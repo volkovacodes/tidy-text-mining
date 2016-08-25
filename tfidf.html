@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Tidy Text Mining in R</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
+  <meta name="generator" content="bookdown 0.1 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Tidy Text Mining in R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="<a href="http://tidytextmining.com/" class="uri">http://tidytextmining.com/</a>" />
+  
+  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Tidy Text Mining in R" />
+  
+  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  
+
+<meta name="author" content="Julia Silge and David Robinson">
+
+<meta name="date" content="2016-08-25">
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="sentiment.html">
+<link rel="next" href="ngrams.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Tidy Text Mining in R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#outline"><i class="fa fa-check"></i><b>1.3</b> Outline</a></li>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>1.4</b> Topics this book does not cover</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>2</b> The Tidy Text Format</a><ul>
+<li class="chapter" data-level="2.1" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>2.1</b> The <code>unnest_tokens</code> function</a></li>
+<li class="chapter" data-level="2.2" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>2.2</b> Tidying the works of Jane Austen</a></li>
+<li class="chapter" data-level="2.3" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>2.3</b> The gutenbergr package</a></li>
+<li class="chapter" data-level="2.4" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>2.4</b> Word frequencies</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>3</b> Sentiment analysis with tidy data</a><ul>
+<li class="chapter" data-level="3.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>3.1</b> The <code>sentiments</code> dataset</a></li>
+<li class="chapter" data-level="3.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>3.2</b> Sentiment analysis with inner join</a></li>
+<li class="chapter" data-level="3.3" data-path="sentiment.html"><a href="sentiment.html#most-common-positive-and-negative-words"><i class="fa fa-check"></i><b>3.3</b> Most common positive and negative words</a></li>
+<li class="chapter" data-level="3.4" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>3.4</b> Wordclouds</a></li>
+<li class="chapter" data-level="3.5" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>3.5</b> Looking at units beyond just words</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>4</b> TF-IDF: Analyzing word and document frequency</a><ul>
+<li class="chapter" data-level="4.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-and-inverse-document-frequency"><i class="fa fa-check"></i><b>4.1</b> Term frequency and inverse document frequency</a></li>
+<li class="chapter" data-level="4.2" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>4.2</b> Term frequency in Jane Austen’s novels</a></li>
+<li class="chapter" data-level="4.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>4.3</b> The <code>bind_tf_idf</code> function</a></li>
+<li class="chapter" data-level="4.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>4.4</b> A corpus of physics texts</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Working with combinations of words using n-grams and widyr</a><ul>
+<li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
+<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-digrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing digrams</a></li>
+<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-digrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using digrams to provide context in sentiment analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-digrams-as-a-network-with-the-ggraph-package"><i class="fa fa-check"></i><b>5.2</b> Visualizing digrams as a network with the ggraph package</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#creating-a-network-with-igraph"><i class="fa fa-check"></i><b>5.2.1</b> Creating a network with igraph</a></li>
+<li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-with-ggraph"><i class="fa fa-check"></i><b>5.2.2</b> Visualizing a network with ggraph</a></li>
+<li class="chapter" data-level="5.2.3" data-path="ngrams.html"><a href="ngrams.html#visualizing-digrams-in-other-texts"><i class="fa fa-check"></i><b>5.2.3</b> Visualizing digrams in other texts</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.3</b> Counting and correlating pairs of words with the widyr package</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.3.1</b> Pairwise correlation</a></li>
+<li class="chapter" data-level="5.3.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-word-correlations"><i class="fa fa-check"></i><b>5.3.2</b> Visualizing word correlations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="tidying-and-casting-document-term-matrices.html"><a href="tidying-and-casting-document-term-matrices.html"><i class="fa fa-check"></i><b>6</b> Tidying and casting document-term matrices</a><ul>
+<li class="chapter" data-level="6.1" data-path="tidying-and-casting-document-term-matrices.html"><a href="tidying-and-casting-document-term-matrices.html#tidying-a-document-term-matrix"><i class="fa fa-check"></i><b>6.1</b> Tidying a document-term matrix</a></li>
+<li class="chapter" data-level="6.2" data-path="tidying-and-casting-document-term-matrices.html"><a href="tidying-and-casting-document-term-matrices.html#casting-tidy-text-data-into-a-documenttermmatrix"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a DocumentTermMatrix</a></li>
+<li class="chapter" data-level="6.3" data-path="tidying-and-casting-document-term-matrices.html"><a href="tidying-and-casting-document-term-matrices.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic Modeling</a><ul>
+<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#topic-modeling"><i class="fa fa-check"></i><b>7.1</b> Topic modeling</a></li>
+<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#setup"><i class="fa fa-check"></i><b>7.2</b> Setup</a></li>
+<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.3</b> Latent Dirichlet Allocation with the topicmodels package</a></li>
+<li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.4</b> Per-document classification</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.4.1</b> By word assignments: <code>augment</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>8</b> Case study: mining NASA metadata</a><ul>
+<li class="chapter" data-level="8.1" data-path="nasa.html"><a href="nasa.html#getting-the-metadata"><i class="fa fa-check"></i><b>8.1</b> Getting the metadata</a></li>
+<li class="chapter" data-level="8.2" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>8.2</b> Wrangling and tidying the data</a></li>
+<li class="chapter" data-level="8.3" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>8.3</b> Some initial simple exploration</a></li>
+<li class="chapter" data-level="8.4" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences"><i class="fa fa-check"></i><b>8.4</b> Word co-ocurrences</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html"><i class="fa fa-check"></i><b>9</b> Case Study: Analyzing Usenet Text</a><ul>
+<li class="chapter" data-level="9.1" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#setup-1"><i class="fa fa-check"></i><b>9.1</b> Setup</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#tf-idf"><i class="fa fa-check"></i><b>9.1.1</b> TF-IDF</a></li>
+<li class="chapter" data-level="9.1.2" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#sentiment-analysis"><i class="fa fa-check"></i><b>9.1.2</b> Sentiment Analysis</a></li>
+<li class="chapter" data-level="9.1.3" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#looking-by-word"><i class="fa fa-check"></i><b>9.1.3</b> Looking by word</a></li>
+<li class="chapter" data-level="9.1.4" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#n-grams"><i class="fa fa-check"></i><b>9.1.4</b> N-grams</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tidy Text Mining in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="tfidf" class="section level1">
+<h1><span class="header-section-number">4</span> TF-IDF: Analyzing word and document frequency</h1>
+<p>A central question in text mining and natural language processing is how to quantify what a document is about. Can we do this by looking at the words that make up the document? One measure of how important a word may be is its <em>term frequency</em> (tf), how frequently a word occurs in a document. There are words in a document, however, that occur many times but may not be important; in English, these are probably words like “the”, “is”, “of”, and so forth. We might take the approach of adding words like these to a list of stop words and removing them before analysis, but it is possible that some of these words might be more important in some documents than others. A list of stop words is not a sophisticated approach to adjusting term frequency for commonly used words.</p>
+<div id="term-frequency-and-inverse-document-frequency" class="section level2">
+<h2><span class="header-section-number">4.1</span> Term frequency and inverse document frequency</h2>
+<p>Another approach is to look at a term’s <em>inverse document frequency</em> (idf), which decreases the weight for commonly used words and increases the weight for words that are not used very much in a collection of documents. This can be combined with term frequency to calculate a term’s <em>tf-idf</em>, the frequency of a term adjusted for how rarely it is used. It is intended to measure how important a word is to a document in a collection (or corpus) of documents. It is a rule-of-thumb or heuristic quantity; while it has proved useful in text mining, search engines, etc., its theoretical foundations are considered less than firm by information theory experts. The inverse document frequency for any given term is defined as</p>
+<p><span class="math display">\[idf(\text{term}) = \ln{\left(\frac{n_{\text{documents}}}{n_{\text{documents containing term}}}\right)}\]</span></p>
+<p>We can use tidy data principles, as described in Chapter #tidytext, to approach tf-idf analysis and use consistent, effective tools to quantify how important various terms are in a document that is part of a collection.</p>
+</div>
+<div id="term-frequency-in-jane-austens-novels" class="section level2">
+<h2><span class="header-section-number">4.2</span> Term frequency in Jane Austen’s novels</h2>
+<p>Let’s start by looking at the published novels of Jane Austen and examine first term frequency, then tf-idf. We can start just by using dplyr verbs such as <code>group_by</code> and <code>join</code>. What are the most commonly used words in Jane Austen’s novels? (Let’s also calculate the total words in each novel here, for later use.)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(janeaustenr)
+<span class="kw">library</span>(tidytext)
+book_words &lt;-<span class="st"> </span><span class="kw">austen_books</span>() %&gt;%
+<span class="st">        </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
+<span class="st">        </span><span class="kw">count</span>(book, word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
+<span class="st">        </span><span class="kw">ungroup</span>()
+
+total_words &lt;-<span class="st"> </span>book_words %&gt;%<span class="st"> </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span><span class="kw">summarize</span>(<span class="dt">total =</span> <span class="kw">sum</span>(n))
+book_words &lt;-<span class="st"> </span><span class="kw">left_join</span>(book_words, total_words)
+book_words</code></pre></div>
+<pre><code>## # A tibble: 40,379 x 4
+##                 book  word     n  total
+##               &lt;fctr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt;
+## 1     Mansfield Park   the  6206 160460
+## 2     Mansfield Park    to  5475 160460
+## 3     Mansfield Park   and  5438 160460
+## 4               Emma    to  5239 160996
+## 5               Emma   the  5201 160996
+## 6               Emma   and  4896 160996
+## 7     Mansfield Park    of  4778 160460
+## 8  Pride &amp; Prejudice   the  4331 122204
+## 9               Emma    of  4291 160996
+## 10 Pride &amp; Prejudice    to  4162 122204
+## # ... with 40,369 more rows</code></pre>
+<p>The usual suspects are here, “the”, “and”, “to”, and so forth. Let’s look at the distribution of <code>n/total</code> for each novel, the number of times a word appears in a novel divided by the total number of terms (words) in that novel. This is exactly what term frequency is.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(viridis)
+<span class="kw">ggplot</span>(book_words, <span class="kw">aes</span>(n/total, <span class="dt">fill =</span> book)) +
+<span class="st">        </span><span class="kw">geom_histogram</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">        </span><span class="kw">xlim</span>(<span class="ot">NA</span>, <span class="fl">0.0009</span>) +
+<span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Term Frequency Distribution in Jane Austen&#39;s Novels&quot;</span>,
+             <span class="dt">y =</span> <span class="st">&quot;Count&quot;</span>) +
+<span class="st">        </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
+<span class="st">        </span><span class="kw">theme_minimal</span>(<span class="dt">base_size =</span> <span class="dv">13</span>) +
+<span class="st">        </span><span class="kw">scale_fill_viridis</span>(<span class="dt">end =</span> <span class="fl">0.85</span>, <span class="dt">discrete=</span><span class="ot">TRUE</span>) +
+<span class="st">        </span><span class="kw">theme</span>(<span class="dt">strip.text=</span><span class="kw">element_text</span>(<span class="dt">hjust=</span><span class="dv">0</span>)) +
+<span class="st">        </span><span class="kw">theme</span>(<span class="dt">strip.text =</span> <span class="kw">element_text</span>(<span class="dt">face =</span> <span class="st">&quot;italic&quot;</span>))</code></pre></div>
+<p>There are very long tails to the right for these novels (those extremely common words!) that we have not shown in these plots. These plots exhibit similar distributions for all the novels, with many words that occur rarely and fewer words that occur frequently.</p>
+</div>
+<div id="the-bind_tf_idf-function" class="section level2">
+<h2><span class="header-section-number">4.3</span> The <code>bind_tf_idf</code> function</h2>
+<p>The idea of tf-idf is to find the important words for the content of each document by decreasing the weight for commonly used words and increasing the weight for words that are not used very much in a collection or corpus of documents, in this case, the group of Jane Austen’s novels as a whole. Calculating tf-idf attempts to find the words that are important (i.e., common) in a text, but not <em>too</em> common. Let’s do that now.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">book_words &lt;-<span class="st"> </span>book_words %&gt;%
+<span class="st">  </span><span class="kw">bind_tf_idf</span>(word, book, n)
+book_words</code></pre></div>
+<pre><code>## # A tibble: 40,379 x 7
+##                 book  word     n  total         tf   idf tf_idf
+##               &lt;fctr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+## 1     Mansfield Park   the  6206 160460 0.03867631     0      0
+## 2     Mansfield Park    to  5475 160460 0.03412065     0      0
+## 3     Mansfield Park   and  5438 160460 0.03389007     0      0
+## 4               Emma    to  5239 160996 0.03254118     0      0
+## 5               Emma   the  5201 160996 0.03230515     0      0
+## 6               Emma   and  4896 160996 0.03041069     0      0
+## 7     Mansfield Park    of  4778 160460 0.02977689     0      0
+## 8  Pride &amp; Prejudice   the  4331 122204 0.03544074     0      0
+## 9               Emma    of  4291 160996 0.02665284     0      0
+## 10 Pride &amp; Prejudice    to  4162 122204 0.03405780     0      0
+## # ... with 40,369 more rows</code></pre>
+<p>Notice that idf and thus tf-idf are zero for these extremely common words. These are all words that appear in all six of Jane Austen’s novels, so the idf term (which will then be the natural log of 1) is zero. The inverse document frequency (and thus tf-idf) is very low (near zero) for words that occur in many of the documents in a collection; this is how this approach decreases the weight for common words. The inverse document frequency will be a higher number for words that occur in fewer of the documents in the collection. Let’s look at terms with high tf-idf in Jane Austen’s works.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">book_words %&gt;%
+<span class="st">  </span><span class="kw">select</span>(-total) %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf))</code></pre></div>
+<pre><code>## # A tibble: 40,379 x 6
+##                   book      word     n          tf      idf      tf_idf
+##                 &lt;fctr&gt;     &lt;chr&gt; &lt;int&gt;       &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;
+## 1  Sense &amp; Sensibility    elinor   623 0.005193528 1.791759 0.009305552
+## 2  Sense &amp; Sensibility  marianne   492 0.004101470 1.791759 0.007348847
+## 3       Mansfield Park  crawford   493 0.003072417 1.791759 0.005505032
+## 4    Pride &amp; Prejudice     darcy   373 0.003052273 1.791759 0.005468939
+## 5           Persuasion    elliot   254 0.003036207 1.791759 0.005440153
+## 6                 Emma      emma   786 0.004882109 1.098612 0.005363545
+## 7     Northanger Abbey    tilney   196 0.002519928 1.791759 0.004515105
+## 8                 Emma    weston   389 0.002416209 1.791759 0.004329266
+## 9    Pride &amp; Prejudice    bennet   294 0.002405813 1.791759 0.004310639
+## 10          Persuasion wentworth   191 0.002283132 1.791759 0.004090824
+## # ... with 40,369 more rows</code></pre>
+<p>Here we see all proper nouns, names that are in fact important in these novels. None of them occur in all of novels, and they are important, characteristic words for each text. Some of the values for idf are the same for different terms because there are 6 documents in this corpus and we are seeing the numerical value for <span class="math inline">\(\ln(6/1)\)</span>, <span class="math inline">\(\ln(6/2)\)</span>, etc. Let’s look at a visualization for these high tf-idf words.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggstance)
+<span class="kw">library</span>(ggthemes)
+plot_austen &lt;-<span class="st"> </span>book_words %&gt;%
+<span class="st">        </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf)) %&gt;%
+<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">unique</span>(word))))
+<span class="kw">ggplot</span>(plot_austen[<span class="dv">1</span>:<span class="dv">20</span>,], <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> book, <span class="dt">alpha =</span> tf_idf)) +
+<span class="st">        </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Jane Austen&#39;s Novels&quot;</span>,
+             <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">        </span><span class="kw">theme_tufte</span>(<span class="dt">base_family =</span> <span class="st">&quot;Arial&quot;</span>, <span class="dt">base_size =</span> <span class="dv">13</span>, <span class="dt">ticks =</span> <span class="ot">FALSE</span>) +
+<span class="st">        </span><span class="kw">scale_alpha_continuous</span>(<span class="dt">range =</span> <span class="kw">c</span>(<span class="fl">0.6</span>, <span class="dv">1</span>), <span class="dt">guide =</span> <span class="ot">FALSE</span>) +
+<span class="st">        </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) +
+<span class="st">        </span><span class="kw">scale_fill_viridis</span>(<span class="dt">end =</span> <span class="fl">0.85</span>, <span class="dt">discrete=</span><span class="ot">TRUE</span>) +
+<span class="st">        </span><span class="kw">theme</span>(<span class="dt">legend.title=</span><span class="kw">element_blank</span>()) +
+<span class="st">        </span><span class="kw">theme</span>(<span class="dt">legend.justification=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">legend.position=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>))</code></pre></div>
+<p>Let’s look at the novels individually.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_austen &lt;-<span class="st"> </span>plot_austen %&gt;%<span class="st"> </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span><span class="kw">top_n</span>(<span class="dv">15</span>) %&gt;%<span class="st"> </span>ungroup
+<span class="kw">ggplot</span>(plot_austen, <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> book, <span class="dt">alpha =</span> tf_idf)) +
+<span class="st">        </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Jane Austen&#39;s Novels&quot;</span>,
+             <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">        </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">        </span><span class="kw">theme_tufte</span>(<span class="dt">base_family =</span> <span class="st">&quot;Arial&quot;</span>, <span class="dt">base_size =</span> <span class="dv">13</span>, <span class="dt">ticks =</span> <span class="ot">FALSE</span>) +
+<span class="st">        </span><span class="kw">scale_alpha_continuous</span>(<span class="dt">range =</span> <span class="kw">c</span>(<span class="fl">0.6</span>, <span class="dv">1</span>)) +
+<span class="st">        </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) +
+<span class="st">        </span><span class="kw">scale_fill_viridis</span>(<span class="dt">end =</span> <span class="fl">0.85</span>, <span class="dt">discrete=</span><span class="ot">TRUE</span>) +
+<span class="st">        </span><span class="kw">theme</span>(<span class="dt">strip.text=</span><span class="kw">element_text</span>(<span class="dt">hjust=</span><span class="dv">0</span>)) +
+<span class="st">        </span><span class="kw">theme</span>(<span class="dt">strip.text =</span> <span class="kw">element_text</span>(<span class="dt">face =</span> <span class="st">&quot;italic&quot;</span>))</code></pre></div>
+<p>Still all proper nouns! These words are, as measured by tf-idf, the most important to each novel and most readers would likely agree.</p>
+<iframe src="http://giphy.com/embed/y5dASMYqZwS2s" width="480" height="204" frameBorder="0" class="giphy-embed" allowFullScreen>
+</iframe>
+<p>
+<a href="http://giphy.com/gifs/vintage-pale-colin-firth-y5dASMYqZwS2s">via GIPHY</a>
+</p>
+</div>
+<div id="a-corpus-of-physics-texts" class="section level2">
+<h2><span class="header-section-number">4.4</span> A corpus of physics texts</h2>
+<p>Let’s work with another corpus of documents, to see what terms are important in a different set of works. In fact, let’s leave the world of fiction and narrative entirely. Let’s download some classic physics texts from Project Gutenberg and see what terms are important in these works, as measured by tf-idf. Let’s download <a href="http://www.gutenberg.org/ebooks/37729"><em>Discourse on Floating Bodies</em> by Galileo Galilei</a>, <a href="http://www.gutenberg.org/ebooks/14725"><em>Treatise on Light</em> by Christiaan Huygens</a>, <a href="http://www.gutenberg.org/ebooks/13476"><em>Experiments with Alternate Currents of High Potential and High Frequency</em> by Nikola Tesla</a>, and <a href="http://www.gutenberg.org/ebooks/5001"><em>Relativity: The Special and General Theory</em> by Albert Einstein</a>.</p>
+<p>This is a pretty diverse bunch. They may all be physics classics, but they were written across a 300-year timespan, and some of them were first written in other languages and then translated to English. Perfectly homogeneous these are not, but that doesn’t stop this from being an interesting exercise!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gutenbergr)
+physics &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>(<span class="kw">c</span>(<span class="dv">37729</span>, <span class="dv">14725</span>, <span class="dv">13476</span>, <span class="dv">5001</span>), 
+                              <span class="dt">meta_fields =</span> <span class="st">&quot;author&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">physics_words &lt;-<span class="st"> </span>physics %&gt;%
+<span class="st">        </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
+<span class="st">        </span><span class="kw">count</span>(author, word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
+<span class="st">        </span><span class="kw">ungroup</span>()
+physics_words</code></pre></div>
+<pre><code>## # A tibble: 12,592 x 3
+##                 author  word     n
+##                  &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+## 1     Galilei, Galileo   the  3760
+## 2        Tesla, Nikola   the  3604
+## 3  Huygens, Christiaan   the  3553
+## 4     Einstein, Albert   the  2994
+## 5     Galilei, Galileo    of  2049
+## 6     Einstein, Albert    of  2030
+## 7        Tesla, Nikola    of  1737
+## 8  Huygens, Christiaan    of  1708
+## 9  Huygens, Christiaan    to  1207
+## 10       Tesla, Nikola     a  1176
+## # ... with 12,582 more rows</code></pre>
+<p>Here we see just the raw counts, and of course these documents are all very different lengths. Let’s go ahead and calculate tf-idf.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">physics_words &lt;-<span class="st"> </span>physics_words %&gt;%
+<span class="st">        </span><span class="kw">bind_tf_idf</span>(word, author, n) 
+plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
+<span class="st">        </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf)) %&gt;%
+<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">unique</span>(word)))) %&gt;%
+<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">author =</span> <span class="kw">factor</span>(author, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Galilei, Galileo&quot;</span>,
+                                                  <span class="st">&quot;Huygens, Christiaan&quot;</span>,
+                                                  <span class="st">&quot;Tesla, Nikola&quot;</span>,
+                                                  <span class="st">&quot;Einstein, Albert&quot;</span>)))
+
+<span class="kw">ggplot</span>(plot_physics[<span class="dv">1</span>:<span class="dv">20</span>,], <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> author, <span class="dt">alpha =</span> tf_idf)) +
+<span class="st">        </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
+             <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">        </span><span class="kw">theme_tufte</span>(<span class="dt">base_family =</span> <span class="st">&quot;Arial&quot;</span>, <span class="dt">base_size =</span> <span class="dv">13</span>, <span class="dt">ticks =</span> <span class="ot">FALSE</span>) +
+<span class="st">        </span><span class="kw">scale_alpha_continuous</span>(<span class="dt">range =</span> <span class="kw">c</span>(<span class="fl">0.6</span>, <span class="dv">1</span>), <span class="dt">guide =</span> <span class="ot">FALSE</span>) +
+<span class="st">        </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) +
+<span class="st">        </span><span class="kw">scale_fill_viridis</span>(<span class="dt">end =</span> <span class="fl">0.6</span>, <span class="dt">discrete=</span><span class="ot">TRUE</span>) +
+<span class="st">        </span><span class="kw">theme</span>(<span class="dt">legend.title=</span><span class="kw">element_blank</span>()) +
+<span class="st">        </span><span class="kw">theme</span>(<span class="dt">legend.justification=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">legend.position=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>))</code></pre></div>
+<p>Nice! Let’s look at each text individually.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_physics &lt;-<span class="st"> </span>plot_physics %&gt;%<span class="st"> </span><span class="kw">group_by</span>(author) %&gt;%<span class="st"> </span>
+<span class="st">        </span><span class="kw">top_n</span>(<span class="dv">15</span>, tf_idf) %&gt;%<span class="st"> </span>
+<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, tf_idf))
+<span class="kw">ggplot</span>(plot_physics, <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> author, <span class="dt">alpha =</span> tf_idf)) +
+<span class="st">        </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
+             <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">        </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">        </span><span class="kw">theme_tufte</span>(<span class="dt">base_family =</span> <span class="st">&quot;Arial&quot;</span>, <span class="dt">base_size =</span> <span class="dv">13</span>, <span class="dt">ticks =</span> <span class="ot">FALSE</span>) +
+<span class="st">        </span><span class="kw">scale_alpha_continuous</span>(<span class="dt">range =</span> <span class="kw">c</span>(<span class="fl">0.6</span>, <span class="dv">1</span>)) +
+<span class="st">        </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) +
+<span class="st">        </span><span class="kw">scale_fill_viridis</span>(<span class="dt">end =</span> <span class="fl">0.6</span>, <span class="dt">discrete=</span><span class="ot">TRUE</span>) +
+<span class="st">        </span><span class="kw">theme</span>(<span class="dt">strip.text=</span><span class="kw">element_text</span>(<span class="dt">hjust=</span><span class="dv">0</span>))</code></pre></div>
+<p>Very interesting indeed. One thing we see here is “gif” in the Einstein text?!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;gif&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>:<span class="dv">10</span>]</code></pre></div>
+<pre><code>##  [1] &quot;                       Fig. 01: file fig01.gif&quot;
+##  [2] &quot;                         eq. 1: file eq01.gif&quot; 
+##  [3] &quot;                         eq. 2: file eq02.gif&quot; 
+##  [4] &quot;                         eq. 3: file eq03.gif&quot; 
+##  [5] &quot;                         eq. 4: file eq04.gif&quot; 
+##  [6] &quot;                       eq. 05a: file eq05a.gif&quot;
+##  [7] &quot;                       eq. 05b: file eq05b.gif&quot;
+##  [8] &quot;                        eq. 07: file eq07.gif&quot; 
+##  [9] &quot;                        eq. 08: file eq08.gif&quot; 
+## [10] &quot;                        eq. 09: file eq09.gif&quot;</code></pre>
+<p>Some cleaning up of the text might be in order. The same thing is true for “eq”, obviously here. “K1” is the name of a coordinate system for Einstein:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;K1&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>]</code></pre></div>
+<pre><code>## [1] &quot;to a second co-ordinate system K1 provided that the latter is&quot;</code></pre>
+<p>Also notice that in this line we have “co-ordinate”, which explains why there are separate “co” and “ordinate” items in the high tf-idf words for the Einstein text. “AB”, “RC”, and so forth are names of rays, circles, angles, and so forth for Huygens.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;AK&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>]</code></pre></div>
+<pre><code>## [1] &quot;Now let us assume that the ray has come from A to C along AK, KC; the&quot;</code></pre>
+<p>Let’s remove some of these less meaningful words to make a better, more meaningful plot.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mystopwords &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;gif&quot;</span>, <span class="st">&quot;eq&quot;</span>, <span class="st">&quot;co&quot;</span>, <span class="st">&quot;rc&quot;</span>, <span class="st">&quot;ac&quot;</span>, <span class="st">&quot;ak&quot;</span>, <span class="st">&quot;bn&quot;</span>, 
+                                   <span class="st">&quot;fig&quot;</span>, <span class="st">&quot;file&quot;</span>, <span class="st">&quot;cg&quot;</span>, <span class="st">&quot;cb&quot;</span>))
+physics_words &lt;-<span class="st"> </span><span class="kw">anti_join</span>(physics_words, mystopwords, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>)
+plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
+<span class="st">        </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf)) %&gt;%
+<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">unique</span>(word)))) %&gt;%
+<span class="st">        </span><span class="kw">group_by</span>(author) %&gt;%<span class="st"> </span>
+<span class="st">        </span><span class="kw">top_n</span>(<span class="dv">15</span>, tf_idf) %&gt;%
+<span class="st">        </span>ungroup %&gt;%
+<span class="st">        </span><span class="kw">mutate</span>(<span class="dt">author =</span> <span class="kw">factor</span>(author, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Galilei, Galileo&quot;</span>,
+                                                  <span class="st">&quot;Huygens, Christiaan&quot;</span>,
+                                                  <span class="st">&quot;Tesla, Nikola&quot;</span>,
+                                                  <span class="st">&quot;Einstein, Albert&quot;</span>)))
+
+<span class="kw">ggplot</span>(plot_physics, <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> author, <span class="dt">alpha =</span> tf_idf)) +
+<span class="st">        </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">        </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
+             <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">        </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">        </span><span class="kw">theme_tufte</span>(<span class="dt">base_family =</span> <span class="st">&quot;Arial&quot;</span>, <span class="dt">base_size =</span> <span class="dv">13</span>, <span class="dt">ticks =</span> <span class="ot">FALSE</span>) +
+<span class="st">        </span><span class="kw">scale_alpha_continuous</span>(<span class="dt">range =</span> <span class="kw">c</span>(<span class="fl">0.6</span>, <span class="dv">1</span>)) +
+<span class="st">        </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>)) +
+<span class="st">        </span><span class="kw">scale_fill_viridis</span>(<span class="dt">end =</span> <span class="fl">0.6</span>, <span class="dt">discrete=</span><span class="ot">TRUE</span>) +
+<span class="st">        </span><span class="kw">theme</span>(<span class="dt">strip.text=</span><span class="kw">element_text</span>(<span class="dt">hjust=</span><span class="dv">0</span>))</code></pre></div>
+<p>We don’t hear enough about ramparts or things being ethereal in physics today.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="sentiment.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="ngrams.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/04-tf-idf.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

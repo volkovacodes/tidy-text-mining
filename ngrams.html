@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Tidy Text Mining in R</title>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
+  <meta name="generator" content="bookdown 0.1 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Tidy Text Mining in R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="<a href="http://tidytextmining.com/" class="uri">http://tidytextmining.com/</a>" />
+  
+  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Tidy Text Mining in R" />
+  
+  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  
+
+<meta name="author" content="Julia Silge and David Robinson">
+
+<meta name="date" content="2016-08-25">
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="tfidf.html">
+<link rel="next" href="tidying-and-casting-document-term-matrices.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Tidy Text Mining in R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#outline"><i class="fa fa-check"></i><b>1.3</b> Outline</a></li>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>1.4</b> Topics this book does not cover</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>2</b> The Tidy Text Format</a><ul>
+<li class="chapter" data-level="2.1" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>2.1</b> The <code>unnest_tokens</code> function</a></li>
+<li class="chapter" data-level="2.2" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>2.2</b> Tidying the works of Jane Austen</a></li>
+<li class="chapter" data-level="2.3" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>2.3</b> The gutenbergr package</a></li>
+<li class="chapter" data-level="2.4" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>2.4</b> Word frequencies</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>3</b> Sentiment analysis with tidy data</a><ul>
+<li class="chapter" data-level="3.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>3.1</b> The <code>sentiments</code> dataset</a></li>
+<li class="chapter" data-level="3.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>3.2</b> Sentiment analysis with inner join</a></li>
+<li class="chapter" data-level="3.3" data-path="sentiment.html"><a href="sentiment.html#most-common-positive-and-negative-words"><i class="fa fa-check"></i><b>3.3</b> Most common positive and negative words</a></li>
+<li class="chapter" data-level="3.4" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>3.4</b> Wordclouds</a></li>
+<li class="chapter" data-level="3.5" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>3.5</b> Looking at units beyond just words</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>4</b> TF-IDF: Analyzing word and document frequency</a><ul>
+<li class="chapter" data-level="4.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-and-inverse-document-frequency"><i class="fa fa-check"></i><b>4.1</b> Term frequency and inverse document frequency</a></li>
+<li class="chapter" data-level="4.2" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>4.2</b> Term frequency in Jane Austen’s novels</a></li>
+<li class="chapter" data-level="4.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>4.3</b> The <code>bind_tf_idf</code> function</a></li>
+<li class="chapter" data-level="4.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>4.4</b> A corpus of physics texts</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Working with combinations of words using n-grams and widyr</a><ul>
+<li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
+<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-digrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing digrams</a></li>
+<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-digrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using digrams to provide context in sentiment analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-digrams-as-a-network-with-the-ggraph-package"><i class="fa fa-check"></i><b>5.2</b> Visualizing digrams as a network with the ggraph package</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#creating-a-network-with-igraph"><i class="fa fa-check"></i><b>5.2.1</b> Creating a network with igraph</a></li>
+<li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-with-ggraph"><i class="fa fa-check"></i><b>5.2.2</b> Visualizing a network with ggraph</a></li>
+<li class="chapter" data-level="5.2.3" data-path="ngrams.html"><a href="ngrams.html#visualizing-digrams-in-other-texts"><i class="fa fa-check"></i><b>5.2.3</b> Visualizing digrams in other texts</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.3</b> Counting and correlating pairs of words with the widyr package</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.3.1</b> Pairwise correlation</a></li>
+<li class="chapter" data-level="5.3.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-word-correlations"><i class="fa fa-check"></i><b>5.3.2</b> Visualizing word correlations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="tidying-and-casting-document-term-matrices.html"><a href="tidying-and-casting-document-term-matrices.html"><i class="fa fa-check"></i><b>6</b> Tidying and casting document-term matrices</a><ul>
+<li class="chapter" data-level="6.1" data-path="tidying-and-casting-document-term-matrices.html"><a href="tidying-and-casting-document-term-matrices.html#tidying-a-document-term-matrix"><i class="fa fa-check"></i><b>6.1</b> Tidying a document-term matrix</a></li>
+<li class="chapter" data-level="6.2" data-path="tidying-and-casting-document-term-matrices.html"><a href="tidying-and-casting-document-term-matrices.html#casting-tidy-text-data-into-a-documenttermmatrix"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a DocumentTermMatrix</a></li>
+<li class="chapter" data-level="6.3" data-path="tidying-and-casting-document-term-matrices.html"><a href="tidying-and-casting-document-term-matrices.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic Modeling</a><ul>
+<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#topic-modeling"><i class="fa fa-check"></i><b>7.1</b> Topic modeling</a></li>
+<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#setup"><i class="fa fa-check"></i><b>7.2</b> Setup</a></li>
+<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.3</b> Latent Dirichlet Allocation with the topicmodels package</a></li>
+<li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.4</b> Per-document classification</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.4.1</b> By word assignments: <code>augment</code></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>8</b> Case study: mining NASA metadata</a><ul>
+<li class="chapter" data-level="8.1" data-path="nasa.html"><a href="nasa.html#getting-the-metadata"><i class="fa fa-check"></i><b>8.1</b> Getting the metadata</a></li>
+<li class="chapter" data-level="8.2" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>8.2</b> Wrangling and tidying the data</a></li>
+<li class="chapter" data-level="8.3" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>8.3</b> Some initial simple exploration</a></li>
+<li class="chapter" data-level="8.4" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences"><i class="fa fa-check"></i><b>8.4</b> Word co-ocurrences</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html"><i class="fa fa-check"></i><b>9</b> Case Study: Analyzing Usenet Text</a><ul>
+<li class="chapter" data-level="9.1" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#setup-1"><i class="fa fa-check"></i><b>9.1</b> Setup</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#tf-idf"><i class="fa fa-check"></i><b>9.1.1</b> TF-IDF</a></li>
+<li class="chapter" data-level="9.1.2" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#sentiment-analysis"><i class="fa fa-check"></i><b>9.1.2</b> Sentiment Analysis</a></li>
+<li class="chapter" data-level="9.1.3" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#looking-by-word"><i class="fa fa-check"></i><b>9.1.3</b> Looking by word</a></li>
+<li class="chapter" data-level="9.1.4" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#n-grams"><i class="fa fa-check"></i><b>9.1.4</b> N-grams</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Tidy Text Mining in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ngrams" class="section level1">
+<h1><span class="header-section-number">5</span> Working with combinations of words using n-grams and widyr</h1>
+<div id="tokenizing-by-n-gram" class="section level2">
+<h2><span class="header-section-number">5.1</span> Tokenizing by n-gram</h2>
+<p>We’ve been using the <code>unnest_tokens</code> function to tokenize by word, or sometimes by sentence or paragraph. But we can also tokenize into consecutive sequences of words, called <strong>n-grams</strong>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(tidytext)
+<span class="kw">library</span>(janeaustenr)
+
+<span class="co"># Set n = 2 to divide into pairs of words</span>
+austen_digrams &lt;-<span class="st"> </span><span class="kw">austen_books</span>() %&gt;%
+<span class="st">  </span><span class="kw">unnest_tokens</span>(digram, text, <span class="dt">token =</span> <span class="st">&quot;ngrams&quot;</span>, <span class="dt">n =</span> <span class="dv">2</span>)
+
+austen_digrams</code></pre></div>
+<pre><code>## # A tibble: 725,048 x 2
+##                   book          digram
+##                 &lt;fctr&gt;           &lt;chr&gt;
+## 1  Sense &amp; Sensibility       sense and
+## 2  Sense &amp; Sensibility and sensibility
+## 3  Sense &amp; Sensibility  sensibility by
+## 4  Sense &amp; Sensibility         by jane
+## 5  Sense &amp; Sensibility     jane austen
+## 6  Sense &amp; Sensibility     austen 1811
+## 7  Sense &amp; Sensibility    1811 chapter
+## 8  Sense &amp; Sensibility       chapter 1
+## 9  Sense &amp; Sensibility           1 the
+## 10 Sense &amp; Sensibility      the family
+## # ... with 725,038 more rows</code></pre>
+<p>This is still tidy: it’s one-row-per-token, but now each token represents a digram. Notice that these digrams are overlapping: “sense and” is one token, “and sensibility” is another.</p>
+<div id="counting-and-filtering-n-grams" class="section level3">
+<h3><span class="header-section-number">5.1.1</span> Counting and filtering n-grams</h3>
+<p>We can examine the most common digrams using <code>count</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">austen_digrams %&gt;%
+<span class="st">  </span><span class="kw">count</span>(digram, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## # A tibble: 211,237 x 2
+##      digram     n
+##       &lt;chr&gt; &lt;int&gt;
+## 1    of the  3017
+## 2     to be  2787
+## 3    in the  2368
+## 4    it was  1781
+## 5      i am  1545
+## 6   she had  1472
+## 7    of her  1445
+## 8    to the  1387
+## 9   she was  1377
+## 10 had been  1299
+## # ... with 211,227 more rows</code></pre>
+<p>As expected, a lot of them are pairs of common (relatively uninteresting) words. This is a useful time to use tidyr’s <code>separate()</code>, which splits a column into multiple based on a delimiter. This lets us separate it into two columns, “word1” and “word2”, which we can remove stop-words from individually:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
+
+digrams_separated &lt;-<span class="st"> </span>austen_digrams %&gt;%
+<span class="st">  </span><span class="kw">separate</span>(digram, <span class="kw">c</span>(<span class="st">&quot;word1&quot;</span>, <span class="st">&quot;word2&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)
+
+digrams_filtered &lt;-<span class="st"> </span>digrams_separated %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(!word1 %in%<span class="st"> </span>stop_words$word) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(!word2 %in%<span class="st"> </span>stop_words$word)
+
+digrams_filtered</code></pre></div>
+<pre><code>## # A tibble: 44,784 x 3
+##                   book       word1        word2
+##                 &lt;fctr&gt;       &lt;chr&gt;        &lt;chr&gt;
+## 1  Sense &amp; Sensibility        jane       austen
+## 2  Sense &amp; Sensibility      austen         1811
+## 3  Sense &amp; Sensibility        1811      chapter
+## 4  Sense &amp; Sensibility     chapter            1
+## 5  Sense &amp; Sensibility     norland         park
+## 6  Sense &amp; Sensibility surrounding acquaintance
+## 7  Sense &amp; Sensibility        late        owner
+## 8  Sense &amp; Sensibility    advanced          age
+## 9  Sense &amp; Sensibility    constant    companion
+## 10 Sense &amp; Sensibility    happened          ten
+## # ... with 44,774 more rows</code></pre>
+<p>We can now count the most common pairs of words:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">digrams_filtered %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Source: local data frame [33,421 x 3]
+## Groups: word1 [6,711]
+## 
+##      word1     word2     n
+##      &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;
+## 1      sir    thomas   287
+## 2     miss  crawford   215
+## 3  captain wentworth   170
+## 4     miss woodhouse   162
+## 5    frank churchill   132
+## 6     lady   russell   118
+## 7     lady   bertram   114
+## 8      sir    walter   113
+## 9     miss   fairfax   109
+## 10 colonel   brandon   108
+## # ... with 33,411 more rows</code></pre>
+<p>We can see that names (whether first and last or with a salutation) are the most common pairs in Jane Austen books.</p>
+<p>We may want to work with the recombined words. tidyr’s <code>unite()</code> is the opposite of <code>separate()</code>, and lets us recombine the columns into one.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">digrams_united &lt;-<span class="st"> </span>digrams_filtered %&gt;%
+<span class="st">  </span><span class="kw">unite</span>(digram, word1, word2, <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)
+
+digrams_united</code></pre></div>
+<pre><code>## # A tibble: 44,784 x 2
+##                   book                   digram
+## *               &lt;fctr&gt;                    &lt;chr&gt;
+## 1  Sense &amp; Sensibility              jane austen
+## 2  Sense &amp; Sensibility              austen 1811
+## 3  Sense &amp; Sensibility             1811 chapter
+## 4  Sense &amp; Sensibility                chapter 1
+## 5  Sense &amp; Sensibility             norland park
+## 6  Sense &amp; Sensibility surrounding acquaintance
+## 7  Sense &amp; Sensibility               late owner
+## 8  Sense &amp; Sensibility             advanced age
+## 9  Sense &amp; Sensibility       constant companion
+## 10 Sense &amp; Sensibility             happened ten
+## # ... with 44,774 more rows</code></pre>
+<p>You could also easily work with trigrams (sequences of 3 words) by setting <code>n = 3</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">austen_books</span>() %&gt;%
+<span class="st">  </span><span class="kw">unnest_tokens</span>(trigram, text, <span class="dt">token =</span> <span class="st">&quot;ngrams&quot;</span>, <span class="dt">n =</span> <span class="dv">3</span>) %&gt;%
+<span class="st">  </span><span class="kw">separate</span>(trigram, <span class="kw">c</span>(<span class="st">&quot;word1&quot;</span>, <span class="st">&quot;word2&quot;</span>, <span class="st">&quot;word3&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(!word1 %in%<span class="st"> </span>stop_words$word,
+         !word2 %in%<span class="st"> </span>stop_words$word,
+         !word3 %in%<span class="st"> </span>stop_words$word) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(word1, word2, word3, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Source: local data frame [8,757 x 4]
+## Groups: word1, word2 [7,462]
+## 
+##        word1     word2     word3     n
+##        &lt;chr&gt;     &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;
+## 1       dear      miss woodhouse    23
+## 2       miss        de    bourgh    18
+## 3       lady catherine        de    14
+## 4  catherine        de    bourgh    13
+## 5       poor      miss    taylor    11
+## 6        sir    walter    elliot    11
+## 7        ten  thousand    pounds    11
+## 8       dear       sir    thomas    10
+## 9     twenty  thousand    pounds     8
+## 10   replied      miss  crawford     7
+## # ... with 8,747 more rows</code></pre>
+</div>
+<div id="analyzing-digrams" class="section level3">
+<h3><span class="header-section-number">5.1.2</span> Analyzing digrams</h3>
+<p>A digram can be treated like a term just as we treated a word. For example, we can look at TF-IDF of digrams:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">digram_tf_idf &lt;-<span class="st"> </span>digrams_united %&gt;%
+<span class="st">  </span><span class="kw">count</span>(book, digram) %&gt;%
+<span class="st">  </span><span class="kw">bind_tf_idf</span>(digram, book, n) %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf))
+
+digram_tf_idf</code></pre></div>
+<pre><code>## Source: local data frame [36,217 x 6]
+## Groups: book [6]
+## 
+##                   book            digram     n         tf      idf     tf_idf
+##                 &lt;fctr&gt;             &lt;chr&gt; &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
+## 1           Persuasion captain wentworth   170 0.02985599 1.791759 0.05349475
+## 2       Mansfield Park        sir thomas   287 0.02873160 1.791759 0.05148012
+## 3       Mansfield Park     miss crawford   215 0.02152368 1.791759 0.03856525
+## 4           Persuasion      lady russell   118 0.02072357 1.791759 0.03713165
+## 5           Persuasion        sir walter   113 0.01984545 1.791759 0.03555828
+## 6                 Emma    miss woodhouse   162 0.01700966 1.791759 0.03047722
+## 7     Northanger Abbey       miss tilney    82 0.01594400 1.791759 0.02856782
+## 8  Sense &amp; Sensibility   colonel brandon   108 0.01502086 1.791759 0.02691377
+## 9                 Emma   frank churchill   132 0.01385972 1.791759 0.02483329
+## 10   Pride &amp; Prejudice    lady catherine   100 0.01380453 1.791759 0.02473439
+## # ... with 36,207 more rows</code></pre>
+<p>This can be visualized within each book, just as we did for words:</p>
+<p><img src="05-word-combinations_files/figure-html/digram_tf_idf_plot-1.png" width="672" /></p>
+<p>Much as we discovered in Chapter <span class="citation">(<span class="citeproc-not-found" data-reference-id="ref"><strong>???</strong></span>)</span>{#tfidf}, the units that distinguish each Austen book are almost exclusively names.</p>
+</div>
+<div id="using-digrams-to-provide-context-in-sentiment-analysis" class="section level3">
+<h3><span class="header-section-number">5.1.3</span> Using digrams to provide context in sentiment analysis</h3>
+<p>Our sentiment analysis approch in Chapter <span class="citation">(<span class="citeproc-not-found" data-reference-id="ref"><strong>???</strong></span>)</span>{#sentiment} simply counted the appearance of positive or negative words, according to a reference lexicon. One of the problems with this approach is that a word’s context matters nearly as much as its presence. For example, the words “happy” and “like” will be positive, even in a sentence like “I’m not <strong>happy</strong> and I don’t <strong>like</strong> it!”</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">digrams_separated %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(word1 ==<span class="st"> &quot;not&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## # A tibble: 1,246 x 2
+##    word2     n
+##    &lt;chr&gt; &lt;int&gt;
+## 1     be   610
+## 2     to   355
+## 3   have   327
+## 4   know   252
+## 5      a   189
+## 6  think   176
+## 7   been   160
+## 8    the   147
+## 9     at   129
+## 10    in   118
+## # ... with 1,236 more rows</code></pre>
+<p>We can use word2 to</p>
+<p>Let’s use the AFINN lexicon for sentiment analysis, which gives a sentiment score for each word:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AFINN &lt;-<span class="st"> </span>sentiments %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(lexicon ==<span class="st"> &quot;AFINN&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(word, score)
+
+AFINN</code></pre></div>
+<pre><code>## # A tibble: 2,476 x 2
+##          word score
+##         &lt;chr&gt; &lt;int&gt;
+## 1     abandon    -2
+## 2   abandoned    -2
+## 3    abandons    -2
+## 4    abducted    -2
+## 5   abduction    -2
+## 6  abductions    -2
+## 7       abhor    -3
+## 8    abhorred    -3
+## 9   abhorrent    -3
+## 10     abhors    -3
+## # ... with 2,466 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">not_words &lt;-<span class="st"> </span>digrams_separated %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(word1 ==<span class="st"> &quot;not&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">word2 =</span> <span class="st">&quot;word&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(word2, score, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>()
+
+not_words</code></pre></div>
+<pre><code>## # A tibble: 245 x 3
+##      word2 score     n
+##      &lt;chr&gt; &lt;int&gt; &lt;int&gt;
+## 1     like     2    99
+## 2     help     2    82
+## 3     want     1    45
+## 4     wish     1    39
+## 5    allow     1    36
+## 6     care     2    23
+## 7    sorry    -1    21
+## 8    leave    -1    18
+## 9  pretend    -1    18
+## 10   worth     2    17
+## # ... with 235 more rows</code></pre>
+<p>It’s worth asking which words contributed the most in the “wrong” direction. To compute that, we can multiply their score by the number of times they appear (so that a word with a sentiment score of +3 occurring 10 times has as much impact as a word with a sentiment score of +1 occurring 30 times).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">not_words %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> n *<span class="st"> </span>score) %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(<span class="kw">abs</span>(contribution))) %&gt;%
+<span class="st">  </span><span class="kw">head</span>(<span class="dv">20</span>) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word2 =</span> <span class="kw">reorder</span>(word2, contribution)) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word2, n *<span class="st"> </span>score, <span class="dt">fill =</span> n *<span class="st"> </span>score &gt;<span class="st"> </span><span class="dv">0</span>)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Words preceded by </span><span class="ch">\&quot;</span><span class="st">not</span><span class="ch">\&quot;</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
+<p><img src="05-word-combinations_files/figure-html/not_words_plot-1.png" width="672" /></p>
+<p>The digrams “not like” and “not help” were overwhelmingly the largest causes of misidentification, making the text seem much more positive than it is. But we can see phrases like “not afraid” and “not fail” sometimes suggest text is more negative than it is.</p>
+<p>“Not” isn’t the only word that provides context. We could make a vector of words that we suspect , and use the same joining and counting approach to examine all of them:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negation_words &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;not&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;never&quot;</span>, <span class="st">&quot;without&quot;</span>)
+
+negated_words &lt;-<span class="st"> </span>digrams_separated %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(word1 %in%<span class="st"> </span>negation_words) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">word2 =</span> <span class="st">&quot;word&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(word1, word2, score, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>()
+
+negated_words</code></pre></div>
+<pre><code>## # A tibble: 531 x 4
+##    word1 word2 score     n
+##    &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt;
+## 1     no doubt    -1   102
+## 2    not  like     2    99
+## 3    not  help     2    82
+## 4     no    no    -1    60
+## 5    not  want     1    45
+## 6    not  wish     1    39
+## 7    not allow     1    36
+## 8    not  care     2    23
+## 9     no  harm    -2    22
+## 10   not sorry    -1    21
+## # ... with 521 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negated_words %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> n *<span class="st"> </span>score) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word2 =</span> <span class="kw">reorder</span>(word2, contribution)) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(word1) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, <span class="kw">abs</span>(contribution)) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word2, contribution, <span class="dt">fill =</span> n *<span class="st"> </span>score &gt;<span class="st"> </span><span class="dv">0</span>)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>word1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Words preceded by </span><span class="ch">\&quot;</span><span class="st">not</span><span class="ch">\&quot;</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
+<p><img src="05-word-combinations_files/figure-html/negated_words_plot-1.png" width="672" /></p>
+</div>
+</div>
+<div id="visualizing-digrams-as-a-network-with-the-ggraph-package" class="section level2">
+<h2><span class="header-section-number">5.2</span> Visualizing digrams as a network with the ggraph package</h2>
+<p>A</p>
+<div id="creating-a-network-with-igraph" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> Creating a network with igraph</h3>
+<p>Now that we have our</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">digram_counts &lt;-<span class="st"> </span>digrams_filtered %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
+
+digram_counts</code></pre></div>
+<pre><code>## Source: local data frame [33,421 x 3]
+## Groups: word1 [6,711]
+## 
+##      word1     word2     n
+##      &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;
+## 1      sir    thomas   287
+## 2     miss  crawford   215
+## 3  captain wentworth   170
+## 4     miss woodhouse   162
+## 5    frank churchill   132
+## 6     lady   russell   118
+## 7     lady   bertram   114
+## 8      sir    walter   113
+## 9     miss   fairfax   109
+## 10 colonel   brandon   108
+## # ... with 33,411 more rows</code></pre>
+<p>Here we’ll be referring to a “graph” not in the sense of a visualization, but as a . A graph can be created from a tidy object because a graph has three variables:</p>
+<ul>
+<li><strong>from</strong>: the node an edge is coming from</li>
+<li><strong>to</strong>: the node an edge is going towards</li>
+<li><strong>weight</strong> A numeric value associated with each edge</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(igraph)
+
+digram_graph &lt;-<span class="st"> </span>digram_counts %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(n &gt;<span class="st"> </span><span class="dv">20</span>) %&gt;%
+<span class="st">  </span><span class="kw">graph_from_data_frame</span>()
+
+digram_graph</code></pre></div>
+<pre><code>## IGRAPH DN-- 91 77 -- 
+## + attr: name (v/c), n (e/n)
+## + edges (vertex names):
+##  [1] sir     -&gt;thomas     miss    -&gt;crawford   captain -&gt;wentworth  miss    -&gt;woodhouse 
+##  [5] frank   -&gt;churchill  lady    -&gt;russell    lady    -&gt;bertram    sir     -&gt;walter    
+##  [9] miss    -&gt;fairfax    colonel -&gt;brandon    miss    -&gt;bates      lady    -&gt;catherine 
+## [13] sir     -&gt;john       jane    -&gt;fairfax    miss    -&gt;tilney     lady    -&gt;middleton 
+## [17] miss    -&gt;bingley    thousand-&gt;pounds     miss    -&gt;dashwood   miss    -&gt;bennet    
+## [21] john    -&gt;knightley  miss    -&gt;morland    captain -&gt;benwick    dear    -&gt;miss      
+## [25] miss    -&gt;smith      miss    -&gt;crawford&#39;s henry   -&gt;crawford   miss    -&gt;elliot    
+## [29] dr      -&gt;grant      miss    -&gt;bertram    sir     -&gt;thomas&#39;s   ten     -&gt;minutes   
+## + ... omitted several edges</code></pre>
+<p>The igraph package has many powerful functions for manipulating and analyzing networks.</p>
+<p>TODO: examples of igraph package</p>
+</div>
+<div id="visualizing-a-network-with-ggraph" class="section level3">
+<h3><span class="header-section-number">5.2.2</span> Visualizing a network with ggraph</h3>
+<p>igraph has plotting functions built in, but they’re not what the package is designed to do. Many others have developed visualization methods for graphs. But we like the ggraph package, because it implements it in terms of the grammar of graphics.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggraph)
+
+<span class="kw">set.seed</span>(<span class="dv">2016</span>)
+
+<span class="kw">ggraph</span>(digram_graph, <span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>() +
+<span class="st">  </span><span class="kw">geom_node_point</span>()</code></pre></div>
+<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>This gives an idea by adding the three …</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
+
+<span class="kw">ggraph</span>(digram_graph, <span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>() +
+<span class="st">  </span><span class="kw">geom_node_point</span>() +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>We can see the graph start to take shape.</p>
+<ul>
+<li>We add the <code>edge_alpha</code> aesthetic to the link layer to make links transparent based on how common or rare the digram is</li>
+<li>We add directionality with an arrow</li>
+<li>We tinker with the options to the node layer to make the points more attractive (larger, and blue)</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
+
+a &lt;-<span class="st"> </span>grid::<span class="kw">arrow</span>(<span class="dt">type =</span> <span class="st">&quot;closed&quot;</span>, <span class="dt">length =</span> <span class="kw">unit</span>(.<span class="dv">1</span>, <span class="st">&quot;inches&quot;</span>))
+
+<span class="kw">ggraph</span>(digram_graph, <span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">arrow =</span> a) +
+<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>It may take a little more experimentation with your plots to get these graphs to work, but in the end we can visualize a lot this way.</p>
+</div>
+<div id="visualizing-digrams-in-other-texts" class="section level3">
+<h3><span class="header-section-number">5.2.3</span> Visualizing digrams in other texts</h3>
+<p>We went to a good amount of work setting up this</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">count_digrams &lt;-<span class="st"> </span>function(dataset) {
+  dataset %&gt;%
+<span class="st">    </span><span class="kw">unnest_tokens</span>(digram, text, <span class="dt">token =</span> <span class="st">&quot;ngrams&quot;</span>, <span class="dt">n =</span> <span class="dv">2</span>) %&gt;%
+<span class="st">    </span><span class="kw">separate</span>(digram, <span class="kw">c</span>(<span class="st">&quot;word1&quot;</span>, <span class="st">&quot;word2&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>) %&gt;%
+<span class="st">    </span><span class="kw">filter</span>(!word1 %in%<span class="st"> </span>stop_words$word) %&gt;%
+<span class="st">    </span><span class="kw">filter</span>(!word2 %in%<span class="st"> </span>stop_words$word) %&gt;%
+<span class="st">    </span><span class="kw">count</span>(word1, word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
+}
+
+visualize_digrams &lt;-<span class="st"> </span>function(digrams) {
+  <span class="kw">set.seed</span>(<span class="dv">2016</span>)
+  
+  digrams %&gt;%
+<span class="st">    </span><span class="kw">graph_from_data_frame</span>() %&gt;%
+<span class="st">    </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
+<span class="st">    </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">arrow =</span> a) +
+<span class="st">    </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">    </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
+<span class="st">    </span><span class="kw">theme_void</span>()
+}</code></pre></div>
+<p>We could visualize pairs in the King James Bible:</p>
+<p>At that point, we could visualize digrams in other works, such as the King James Version of the Bible:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gutenbergr)
+kjv &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>(<span class="dv">10</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">kjv_digrams &lt;-<span class="st"> </span>kjv %&gt;%
+<span class="st">  </span><span class="kw">count_digrams</span>()
+
+kjv_digrams</code></pre></div>
+<pre><code>## Source: local data frame [47,551 x 3]
+## Groups: word1 [7,265]
+## 
+##    word1    word2     n
+##    &lt;chr&gt;    &lt;chr&gt; &lt;int&gt;
+## 1   thou    shalt  1250
+## 2   thou     hast   768
+## 3   lord      god   546
+## 4    thy      god   356
+## 5   thou      art   320
+## 6   lord      thy   316
+## 7   lord     hath   291
+## 8  shalt     thou   258
+## 9  jesus   christ   196
+## 10 burnt offering   184
+## # ... with 47,541 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">kjv_digrams %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(n &gt;<span class="st"> </span><span class="dv">40</span>) %&gt;%
+<span class="st">  </span><span class="kw">visualize_digrams</span>()</code></pre></div>
+<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+</div>
+<div id="counting-and-correlating-pairs-of-words-with-the-widyr-package" class="section level2">
+<h2><span class="header-section-number">5.3</span> Counting and correlating pairs of words with the widyr package</h2>
+<p>We’ve previously analyzed</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">austen_section_words &lt;-<span class="st"> </span><span class="kw">austen_books</span>() %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(book ==<span class="st"> &quot;Pride &amp; Prejudice&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">section =</span> <span class="kw">row_number</span>() %/%<span class="st"> </span><span class="dv">10</span>) %&gt;%
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
+<span class="st">  </span><span class="kw">anti_join</span>(stop_words, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>)</code></pre></div>
+<div class="figure">
+<img src="images/widyr.jpg" alt="The philosophy behind the widyr package, which can operations such as counting and correlating on pairs of values in a tidy dataset." />
+<p class="caption">The philosophy behind the widyr package, which can operations such as counting and correlating on pairs of values in a tidy dataset.</p>
+</div>
+<p>One example of the widyr pattern is the <code>pairwise_count</code> function. The prefix “pairwise” means it will result in one row for each pair of words in the <code>word</code> variable. This lets us count common pairs of words co-appearing within the same section:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
+
+word_pairs &lt;-<span class="st"> </span>austen_section_words %&gt;%
+<span class="st">  </span><span class="kw">pairwise_count</span>(word, section, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
+
+word_pairs</code></pre></div>
+<pre><code>## # A tibble: 796,030 x 3
+##        item1     item2     n
+##        &lt;chr&gt;     &lt;chr&gt; &lt;dbl&gt;
+## 1  elizabeth     darcy   144
+## 2      darcy elizabeth   144
+## 3  elizabeth      miss   110
+## 4       miss elizabeth   110
+## 5       jane elizabeth   106
+## 6  elizabeth      jane   106
+## 7      darcy      miss    92
+## 8       miss     darcy    92
+## 9    bingley elizabeth    91
+## 10 elizabeth   bingley    91
+## # ... with 796,020 more rows</code></pre>
+<p>For example, we discover that the most common pair of words in a section is “Elizabeth” and “Darcy” (the two main characters).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_pairs %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(item1 ==<span class="st"> &quot;darcy&quot;</span>)</code></pre></div>
+<pre><code>## # A tibble: 2,930 x 3
+##    item1     item2     n
+##    &lt;chr&gt;     &lt;chr&gt; &lt;dbl&gt;
+## 1  darcy elizabeth   144
+## 2  darcy      miss    92
+## 3  darcy   bingley    86
+## 4  darcy      jane    46
+## 5  darcy    sister    45
+## 6  darcy    bennet    45
+## 7  darcy      time    41
+## 8  darcy      lady    38
+## 9  darcy   wickham    37
+## 10 darcy    friend    37
+## # ... with 2,920 more rows</code></pre>
+<div id="pairwise-correlation" class="section level3">
+<h3><span class="header-section-number">5.3.1</span> Pairwise correlation</h3>
+<p>Pairs like “Elizabeth” and “Darcy” are the most common co-occurring words, but that’s not particularly meaningful since <strong>they’re also the most common words.</strong> We instead want to examine <em>correlation</em> among words, which is how often they appear together relative to how often they appear separately.</p>
+<p>TODO: formula for Pearson correlation, explanation of phi coefficient</p>
+<p>The <code>pairwise_cor()</code> function in widyr lets us perform a Pearson correlation across words.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
+
+<span class="co"># We need to filter for at least relatively common words first</span>
+word_cors &lt;-<span class="st"> </span>austen_section_words %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(word) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">20</span>) %&gt;%
+<span class="st">  </span><span class="kw">pairwise_cor</span>(word, section, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
+
+word_cors</code></pre></div>
+<pre><code>## # A tibble: 154,842 x 3
+##        item1     item2 correlation
+##        &lt;chr&gt;     &lt;chr&gt;       &lt;dbl&gt;
+## 1         de    bourgh   0.9508510
+## 2     bourgh        de   0.9508510
+## 3   thousand    pounds   0.7005850
+## 4     pounds  thousand   0.7005850
+## 5        sir   william   0.6644804
+## 6    william       sir   0.6644804
+## 7       lady catherine   0.6633289
+## 8  catherine      lady   0.6633289
+## 9    colonel   forster   0.6221042
+## 10   forster   colonel   0.6221042
+## # ... with 154,832 more rows</code></pre>
+<p>We could find the words most correlated with Elizabeth:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_cors %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(item1 ==<span class="st"> &quot;darcy&quot;</span>)</code></pre></div>
+<pre><code>## # A tibble: 393 x 3
+##    item1       item2 correlation
+##    &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt;
+## 1  darcy        miss  0.17989385
+## 2  darcy fitzwilliam  0.17899838
+## 3  darcy     bingley  0.17878908
+## 4  darcy       hurst  0.10658328
+## 5  darcy   pemberley  0.09581220
+## 6  darcy      friend  0.09281731
+## 7  darcy      manner  0.09143830
+## 8  darcy       eliza  0.08663187
+## 9  darcy       proud  0.07751503
+## 10 darcy        eyes  0.07700740
+## # ... with 383 more rows</code></pre>
+</div>
+<div id="visualizing-word-correlations" class="section level3">
+<h3><span class="header-section-number">5.3.2</span> Visualizing word correlations</h3>
+<p>Just as we used ggraph to visualize digrams, we can use it to visualize correlations and clusters among words that we’ve found through the widyr package.</p>
+<p>This graph is an early placeholder, needs to be adjusted:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_cors %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(correlation &gt;<span class="st"> </span>.<span class="dv">15</span>) %&gt;%
+<span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
+<span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> correlation), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Note that unlike the digram analysis, the relationship here aren’t directional.</p>
+<p>This kind of correlation network is a very useful and flexible visualization, and we’ll examine it further in later chapters.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="tfidf.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="tidying-and-casting-document-term-matrices.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/05-word-combinations.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
