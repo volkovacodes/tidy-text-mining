@@ -15,9 +15,10 @@ description: "A guide to text analysis within the tidy data framework, using the
 
 
 
+# Welcome to Tidy Text Mining in R {-}
+
 <img src="images/tidycover.png" width="470" height="750" alt="Cover image" />
 
-# Welcome to Tidy Text Mining in R {-}
 
 This is the [website](http://tidytextmining.com/) for *Tidy Text Mining in R*! Visit the [GitHub repository for this site](https://github.com/dgrtwo/tidy-text-mining).
 
