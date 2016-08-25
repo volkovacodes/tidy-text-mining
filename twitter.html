@@ -38,8 +38,8 @@ MathJax.Hub.Config({
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="case-study-analyzing-usenet-text.html">
-
+<link rel="prev" href="topicmodeling.html">
+<link rel="next" href="nasa.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -202,37 +202,105 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1">
-<h1><span class="header-section-number">11</span> References</h1>
+<div id="twitter" class="section level1">
+<h1><span class="header-section-number">8</span> Case study: comparing Twitter archives</h1>
+<p>One type of text that has gotten a good deal of attention in recent years is text shared online via Twitter. In fact, several of the sentiment lexicons used in this book (and commonly used in general) were designed for use with and validated on tweets. Both of the authors of this book are on Twitter and are fairly regular users of it so in this case study, let’s compare the entire Twitter archives of Julia and David.</p>
+<div id="getting-the-data-and-distribution-of-tweets" class="section level2">
+<h2><span class="header-section-number">8.1</span> Getting the data and distribution of tweets</h2>
+<p>An individual can download their own Twitter archive by following <a href="https://support.twitter.com/articles/20170160">directions available here</a>. We each downloaded ours and will now open them up. Let’s use lubridate to convert the string timestamps to date-time objects and just take a look at our tweeting patterns overall.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate)</code></pre></div>
+<pre><code>## Loading required package: methods</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     date</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(dplyr)</code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:lubridate&#39;:
+## 
+##     intersect, setdiff, union</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tweets_julia &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/tweets_julia.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+tweets_dave &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/tweets_dave.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+tweets_julia$timestamp &lt;-<span class="st"> </span><span class="kw">with_tz</span>(<span class="kw">ymd_hms</span>(tweets_julia$timestamp), 
+                                  <span class="st">&quot;America/Denver&quot;</span>)
+tweets_dave$timestamp &lt;-<span class="st"> </span><span class="kw">with_tz</span>(<span class="kw">ymd_hms</span>(tweets_dave$timestamp), 
+                                 <span class="st">&quot;America/New_York&quot;</span>)
+tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_julia %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;Julia&quot;</span>),
+                    tweets_dave %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;David&quot;</span>))
+<span class="kw">ggplot</span>(tweets, <span class="kw">aes</span>(<span class="dt">x =</span> timestamp, <span class="dt">fill =</span> person)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>)</code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="08-tweet-archives_files/figure-html/setup-1.png" width="768" /> David and Julia tweet at about the same rate currently and joined Twitter about a year apart from each other, but there good 5 or so years where David was not active on Twitter and Julia was. In total, Julia has about 4 times as many tweets as David.</p>
+</div>
+<div id="word-frequencies-1" class="section level2">
+<h2><span class="header-section-number">8.2</span> Word frequencies</h2>
+<p>Let’s use <code>unnest_tokens</code> to make a tidy dataframe of all the words in our tweets, and remove the common English stop words.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
+tidy_tweets &lt;-<span class="st"> </span>tweets %&gt;%<span class="st"> </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%<span class="st"> </span><span class="kw">anti_join</span>(stop_words)</code></pre></div>
+<pre><code>## Joining, by = &quot;word&quot;</code></pre>
+<p>Now we can calculate word frequencies for each person</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">frequency &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> </span><span class="kw">group_by</span>(person) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">left_join</span>(tidy_tweets %&gt;%<span class="st"> </span><span class="kw">group_by</span>(person) %&gt;%<span class="st"> </span><span class="kw">summarise</span>(<span class="dt">total =</span> <span class="kw">n</span>())) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">freq =</span> n/total)</code></pre></div>
+<pre><code>## Joining, by = &quot;person&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">frequency</code></pre></div>
+<pre><code>## Source: local data frame [25,210 x 5]
+## Groups: person [2]
+## 
+##    person       word     n total        freq
+##     &lt;chr&gt;      &lt;chr&gt; &lt;int&gt; &lt;int&gt;       &lt;dbl&gt;
+## 1   Julia       t.co  2218 85215 0.026028281
+## 2   Julia       http  1438 85215 0.016874963
+## 3   David       t.co  1344 27338 0.049162338
+## 4   David      https  1045 27338 0.038225181
+## 5   Julia      https  1040 85215 0.012204424
+## 6   David         rt   909 27338 0.033250421
+## 7   Julia         rt   867 85215 0.010174265
+## 8   Julia       time   568 85215 0.006665493
+## 9   Julia selkie1970   565 85215 0.006630288
+## 10  Julia    skedman   518 85215 0.006078742
+## # ... with 25,200 more rows</code></pre>
+<p>This is a lovely, tidy data frame but we would actually like to plot those frequencies on the x- and y-axes of a plot, so we will need to use an <code>inner_join</code> and make a different dataframe.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">frequency &lt;-<span class="st"> </span><span class="kw">inner_join</span>(frequency %&gt;%<span class="st"> </span><span class="kw">filter</span>(person ==<span class="st"> &quot;Julia&quot;</span>) %&gt;%<span class="st"> </span><span class="kw">rename</span>(<span class="dt">Julia =</span> freq),
+                        frequency %&gt;%<span class="st"> </span><span class="kw">filter</span>(person ==<span class="st"> &quot;David&quot;</span>) %&gt;%<span class="st"> </span><span class="kw">rename</span>(<span class="dt">David =</span> freq),
+                        <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%<span class="st"> </span><span class="kw">select</span>(word, Julia, David)
+frequency</code></pre></div>
+<pre><code>## # A tibble: 3,674 x 3
+##     word       Julia        David
+##    &lt;chr&gt;       &lt;dbl&gt;        &lt;dbl&gt;
+## 1   t.co 0.026028281 0.0491623381
+## 2   http 0.016874963 0.0150340186
+## 3  https 0.012204424 0.0382251811
+## 4     rt 0.010174265 0.0332504207
+## 5   time 0.006665493 0.0035115956
+## 6    day 0.005515461 0.0012071110
+## 7   baby 0.004811360 0.0001463165
+## 8   love 0.003555712 0.0017192187
+## 9  house 0.003403157 0.0001097374
+## 10   amp 0.003356217 0.0015363231
+## # ... with 3,664 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
+<span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(Julia, David)) +
+<span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">alpha =</span> <span class="fl">0.1</span>, <span class="dt">size =</span> <span class="fl">2.5</span>, <span class="dt">width =</span> <span class="fl">0.4</span>, <span class="dt">height =</span> <span class="fl">0.4</span>) +
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> word), <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">vjust =</span> <span class="fl">1.5</span>) +
+<span class="st">  </span><span class="kw">scale_x_log10</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>()) +
+<span class="st">  </span><span class="kw">scale_y_log10</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>()) +
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
+<p><img src="08-tweet-archives_files/figure-html/spread-1.png" width="672" /></p>
+<p>It is at this point that we should perhaps share some personal details. Although the authors of this book enjoy working together very much, it could be argued that their lives are quite different. To start with, David is about 10 years younger than Julia. Also, Julia has three children, two of who were born during the years she has been active on Twitter; we could find the tweets where she complained about being very pregnant or announced their births if we wanted to. David has used his Twitter account almost exclusively for professional purposes since he became more active, while Julia used it for entirely personal purposes until late 2015. We see these differences immediately in this plot exploring word frequencies, and they will continue to be obvious.</p>
+<p>TODO: lots</p>
 
-<div id="refs" class="references">
-<div>
-<p>Benoit, Kenneth, and Paul Nulty. 2016. <em>Quanteda: Quantitative Analysis of Textual Data</em>. <a href="https://CRAN.R-project.org/package=quanteda" class="uri">https://CRAN.R-project.org/package=quanteda</a>.</p>
-</div>
-<div>
-<p>Ingo Feinerer, Kurt Hornik, and David Meyer. 2008. “Text Mining Infrastructure in R.” <em>Journal of Statistical Software</em> 25 (5): 1–54. <a href="http://www.jstatsoft.org/v25/i05/" class="uri">http://www.jstatsoft.org/v25/i05/</a>.</p>
-</div>
-<div>
-<p>Mullen, Lincoln. 2016. <em>Tokenizers: A Consistent Interface to Tokenize Natural Language Text</em>. <a href="https://CRAN.R-project.org/package=tokenizers" class="uri">https://CRAN.R-project.org/package=tokenizers</a>.</p>
-</div>
-<div>
-<p>Robinson, David, Matthieu Gomez, Boris Demeshev, Dieter Menne, Benjamin Nutter, Luke Johnston, Ben Bolker, Francois Briatte, and Hadley Wickham. 2015. <em>Broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
-</div>
-<div>
-<p>Wickham, Hadley. 2007. “Reshaping Data with the reshape Package.” <em>Journal of Statistical Software</em> 21 (12): 1–20. <a href="http://www.jstatsoft.org/v21/i12/" class="uri">http://www.jstatsoft.org/v21/i12/</a>.</p>
-</div>
-<div>
-<p>———. 2009. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="http://ggplot2.org" class="uri">http://ggplot2.org</a>.</p>
-</div>
-<div>
-<p>———. 2014. “Tidy Data.” <em>Journal of Statistical Software</em> 59 (1): 1–23. doi:<a href="https://doi.org/10.18637/jss.v059.i10">10.18637/jss.v059.i10</a>.</p>
-</div>
-<div>
-<p>———. 2016. <em>Tidyr: Easily Tidy Data with `spread()` and `gather()` Functions</em>. <a href="https://CRAN.R-project.org/package=tidyr" class="uri">https://CRAN.R-project.org/package=tidyr</a>.</p>
-</div>
-<div>
-<p>Wickham, Hadley, and Romain Francois. 2016. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr" class="uri">https://CRAN.R-project.org/package=dplyr</a>.</p>
-</div>
 </div>
 </div>
             </section>
@@ -240,8 +308,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="case-study-analyzing-usenet-text.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="topicmodeling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="nasa.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -268,7 +336,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/11-references.Rmd",
+"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/08-tweet-archives.Rmd",
 "text": null
 },
 "download": null,
