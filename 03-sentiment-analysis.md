@@ -9,7 +9,6 @@ There are a variety of methods and dictionaries that exist for evaluating the op
 
 ```r
 library(tidytext)
-
 sentiments
 ```
 
@@ -51,7 +50,6 @@ With data in a tidy format, sentiment analysis can be done as an inner join. Let
 library(janeaustenr)
 library(dplyr)
 library(stringr)
-library(tidytext)
 
 tidy_books <- austen_books() %>%
   group_by(book) %>%
@@ -157,14 +155,14 @@ This can be shown visually, and we can pipe straight into ggplot2, if we like, b
 
 
 ```r
+library(ggstance)
 bing_word_counts %>%
   filter(n > 150) %>%
   mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
   mutate(word = reorder(word, n)) %>%
-  ggplot(aes(word, n, fill = sentiment)) +
-  geom_bar(stat = "identity") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  ylab("Contribution to sentiment")
+  ggplot(aes(n, word, fill = sentiment)) +
+  geom_barh(stat = "identity") +
+  xlab("Contribution to sentiment")
 ```
 
 <img src="03-sentiment-analysis_files/figure-html/pipetoplot-1.png" width="672" />
@@ -182,6 +180,7 @@ For example, consider the wordcloud package. Let's look at the most common words
 library(wordcloud)
 
 tidy_books %>%
+  anti_join(stop_words) %>%
   count(word) %>%
   with(wordcloud(word, n, max.words = 100))
 ```
@@ -229,7 +228,7 @@ PandP_sentences$sentence[2]
 ## [1] "however little known the feelings or views of such a man may be on his first entering a neighbourhood, this truth is so well fixed in the minds of the surrounding families, that he is considered the rightful property of some one or other of their daughters."
 ```
 
-The sentence tokenizing does seem to have a bit of trouble with UTF-8 encoded text, especially with sections of dialogue; it does much better with punctuation in ASCII.
+The sentence tokenizing does seem to have a bit of trouble with UTF-8 encoded text, especially with sections of dialogue; it does much better with punctuation in ASCII. One possibility, if this is important, is to try using `iconv()`, with something like `iconv(text, to = 'latin1')` in a mutate statement before unnesting.
 
 Another option in `unnest_tokens` is to split into tokens using a regex pattern. We could use this, for example, to split the text of Jane Austen's novels into a data frame by chapter.
 
@@ -291,6 +290,4 @@ tidy_books %>%
 ## 6          Persuasion       4            62  1807 0.03431101
 ```
 
-These are the chapters with the most negative words in each book, normalized for number of words in the chapter. What is happening in these chapters? In Chapter 29 of *Sense and Sensibility* Marianne finds out what an awful person Willoughby is by letter, and in Chapter 34 of *Pride and Prejudice* Mr. Darcy proposes for the first time (so badly!). Chapter 45 of *Mansfield Park* is almost the end, when Tom is sick with consumption and Mary is revealed as mercenary and uncaring, Chapter 15 of *Emma* is when horrifying Mr. Elton proposes, and Chapter 27 of *Northanger Abbey* is a short chapter where Catherine gets a terrible letter from her inconstant friend Isabella. Chapter 21 of *Persuasion* is when Anne’s friend tells her all about Mr. Elliott’s immoral past.
-
-Interestingly, many of those chapters are very close to the ends of the novels; things tend to get really bad for Jane Austen's characters before their happy endings, it seems. Also, these chapters largely involve terrible revelations about characters through letters or conversations about past events, rather than some action happening directly in the plot. All that, just with dplyr verbs, because the data is tidy.
+These are the chapters with the most sad words in each book, normalized for number of words in the chapter. What is happening in these chapters? In Chapter 43 of *Sense and Sensibility* Marianne is seriously ill, near death, and in Chapter 34 of *Pride and Prejudice* Mr. Darcy proposes for the first time (so badly!). Chapter 46 of *Mansfield Park* is almost the end, when everyone learns of Henry's scandalous adultery, Chapter 15 of *Emma* is when horrifying Mr. Elton proposes, and in Chapter 21 of *Northanger Abbey* Catherine is deep in her Gothic faux fantasy of murder/etc. Chapter 4 of *Persuasion* is when the reader gets the full flashback of Anne refusing Captain Wentworth and how sad she was and what a terrible mistake she realized it to be.
