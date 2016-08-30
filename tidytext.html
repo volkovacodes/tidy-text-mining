@@ -264,7 +264,7 @@ text_df %&gt;%
 </div>
 <div id="tidying-the-works-of-jane-austen" class="section level2">
 <h2><span class="header-section-number">2.2</span> Tidying the works of Jane Austen</h2>
-<p>Let’s use the text of Jane Austen’s 6 completed, published novels from the <a href="https://cran.r-project.org/package=janeaustenr">janeaustenr</a> package, and transform them into a tidy format. The janeaustenr package provides these texts in a one-row-per-line format.</p>
+<p>Let’s use the text of Jane Austen’s 6 completed, published novels from the <a href="https://cran.r-project.org/package=janeaustenr">janeaustenr</a> package, and transform them into a tidy format. The janeaustenr package provides these texts in a one-row-per-line format. Let’s start with that, annotate a <code>linenumber</code> quantity to keep track of lines in the original format, and use a regex to find where all the chapters are.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(janeaustenr)
 <span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(stringr)
@@ -377,7 +377,7 @@ hgwells &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>
 ## 9    kemp   213
 ## 10   eyes   210
 ## # ... with 11,759 more rows</code></pre>
-<p>Now let’s get some well-known works of the Brontë sisters, whose lives overlapped with Jane Austen’s somewhat but who wrote in a bit of a different style. Let’s get <a href="https://www.gutenberg.org/ebooks/1260"><em>Jane Eyre</em></a>, <a href="https://www.gutenberg.org/ebooks/768"><em>Wuthering Heights</em></a>, <a href="https://www.gutenberg.org/ebooks/969"><em>The Tenant of Wildfell Hall</em></a>, <a href="https://www.gutenberg.org/ebooks/9182"><em>Villette</em></a>, and <a href="https://www.gutenberg.org/ebooks/767"><em>Agnes Grey</em></a>.</p>
+<p>Now let’s get some well-known works of the Brontë sisters, whose lives overlapped with Jane Austen’s somewhat but who wrote in a rather different style. Let’s get <a href="https://www.gutenberg.org/ebooks/1260"><em>Jane Eyre</em></a>, <a href="https://www.gutenberg.org/ebooks/768"><em>Wuthering Heights</em></a>, <a href="https://www.gutenberg.org/ebooks/969"><em>The Tenant of Wildfell Hall</em></a>, <a href="https://www.gutenberg.org/ebooks/9182"><em>Villette</em></a>, and <a href="https://www.gutenberg.org/ebooks/767"><em>Agnes Grey</em></a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bronte &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>(<span class="kw">c</span>(<span class="dv">1260</span>, <span class="dv">768</span>, <span class="dv">969</span>, <span class="dv">9182</span>, <span class="dv">766</span>))</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_bronte &lt;-<span class="st"> </span>bronte %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
