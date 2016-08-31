@@ -9,6 +9,7 @@ There are a variety of methods and dictionaries that exist for evaluating the op
 
 ```r
 library(tidytext)
+
 sentiments
 ```
 
