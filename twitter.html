@@ -215,6 +215,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 tweets_julia &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/tweets_julia.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 tweets_dave &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/tweets_dave.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+<span class="co"># take out the timezone thing if we don&#39;t do anything with times of day</span>
 tweets_julia$timestamp &lt;-<span class="st"> </span><span class="kw">with_tz</span>(<span class="kw">ymd_hms</span>(tweets_julia$timestamp), 
                                   <span class="st">&quot;America/Denver&quot;</span>)
 tweets_dave$timestamp &lt;-<span class="st"> </span><span class="kw">with_tz</span>(<span class="kw">ymd_hms</span>(tweets_dave$timestamp), 
@@ -228,7 +229,7 @@ tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_ju
 </div>
 <div id="word-frequencies-1" class="section level2">
 <h2><span class="header-section-number">8.2</span> Word frequencies</h2>
-<p>Let’s use <code>unnest_tokens</code> to make a tidy dataframe of all the words in our tweets, and remove the common English stop words. There are certain conventions in how people use text on Twitter, so we will do a bit more work with our text here than, for example, we did with the narrative text from Project Gutenberg. The first <code>mutate</code> line below removes links and cleans out some characters that we don’t want. In the call to <code>unnest_tokens</code>, we unnest using a regex pattern, instead of just looking for single unigrams (words). This regex pattern is very useful for dealing with Twitter text; it retains hashtags and mentions of usernames with the <code>\@</code> symbol. Because we have kept these types of symbols in the text, we can’t use a simple <code>anti_join</code> to remove stop words. Instead, we can take the approach shown in the <code>filter</code> line that uses <code>str_detect</code> from the stringr library.</p>
+<p>Let’s use <code>unnest_tokens</code> to make a tidy dataframe of all the words in our tweets, and remove the common English stop words. There are certain conventions in how people use text on Twitter, so we will do a bit more work with our text here than, for example, we did with the narrative text from Project Gutenberg. The first <code>mutate</code> line below removes links and cleans out some characters that we don’t want. In the call to <code>unnest_tokens</code>, we unnest using a regex pattern, instead of just looking for single unigrams (words). This regex pattern is very useful for dealing with Twitter text; it retains hashtags and mentions of usernames with the <code>@</code> symbol. Because we have kept these types of symbols in the text, we can’t use a simple <code>anti_join</code> to remove stop words. Instead, we can take the approach shown in the <code>filter</code> line that uses <code>str_detect</code> from the stringr library.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 <span class="kw">library</span>(stringr)
 
