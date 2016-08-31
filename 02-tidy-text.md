@@ -2,7 +2,7 @@
 
 
 
-We define the tidy text format as being a table with **one-term-per-row.** Structuring text data in this way means that it is conforms to tidy data principles and can be manipulated with a set of consistent tools. This is worth contrasting with the ways text is often stored in text mining approaches.
+We define the tidy text format as being a table with **one-term-per-row.** Structuring text data in this way means that it conforms to tidy data principles and can be manipulated with a set of consistent tools. This is worth contrasting with the ways text is often stored in text mining approaches.
 
 * **Raw string**: Text can, of course, be stored as raw strings within R, and often text data is first read into memory in this form.
 * **Corpus**: These types of objects typically annotate the raw string content with additional metadata and details.
