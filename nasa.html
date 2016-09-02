@@ -205,10 +205,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="nasa" class="section level1">
 <h1><span class="header-section-number">9</span> Case study: mining NASA metadata</h1>
-<p>There are 32,000+ datasets at <a href="https://www.nasa.gov/">NASA</a>, and we can use the metadata for these datasets to understand the connections between them. What is metadata? Metadata is data that gives information about other data, in this case, data about what is in these numerous NASA datasets. It includes information like the title of the dataset, description fields, what organization(s) with NASA is responsible for the dataset, and so forth. NASA places a high priority on making its data accessible, even requiring all NASA-funded research to be <a href="https://www.nasa.gov/press-release/nasa-unveils-new-public-web-portal-for-research-results">openly accessible online</a>, and the metadata for all its datasets is <a href="https://data.nasa.gov/data.json">publicly available online in JSON format</a>. Let’s take a look at this metadata and see what is there.</p>
+<p>There are 32,000+ datasets at <a href="https://www.nasa.gov/">NASA</a>, and we can use the metadata for these datasets to understand the connections between them. What is metadata? Metadata is data that gives information about other data, in this case, data about what is in these numerous NASA datasets (but not the datasets themselves). It includes information like the title of the dataset, description fields, what organization(s) within NASA is responsible for the dataset, and so forth. NASA places a high priority on making its data accessible, even requiring all NASA-funded research to be <a href="https://www.nasa.gov/press-release/nasa-unveils-new-public-web-portal-for-research-results">openly accessible online</a>, and the metadata for all its datasets is <a href="https://data.nasa.gov/data.json">publicly available online in JSON format</a>. Let’s take a look at this metadata and see what is there.</p>
 <div id="getting-the-metadata" class="section level2">
 <h2><span class="header-section-number">9.1</span> Getting the metadata</h2>
+<p>First, let’s download the JSON file and take a look at the names.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(jsonlite)
+
 metadata &lt;-<span class="st"> </span><span class="kw">fromJSON</span>(<span class="st">&quot;https://data.nasa.gov/data.json&quot;</span>)
 <span class="kw">names</span>(metadata$dataset)</code></pre></div>
 <pre><code>##  [1] &quot;_id&quot;                &quot;@type&quot;              &quot;accessLevel&quot;        &quot;accrualPeriodicity&quot;
@@ -230,7 +232,7 @@ metadata &lt;-<span class="st"> </span><span class="kw">fromJSON</span>(<span cl
 ##       &quot;data.frame&quot;        &quot;character&quot;        &quot;character&quot;             &quot;list&quot;        &quot;character&quot; 
 ##            license           isPartOf         references             rights        describedBy 
 ##        &quot;character&quot;        &quot;character&quot;             &quot;list&quot;        &quot;character&quot;        &quot;character&quot;</code></pre>
-<p>It has been suggested that the title, description, and keywords for each dataset will probably be most fruitful for drawing connections between datasets. Let’s check them out.</p>
+<p>It seems likely that the title, description, and keywords for each dataset may be most fruitful for drawing connections between datasets. It’s a place to start anyway. Let’s check them out.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(metadata$dataset$title)</code></pre></div>
 <pre><code>## [1] &quot;character&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(metadata$dataset$description)</code></pre></div>
@@ -240,10 +242,12 @@ metadata &lt;-<span class="st"> </span><span class="kw">fromJSON</span>(<span cl
 </div>
 <div id="wrangling-and-tidying-the-data" class="section level2">
 <h2><span class="header-section-number">9.2</span> Wrangling and tidying the data</h2>
-<p>Let’s set up dataframes for title, description, and keyword and keep the dataset ids.</p>
+<p>Let’s set up tidy data frames for title, description, and keyword and keep the dataset ids.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-nasatitle &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">id =</span> metadata$dataset$<span class="st">`</span><span class="dt">_id</span><span class="st">`</span>$<span class="st">`</span><span class="dt">$oid</span><span class="st">`</span>, <span class="dt">title =</span> metadata$dataset$title)
-nasatitle</code></pre></div>
+
+nasa_title &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">id =</span> metadata$dataset$<span class="st">`</span><span class="dt">_id</span><span class="st">`</span>$<span class="st">`</span><span class="dt">$oid</span><span class="st">`</span>, 
+                        <span class="dt">title =</span> metadata$dataset$title)
+nasa_title</code></pre></div>
 <pre><code>## # A tibble: 32,089 x 2
 ##                          id                                               title
 ##                       &lt;chr&gt;                                               &lt;chr&gt;
@@ -258,8 +262,9 @@ nasatitle</code></pre></div>
 ## 9  55942a58c63a7fe59b495a7f       2001 Environmental Sustainability Index (ESI)
 ## 10 55942a58c63a7fe59b495a80       2001 Environmental Sustainability Index (ESI)
 ## # ... with 32,079 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasadesc &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">id =</span> metadata$dataset$<span class="st">`</span><span class="dt">_id</span><span class="st">`</span>$<span class="st">`</span><span class="dt">$oid</span><span class="st">`</span>, <span class="dt">desc =</span> metadata$dataset$description)
-nasadesc</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_desc &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">id =</span> metadata$dataset$<span class="st">`</span><span class="dt">_id</span><span class="st">`</span>$<span class="st">`</span><span class="dt">$oid</span><span class="st">`</span>, 
+                       <span class="dt">desc =</span> metadata$dataset$description)
+nasa_desc</code></pre></div>
 <pre><code>## # A tibble: 32,089 x 2
 ##                          id
 ##                       &lt;chr&gt;
@@ -274,11 +279,25 @@ nasadesc</code></pre></div>
 ## 9  55942a58c63a7fe59b495a7f
 ## 10 55942a58c63a7fe59b495a80
 ## # ... with 32,079 more rows, and 1 more variables: desc &lt;chr&gt;</code></pre>
+<p>These are having a hard time printing out; let’s print out part of a few.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_desc %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(desc) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">5</span>)</code></pre></div>
+<pre><code>## # A tibble: 5 x 1
+##                                                                                                    desc
+##                                                                                                   &lt;chr&gt;
+## 1               The cryogenic evaluation of typical and experimental filament winding materials Project
+## 2  The Aura-OMI Daily Gridded Surface UV Irradiance Product (OMUVBd) is now available from the NASA God
+## 3 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+## 4 The Coastal Zone Color Scanner Experiment (CZCS) was the first instrument devoted to\nthe measurement
+## 5  The EUMETSAT OSI-SAF NAR SST products are SST fields derived from NOAA/AVHRR data and available over</code></pre>
+<p>Now we can do the keywords, which must be unnested since they are in a list-column.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
-nasakeyword &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">id =</span> metadata$dataset$<span class="st">`</span><span class="dt">_id</span><span class="st">`</span>$<span class="st">`</span><span class="dt">$oid</span><span class="st">`</span>, 
+
+nasa_keyword &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">id =</span> metadata$dataset$<span class="st">`</span><span class="dt">_id</span><span class="st">`</span>$<span class="st">`</span><span class="dt">$oid</span><span class="st">`</span>, 
                           <span class="dt">keyword =</span> metadata$dataset$keyword) %&gt;%
-<span class="st">        </span><span class="kw">unnest</span>(keyword)
-nasakeyword</code></pre></div>
+<span class="st">  </span><span class="kw">unnest</span>(keyword)
+nasa_keyword</code></pre></div>
 <pre><code>## # A tibble: 126,814 x 2
 ##                          id       keyword
 ##                       &lt;chr&gt;         &lt;chr&gt;
@@ -293,15 +312,21 @@ nasakeyword</code></pre></div>
 ## 9  55942a58c63a7fe59b495a79 SURFACE WATER
 ## 10 55942a58c63a7fe59b495a7a EARTH SCIENCE
 ## # ... with 126,804 more rows</code></pre>
-<p>Now let’s do some unnesting/tidying of the title and description fields so we can do some NLP and text analysis. Let’s also remove common English words.</p>
+<p>Now let’s do some use tidytext’s <code>unnest_tokens</code> for the title and description fields so we can do the text analysis. Let’s also remove common English words.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
-nasatitle &lt;-<span class="st"> </span>nasatitle %&gt;%<span class="st"> </span><span class="kw">unnest_tokens</span>(word, title) %&gt;%<span class="st"> </span><span class="kw">anti_join</span>(stop_words)
-nasadesc &lt;-<span class="st"> </span>nasadesc %&gt;%<span class="st"> </span><span class="kw">unnest_tokens</span>(word, desc) %&gt;%<span class="st"> </span><span class="kw">anti_join</span>(stop_words)</code></pre></div>
+
+nasa_title &lt;-<span class="st"> </span>nasa_title %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, title) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">anti_join</span>(stop_words)
+nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, desc) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">anti_join</span>(stop_words)</code></pre></div>
 </div>
 <div id="some-initial-simple-exploration" class="section level2">
 <h2><span class="header-section-number">9.3</span> Some initial simple exploration</h2>
 <p>What are the most common words in the NASA dataset titles?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasatitle %&gt;%<span class="st"> </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_title %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## # A tibble: 11,614 x 2
 ##       word     n
 ##      &lt;chr&gt; &lt;int&gt;
@@ -317,7 +342,8 @@ nasadesc &lt;-<span class="st"> </span>nasadesc %&gt;%<span class="st"> </span><
 ## 10      l2  1311
 ## # ... with 11,604 more rows</code></pre>
 <p>What about the descriptions?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasadesc %&gt;%<span class="st"> </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_desc %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## # A tibble: 35,936 x 2
 ##          word     n
 ##         &lt;chr&gt; &lt;int&gt;
@@ -336,10 +362,14 @@ nasadesc &lt;-<span class="st"> </span>nasadesc %&gt;%<span class="st"> </span><
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mystopwords &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">1</span>:<span class="dv">10</span>), 
                                    <span class="st">&quot;v1&quot;</span>, <span class="st">&quot;v03&quot;</span>, <span class="st">&quot;l2&quot;</span>, <span class="st">&quot;l3&quot;</span>, <span class="st">&quot;v5.2.0&quot;</span>, 
                                    <span class="st">&quot;v003&quot;</span>, <span class="st">&quot;v004&quot;</span>, <span class="st">&quot;v005&quot;</span>, <span class="st">&quot;v006&quot;</span>))
-nasatitle &lt;-<span class="st"> </span>nasatitle %&gt;%<span class="st"> </span><span class="kw">anti_join</span>(mystopwords)
-nasadesc &lt;-<span class="st"> </span>nasadesc %&gt;%<span class="st"> </span><span class="kw">anti_join</span>(mystopwords)</code></pre></div>
+nasa_title &lt;-<span class="st"> </span>nasa_title %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">anti_join</span>(mystopwords)
+nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">anti_join</span>(mystopwords)</code></pre></div>
 <p>What are the most common keywords?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasakeyword %&gt;%<span class="st"> </span><span class="kw">group_by</span>(keyword) %&gt;%<span class="st"> </span><span class="kw">count</span>(<span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_keyword %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">count</span>(<span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## # A tibble: 1,774 x 2
 ##                    keyword     n
 ##                      &lt;chr&gt; &lt;int&gt;
@@ -354,15 +384,18 @@ nasadesc &lt;-<span class="st"> </span>nasadesc %&gt;%<span class="st"> </span><
 ## 9                   OCEANS  2765
 ## 10            LAND SURFACE  2720
 ## # ... with 1,764 more rows</code></pre>
-<p>Looks like “Project completed” may not be useful keywords to keep around for some purposes, and we may want to change all of these to lower or upper case to get rid of duplicates like “OCEANS” and “Oceans”. Let’s do that, actually.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasakeyword &lt;-<span class="st"> </span>nasakeyword %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">keyword =</span> <span class="kw">toupper</span>(keyword))</code></pre></div>
+<p>It is possible that “Project completed” may not be a useful set of keywords to keep around for some purposes, and we may want to change all of these to lower or upper case to get rid of duplicates like “OCEANS” and “Oceans”. Let’s do that, actually.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_keyword &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">keyword =</span> <span class="kw">toupper</span>(keyword))</code></pre></div>
 </div>
 <div id="word-co-ocurrences" class="section level2">
 <h2><span class="header-section-number">9.4</span> Word co-ocurrences</h2>
-<p>Let’s examine which words commonly occur together in the titles and descriptions of NASA datasets. We can then examine a word network in titles/descriptions and this may help us decide, for example, how many topics to look at in topic modeling.</p>
+<p>Let’s examine which words commonly occur together in the titles and descriptions of NASA datasets. We can then examine a word network in titles/descriptions; this may help us decide, for example, how many topics to look at in topic modeling.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
-titlewords &lt;-<span class="st"> </span>nasatitle %&gt;%<span class="st"> </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
-titlewords</code></pre></div>
+
+title_words &lt;-<span class="st"> </span>nasa_title %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
+title_words</code></pre></div>
 <pre><code>## # A tibble: 313,774 x 3
 ##      item1   item2     n
 ##      &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;
@@ -377,8 +410,9 @@ titlewords</code></pre></div>
 ## 9     airs   level   612
 ## 10   level    airs   612
 ## # ... with 313,764 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">descwords &lt;-<span class="st"> </span>nasadesc %&gt;%<span class="st"> </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
-descwords</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_words &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
+desc_words</code></pre></div>
 <pre><code>## # A tibble: 21,775,980 x 3
 ##         item1      item2     n
 ##         &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;
@@ -400,50 +434,68 @@ descwords</code></pre></div>
 <span class="kw">library</span>(ggplot2)
 
 <span class="kw">set.seed</span>(<span class="dv">1234</span>)
-titlewords %&gt;%
-<span class="st">        </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">250</span>) %&gt;%
-<span class="st">        </span><span class="kw">graph_from_data_frame</span>() %&gt;%
-<span class="st">        </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
-<span class="st">        </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
-<span class="st">        </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;darkslategray4&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">        </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
-<span class="st">        </span><span class="kw">ggtitle</span>(<span class="st">&quot;Word Network in NASA Dataset Titles&quot;</span>) +
-<span class="st">        </span><span class="kw">theme_void</span>()</code></pre></div>
-<p><img src="09-nasa-metadata_files/figure-html/unnamed-chunk-11-1.png" width="864" /></p>
+title_words %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">250</span>) %&gt;%
+<span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
+<span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
+<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;darkslategray4&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Word Network in NASA Dataset Titles&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<p><img src="09-nasa-metadata_files/figure-html/plot_title-1.png" width="864" /></p>
 <p>This is a good start, although it looks like there may still a bit more cleaning to be done.</p>
 <p>Let’s look at the words in descriptions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
-descwords %&gt;%
-<span class="st">        </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">5000</span>) %&gt;%
-<span class="st">        </span><span class="kw">graph_from_data_frame</span>() %&gt;%
-<span class="st">        </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
-<span class="st">        </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
-<span class="st">        </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;indianred4&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">        </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
-<span class="st">        </span><span class="kw">ggtitle</span>(<span class="st">&quot;Word Network in NASA Dataset Descriptions&quot;</span>) +
-<span class="st">        </span><span class="kw">theme_void</span>()</code></pre></div>
-<p><img src="09-nasa-metadata_files/figure-html/unnamed-chunk-12-1.png" width="864" /></p>
-<p>Here there are such <em>strong</em> connections between the top dozen or so words (words like “data”, “resolution”, and “instrument”) that we may do better if we exclude these very highly connected words. Also, this makes me think that tf-idf will be a good option to explore. But for now, let’s add a few more stop words and look at one more word network.</p>
+desc_words %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">5000</span>) %&gt;%
+<span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
+<span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
+<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;indianred4&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Word Network in NASA Dataset Descriptions&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<p><img src="09-nasa-metadata_files/figure-html/plot_desc-1.png" width="864" /></p>
+<p>Here there are such <em>strong</em> connections between the top dozen or so words (words like “data”, “resolution”, and “instrument”) that we may do better if we exclude these very highly connected words. Also, this may mean that tf-idf (as described in detail in <a href="tfidf.html#tfidf">Chapter 4</a>) will be a good option to explore. But for now, let’s add a few more stop words and look at one more word network for the description fields. Notice how we use <code>bind_rows</code> to add more custom stop words to the words we are already using; this approach can be used in many instances.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mystopwords &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(mystopwords,
                          <span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;global&quot;</span>, 
                                              <span class="st">&quot;instrument&quot;</span>, <span class="st">&quot;resolution&quot;</span>,
                                              <span class="st">&quot;product&quot;</span>, <span class="st">&quot;level&quot;</span>)))
 
-nasadesc &lt;-<span class="st"> </span>nasadesc %&gt;%<span class="st"> </span><span class="kw">anti_join</span>(mystopwords)
-descwords &lt;-<span class="st"> </span>nasadesc %&gt;%<span class="st"> </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
+nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">anti_join</span>(mystopwords)
+desc_words &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 <span class="kw">set.seed</span>(<span class="dv">1234</span>)
-descwords %&gt;%
-<span class="st">        </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">4600</span>) %&gt;%
-<span class="st">        </span><span class="kw">graph_from_data_frame</span>() %&gt;%
-<span class="st">        </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
-<span class="st">        </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
-<span class="st">        </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;indianred4&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">        </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
-<span class="st">        </span><span class="kw">ggtitle</span>(<span class="st">&quot;Word Network in NASA Dataset Descriptions&quot;</span>) +
-<span class="st">        </span><span class="kw">theme_void</span>()</code></pre></div>
-<p><img src="09-nasa-metadata_files/figure-html/unnamed-chunk-13-1.png" width="864" /></p>
+desc_words %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">4600</span>) %&gt;%
+<span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
+<span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
+<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;indianred4&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Word Network in NASA Dataset Descriptions&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<p><img src="09-nasa-metadata_files/figure-html/plot_desc2-1.png" width="864" /></p>
 <p>We still are not seeing clusters the way we did with the titles (the descriptions appear to use very similar words compared to each other), so using tf-idf may be a better way to go when approaching the description fields.</p>
-<p>TODO: tf-idf and topic modeling</p>
+<p>Let’s make a network of the keywords to see which keywords commonly occur together in the same datasets.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_counts &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">pairwise_count</span>(keyword, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
+
+<span class="kw">set.seed</span>(<span class="dv">4321</span>)
+keyword_counts %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">700</span>) %&gt;%
+<span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
+<span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
+<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;royalblue3&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Co-occurrence Network in NASA Keywords&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<p><img src="09-nasa-metadata_files/figure-html/plot_counts-1.png" width="864" /></p>
+<p>These are the most common co-occurring words, and also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find to correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>.</p>
+<p>TODO: correlation of keywords, tf-idf, and topic modeling</p>
 
 </div>
 </div>
