@@ -491,10 +491,10 @@ keyword_counts %&gt;%
 <span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
 <span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;royalblue3&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
-<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Co-occurrence Network in NASA Keywords&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Co-occurrence Network in NASA Dataset Keywords&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_counts-1.png" width="864" /></p>
-<p>These are the most common co-occurring words, and also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find to correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>.</p>
+<p>These are the most commonly co-occurring words, but also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>.</p>
 <p>TODO: correlation of keywords, tf-idf, and topic modeling</p>
 
 </div>

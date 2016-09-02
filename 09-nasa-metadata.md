@@ -430,12 +430,12 @@ keyword_counts %>%
   geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
   geom_node_point(color = "royalblue3", size = 5) +
   geom_node_text(aes(label = name), vjust = 1.8) +
-  ggtitle("Co-occurrence Network in NASA Keywords") +
+  ggtitle("Co-occurrence Network in NASA Dataset Keywords") +
   theme_void()
 ```
 
 <img src="09-nasa-metadata_files/figure-html/plot_counts-1.png" width="864" />
 
-These are the most common co-occurring words, and also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find to correlation among the keywords as described in [Chapter 5](#ngrams).
+These are the most commonly co-occurring words, but also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find the correlation among the keywords as described in [Chapter 5](#ngrams).
 
 TODO: correlation of keywords, tf-idf, and topic modeling
