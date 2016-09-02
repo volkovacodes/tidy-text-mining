@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-09-01">
+<meta name="date" content="2016-09-02">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -224,7 +224,9 @@ book_words &lt;-<span class="st"> </span><span class="kw">austen_books</span>() 
 <span class="st">  </span><span class="kw">count</span>(book, word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()
 
-total_words &lt;-<span class="st"> </span>book_words %&gt;%<span class="st"> </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span><span class="kw">summarize</span>(<span class="dt">total =</span> <span class="kw">sum</span>(n))
+total_words &lt;-<span class="st"> </span>book_words %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">total =</span> <span class="kw">sum</span>(n))
 book_words &lt;-<span class="st"> </span><span class="kw">left_join</span>(book_words, total_words)
 book_words</code></pre></div>
 <pre><code>## # A tibble: 40,379 x 4
