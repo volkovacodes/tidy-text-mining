@@ -157,11 +157,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic modeling</a><ul>
-<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#topic-modeling"><i class="fa fa-check"></i><b>7.1</b> Topic modeling</a></li>
-<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#the-great-library-heist"><i class="fa fa-check"></i><b>7.2</b> The great library heist</a></li>
-<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.3</b> Latent Dirichlet allocation with the topicmodels package</a></li>
-<li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.4</b> Per-document classification</a></li>
-<li class="chapter" data-level="7.5" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.5</b> By word assignments: <code>augment</code></a></li>
+<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#the-great-library-heist"><i class="fa fa-check"></i><b>7.1</b> The great library heist</a></li>
+<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.2</b> Latent Dirichlet allocation with the topicmodels package</a></li>
+<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.3</b> Per-document classification</a></li>
+<li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.4</b> By word assignments: <code>augment</code></a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
 <li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
@@ -204,13 +203,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="topicmodeling" class="section level1">
 <h1><span class="header-section-number">7</span> Topic modeling</h1>
-<div id="topic-modeling" class="section level2">
-<h2><span class="header-section-number">7.1</span> Topic modeling</h2>
 <p>Topic modeling is a method for unsupervised classification of documents, by modeling each document as a mixture of topics and each topic as a mixture of words. <a href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">Latent Dirichlet allocation</a> is a particularly popular method for fitting a topic model.</p>
 <p>We can use tidy text principles, as described in <a href="tidytext.html#tidytext">Chapter 2</a>, to approach topic modeling using consistent and effective tools. In particular, we’ll be using tidying functions for LDA objects from the <a href="https://cran.r-project.org/package=topicmodels">topicmodels package</a>.</p>
-</div>
 <div id="the-great-library-heist" class="section level2">
-<h2><span class="header-section-number">7.2</span> The great library heist</h2>
+<h2><span class="header-section-number">7.1</span> The great library heist</h2>
 <p>Suppose a vandal has broken into your study and torn apart four of your books:</p>
 <ul>
 <li><em>Great Expectations</em> by Charles Dickens</li>
@@ -265,7 +261,7 @@ word_counts</code></pre></div>
 ## # ... with 104,711 more rows</code></pre>
 </div>
 <div id="latent-dirichlet-allocation-with-the-topicmodels-package" class="section level2">
-<h2><span class="header-section-number">7.3</span> Latent Dirichlet allocation with the topicmodels package</h2>
+<h2><span class="header-section-number">7.2</span> Latent Dirichlet allocation with the topicmodels package</h2>
 <p>Right now this data frame is in a tidy form, with one-term-per-document-per-row. However, the topicmodels package requires a <code>DocumentTermMatrix</code> (from the tm package). As described in <a href="dtm.html#dtm">Chapter 6</a>, we can cast a one-token-per-row table into a <code>DocumentTermMatrix</code> with tidytext’s <code>cast_dtm</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_dtm &lt;-<span class="st"> </span>word_counts %&gt;%
 <span class="st">  </span><span class="kw">cast_dtm</span>(title_chapter, word, n)
@@ -346,7 +342,7 @@ top_terms %&gt;%
 <p>These topics are pretty clearly associated with the four books! There’s no question that the topic of “nemo”, “sea”, and “nautilus” belongs to <em>Twenty Thousand Leagues Under the Sea</em>, and that “jane”, “darcy”, and “elizabeth” belongs to <em>Pride and Prejudice</em>. We see “pip” and “joe” from <em>Great Expectations</em> and “martians”, “black”, and “night” from <em>The War of the Worlds</em>.</p>
 </div>
 <div id="per-document-classification" class="section level2">
-<h2><span class="header-section-number">7.4</span> Per-document classification</h2>
+<h2><span class="header-section-number">7.3</span> Per-document classification</h2>
 <p>Each chapter was a “document” in this analysis. Thus, we may want to know which topics are associated with each document. Can we put the chapters back together in the correct books?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda_gamma &lt;-<span class="st"> </span>tidytext:::<span class="kw">tidy.LDA</span>(chapters_lda, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
 chapters_lda_gamma</code></pre></div>
@@ -442,7 +438,7 @@ book_topics</code></pre></div>
 <p>We see that only a few chapters from <em>Great Expectations</em> were misclassified. Not bad for unsupervised clustering!</p>
 </div>
 <div id="by-word-assignments-augment" class="section level2">
-<h2><span class="header-section-number">7.5</span> By word assignments: <code>augment</code></h2>
+<h2><span class="header-section-number">7.4</span> By word assignments: <code>augment</code></h2>
 <p>One important step in the topic modeling expectation-maximization algorithm is assigning each word in each document to a topic. The more words in a document are assigned to that topic, generally, the more weight (<code>gamma</code>) will go on that document-topic classification.</p>
 <p>We may want to take the original document-word pairs and find which words in each document were assigned to which topic. This is the job of the <code>augment</code> verb.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">assignments &lt;-<span class="st"> </span>tidytext:::<span class="kw">augment.LDA</span>(chapters_lda, <span class="dt">data =</span> chapters_dtm)</code></pre></div>
