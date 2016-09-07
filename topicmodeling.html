@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-09-02">
+<meta name="date" content="2016-09-07">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -156,13 +156,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="6.2" data-path="dtm.html"><a href="dtm.html#casting-tidy-text-data-into-a-documenttermmatrix"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a DocumentTermMatrix</a></li>
 <li class="chapter" data-level="6.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic Modeling</a><ul>
+<li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic modeling</a><ul>
 <li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#topic-modeling"><i class="fa fa-check"></i><b>7.1</b> Topic modeling</a></li>
-<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#setup"><i class="fa fa-check"></i><b>7.2</b> Setup</a></li>
-<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.3</b> Latent Dirichlet Allocation with the topicmodels package</a></li>
-<li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.4</b> Per-document classification</a><ul>
-<li class="chapter" data-level="7.4.1" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.4.1</b> By word assignments: <code>augment</code></a></li>
-</ul></li>
+<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#the-great-library-heist"><i class="fa fa-check"></i><b>7.2</b> The great library heist</a></li>
+<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.3</b> Latent Dirichlet allocation with the topicmodels package</a></li>
+<li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.4</b> Per-document classification</a></li>
+<li class="chapter" data-level="7.5" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.5</b> By word assignments: <code>augment</code></a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
 <li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
@@ -175,7 +174,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences"><i class="fa fa-check"></i><b>9.4</b> Word co-ocurrences</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html"><i class="fa fa-check"></i><b>10</b> Case Study: Analyzing Usenet Text</a><ul>
-<li class="chapter" data-level="10.1" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#setup-1"><i class="fa fa-check"></i><b>10.1</b> Setup</a><ul>
+<li class="chapter" data-level="10.1" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#setup"><i class="fa fa-check"></i><b>10.1</b> Setup</a><ul>
 <li class="chapter" data-level="10.1.1" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#tf-idf"><i class="fa fa-check"></i><b>10.1.1</b> TF-IDF</a></li>
 <li class="chapter" data-level="10.1.2" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.1.2</b> Sentiment Analysis</a></li>
 <li class="chapter" data-level="10.1.3" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#looking-by-word"><i class="fa fa-check"></i><b>10.1.3</b> Looking by word</a></li>
@@ -204,14 +203,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="topicmodeling" class="section level1">
-<h1><span class="header-section-number">7</span> Topic Modeling</h1>
+<h1><span class="header-section-number">7</span> Topic modeling</h1>
 <div id="topic-modeling" class="section level2">
 <h2><span class="header-section-number">7.1</span> Topic modeling</h2>
 <p>Topic modeling is a method for unsupervised classification of documents, by modeling each document as a mixture of topics and each topic as a mixture of words. <a href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">Latent Dirichlet allocation</a> is a particularly popular method for fitting a topic model.</p>
-<p>We can use tidy text principles, as described in Chapter 2, to approach topic modeling using consistent and effective tools. In particular, we’ll be using tidying functions for LDA objects from the <a href="https://cran.r-project.org/package=topicmodels">topicmodels package</a>. u789</p>
+<p>We can use tidy text principles, as described in <a href="tidytext.html#tidytext">Chapter 2</a>, to approach topic modeling using consistent and effective tools. In particular, we’ll be using tidying functions for LDA objects from the <a href="https://cran.r-project.org/package=topicmodels">topicmodels package</a>.</p>
 </div>
-<div id="setup" class="section level2">
-<h2><span class="header-section-number">7.2</span> Setup</h2>
+<div id="the-great-library-heist" class="section level2">
+<h2><span class="header-section-number">7.2</span> The great library heist</h2>
 <p>Suppose a vandal has broken into your study and torn apart four of your books:</p>
 <ul>
 <li><em>Great Expectations</em> by Charles Dickens</li>
@@ -266,8 +265,8 @@ word_counts</code></pre></div>
 ## # ... with 104,711 more rows</code></pre>
 </div>
 <div id="latent-dirichlet-allocation-with-the-topicmodels-package" class="section level2">
-<h2><span class="header-section-number">7.3</span> Latent Dirichlet Allocation with the topicmodels package</h2>
-<p>Right now this data frame is in a tidy form, with one-term-per-document-per-row. However, the topicmodels package requires a <code>DocumentTermMatrix</code> (from the tm package). As described in <a href="tidying_casting.html">this vignette</a>, we can cast a one-token-per-row table into a <code>DocumentTermMatrix</code> with tidytext’s <code>cast_dtm</code>:</p>
+<h2><span class="header-section-number">7.3</span> Latent Dirichlet allocation with the topicmodels package</h2>
+<p>Right now this data frame is in a tidy form, with one-term-per-document-per-row. However, the topicmodels package requires a <code>DocumentTermMatrix</code> (from the tm package). As described in <a href="dtm.html#dtm">Chapter 6</a>, we can cast a one-token-per-row table into a <code>DocumentTermMatrix</code> with tidytext’s <code>cast_dtm</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_dtm &lt;-<span class="st"> </span>word_counts %&gt;%
 <span class="st">  </span><span class="kw">cast_dtm</span>(title_chapter, word, n)
 
@@ -336,14 +335,13 @@ top_terms</code></pre></div>
 ## 20     4      miss 0.006228387</code></pre>
 <p>This model lends itself to a visualization:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-<span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())
+<span class="kw">library</span>(ggstance)
 
 top_terms %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">term =</span> <span class="kw">reorder</span>(term, beta)) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(term, beta)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">15</span>, <span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(beta, term)) +
+<span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
 <p><img src="07-topic-models_files/figure-html/top_terms_plot-1.png" width="672" /></p>
 <p>These topics are pretty clearly associated with the four books! There’s no question that the topic of “nemo”, “sea”, and “nautilus” belongs to <em>Twenty Thousand Leagues Under the Sea</em>, and that “jane”, “darcy”, and “elizabeth” belongs to <em>Pride and Prejudice</em>. We see “pip” and “joe” from <em>Great Expectations</em> and “martians”, “black”, and “night” from <em>The War of the Worlds</em>.</p>
 </div>
@@ -388,7 +386,7 @@ chapters_lda_gamma</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(chapters_lda_gamma, <span class="kw">aes</span>(gamma, <span class="dt">fill =</span> <span class="kw">factor</span>(topic))) +
 <span class="st">  </span><span class="kw">geom_histogram</span>() +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>title, <span class="dt">nrow =</span> <span class="dv">2</span>)</code></pre></div>
-<p><img src="07-topic-models_files/figure-html/chapters_lda_gamma_plot-1.png" width="672" /></p>
+<p><img src="07-topic-models_files/figure-html/chapters_lda_gamma_plot-1.png" width="768" /></p>
 <p>We notice that almost all of the chapters from <em>Pride and Prejudice</em>, <em>War of the Worlds</em>, and <em>Twenty Thousand Leagues Under the Sea</em> were uniquely identified as a single topic each.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapter_classifications &lt;-<span class="st"> </span>chapters_lda_gamma %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(title, chapter) %&gt;%
@@ -442,8 +440,9 @@ book_topics</code></pre></div>
 ## 5                 The War of the Worlds                 The War of the Worlds    27
 ## 6 Twenty Thousand Leagues under the Sea Twenty Thousand Leagues under the Sea    46</code></pre>
 <p>We see that only a few chapters from <em>Great Expectations</em> were misclassified. Not bad for unsupervised clustering!</p>
-<div id="by-word-assignments-augment" class="section level3">
-<h3><span class="header-section-number">7.4.1</span> By word assignments: <code>augment</code></h3>
+</div>
+<div id="by-word-assignments-augment" class="section level2">
+<h2><span class="header-section-number">7.5</span> By word assignments: <code>augment</code></h2>
 <p>One important step in the topic modeling expectation-maximization algorithm is assigning each word in each document to a topic. The more words in a document are assigned to that topic, generally, the more weight (<code>gamma</code>) will go on that document-topic classification.</p>
 <p>We may want to take the original document-word pairs and find which words in each document were assigned to which topic. This is the job of the <code>augment</code> verb.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">assignments &lt;-<span class="st"> </span>tidytext:::<span class="kw">augment.LDA</span>(chapters_lda, <span class="dt">data =</span> chapters_dtm)</code></pre></div>
@@ -453,7 +452,7 @@ book_topics</code></pre></div>
 <span class="st">  </span><span class="kw">inner_join</span>(book_topics, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;.topic&quot;</span> =<span class="st"> &quot;topic&quot;</span>))
 
 assignments</code></pre></div>
-<pre><code>## # A tibble: 104,721 x 6
+<pre><code>## # A tibble: 104,721 × 6
 ##                 title chapter  term count .topic          consensus
 ##                 &lt;chr&gt;   &lt;int&gt; &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;              &lt;chr&gt;
 ## 1  Great Expectations      57   joe    88      4 Great Expectations
@@ -474,25 +473,25 @@ assignments</code></pre></div>
 <pre><code>## Source: local data frame [4 x 5]
 ## Groups: title [4]
 ## 
-##                                   title Great Expectations Pride and Prejudice
-## *                                 &lt;chr&gt;              &lt;dbl&gt;               &lt;dbl&gt;
-## 1                    Great Expectations              49770                3876
-## 2                   Pride and Prejudice                  1               37229
-## 3                 The War of the Worlds                  0                   0
-## 4 Twenty Thousand Leagues under the Sea                  0                   5
-##   The War of the Worlds Twenty Thousand Leagues under the Sea
-## *                 &lt;dbl&gt;                                 &lt;dbl&gt;
-## 1                  1845                                    77
-## 2                     7                                     5
-## 3                 22561                                     7
-## 4                     0                                 39629</code></pre>
+##                                   title `Great Expectations` `Pride and Prejudice`
+## *                                 &lt;chr&gt;                &lt;dbl&gt;                 &lt;dbl&gt;
+## 1                    Great Expectations                49770                  3876
+## 2                   Pride and Prejudice                    1                 37229
+## 3                 The War of the Worlds                    0                     0
+## 4 Twenty Thousand Leagues under the Sea                    0                     5
+##   `The War of the Worlds` `Twenty Thousand Leagues under the Sea`
+## *                   &lt;dbl&gt;                                   &lt;dbl&gt;
+## 1                    1845                                      77
+## 2                       7                                       5
+## 3                   22561                                       7
+## 4                       0                                   39629</code></pre>
 <p>We notice that almost all the words for <em>Pride and Prejudice</em>, <em>Twenty Thousand Leagues Under the Sea</em>, and <em>War of the Worlds</em> were correctly assigned, while <em>Great Expectations</em> had a fair amount of misassignment.</p>
 <p>What were the most commonly mistaken words?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wrong_words &lt;-<span class="st"> </span>assignments %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(title !=<span class="st"> </span>consensus)
 
 wrong_words</code></pre></div>
-<pre><code>## # A tibble: 4,535 x 6
+<pre><code>## # A tibble: 4,535 × 6
 ##                                    title chapter     term count .topic
 ##                                    &lt;chr&gt;   &lt;int&gt;    &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
 ## 1                     Great Expectations      38  brother     2      1
@@ -522,7 +521,7 @@ wrong_words</code></pre></div>
 <span class="st">  </span><span class="kw">count</span>(title, consensus, term, <span class="dt">wt =</span> count) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(n))</code></pre></div>
-<pre><code>## # A tibble: 3,500 x 4
+<pre><code>## # A tibble: 3,500 × 4
 ##                 title             consensus     term     n
 ##                 &lt;chr&gt;                 &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;
 ## 1  Great Expectations   Pride and Prejudice     love    44
@@ -539,7 +538,7 @@ wrong_words</code></pre></div>
 <p>Notice the word “flopson” here; these wrong words do not necessarily appear in the novels they were misassigned to. Indeed, we can confirm “flopson” appears only in <em>Great Expectations</em>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_counts %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word ==<span class="st"> &quot;flopson&quot;</span>)</code></pre></div>
-<pre><code>## # A tibble: 3 x 3
+<pre><code>## # A tibble: 3 × 3
 ##           title_chapter    word     n
 ##                   &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;
 ## 1 Great Expectations_22 flopson    10
@@ -547,7 +546,6 @@ wrong_words</code></pre></div>
 ## 3 Great Expectations_33 flopson     1</code></pre>
 <p>The algorithm is stochastic and iterative, and it can accidentally land on a topic that spans multiple books.</p>
 
-</div>
 </div>
 </div>
             </section>

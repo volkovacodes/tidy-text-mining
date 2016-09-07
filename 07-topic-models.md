@@ -1,4 +1,4 @@
-# Topic Modeling {#topicmodeling}
+# Topic modeling {#topicmodeling}
 
 
 
@@ -6,10 +6,9 @@
 
 Topic modeling is a method for unsupervised classification of documents, by modeling each document as a mixture of topics and each topic as a mixture of words. [Latent Dirichlet allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) is a particularly popular method for fitting a topic model.
 
-We can use tidy text principles, as described in Chapter 2, to approach topic modeling using consistent and effective tools. In particular, we'll be using tidying functions for LDA objects from the [topicmodels package](https://cran.r-project.org/package=topicmodels).
-u789
+We can use tidy text principles, as described in [Chapter 2](#tidytext), to approach topic modeling using consistent and effective tools. In particular, we'll be using tidying functions for LDA objects from the [topicmodels package](https://cran.r-project.org/package=topicmodels).
 
-## Setup
+## The great library heist
 
 Suppose a vandal has broken into your study and torn apart four of your books:
 
@@ -83,9 +82,9 @@ word_counts
 ## # ... with 104,711 more rows
 ```
 
-## Latent Dirichlet Allocation with the topicmodels package
+## Latent Dirichlet allocation with the topicmodels package
 
-Right now this data frame is in a tidy form, with one-term-per-document-per-row. However, the topicmodels package requires a `DocumentTermMatrix` (from the tm package). As described in [this vignette](tidying_casting.html), we can cast a one-token-per-row table into a `DocumentTermMatrix` with tidytext's `cast_dtm`:
+Right now this data frame is in a tidy form, with one-term-per-document-per-row. However, the topicmodels package requires a `DocumentTermMatrix` (from the tm package). As described in [Chapter 6](#dtm), we can cast a one-token-per-row table into a `DocumentTermMatrix` with tidytext's `cast_dtm`:
 
 
 ```r
@@ -191,14 +190,13 @@ This model lends itself to a visualization:
 
 ```r
 library(ggplot2)
-theme_set(theme_bw())
+library(ggstance)
 
 top_terms %>%
   mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(term, beta)) +
-  geom_bar(stat = "identity") +
-  facet_wrap(~ topic, scales = "free") +
-  theme(axis.text.x = element_text(size = 15, angle = 90, hjust = 1))
+  ggplot(aes(beta, term)) +
+  geom_barh(stat = "identity") +
+  facet_wrap(~ topic, scales = "free")
 ```
 
 <img src="07-topic-models_files/figure-html/top_terms_plot-1.png" width="672" />
@@ -267,7 +265,7 @@ ggplot(chapters_lda_gamma, aes(gamma, fill = factor(topic))) +
   facet_wrap(~ title, nrow = 2)
 ```
 
-<img src="07-topic-models_files/figure-html/chapters_lda_gamma_plot-1.png" width="672" />
+<img src="07-topic-models_files/figure-html/chapters_lda_gamma_plot-1.png" width="768" />
 
 We notice that almost all of the chapters from *Pride and Prejudice*, *War of the Worlds*, and *Twenty Thousand Leagues Under the Sea* were uniquely identified as a single topic each.
 
@@ -347,7 +345,7 @@ chapter_classifications %>%
 
 We see that only a few chapters from *Great Expectations* were misclassified. Not bad for unsupervised clustering!
 
-### By word assignments: `augment`
+## By word assignments: `augment`
 
 One important step in the topic modeling expectation-maximization algorithm is assigning each word in each document to a topic. The more words in a document are assigned to that topic, generally, the more weight (`gamma`) will go on that document-topic classification.
 
@@ -370,7 +368,7 @@ assignments
 ```
 
 ```
-## # A tibble: 104,721 x 6
+## # A tibble: 104,721 × 6
 ##                 title chapter  term count .topic          consensus
 ##                 <chr>   <int> <chr> <dbl>  <dbl>              <chr>
 ## 1  Great Expectations      57   joe    88      4 Great Expectations
@@ -399,18 +397,18 @@ assignments %>%
 ## Source: local data frame [4 x 5]
 ## Groups: title [4]
 ## 
-##                                   title Great Expectations Pride and Prejudice
-## *                                 <chr>              <dbl>               <dbl>
-## 1                    Great Expectations              49770                3876
-## 2                   Pride and Prejudice                  1               37229
-## 3                 The War of the Worlds                  0                   0
-## 4 Twenty Thousand Leagues under the Sea                  0                   5
-##   The War of the Worlds Twenty Thousand Leagues under the Sea
-## *                 <dbl>                                 <dbl>
-## 1                  1845                                    77
-## 2                     7                                     5
-## 3                 22561                                     7
-## 4                     0                                 39629
+##                                   title `Great Expectations` `Pride and Prejudice`
+## *                                 <chr>                <dbl>                 <dbl>
+## 1                    Great Expectations                49770                  3876
+## 2                   Pride and Prejudice                    1                 37229
+## 3                 The War of the Worlds                    0                     0
+## 4 Twenty Thousand Leagues under the Sea                    0                     5
+##   `The War of the Worlds` `Twenty Thousand Leagues under the Sea`
+## *                   <dbl>                                   <dbl>
+## 1                    1845                                      77
+## 2                       7                                       5
+## 3                   22561                                       7
+## 4                       0                                   39629
 ```
 
 We notice that almost all the words for *Pride and Prejudice*, *Twenty Thousand Leagues Under the Sea*, and *War of the Worlds* were correctly assigned, while *Great Expectations* had a fair amount of misassignment.
@@ -426,7 +424,7 @@ wrong_words
 ```
 
 ```
-## # A tibble: 4,535 x 6
+## # A tibble: 4,535 × 6
 ##                                    title chapter     term count .topic
 ##                                    <chr>   <int>    <chr> <dbl>  <dbl>
 ## 1                     Great Expectations      38  brother     2      1
@@ -462,7 +460,7 @@ wrong_words %>%
 ```
 
 ```
-## # A tibble: 3,500 x 4
+## # A tibble: 3,500 × 4
 ##                 title             consensus     term     n
 ##                 <chr>                 <chr>    <chr> <dbl>
 ## 1  Great Expectations   Pride and Prejudice     love    44
@@ -487,7 +485,7 @@ word_counts %>%
 ```
 
 ```
-## # A tibble: 3 x 3
+## # A tibble: 3 × 3
 ##           title_chapter    word     n
 ##                   <chr>   <chr> <int>
 ## 1 Great Expectations_22 flopson    10
