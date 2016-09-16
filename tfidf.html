@@ -172,13 +172,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.3" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>9.3</b> Some initial simple exploration</a></li>
 <li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences"><i class="fa fa-check"></i><b>9.4</b> Word co-ocurrences</a></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html"><i class="fa fa-check"></i><b>10</b> Case Study: Analyzing Usenet Text</a><ul>
-<li class="chapter" data-level="10.1" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#setup"><i class="fa fa-check"></i><b>10.1</b> Setup</a><ul>
-<li class="chapter" data-level="10.1.1" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#tf-idf"><i class="fa fa-check"></i><b>10.1.1</b> TF-IDF</a></li>
-<li class="chapter" data-level="10.1.2" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.1.2</b> Sentiment Analysis</a></li>
-<li class="chapter" data-level="10.1.3" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#looking-by-word"><i class="fa fa-check"></i><b>10.1.3</b> Looking by word</a></li>
-<li class="chapter" data-level="10.1.4" data-path="case-study-analyzing-usenet-text.html"><a href="case-study-analyzing-usenet-text.html#n-grams"><i class="fa fa-check"></i><b>10.1.4</b> N-grams</a></li>
-</ul></li>
+<li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
+<li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#setup"><i class="fa fa-check"></i><b>10.1</b> Setup</a></li>
+<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#term-frequency-and-inverse-document-frequency-tf-idf"><i class="fa fa-check"></i><b>10.2</b> Term frequency and inverse document frequency (tf-idf)</a></li>
+<li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment Analysis</a></li>
+<li class="chapter" data-level="10.4" data-path="usenet.html"><a href="usenet.html#looking-by-word"><i class="fa fa-check"></i><b>10.4</b> Looking by word</a></li>
+<li class="chapter" data-level="10.5" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>10.5</b> Sentiment analysis by message</a></li>
+<li class="chapter" data-level="10.6" data-path="usenet.html"><a href="usenet.html#n-grams"><i class="fa fa-check"></i><b>10.6</b> N-grams</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
 <li class="divider"></li>
@@ -301,8 +301,7 @@ plot_austen &lt;-<span class="st"> </span>book_words %&gt;%
 <span class="kw">ggplot</span>(plot_austen[<span class="dv">1</span>:<span class="dv">20</span>,], <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> book)) +
 <span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Jane Austen&#39;s Novels&quot;</span>,
-       <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
+       <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>)</code></pre></div>
 <p><img src="04-tf-idf_files/figure-html/plot_austen-1.png" width="864" /></p>
 <p>Let’s look at the novels individually.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_austen &lt;-<span class="st"> </span>plot_austen %&gt;%<span class="st"> </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span><span class="kw">top_n</span>(<span class="dv">15</span>) %&gt;%<span class="st"> </span>ungroup
@@ -311,8 +310,7 @@ plot_austen &lt;-<span class="st"> </span>book_words %&gt;%
 <span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Jane Austen&#39;s Novels&quot;</span>,
        <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
+<span class="st">  </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
 <p><img src="04-tf-idf_files/figure-html/plot_separate-1.png" width="864" /></p>
 <p>Still all proper nouns! These words are, as measured by tf-idf, the most important to each novel and most readers would likely agree.</p>
 </div>
@@ -357,8 +355,7 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 <span class="kw">ggplot</span>(plot_physics[<span class="dv">1</span>:<span class="dv">20</span>,], <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> author)) +
 <span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
-       <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
+       <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>)</code></pre></div>
 <p><img src="04-tf-idf_files/figure-html/plot_physics-1.png" width="864" /></p>
 <p>Nice! Let’s look at each text individually.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_physics &lt;-<span class="st"> </span>plot_physics %&gt;%<span class="st"> </span>
@@ -370,8 +367,7 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 <span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
        <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
+<span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
 <p><img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="864" /></p>
 <p>Very interesting indeed. One thing we see here is “gif” in the Einstein text?!</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;gif&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>:<span class="dv">10</span>]</code></pre></div>
@@ -410,8 +406,7 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 <span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
        <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
+<span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
 <p><img src="04-tf-idf_files/figure-html/mystopwords-1.png" width="864" /></p>
 <p>We don’t hear enough about ramparts or things being ethereal in physics today.</p>
 

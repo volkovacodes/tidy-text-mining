@@ -136,8 +136,7 @@ plot_austen <- book_words %>%
 ggplot(plot_austen[1:20,], aes(tf_idf, word, fill = book)) +
   geom_barh(alpha = 0.8, stat = "identity") +
   labs(title = "Highest tf-idf words in Jane Austen's Novels",
-       y = NULL, x = "tf-idf") +
-  scale_x_continuous(expand=c(0,0))
+       y = NULL, x = "tf-idf")
 ```
 
 <img src="04-tf-idf_files/figure-html/plot_austen-1.png" width="864" />
@@ -152,8 +151,7 @@ ggplot(plot_austen, aes(tf_idf, word, fill = book)) +
   geom_barh(alpha = 0.8, stat = "identity", show.legend = FALSE) +
   labs(title = "Highest tf-idf words in Jane Austen's Novels",
        y = NULL, x = "tf-idf") +
-  facet_wrap(~book, ncol = 2, scales = "free") +
-  scale_x_continuous(expand=c(0,0))
+  facet_wrap(~book, ncol = 2, scales = "free")
 ```
 
 <img src="04-tf-idf_files/figure-html/plot_separate-1.png" width="864" />
@@ -219,8 +217,7 @@ plot_physics <- physics_words %>%
 ggplot(plot_physics[1:20,], aes(tf_idf, word, fill = author)) +
   geom_barh(alpha = 0.8, stat = "identity") +
   labs(title = "Highest tf-idf words in Classic Physics Texts",
-       y = NULL, x = "tf-idf") +
-  scale_x_continuous(expand=c(0,0))
+       y = NULL, x = "tf-idf")
 ```
 
 <img src="04-tf-idf_files/figure-html/plot_physics-1.png" width="864" />
@@ -238,8 +235,7 @@ ggplot(plot_physics, aes(tf_idf, word, fill = author)) +
   geom_barh(alpha = 0.8, stat = "identity", show.legend = FALSE) +
   labs(title = "Highest tf-idf words in Classic Physics Texts",
        y = NULL, x = "tf-idf") +
-  facet_wrap(~author, ncol = 2, scales = "free") +
-  scale_x_continuous(expand=c(0,0))
+  facet_wrap(~author, ncol = 2, scales = "free")
 ```
 
 <img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="864" />
@@ -308,8 +304,7 @@ ggplot(plot_physics, aes(tf_idf, word, fill = author)) +
   geom_barh(alpha = 0.8, stat = "identity", show.legend = FALSE) +
   labs(title = "Highest tf-idf words in Classic Physics Texts",
        y = NULL, x = "tf-idf") +
-  facet_wrap(~author, ncol = 2, scales = "free") +
-  scale_x_continuous(expand=c(0,0))
+  facet_wrap(~author, ncol = 2, scales = "free")
 ```
 
 <img src="04-tf-idf_files/figure-html/mystopwords-1.png" width="864" />

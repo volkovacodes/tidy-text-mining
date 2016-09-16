@@ -1,8 +1,8 @@
-# Case Study: Analyzing Usenet Text
+# Case study: analyzing usenet text {#usenet}
 
 
 
-Here we'll use what we've learned in the book to perform a start-to-finish analysis of the Usenet 
+Here we'll use what we've learned in the book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this data set include boards for topics like politics, autos, "for sale", atheism, etc. This data set is [publicly available](http://qwone.com/~jason/20Newsgroups/) and has become popular for testing and exercises in text analysis and machine learning.
 
 ## Setup
 
@@ -132,9 +132,9 @@ words_by_board %>%
 ## # ... with 50 more rows
 ```
 
-### TF-IDF
+## Term frequency and inverse document frequency (tf-idf)
 
-We notice that some words are likely to be more common on particular boards. Let's try quantifying this using the TF-IDF metric we learned in Chapter 4.
+We notice that some words are likely to be more common on particular boards. Let's try quantifying this using the tf-idf metric we learned in [Chapter 4](tfidf).
 
 
 ```r
@@ -167,27 +167,26 @@ We can visualize this for a few select boards. For example, let's look at all th
 
 ```r
 library(ggplot2)
-theme_set(theme_bw())
+library(ggstance)
 
 tf_idf %>%
   filter(str_detect(board, "^sci\\.")) %>%
   group_by(board) %>%
   top_n(12, tf_idf) %>%
   mutate(word = reorder(word, -tf_idf)) %>%
-  ggplot(aes(word, tf_idf)) +
-  geom_bar(stat = "identity") +
-  facet_wrap(~ board, scales = "free_x") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  ylab("TF-IDF")
+  ggplot(aes(tf_idf, word)) +
+  geom_barh(stat = "identity") +
+  facet_wrap(~ board, scales = "free_y") +
+  xlab("tf-idf")
 ```
 
-<img src="10-usenet_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="10-usenet_files/figure-html/unnamed-chunk-8-1.png" width="864" />
 
 We could use almost the same code (not shown) to compare the "rec." (recreation) or "talk." boards:
 
 <img src="10-usenet_files/figure-html/unnamed-chunk-9-1.png" width="672" /><img src="10-usenet_files/figure-html/unnamed-chunk-9-2.png" width="672" />
 
-### Sentiment Analysis
+## Sentiment Analysis
 
 
 ```r
@@ -211,7 +210,7 @@ board_sentiments %>%
 
 <img src="10-usenet_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
-### Looking by word
+## Looking by word
 
 It's worth discovering *why* some topics ended up more positive then others. For that, we can examine the total positive and negative contributions of each word:
 
@@ -243,13 +242,7 @@ contributions
 ## # ... with 1,881 more rows
 ```
 
-We can visualize which words had the most effect:
-
-
-```r
-library(ggplot2)
-theme_set(theme_bw())
-```
+We can visualize which words had the most effect.
 
 
 ```r
@@ -261,7 +254,7 @@ contributions %>%
   coord_flip()
 ```
 
-<img src="10-usenet_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="10-usenet_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 
 These words look generally reasonable as indicators of each message's sentiment, but we can spot possible problems with the approach. "True" could just as easily be a part of "not true" or a similar negative expression, and the words "God" and "Jesus" are apparently very common on Usenet but could easily be used in many contexts.
 
@@ -278,17 +271,16 @@ top_sentiment_words %>%
   ungroup() %>%
   mutate(board = reorder(board, contribution),
          word = reorder(word, contribution)) %>%
-  ggplot(aes(word, contribution, fill = contribution > 0)) +
-  geom_bar(stat = "identity", show.legend = FALSE) +
-  facet_wrap(~ board, scales = "free") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  ggplot(aes(contribution, word, fill = contribution > 0)) +
+  geom_barh(stat = "identity", show.legend = FALSE) +
+  facet_wrap(~ board, scales = "free")
 ```
 
 <img src="10-usenet_files/figure-html/top_sentiment_words-1.png" width="960" />
 
 We can also see how much sentiment is confounded with topic in this particular approach. An atheism board is likely to discuss "god" in detail even in a negative context, and we can see it makes the board look more positive. Similarly, the negative contribution of the word "gun" to the "talk.politics.guns" board would occur even if the board were positive.
 
-#### Sentiment analysis by message
+## Sentiment analysis by message
 
 We can also try finding the most positive and negative *messages*:
 
@@ -314,7 +306,7 @@ sentiment_messages %>%
 ```
 
 ```
-## # A tibble: 3,385 x 4
+## # A tibble: 3,385 × 4
 ##                      board     id sentiment words
 ##                      <chr>  <chr>     <dbl> <int>
 ## 1         rec.sport.hockey  53560  3.888889    18
@@ -392,7 +384,7 @@ sentiment_messages %>%
 ```
 
 ```
-## # A tibble: 3,385 x 4
+## # A tibble: 3,385 × 4
 ##                    board     id sentiment words
 ##                    <chr>  <chr>     <dbl> <int>
 ## 1       rec.sport.hockey  53907 -3.000000     6
@@ -424,7 +416,7 @@ print_message(53907)
 
 
 
-### N-grams
+## N-grams
 
 We can also 
 
@@ -461,13 +453,12 @@ usenet_digram_counts %>%
   top_n(10, abs(contribution)) %>%
   ungroup() %>%
   mutate(word2 = reorder(word2, contribution)) %>%
-  ggplot(aes(word2, contribution, fill = contribution > 0)) +
-  geom_bar(stat = "identity", show.legend = FALSE) +
-  facet_wrap(~ word1, scales = "free", nrow = 2) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  ggplot(aes(contribution, word2, fill = contribution > 0)) +
+  geom_barh(stat = "identity", show.legend = FALSE) +
+  facet_wrap(~ word1, scales = "free", nrow = 2)
 ```
 
-<img src="10-usenet_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="10-usenet_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
 
 
