@@ -271,9 +271,10 @@ top_sentiment_words %>%
   ungroup() %>%
   mutate(board = reorder(board, contribution),
          word = reorder(word, contribution)) %>%
-  ggplot(aes(contribution, word, fill = contribution > 0)) +
-  geom_barh(stat = "identity", show.legend = FALSE) +
-  facet_wrap(~ board, scales = "free")
+  ggplot(aes(word, contribution, fill = contribution > 0)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  facet_wrap(~ board, scales = "free") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 <img src="10-usenet_files/figure-html/top_sentiment_words-1.png" width="960" />
@@ -453,9 +454,10 @@ usenet_digram_counts %>%
   top_n(10, abs(contribution)) %>%
   ungroup() %>%
   mutate(word2 = reorder(word2, contribution)) %>%
-  ggplot(aes(contribution, word2, fill = contribution > 0)) +
-  geom_barh(stat = "identity", show.legend = FALSE) +
-  facet_wrap(~ word1, scales = "free", nrow = 2)
+  ggplot(aes(word2, contribution, fill = contribution > 0)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  facet_wrap(~ word1, scales = "free", nrow = 2) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 <img src="10-usenet_files/figure-html/unnamed-chunk-17-1.png" width="672" />
