@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-09-07">
+<meta name="date" content="2016-09-16">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -364,12 +364,12 @@ digram_tf_idf</code></pre></div>
 ## 10   Pride &amp; Prejudice    lady catherine   100 0.01380453 1.791759 0.02473439
 ## # ... with 36,207 more rows</code></pre>
 <p>This can be visualized within each book, just as we did for words:</p>
-<p><img src="05-word-combinations_files/figure-html/digram_tf_idf_plot-1.png" width="672" /></p>
-<p>Much as we discovered in Chapter <span class="citation">(<span class="citeproc-not-found" data-reference-id="ref"><strong>???</strong></span>)</span>{#tfidf}, the units that distinguish each Austen book are almost exclusively names.</p>
+<p><img src="05-word-combinations_files/figure-html/digram_tf_idf_plot-1.png" width="864" /></p>
+<p>Much as we discovered in <a href="tfidf.html#tfidf">Chapter 4</a>, the units that distinguish each Austen book are almost exclusively names.</p>
 </div>
 <div id="using-digrams-to-provide-context-in-sentiment-analysis" class="section level3">
 <h3><span class="header-section-number">5.1.3</span> Using digrams to provide context in sentiment analysis</h3>
-<p>Our sentiment analysis approch in Chapter <span class="citation">(<span class="citeproc-not-found" data-reference-id="ref"><strong>???</strong></span>)</span>{#sentiment} simply counted the appearance of positive or negative words, according to a reference lexicon. One of the problems with this approach is that a word’s context matters nearly as much as its presence. For example, the words “happy” and “like” will be positive, even in a sentence like “I’m not <strong>happy</strong> and I don’t <strong>like</strong> it!”</p>
+<p>Our sentiment analysis approch in <a href="sentiment.html#sentiment">Chapter 3</a> simply counted the appearance of positive or negative words, according to a reference lexicon. One of the problems with this approach is that a word’s context can matter nearly as much as its presence. For example, the words “happy” and “like” will be counted as positive, even in a sentence like “I’m not <strong>happy</strong> and I don’t <strong>like</strong> it!”</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">digrams_separated %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word1 ==<span class="st"> &quot;not&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
@@ -387,7 +387,7 @@ digram_tf_idf</code></pre></div>
 ## 9     at   129
 ## 10    in   118
 ## # ... with 1,236 more rows</code></pre>
-<p>We can use word2 to</p>
+<p>We can use <code>word2</code> to TODO</p>
 <p>Let’s use the AFINN lexicon for sentiment analysis, which gives a sentiment score for each word:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AFINN &lt;-<span class="st"> </span>sentiments %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(lexicon ==<span class="st"> &quot;AFINN&quot;</span>) %&gt;%
@@ -440,7 +440,7 @@ not_words</code></pre></div>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Words preceded by </span><span class="ch">\&quot;</span><span class="st">not</span><span class="ch">\&quot;</span><span class="st">&quot;</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/not_words_plot-1.png" width="672" /></p>
+<p><img src="05-word-combinations_files/figure-html/not_words_plot-1.png" width="864" /></p>
 <p>The digrams “not like” and “not help” were overwhelmingly the largest causes of misidentification, making the text seem much more positive than it is. But we can see phrases like “not afraid” and “not fail” sometimes suggest text is more negative than it is.</p>
 <p>“Not” isn’t the only word that provides context. We could make a vector of words that we suspect , and use the same joining and counting approach to examine all of them:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negation_words &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;not&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;never&quot;</span>, <span class="st">&quot;without&quot;</span>)
@@ -471,21 +471,20 @@ negated_words</code></pre></div>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word2 =</span> <span class="kw">reorder</span>(word2, contribution)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(word1) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, <span class="kw">abs</span>(contribution)) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word2, contribution, <span class="dt">fill =</span> n *<span class="st"> </span>score &gt;<span class="st"> </span><span class="dv">0</span>)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(contribution, word2, <span class="dt">fill =</span> n *<span class="st"> </span>score &gt;<span class="st"> </span><span class="dv">0</span>)) +
+<span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>word1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
-<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Words preceded by </span><span class="ch">\&quot;</span><span class="st">not</span><span class="ch">\&quot;</span><span class="st">&quot;</span>) +
-<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>) +
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/negated_words_plot-1.png" width="672" /></p>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Words preceded by </span><span class="ch">\&quot;</span><span class="st">not</span><span class="ch">\&quot;</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>)</code></pre></div>
+<p><img src="05-word-combinations_files/figure-html/negated_words_plot-1.png" width="864" /></p>
 </div>
 </div>
 <div id="visualizing-digrams-as-a-network-with-the-ggraph-package" class="section level2">
 <h2><span class="header-section-number">5.2</span> Visualizing digrams as a network with the ggraph package</h2>
-<p>A</p>
+<p>TODO</p>
 <div id="creating-a-network-with-igraph" class="section level3">
 <h3><span class="header-section-number">5.2.1</span> Creating a network with igraph</h3>
-<p>Now that we have our</p>
+<p>Now that we have our TODO</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">digram_counts &lt;-<span class="st"> </span>digrams_filtered %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 

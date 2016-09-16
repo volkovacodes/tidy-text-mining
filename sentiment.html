@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-09-07">
+<meta name="date" content="2016-09-16">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -284,7 +284,7 @@ janeaustensentiment &lt;-<span class="st"> </span>tidy_books %&gt;%
 <span class="kw">ggplot</span>(janeaustensentiment, <span class="kw">aes</span>(index, sentiment, <span class="dt">fill =</span> book)) +
 <span class="st">        </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">        </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free_x&quot;</span>)</code></pre></div>
-<p><img src="03-sentiment-analysis_files/figure-html/sentimentplot-1.png" width="960" /></p>
+<p><img src="03-sentiment-analysis_files/figure-html/sentimentplot-1.png" width="864" /></p>
 <p>We can see here how the plot of each novel changes toward more positive or negative sentiment over the trajectory of the story.</p>
 <p>TODO: The three different methods of calculating sentiment give results that are different in an absolute sense but have similar relative trajectories through the novel.</p>
 </div>
@@ -320,7 +320,7 @@ bing_word_counts %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(n, word, <span class="dt">fill =</span> sentiment)) +
 <span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Contribution to sentiment&quot;</span>)</code></pre></div>
-<p><img src="03-sentiment-analysis_files/figure-html/pipetoplot-1.png" width="672" /></p>
+<p><img src="03-sentiment-analysis_files/figure-html/pipetoplot-1.png" width="576" /></p>
 <p>This lets us spot an anomaly in the sentiment analysis; the word “miss” is coded as negative but it is used as a title for young, unmarried women in Jane Austen’s works. If it were appropriate for our purposes, we could easily add “miss” to a custom stop-words list using <code>bind_rows</code>.</p>
 </div>
 <div id="wordclouds" class="section level2">

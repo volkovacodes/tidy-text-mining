@@ -115,7 +115,7 @@ ggplot(janeaustensentiment, aes(index, sentiment, fill = book)) +
         facet_wrap(~book, ncol = 2, scales = "free_x")
 ```
 
-<img src="03-sentiment-analysis_files/figure-html/sentimentplot-1.png" width="960" />
+<img src="03-sentiment-analysis_files/figure-html/sentimentplot-1.png" width="864" />
 
 We can see here how the plot of each novel changes toward more positive or negative sentiment over the trajectory of the story.
 
@@ -166,7 +166,7 @@ bing_word_counts %>%
   xlab("Contribution to sentiment")
 ```
 
-<img src="03-sentiment-analysis_files/figure-html/pipetoplot-1.png" width="672" />
+<img src="03-sentiment-analysis_files/figure-html/pipetoplot-1.png" width="576" />
 
 This lets us spot an anomaly in the sentiment analysis; the word "miss" is coded as negative but it is used as a title for young, unmarried women in Jane Austen's works. If it were appropriate for our purposes, we could easily add "miss" to a custom stop-words list using `bind_rows`.
 

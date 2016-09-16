@@ -203,7 +203,7 @@ tidy_books %>%
   ylab(NULL)
 ```
 
-<img src="02-tidy-text_files/figure-html/plot_count-1.png" width="768" />
+<img src="02-tidy-text_files/figure-html/plot_count-1.png" width="672" />
 
 We could pipe this straight into ggplot2 because of our consistent use of tidy tools.
 
@@ -327,7 +327,7 @@ ggplot(frequency, aes(x = other, y = Austen, color = abs(Austen - other))) +
   geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5) +
   scale_x_log10(labels = percent_format()) +
   scale_y_log10(labels = percent_format()) +
-  scale_color_gradient(limits = c(0, 0.001), low = "gray30", high = "gray75") +
+#  scale_color_gradient(limits = c(0, 0.001), low = "gray30", high = "gray75") +
   facet_wrap(~author, ncol = 2) +
   theme(legend.position="none") +
   labs(y = "Jane Austen", x = NULL)

@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-09-07">
+<meta name="date" content="2016-09-16">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -343,7 +343,7 @@ tidy_books %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(n, word)) +
 <span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="ot">NULL</span>)</code></pre></div>
-<p><img src="02-tidy-text_files/figure-html/plot_count-1.png" width="768" /></p>
+<p><img src="02-tidy-text_files/figure-html/plot_count-1.png" width="672" /></p>
 <p>We could pipe this straight into ggplot2 because of our consistent use of tidy tools.</p>
 </div>
 <div id="the-gutenbergr-package" class="section level2">
@@ -419,7 +419,7 @@ frequency &lt;-<span class="st"> </span>tidy_both %&gt;%
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> word), <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">vjust =</span> <span class="fl">1.5</span>) +
 <span class="st">  </span><span class="kw">scale_x_log10</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>()) +
 <span class="st">  </span><span class="kw">scale_y_log10</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>()) +
-<span class="st">  </span><span class="kw">scale_color_gradient</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.001</span>), <span class="dt">low =</span> <span class="st">&quot;gray30&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;gray75&quot;</span>) +
+<span class="co">#  scale_color_gradient(limits = c(0, 0.001), low = &quot;gray30&quot;, high = &quot;gray75&quot;) +</span>
 <span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;none&quot;</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Jane Austen&quot;</span>, <span class="dt">x =</span> <span class="ot">NULL</span>)</code></pre></div>

@@ -140,7 +140,7 @@ ggplot(plot_austen[1:20,], aes(tf_idf, word, fill = book)) +
   scale_x_continuous(expand=c(0,0))
 ```
 
-<img src="04-tf-idf_files/figure-html/plot_austen-1.png" width="768" />
+<img src="04-tf-idf_files/figure-html/plot_austen-1.png" width="864" />
 
 Let's look at the novels individually.
 
@@ -156,7 +156,7 @@ ggplot(plot_austen, aes(tf_idf, word, fill = book)) +
   scale_x_continuous(expand=c(0,0))
 ```
 
-<img src="04-tf-idf_files/figure-html/plot_separate-1.png" width="768" />
+<img src="04-tf-idf_files/figure-html/plot_separate-1.png" width="864" />
 
 Still all proper nouns! These words are, as measured by tf-idf, the most important to each novel and most readers would likely agree.
 
@@ -223,7 +223,7 @@ ggplot(plot_physics[1:20,], aes(tf_idf, word, fill = author)) +
   scale_x_continuous(expand=c(0,0))
 ```
 
-<img src="04-tf-idf_files/figure-html/plot_physics-1.png" width="768" />
+<img src="04-tf-idf_files/figure-html/plot_physics-1.png" width="864" />
 
 Nice! Let's look at each text individually.
 
@@ -242,7 +242,7 @@ ggplot(plot_physics, aes(tf_idf, word, fill = author)) +
   scale_x_continuous(expand=c(0,0))
 ```
 
-<img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="768" />
+<img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="864" />
 
 Very interesting indeed. One thing we see here is "gif" in the Einstein text?!
 
@@ -312,6 +312,6 @@ ggplot(plot_physics, aes(tf_idf, word, fill = author)) +
   scale_x_continuous(expand=c(0,0))
 ```
 
-<img src="04-tf-idf_files/figure-html/mystopwords-1.png" width="768" />
+<img src="04-tf-idf_files/figure-html/mystopwords-1.png" width="864" />
 
 We don't hear enough about ramparts or things being ethereal in physics today.

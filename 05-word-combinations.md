@@ -221,13 +221,13 @@ digram_tf_idf
 
 This can be visualized within each book, just as we did for words:
 
-<img src="05-word-combinations_files/figure-html/digram_tf_idf_plot-1.png" width="672" />
+<img src="05-word-combinations_files/figure-html/digram_tf_idf_plot-1.png" width="864" />
 
-Much as we discovered in Chapter @ref{#tfidf}, the units that distinguish each Austen book are almost exclusively names.
+Much as we discovered in [Chapter 4](#tfidf), the units that distinguish each Austen book are almost exclusively names.
 
 ### Using digrams to provide context in sentiment analysis
 
-Our sentiment analysis approch in Chapter @ref{#sentiment} simply counted the appearance of positive or negative words, according to a reference lexicon. One of the problems with this approach is that a word's context matters nearly as much as its presence. For example, the words "happy" and "like" will be positive, even in a sentence like "I'm not **happy** and I don't **like** it!"
+Our sentiment analysis approch in [Chapter 3](#sentiment) simply counted the appearance of positive or negative words, according to a reference lexicon. One of the problems with this approach is that a word's context can matter nearly as much as its presence. For example, the words "happy" and "like" will be counted as positive, even in a sentence like "I'm not **happy** and I don't **like** it!"
 
 
 ```r
@@ -253,7 +253,7 @@ digrams_separated %>%
 ## # ... with 1,236 more rows
 ```
 
-We can use word2 to 
+We can use `word2` to TODO
 
 Let's use the AFINN lexicon for sentiment analysis, which gives a sentiment score for each word:
 
@@ -327,7 +327,7 @@ not_words %>%
   coord_flip()
 ```
 
-<img src="05-word-combinations_files/figure-html/not_words_plot-1.png" width="672" />
+<img src="05-word-combinations_files/figure-html/not_words_plot-1.png" width="864" />
 
 The digrams "not like" and "not help" were overwhelmingly the largest causes of misidentification, making the text seem much more positive than it is. But we can see phrases like "not afraid" and "not fail" sometimes suggest text is more negative than it is.
 
@@ -370,23 +370,22 @@ negated_words %>%
   mutate(word2 = reorder(word2, contribution)) %>%
   group_by(word1) %>%
   top_n(10, abs(contribution)) %>%
-  ggplot(aes(word2, contribution, fill = n * score > 0)) +
-  geom_bar(stat = "identity", show.legend = FALSE) +
+  ggplot(aes(contribution, word2, fill = n * score > 0)) +
+  geom_barh(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ word1, scales = "free") +
-  xlab("Words preceded by \"not\"") +
-  ylab("Sentiment score * # of occurrences") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  ylab("Words preceded by \"not\"") +
+  xlab("Sentiment score * # of occurrences")
 ```
 
-<img src="05-word-combinations_files/figure-html/negated_words_plot-1.png" width="672" />
+<img src="05-word-combinations_files/figure-html/negated_words_plot-1.png" width="864" />
 
 ## Visualizing digrams as a network with the ggraph package
 
-A 
+TODO
 
 ### Creating a network with igraph
 
-Now that we have our 
+Now that we have our TODO
 
 
 ```r

@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-09-07">
+<meta name="date" content="2016-09-16">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -303,7 +303,7 @@ plot_austen &lt;-<span class="st"> </span>book_words %&gt;%
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Jane Austen&#39;s Novels&quot;</span>,
        <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/plot_austen-1.png" width="768" /></p>
+<p><img src="04-tf-idf_files/figure-html/plot_austen-1.png" width="864" /></p>
 <p>Let’s look at the novels individually.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_austen &lt;-<span class="st"> </span>plot_austen %&gt;%<span class="st"> </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span><span class="kw">top_n</span>(<span class="dv">15</span>) %&gt;%<span class="st"> </span>ungroup
 
@@ -313,7 +313,7 @@ plot_austen &lt;-<span class="st"> </span>book_words %&gt;%
        <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/plot_separate-1.png" width="768" /></p>
+<p><img src="04-tf-idf_files/figure-html/plot_separate-1.png" width="864" /></p>
 <p>Still all proper nouns! These words are, as measured by tf-idf, the most important to each novel and most readers would likely agree.</p>
 </div>
 <div id="a-corpus-of-physics-texts" class="section level2">
@@ -359,7 +359,7 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
        <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/plot_physics-1.png" width="768" /></p>
+<p><img src="04-tf-idf_files/figure-html/plot_physics-1.png" width="864" /></p>
 <p>Nice! Let’s look at each text individually.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_physics &lt;-<span class="st"> </span>plot_physics %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(author) %&gt;%<span class="st"> </span>
@@ -372,7 +372,7 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
        <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="768" /></p>
+<p><img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="864" /></p>
 <p>Very interesting indeed. One thing we see here is “gif” in the Einstein text?!</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;gif&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>:<span class="dv">10</span>]</code></pre></div>
 <pre><code>##  [1] &quot;                       Fig. 01: file fig01.gif&quot;
@@ -412,7 +412,7 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
        <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">expand=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">0</span>))</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/mystopwords-1.png" width="768" /></p>
+<p><img src="04-tf-idf_files/figure-html/mystopwords-1.png" width="864" /></p>
 <p>We don’t hear enough about ramparts or things being ethereal in physics today.</p>
 
 </div>
