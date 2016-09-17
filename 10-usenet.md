@@ -462,6 +462,8 @@ usenet_digram_counts %>%
 
 <img src="10-usenet_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
+TODO: Something is wrong with that plot? Shouldn't each panel have 10 words? Missing a `group_by`?
+
 
 
 
