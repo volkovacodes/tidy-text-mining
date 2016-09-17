@@ -173,7 +173,7 @@ tf_idf %>%
   filter(str_detect(board, "^sci\\.")) %>%
   group_by(board) %>%
   top_n(12, tf_idf) %>%
-  mutate(word = reorder(word, -tf_idf)) %>%
+  mutate(word = reorder(word, tf_idf)) %>%
   ggplot(aes(tf_idf, word)) +
   geom_barh(stat = "identity") +
   facet_wrap(~ board, scales = "free_y") +
@@ -184,7 +184,7 @@ tf_idf %>%
 
 We could use almost the same code (not shown) to compare the "rec." (recreation) or "talk." boards:
 
-<img src="10-usenet_files/figure-html/unnamed-chunk-9-1.png" width="672" /><img src="10-usenet_files/figure-html/unnamed-chunk-9-2.png" width="672" />
+<img src="10-usenet_files/figure-html/unnamed-chunk-9-1.png" width="864" /><img src="10-usenet_files/figure-html/unnamed-chunk-9-2.png" width="864" />
 
 ## Sentiment Analysis
 
