@@ -192,18 +192,18 @@ For example, this allows us to visualize the commonly used words using ggplot2.
 
 ```r
 library(ggplot2)
-library(ggstance)
 
 tidy_books %>%
   count(word, sort = TRUE) %>%
   filter(n > 600) %>%
   mutate(word = reorder(word, n)) %>%
-  ggplot(aes(n, word)) +
-  geom_barh(stat = "identity") +
-  ylab(NULL)
+  ggplot(aes(word, n)) +
+  geom_bar(stat = "identity") +
+  xlab(NULL) +
+  coord_flip()
 ```
 
-<img src="02-tidy-text_files/figure-html/plot_count-1.png" width="672" />
+<img src="02-tidy-text_files/figure-html/plot_count-1.png" width="576" />
 
 We could pipe this straight into ggplot2 because of our consistent use of tidy tools.
 
@@ -321,13 +321,12 @@ We use `str_extract` here because the UTF-8 encoded texts from Project Gutenberg
 
 ```r
 library(scales)
-ggplot(frequency, aes(x = other, y = Austen, color = abs(Austen - other))) +
+ggplot(frequency, aes(x = other, y = Austen)) +
   geom_abline(color = "red") +
   geom_jitter(alpha = 0.1, size = 2.5, width = 0.4, height = 0.4) +
   geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5) +
   scale_x_log10(labels = percent_format()) +
   scale_y_log10(labels = percent_format()) +
-#  scale_color_gradient(limits = c(0, 0.001), low = "gray30", high = "gray75") +
   facet_wrap(~author, ncol = 2) +
   theme(legend.position="none") +
   labs(y = "Jane Austen", x = NULL)

@@ -334,16 +334,16 @@ tidy_books &lt;-<span class="st"> </span>tidy_books %&gt;%
 ## # ... with 13,904 more rows</code></pre>
 <p>For example, this allows us to visualize the commonly used words using ggplot2.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-<span class="kw">library</span>(ggstance)
 
 tidy_books %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;<span class="st"> </span><span class="dv">600</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, n)) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(n, word)) +
-<span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
-<span class="st">  </span><span class="kw">ylab</span>(<span class="ot">NULL</span>)</code></pre></div>
-<p><img src="02-tidy-text_files/figure-html/plot_count-1.png" width="672" /></p>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, n)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="ot">NULL</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
+<p><img src="02-tidy-text_files/figure-html/plot_count-1.png" width="576" /></p>
 <p>We could pipe this straight into ggplot2 because of our consistent use of tidy tools.</p>
 </div>
 <div id="the-gutenbergr-package" class="section level2">
@@ -413,13 +413,12 @@ frequency &lt;-<span class="st"> </span>tidy_both %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
 <p>We use <code>str_extract</code> here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words but we don’t want to count “_any_” separately from “any”. Now let’s plot.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
-<span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(<span class="dt">x =</span> other, <span class="dt">y =</span> Austen, <span class="dt">color =</span> <span class="kw">abs</span>(Austen -<span class="st"> </span>other))) +
+<span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(<span class="dt">x =</span> other, <span class="dt">y =</span> Austen)) +
 <span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">alpha =</span> <span class="fl">0.1</span>, <span class="dt">size =</span> <span class="fl">2.5</span>, <span class="dt">width =</span> <span class="fl">0.4</span>, <span class="dt">height =</span> <span class="fl">0.4</span>) +
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> word), <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">vjust =</span> <span class="fl">1.5</span>) +
 <span class="st">  </span><span class="kw">scale_x_log10</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>()) +
 <span class="st">  </span><span class="kw">scale_y_log10</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>()) +
-<span class="co">#  scale_color_gradient(limits = c(0, 0.001), low = &quot;gray30&quot;, high = &quot;gray75&quot;) +</span>
 <span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;none&quot;</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Jane Austen&quot;</span>, <span class="dt">x =</span> <span class="ot">NULL</span>)</code></pre></div>
