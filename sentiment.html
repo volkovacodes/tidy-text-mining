@@ -243,7 +243,8 @@ sentiments</code></pre></div>
 tidy_books &lt;-<span class="st"> </span><span class="kw">austen_books</span>() %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(book) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">linenumber =</span> <span class="kw">row_number</span>(),
-         <span class="dt">chapter =</span> <span class="kw">cumsum</span>(<span class="kw">str_detect</span>(text, <span class="kw">regex</span>(<span class="st">&quot;^chapter [</span><span class="ch">\\</span><span class="st">divxlc]&quot;</span>, <span class="dt">ignore_case =</span> <span class="ot">TRUE</span>)))) %&gt;%
+         <span class="dt">chapter =</span> <span class="kw">cumsum</span>(<span class="kw">str_detect</span>(text, <span class="kw">regex</span>(<span class="st">&quot;^chapter [</span><span class="ch">\\</span><span class="st">divxlc]&quot;</span>, 
+                                                 <span class="dt">ignore_case =</span> <span class="ot">TRUE</span>)))) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nrcjoy &lt;-<span class="st"> </span>sentiments %&gt;%
@@ -253,7 +254,7 @@ tidy_books %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(book ==<span class="st"> &quot;Emma&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">semi_join</span>(nrcjoy) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## # A tibble: 303 x 2
+<pre><code>## # A tibble: 303 × 2
 ##       word     n
 ##      &lt;chr&gt; &lt;int&gt;
 ## 1     good   359
@@ -297,7 +298,7 @@ janeaustensentiment &lt;-<span class="st"> </span>tidy_books %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()
 
 bing_word_counts</code></pre></div>
-<pre><code>## # A tibble: 2,585 x 3
+<pre><code>## # A tibble: 2,585 × 3
 ##        word sentiment     n
 ##       &lt;chr&gt;     &lt;chr&gt; &lt;int&gt;
 ## 1      miss  negative  1855
@@ -312,14 +313,15 @@ bing_word_counts</code></pre></div>
 ## 10 pleasure  positive   462
 ## # ... with 2,575 more rows</code></pre>
 <p>This can be shown visually, and we can pipe straight into ggplot2, if we like, because of the way we are consistently using tools built for handling tidy data frames.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggstance)
-bing_word_counts %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bing_word_counts %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;<span class="st"> </span><span class="dv">150</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">n =</span> <span class="kw">ifelse</span>(sentiment ==<span class="st"> &quot;negative&quot;</span>, -n, n)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, n)) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(n, word, <span class="dt">fill =</span> sentiment)) +
-<span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
-<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Contribution to sentiment&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, n, <span class="dt">fill =</span> sentiment)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Contribution to sentiment&quot;</span>,
+       <span class="dt">x =</span> <span class="ot">NULL</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="03-sentiment-analysis_files/figure-html/pipetoplot-1.png" width="576" /></p>
 <p>This lets us spot an anomaly in the sentiment analysis; the word “miss” is coded as negative but it is used as a title for young, unmarried women in Jane Austen’s works. If it were appropriate for our purposes, we could easily add “miss” to a custom stop-words list using <code>bind_rows</code>.</p>
 </div>
@@ -361,18 +363,19 @@ tidy_books %&gt;%
 <p>Another option in <code>unnest_tokens</code> is to split into tokens using a regex pattern. We could use this, for example, to split the text of Jane Austen’s novels into a data frame by chapter.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">austen_chapters &lt;-<span class="st"> </span><span class="kw">austen_books</span>() %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(book) %&gt;%
-<span class="st">  </span><span class="kw">unnest_tokens</span>(chapter, text, <span class="dt">token =</span> <span class="st">&quot;regex&quot;</span>, <span class="dt">pattern =</span> <span class="st">&quot;Chapter|CHAPTER [</span><span class="ch">\\</span><span class="st">dIVXLC]&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">unnest_tokens</span>(chapter, text, <span class="dt">token =</span> <span class="st">&quot;regex&quot;</span>, 
+                <span class="dt">pattern =</span> <span class="st">&quot;Chapter|CHAPTER [</span><span class="ch">\\</span><span class="st">dIVXLC]&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()
 austen_chapters %&gt;%<span class="st"> </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span><span class="kw">summarise</span>(<span class="dt">chapters =</span> <span class="kw">n</span>())</code></pre></div>
-<pre><code>## # A tibble: 6 x 2
+<pre><code>## # A tibble: 6 × 2
 ##                  book chapters
 ##                &lt;fctr&gt;    &lt;int&gt;
-## 1 Sense &amp; Sensibility       51
-## 2   Pride &amp; Prejudice       62
-## 3      Mansfield Park       49
-## 4                Emma       56
-## 5    Northanger Abbey       32
-## 6          Persuasion       25</code></pre>
+## 1                Emma       56
+## 2      Mansfield Park       49
+## 3    Northanger Abbey       32
+## 4          Persuasion       25
+## 5   Pride &amp; Prejudice       62
+## 6 Sense &amp; Sensibility       51</code></pre>
 <p>We have recovered the correct number of chapters in each novel (plus an “extra” row for each novel title). In this data frame, each row corresponds to one chapter.</p>
 <p>Near the beginning of this vignette, we used a similar regex to find where all the chapters were in Austen’s novels for a tidy data frame organized by one-word-per-row. We can use tidy text analysis to ask questions such as what are the most negative chapters in each of Jane Austen’s novels? First, let’s get the list of negative words from the Bing lexicon. Second, let’s make a dataframe of how many words are in each chapter so we can normalize for the length of chapters. Then, let’s find the number of negative words in each chapter and divide by the total words in each chapter. Which chapter has the highest proportion of negative words?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bingnegative &lt;-<span class="st"> </span>sentiments %&gt;%
@@ -395,13 +398,13 @@ tidy_books %&gt;%
 ## 
 ##                  book chapter negativewords words      ratio
 ##                &lt;fctr&gt;   &lt;int&gt;         &lt;int&gt; &lt;int&gt;      &lt;dbl&gt;
-## 1 Sense &amp; Sensibility      43           161  3405 0.04728341
-## 2   Pride &amp; Prejudice      34           111  2104 0.05275665
-## 3      Mansfield Park      46           173  3685 0.04694708
-## 4                Emma      15           151  3340 0.04520958
-## 5    Northanger Abbey      21           149  2982 0.04996647
-## 6          Persuasion       4            62  1807 0.03431101</code></pre>
-<p>These are the chapters with the most sad words in each book, normalized for number of words in the chapter. What is happening in these chapters? In Chapter 43 of <em>Sense and Sensibility</em> Marianne is seriously ill, near death, and in Chapter 34 of <em>Pride and Prejudice</em> Mr. Darcy proposes for the first time (so badly!). Chapter 46 of <em>Mansfield Park</em> is almost the end, when everyone learns of Henry’s scandalous adultery, Chapter 15 of <em>Emma</em> is when horrifying Mr. Elton proposes, and in Chapter 21 of <em>Northanger Abbey</em> Catherine is deep in her Gothic faux fantasy of murder/etc. Chapter 4 of <em>Persuasion</em> is when the reader gets the full flashback of Anne refusing Captain Wentworth and how sad she was and what a terrible mistake she realized it to be.</p>
+## 1                Emma      15           151  3340 0.04520958
+## 2      Mansfield Park      46           173  3685 0.04694708
+## 3    Northanger Abbey      21           149  2982 0.04996647
+## 4          Persuasion       4            62  1807 0.03431101
+## 5   Pride &amp; Prejudice      34           111  2104 0.05275665
+## 6 Sense &amp; Sensibility      43           161  3405 0.04728341</code></pre>
+<p>These are the chapters with the most sad words in each book, normalized for number of words in the chapter. What is happening in these chapters? In Chapter 43 of <em>Sense and Sensibility</em> Marianne is seriously ill, near death, and in Chapter 34 of <em>Pride and Prejudice</em> Mr. Darcy proposes for the first time (so badly!). Chapter 46 of <em>Mansfield Park</em> is almost the end, when everyone learns of Henry’s scandalous adultery, Chapter 15 of <em>Emma</em> is when horrifying Mr. Elton proposes, and in Chapter 21 of <em>Northanger Abbey</em> Catherine is deep in her Gothic faux fantasy of murder, etc. Chapter 4 of <em>Persuasion</em> is when the reader gets the full flashback of Anne refusing Captain Wentworth and how sad she was and what a terrible mistake she realized it to be.</p>
 
 </div>
 </div>

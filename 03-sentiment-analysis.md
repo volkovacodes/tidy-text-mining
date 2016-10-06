@@ -55,7 +55,8 @@ library(stringr)
 tidy_books <- austen_books() %>%
   group_by(book) %>%
   mutate(linenumber = row_number(),
-         chapter = cumsum(str_detect(text, regex("^chapter [\\divxlc]", ignore_case = TRUE)))) %>%
+         chapter = cumsum(str_detect(text, regex("^chapter [\\divxlc]", 
+                                                 ignore_case = TRUE)))) %>%
   ungroup() %>%
   unnest_tokens(word, text)
 ```
@@ -72,7 +73,7 @@ tidy_books %>%
 ```
 
 ```
-## # A tibble: 303 x 2
+## # A tibble: 303 × 2
 ##       word     n
 ##      <chr> <int>
 ## 1     good   359
@@ -136,7 +137,7 @@ bing_word_counts
 ```
 
 ```
-## # A tibble: 2,585 x 3
+## # A tibble: 2,585 × 3
 ##        word sentiment     n
 ##       <chr>     <chr> <int>
 ## 1      miss  negative  1855
@@ -156,14 +157,15 @@ This can be shown visually, and we can pipe straight into ggplot2, if we like, b
 
 
 ```r
-library(ggstance)
 bing_word_counts %>%
   filter(n > 150) %>%
   mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
   mutate(word = reorder(word, n)) %>%
-  ggplot(aes(n, word, fill = sentiment)) +
-  geom_barh(stat = "identity") +
-  xlab("Contribution to sentiment")
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_bar(stat = "identity") +
+  labs(y = "Contribution to sentiment",
+       x = NULL) +
+  coord_flip()
 ```
 
 <img src="03-sentiment-analysis_files/figure-html/pipetoplot-1.png" width="576" />
@@ -237,21 +239,22 @@ Another option in `unnest_tokens` is to split into tokens using a regex pattern.
 ```r
 austen_chapters <- austen_books() %>%
   group_by(book) %>%
-  unnest_tokens(chapter, text, token = "regex", pattern = "Chapter|CHAPTER [\\dIVXLC]") %>%
+  unnest_tokens(chapter, text, token = "regex", 
+                pattern = "Chapter|CHAPTER [\\dIVXLC]") %>%
   ungroup()
 austen_chapters %>% group_by(book) %>% summarise(chapters = n())
 ```
 
 ```
-## # A tibble: 6 x 2
+## # A tibble: 6 × 2
 ##                  book chapters
 ##                <fctr>    <int>
-## 1 Sense & Sensibility       51
-## 2   Pride & Prejudice       62
-## 3      Mansfield Park       49
-## 4                Emma       56
-## 5    Northanger Abbey       32
-## 6          Persuasion       25
+## 1                Emma       56
+## 2      Mansfield Park       49
+## 3    Northanger Abbey       32
+## 4          Persuasion       25
+## 5   Pride & Prejudice       62
+## 6 Sense & Sensibility       51
 ```
 
 We have recovered the correct number of chapters in each novel (plus an "extra" row for each novel title). In this data frame, each row corresponds to one chapter.
@@ -283,12 +286,12 @@ tidy_books %>%
 ## 
 ##                  book chapter negativewords words      ratio
 ##                <fctr>   <int>         <int> <int>      <dbl>
-## 1 Sense & Sensibility      43           161  3405 0.04728341
-## 2   Pride & Prejudice      34           111  2104 0.05275665
-## 3      Mansfield Park      46           173  3685 0.04694708
-## 4                Emma      15           151  3340 0.04520958
-## 5    Northanger Abbey      21           149  2982 0.04996647
-## 6          Persuasion       4            62  1807 0.03431101
+## 1                Emma      15           151  3340 0.04520958
+## 2      Mansfield Park      46           173  3685 0.04694708
+## 3    Northanger Abbey      21           149  2982 0.04996647
+## 4          Persuasion       4            62  1807 0.03431101
+## 5   Pride & Prejudice      34           111  2104 0.05275665
+## 6 Sense & Sensibility      43           161  3405 0.04728341
 ```
 
-These are the chapters with the most sad words in each book, normalized for number of words in the chapter. What is happening in these chapters? In Chapter 43 of *Sense and Sensibility* Marianne is seriously ill, near death, and in Chapter 34 of *Pride and Prejudice* Mr. Darcy proposes for the first time (so badly!). Chapter 46 of *Mansfield Park* is almost the end, when everyone learns of Henry's scandalous adultery, Chapter 15 of *Emma* is when horrifying Mr. Elton proposes, and in Chapter 21 of *Northanger Abbey* Catherine is deep in her Gothic faux fantasy of murder/etc. Chapter 4 of *Persuasion* is when the reader gets the full flashback of Anne refusing Captain Wentworth and how sad she was and what a terrible mistake she realized it to be.
+These are the chapters with the most sad words in each book, normalized for number of words in the chapter. What is happening in these chapters? In Chapter 43 of *Sense and Sensibility* Marianne is seriously ill, near death, and in Chapter 34 of *Pride and Prejudice* Mr. Darcy proposes for the first time (so badly!). Chapter 46 of *Mansfield Park* is almost the end, when everyone learns of Henry's scandalous adultery, Chapter 15 of *Emma* is when horrifying Mr. Elton proposes, and in Chapter 21 of *Northanger Abbey* Catherine is deep in her Gothic faux fantasy of murder, etc. Chapter 4 of *Persuasion* is when the reader gets the full flashback of Anne refusing Captain Wentworth and how sad she was and what a terrible mistake she realized it to be.
