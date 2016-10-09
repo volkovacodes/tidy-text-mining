@@ -126,17 +126,15 @@ Here we see all proper nouns, names that are in fact important in these novels. 
 
 
 ```r
-library(ggstance)
-library(ggthemes)
-
 plot_austen <- book_words %>%
   arrange(desc(tf_idf)) %>%
   mutate(word = factor(word, levels = rev(unique(word))))
 
-ggplot(plot_austen[1:20,], aes(tf_idf, word, fill = book)) +
-  geom_barh(alpha = 0.8, stat = "identity") +
+ggplot(plot_austen[1:20,], aes(word, tf_idf, fill = book)) +
+  geom_bar(alpha = 0.8, stat = "identity") +
   labs(title = "Highest tf-idf words in Jane Austen's Novels",
-       y = NULL, x = "tf-idf")
+       x = NULL, y = "tf-idf") +
+  coord_flip()
 ```
 
 <img src="04-tf-idf_files/figure-html/plot_austen-1.png" width="864" />
@@ -145,13 +143,17 @@ Let's look at the novels individually.
 
 
 ```r
-plot_austen <- plot_austen %>% group_by(book) %>% top_n(15) %>% ungroup
+plot_austen <- plot_austen %>% 
+  group_by(book) %>% 
+  top_n(15) %>% 
+  ungroup
 
-ggplot(plot_austen, aes(tf_idf, word, fill = book)) +
-  geom_barh(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+ggplot(plot_austen, aes(word, tf_idf, fill = book)) +
+  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
   labs(title = "Highest tf-idf words in Jane Austen's Novels",
-       y = NULL, x = "tf-idf") +
-  facet_wrap(~book, ncol = 2, scales = "free")
+       x = NULL, y = "tf-idf") +
+  facet_wrap(~book, ncol = 2, scales = "free") +
+  coord_flip()
 ```
 
 <img src="04-tf-idf_files/figure-html/plot_separate-1.png" width="864" />
@@ -179,11 +181,12 @@ physics_words <- physics %>%
   unnest_tokens(word, text) %>%
   count(author, word, sort = TRUE) %>%
   ungroup()
+
 physics_words
 ```
 
 ```
-## # A tibble: 12,592 x 3
+## # A tibble: 12,592 × 3
 ##                 author  word     n
 ##                  <chr> <chr> <int>
 ## 1     Galilei, Galileo   the  3760
@@ -199,7 +202,7 @@ physics_words
 ## # ... with 12,582 more rows
 ```
 
-Here we see just the raw counts, and of course these documents are all very different lengths. Let's go ahead and calculate tf-idf.
+Here we see just the raw counts, and of course these documents are all different lengths. Let's go ahead and calculate tf-idf.
 
 
 ```r
@@ -214,10 +217,11 @@ plot_physics <- physics_words %>%
                                             "Tesla, Nikola",
                                             "Einstein, Albert")))
 
-ggplot(plot_physics[1:20,], aes(tf_idf, word, fill = author)) +
-  geom_barh(alpha = 0.8, stat = "identity") +
+ggplot(plot_physics[1:20,], aes(word, tf_idf, fill = author)) +
+  geom_bar(alpha = 0.8, stat = "identity") +
   labs(title = "Highest tf-idf words in Classic Physics Texts",
-       y = NULL, x = "tf-idf")
+       x = NULL, y = "tf-idf") +
+  coord_flip()
 ```
 
 <img src="04-tf-idf_files/figure-html/plot_physics-1.png" width="864" />
@@ -231,14 +235,15 @@ plot_physics <- plot_physics %>%
   top_n(15, tf_idf) %>% 
   mutate(word = reorder(word, tf_idf))
 
-ggplot(plot_physics, aes(tf_idf, word, fill = author)) +
-  geom_barh(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+ggplot(plot_physics, aes(word, tf_idf, fill = author)) +
+  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
   labs(title = "Highest tf-idf words in Classic Physics Texts",
-       y = NULL, x = "tf-idf") +
-  facet_wrap(~author, ncol = 2, scales = "free")
+       x = NULL, y = "tf-idf") +
+  facet_wrap(~author, ncol = 2, scales = "free") +
+  coord_flip()
 ```
 
-<img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="864" />
+<img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="768" />
 
 Very interesting indeed. One thing we see here is "gif" in the Einstein text?!
 
@@ -300,13 +305,14 @@ plot_physics <- physics_words %>%
                                             "Tesla, Nikola",
                                             "Einstein, Albert")))
 
-ggplot(plot_physics, aes(tf_idf, word, fill = author)) +
-  geom_barh(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+ggplot(plot_physics, aes(word, tf_idf, fill = author)) +
+  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
   labs(title = "Highest tf-idf words in Classic Physics Texts",
-       y = NULL, x = "tf-idf") +
-  facet_wrap(~author, ncol = 2, scales = "free")
+       x = NULL, y = "tf-idf") +
+  facet_wrap(~author, ncol = 2, scales = "free") +
+  coord_flip()
 ```
 
-<img src="04-tf-idf_files/figure-html/mystopwords-1.png" width="864" />
+<img src="04-tf-idf_files/figure-html/mystopwords-1.png" width="768" />
 
 We don't hear enough about ramparts or things being ethereal in physics today.

@@ -1,7 +1,7 @@
 --- 
 title: "Tidy Text Mining with R"
 author: "Julia Silge and David Robinson"
-date: "2016-10-07"
+date: "2016-10-09"
 knit: "bookdown::render_book"
 site: bookdown::bookdown_site
 output: bookdown::gitbook

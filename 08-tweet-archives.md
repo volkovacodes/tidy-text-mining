@@ -2,11 +2,11 @@
 
 
 
-One type of text that has certainly received its share of attention in recent years is text shared online via Twitter. In fact, several of the sentiment lexicons used in this book (and commonly used in general) were designed for use with and validated on tweets. Both of the authors of this book are on Twitter and are fairly regular users of it so in this case study, let's compare the entire Twitter archives of [Julia](https://twitter.com/juliasilge) and [David](https://twitter.com/drob).
+One type of text that has received its share of attention in recent years is text shared online via Twitter. In fact, several of the sentiment lexicons used in this book (and commonly used in general) were designed for use with and validated on tweets. Both of the authors of this book are on Twitter and are fairly regular users of it so in this case study, let's compare the entire Twitter archives of [Julia](https://twitter.com/juliasilge) and [David](https://twitter.com/drob).
 
 ## Getting the data and distribution of tweets
 
-An individual can download their own Twitter archive by following [directions available here](https://support.twitter.com/articles/20170160). We each downloaded ours and will now open them up. Let's use lubridate to convert the string timestamps to date-time objects and just take a look at our tweeting patterns overall.
+An individual can download their own Twitter archive by following [directions available here](https://support.twitter.com/articles/20170160). We each downloaded ours and will now open them up. Let's use the lubridate package to convert the string timestamps to date-time objects and initially take a look at our tweeting patterns overall.
 
 
 ```r
@@ -21,8 +21,11 @@ tweets_julia$timestamp <- with_tz(ymd_hms(tweets_julia$timestamp),
                                   "America/Denver")
 tweets_dave$timestamp <- with_tz(ymd_hms(tweets_dave$timestamp), 
                                  "America/New_York")
-tweets <- bind_rows(tweets_julia %>% mutate(person = "Julia"),
-                    tweets_dave %>% mutate(person = "David"))
+tweets <- bind_rows(tweets_julia %>% 
+                      mutate(person = "Julia"),
+                    tweets_dave %>% 
+                      mutate(person = "David"))
+
 ggplot(tweets, aes(x = timestamp, fill = person)) +
   geom_histogram(alpha = 0.5, position = "identity")
 ```
@@ -40,7 +43,7 @@ Let's use `unnest_tokens` to make a tidy dataframe of all the words in our tweet
 library(tidytext)
 library(stringr)
 
-reg <- "([^A-Za-z\\d#@']|'(?![A-Za-z\\d#@]))"
+reg <- "([^A-Za-z_\\d#@']|'(?![A-Za-z_\\d#@]))"
 tidy_tweets <- tweets %>% 
   mutate(text = str_replace_all(text, "https://t.co/[A-Za-z\\d]+|http://[A-Za-z\\d]+|&amp;|&lt;|&gt;|RT", "")) %>%
   unnest_tokens(word, text, token = "regex", pattern = reg) %>%
@@ -52,63 +55,72 @@ Now we can calculate word frequencies for each person
 
 
 ```r
-frequency <- tidy_tweets %>% group_by(person) %>% 
+frequency <- tidy_tweets %>% 
+  group_by(person) %>% 
   count(word, sort = TRUE) %>% 
-  left_join(tidy_tweets %>% group_by(person) %>% summarise(total = n())) %>%
+  left_join(tidy_tweets %>% 
+              group_by(person) %>% 
+              summarise(total = n())) %>%
   mutate(freq = n/total)
+
 frequency
 ```
 
 ```
-## Source: local data frame [23,092 x 5]
+## Source: local data frame [23,086 x 5]
 ## Groups: person [2]
 ## 
 ##    person           word     n total        freq
 ##     <chr>          <chr> <int> <int>       <dbl>
-## 1   Julia           time   567 76811 0.007381755
-## 2   Julia    @selkie1970   565 76811 0.007355717
-## 3   Julia       @skedman   518 76811 0.006743826
-## 4   Julia            day   470 76811 0.006118915
-## 5   Julia           baby   410 76811 0.005337777
-## 6   David        #rstats   359 22426 0.016008205
-## 7   Julia     @doctormac   342 76811 0.004452487
-## 8   David @hadleywickham   306 22426 0.013644876
-## 9   Julia           love   303 76811 0.003944747
-## 10  Julia   @haleynburke   291 76811 0.003788520
-## # ... with 23,082 more rows
+## 1   Julia           time   567 76504 0.007411377
+## 2   Julia    @selkie1970   565 76504 0.007385235
+## 3   Julia       @skedman   518 76504 0.006770888
+## 4   Julia            day   470 76504 0.006143470
+## 5   Julia           baby   410 76504 0.005359197
+## 6   David        #rstats   359 22074 0.016263477
+## 7   Julia     @doctormac   342 76504 0.004470354
+## 8   David @hadleywickham   306 22074 0.013862463
+## 9   Julia           love   303 76504 0.003960577
+## 10  Julia   @haleynburke   291 76504 0.003803723
+## # ... with 23,076 more rows
 ```
 
 This is a lovely, tidy data frame but we would actually like to plot those frequencies on the x- and y-axes of a plot, so we will need to use an `inner_join` and make a different dataframe.
 
 
 ```r
-frequency <- inner_join(frequency %>% filter(person == "Julia") %>% rename(Julia = freq),
-                        frequency %>% filter(person == "David") %>% rename(David = freq),
+frequency <- inner_join(frequency %>% 
+                          filter(person == "Julia") %>% 
+                          rename(Julia = freq),
+                        frequency %>% 
+                          filter(person == "David") %>% 
+                          rename(David = freq),
                         by = "word") %>% 
-  ungroup() %>% select(word, Julia, David)
+  ungroup() %>% 
+  select(word, Julia, David)
+
 frequency
 ```
 
 ```
-## # A tibble: 3,555 x 3
+## # A tibble: 3,520 × 3
 ##       word       Julia        David
 ##      <chr>       <dbl>        <dbl>
-## 1     time 0.007381755 0.0042807456
-## 2      day 0.006118915 0.0014715063
-## 3     baby 0.005337777 0.0001783644
-## 4     love 0.003944747 0.0020065995
-## 5    house 0.003775501 0.0001337733
-## 6  morning 0.003645311 0.0004013199
-## 7   people 0.003358894 0.0032997414
-## 8     feel 0.003111534 0.0012931419
-## 9   pretty 0.002942287 0.0010701864
-## 10  school 0.002864173 0.0002229555
-## # ... with 3,545 more rows
+## 1     time 0.007411377 0.0043490079
+## 2      day 0.006143470 0.0014949715
+## 3     baby 0.005359197 0.0001812087
+## 4     love 0.003960577 0.0020385974
+## 5    house 0.003790651 0.0001359065
+## 6  morning 0.003659939 0.0004077195
+## 7   people 0.003372373 0.0033523602
+## 8     feel 0.003124020 0.0013137628
+## 9   pretty 0.002954094 0.0010872520
+## 10  school 0.002875667 0.0002265108
+## # ... with 3,510 more rows
 ```
 
 ```r
 library(scales)
-
 ggplot(frequency, aes(Julia, David)) +
   geom_jitter(alpha = 0.1, size = 2.5, width = 0.4, height = 0.4) +
   geom_text(aes(label = word), check_overlap = TRUE, vjust = 1.5) +
@@ -122,7 +134,7 @@ ggplot(frequency, aes(Julia, David)) +
 <img src="08-tweet-archives_files/figure-html/spread-1.png" width="672" />
 
 
-This may not even need to be pointed out, but David and Julia have used their Twitter accounts rather differently over the course of the past several years. David has used his Twitter account almost exclusively for professional purposes since he became more active, while Julia used it for entirely personal purposes until late 2015. We see these differences immediately in this plot exploring word frequencies, and they will continue to be obvious. Words near the red line in this plot are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Because of the inner join we did above, words, hashtags, and usernames that appear in this plot are ones that we have both used at least once.
+This may not even need to be pointed out, but David and Julia have used their Twitter accounts rather differently over the course of the past several years. David has used his Twitter account almost exclusively for professional purposes since he became more active, while Julia used it for entirely personal purposes until late 2015. We see these differences immediately in this plot exploring word frequencies, and they will continue to be obvious in the rest of this chapter. Words near the red line in this plot are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Because of the inner join we did above, words, hashtags, and usernames that appear in this plot are ones that we have both used at least once.
 
 
 TODO: lots

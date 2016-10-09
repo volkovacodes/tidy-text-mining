@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-10-07">
+<meta name="date" content="2016-10-09">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -203,10 +203,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="twitter" class="section level1">
 <h1><span class="header-section-number">8</span> Case study: comparing Twitter archives</h1>
-<p>One type of text that has certainly received its share of attention in recent years is text shared online via Twitter. In fact, several of the sentiment lexicons used in this book (and commonly used in general) were designed for use with and validated on tweets. Both of the authors of this book are on Twitter and are fairly regular users of it so in this case study, let’s compare the entire Twitter archives of <a href="https://twitter.com/juliasilge">Julia</a> and <a href="https://twitter.com/drob">David</a>.</p>
+<p>One type of text that has received its share of attention in recent years is text shared online via Twitter. In fact, several of the sentiment lexicons used in this book (and commonly used in general) were designed for use with and validated on tweets. Both of the authors of this book are on Twitter and are fairly regular users of it so in this case study, let’s compare the entire Twitter archives of <a href="https://twitter.com/juliasilge">Julia</a> and <a href="https://twitter.com/drob">David</a>.</p>
 <div id="getting-the-data-and-distribution-of-tweets" class="section level2">
 <h2><span class="header-section-number">8.1</span> Getting the data and distribution of tweets</h2>
-<p>An individual can download their own Twitter archive by following <a href="https://support.twitter.com/articles/20170160">directions available here</a>. We each downloaded ours and will now open them up. Let’s use lubridate to convert the string timestamps to date-time objects and just take a look at our tweeting patterns overall.</p>
+<p>An individual can download their own Twitter archive by following <a href="https://support.twitter.com/articles/20170160">directions available here</a>. We each downloaded ours and will now open them up. Let’s use the lubridate package to convert the string timestamps to date-time objects and initially take a look at our tweeting patterns overall.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(dplyr)
@@ -218,8 +218,11 @@ tweets_julia$timestamp &lt;-<span class="st"> </span><span class="kw">with_tz</s
                                   <span class="st">&quot;America/Denver&quot;</span>)
 tweets_dave$timestamp &lt;-<span class="st"> </span><span class="kw">with_tz</span>(<span class="kw">ymd_hms</span>(tweets_dave$timestamp), 
                                  <span class="st">&quot;America/New_York&quot;</span>)
-tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_julia %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;Julia&quot;</span>),
-                    tweets_dave %&gt;%<span class="st"> </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;David&quot;</span>))
+tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_julia %&gt;%<span class="st"> </span>
+<span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;Julia&quot;</span>),
+                    tweets_dave %&gt;%<span class="st"> </span>
+<span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;David&quot;</span>))
+
 <span class="kw">ggplot</span>(tweets, <span class="kw">aes</span>(<span class="dt">x =</span> timestamp, <span class="dt">fill =</span> person)) +
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>)</code></pre></div>
 <p><img src="08-tweet-archives_files/figure-html/setup-1.png" width="768" /></p>
@@ -231,56 +234,65 @@ tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_ju
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 <span class="kw">library</span>(stringr)
 
-reg &lt;-<span class="st"> &quot;([^A-Za-z</span><span class="ch">\\</span><span class="st">d#@&#39;]|&#39;(?![A-Za-z</span><span class="ch">\\</span><span class="st">d#@]))&quot;</span>
+reg &lt;-<span class="st"> &quot;([^A-Za-z_</span><span class="ch">\\</span><span class="st">d#@&#39;]|&#39;(?![A-Za-z_</span><span class="ch">\\</span><span class="st">d#@]))&quot;</span>
 tidy_tweets &lt;-<span class="st"> </span>tweets %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">text =</span> <span class="kw">str_replace_all</span>(text, <span class="st">&quot;https://t.co/[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|http://[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|&amp;amp;|&amp;lt;|&amp;gt;|RT&quot;</span>, <span class="st">&quot;&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text, <span class="dt">token =</span> <span class="st">&quot;regex&quot;</span>, <span class="dt">pattern =</span> reg) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(!word %in%<span class="st"> </span>stop_words$word,
          <span class="kw">str_detect</span>(word, <span class="st">&quot;[a-z]&quot;</span>))</code></pre></div>
 <p>Now we can calculate word frequencies for each person</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">frequency &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> </span><span class="kw">group_by</span>(person) %&gt;%<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">frequency &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(person) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">left_join</span>(tidy_tweets %&gt;%<span class="st"> </span><span class="kw">group_by</span>(person) %&gt;%<span class="st"> </span><span class="kw">summarise</span>(<span class="dt">total =</span> <span class="kw">n</span>())) %&gt;%
+<span class="st">  </span><span class="kw">left_join</span>(tidy_tweets %&gt;%<span class="st"> </span>
+<span class="st">              </span><span class="kw">group_by</span>(person) %&gt;%<span class="st"> </span>
+<span class="st">              </span><span class="kw">summarise</span>(<span class="dt">total =</span> <span class="kw">n</span>())) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">freq =</span> n/total)
+
 frequency</code></pre></div>
-<pre><code>## Source: local data frame [23,092 x 5]
+<pre><code>## Source: local data frame [23,086 x 5]
 ## Groups: person [2]
 ## 
 ##    person           word     n total        freq
 ##     &lt;chr&gt;          &lt;chr&gt; &lt;int&gt; &lt;int&gt;       &lt;dbl&gt;
-## 1   Julia           time   567 76811 0.007381755
-## 2   Julia    @selkie1970   565 76811 0.007355717
-## 3   Julia       @skedman   518 76811 0.006743826
-## 4   Julia            day   470 76811 0.006118915
-## 5   Julia           baby   410 76811 0.005337777
-## 6   David        #rstats   359 22426 0.016008205
-## 7   Julia     @doctormac   342 76811 0.004452487
-## 8   David @hadleywickham   306 22426 0.013644876
-## 9   Julia           love   303 76811 0.003944747
-## 10  Julia   @haleynburke   291 76811 0.003788520
-## # ... with 23,082 more rows</code></pre>
+## 1   Julia           time   567 76504 0.007411377
+## 2   Julia    @selkie1970   565 76504 0.007385235
+## 3   Julia       @skedman   518 76504 0.006770888
+## 4   Julia            day   470 76504 0.006143470
+## 5   Julia           baby   410 76504 0.005359197
+## 6   David        #rstats   359 22074 0.016263477
+## 7   Julia     @doctormac   342 76504 0.004470354
+## 8   David @hadleywickham   306 22074 0.013862463
+## 9   Julia           love   303 76504 0.003960577
+## 10  Julia   @haleynburke   291 76504 0.003803723
+## # ... with 23,076 more rows</code></pre>
 <p>This is a lovely, tidy data frame but we would actually like to plot those frequencies on the x- and y-axes of a plot, so we will need to use an <code>inner_join</code> and make a different dataframe.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">frequency &lt;-<span class="st"> </span><span class="kw">inner_join</span>(frequency %&gt;%<span class="st"> </span><span class="kw">filter</span>(person ==<span class="st"> &quot;Julia&quot;</span>) %&gt;%<span class="st"> </span><span class="kw">rename</span>(<span class="dt">Julia =</span> freq),
-                        frequency %&gt;%<span class="st"> </span><span class="kw">filter</span>(person ==<span class="st"> &quot;David&quot;</span>) %&gt;%<span class="st"> </span><span class="kw">rename</span>(<span class="dt">David =</span> freq),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">frequency &lt;-<span class="st"> </span><span class="kw">inner_join</span>(frequency %&gt;%<span class="st"> </span>
+<span class="st">                          </span><span class="kw">filter</span>(person ==<span class="st"> &quot;Julia&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">                          </span><span class="kw">rename</span>(<span class="dt">Julia =</span> freq),
+                        frequency %&gt;%<span class="st"> </span>
+<span class="st">                          </span><span class="kw">filter</span>(person ==<span class="st"> &quot;David&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">                          </span><span class="kw">rename</span>(<span class="dt">David =</span> freq),
                         <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%<span class="st"> </span><span class="kw">select</span>(word, Julia, David)
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(word, Julia, David)
+
 frequency</code></pre></div>
-<pre><code>## # A tibble: 3,555 x 3
+<pre><code>## # A tibble: 3,520 × 3
 ##       word       Julia        David
 ##      &lt;chr&gt;       &lt;dbl&gt;        &lt;dbl&gt;
-## 1     time 0.007381755 0.0042807456
-## 2      day 0.006118915 0.0014715063
-## 3     baby 0.005337777 0.0001783644
-## 4     love 0.003944747 0.0020065995
-## 5    house 0.003775501 0.0001337733
-## 6  morning 0.003645311 0.0004013199
-## 7   people 0.003358894 0.0032997414
-## 8     feel 0.003111534 0.0012931419
-## 9   pretty 0.002942287 0.0010701864
-## 10  school 0.002864173 0.0002229555
-## # ... with 3,545 more rows</code></pre>
+## 1     time 0.007411377 0.0043490079
+## 2      day 0.006143470 0.0014949715
+## 3     baby 0.005359197 0.0001812087
+## 4     love 0.003960577 0.0020385974
+## 5    house 0.003790651 0.0001359065
+## 6  morning 0.003659939 0.0004077195
+## 7   people 0.003372373 0.0033523602
+## 8     feel 0.003124020 0.0013137628
+## 9   pretty 0.002954094 0.0010872520
+## 10  school 0.002875667 0.0002265108
+## # ... with 3,510 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
-
 <span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(Julia, David)) +
 <span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">alpha =</span> <span class="fl">0.1</span>, <span class="dt">size =</span> <span class="fl">2.5</span>, <span class="dt">width =</span> <span class="fl">0.4</span>, <span class="dt">height =</span> <span class="fl">0.4</span>) +
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> word), <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">vjust =</span> <span class="fl">1.5</span>) +
@@ -290,7 +302,7 @@ frequency</code></pre></div>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position=</span><span class="st">&quot;none&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
 <p><img src="08-tweet-archives_files/figure-html/spread-1.png" width="672" /></p>
-<p>This may not even need to be pointed out, but David and Julia have used their Twitter accounts rather differently over the course of the past several years. David has used his Twitter account almost exclusively for professional purposes since he became more active, while Julia used it for entirely personal purposes until late 2015. We see these differences immediately in this plot exploring word frequencies, and they will continue to be obvious. Words near the red line in this plot are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Because of the inner join we did above, words, hashtags, and usernames that appear in this plot are ones that we have both used at least once.</p>
+<p>This may not even need to be pointed out, but David and Julia have used their Twitter accounts rather differently over the course of the past several years. David has used his Twitter account almost exclusively for professional purposes since he became more active, while Julia used it for entirely personal purposes until late 2015. We see these differences immediately in this plot exploring word frequencies, and they will continue to be obvious in the rest of this chapter. Words near the red line in this plot are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Because of the inner join we did above, words, hashtags, and usernames that appear in this plot are ones that we have both used at least once.</p>
 <p>TODO: lots</p>
 
 </div>

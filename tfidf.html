@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-10-07">
+<meta name="date" content="2016-10-09">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -291,26 +291,28 @@ book_words</code></pre></div>
 ## 10          Persuasion wentworth   191 0.002283132 1.791759 0.004090824
 ## # ... with 40,369 more rows</code></pre>
 <p>Here we see all proper nouns, names that are in fact important in these novels. None of them occur in all of novels, and they are important, characteristic words for each text. Some of the values for idf are the same for different terms because there are 6 documents in this corpus and we are seeing the numerical value for <span class="math inline">\(\ln(6/1)\)</span>, <span class="math inline">\(\ln(6/2)\)</span>, etc. Let’s look at a visualization for these high tf-idf words.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggstance)
-<span class="kw">library</span>(ggthemes)
-
-plot_austen &lt;-<span class="st"> </span>book_words %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_austen &lt;-<span class="st"> </span>book_words %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">unique</span>(word))))
 
-<span class="kw">ggplot</span>(plot_austen[<span class="dv">1</span>:<span class="dv">20</span>,], <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> book)) +
-<span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="kw">ggplot</span>(plot_austen[<span class="dv">1</span>:<span class="dv">20</span>,], <span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> book)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Jane Austen&#39;s Novels&quot;</span>,
-       <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>)</code></pre></div>
+       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="04-tf-idf_files/figure-html/plot_austen-1.png" width="864" /></p>
 <p>Let’s look at the novels individually.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_austen &lt;-<span class="st"> </span>plot_austen %&gt;%<span class="st"> </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span><span class="kw">top_n</span>(<span class="dv">15</span>) %&gt;%<span class="st"> </span>ungroup
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_austen &lt;-<span class="st"> </span>plot_austen %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">15</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span>ungroup
 
-<span class="kw">ggplot</span>(plot_austen, <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> book)) +
-<span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="kw">ggplot</span>(plot_austen, <span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> book)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Jane Austen&#39;s Novels&quot;</span>,
-       <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
+       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="04-tf-idf_files/figure-html/plot_separate-1.png" width="864" /></p>
 <p>Still all proper nouns! These words are, as measured by tf-idf, the most important to each novel and most readers would likely agree.</p>
 </div>
@@ -325,8 +327,9 @@ physics &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(author, word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()
+
 physics_words</code></pre></div>
-<pre><code>## # A tibble: 12,592 x 3
+<pre><code>## # A tibble: 12,592 × 3
 ##                 author  word     n
 ##                  &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
 ## 1     Galilei, Galileo   the  3760
@@ -340,7 +343,7 @@ physics_words</code></pre></div>
 ## 9  Huygens, Christiaan    to  1207
 ## 10       Tesla, Nikola     a  1176
 ## # ... with 12,582 more rows</code></pre>
-<p>Here we see just the raw counts, and of course these documents are all very different lengths. Let’s go ahead and calculate tf-idf.</p>
+<p>Here we see just the raw counts, and of course these documents are all different lengths. Let’s go ahead and calculate tf-idf.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">physics_words &lt;-<span class="st"> </span>physics_words %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(word, author, n) 
 
@@ -352,10 +355,11 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
                                             <span class="st">&quot;Tesla, Nikola&quot;</span>,
                                             <span class="st">&quot;Einstein, Albert&quot;</span>)))
 
-<span class="kw">ggplot</span>(plot_physics[<span class="dv">1</span>:<span class="dv">20</span>,], <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> author)) +
-<span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="kw">ggplot</span>(plot_physics[<span class="dv">1</span>:<span class="dv">20</span>,], <span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> author)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
-       <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>)</code></pre></div>
+       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="04-tf-idf_files/figure-html/plot_physics-1.png" width="864" /></p>
 <p>Nice! Let’s look at each text individually.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_physics &lt;-<span class="st"> </span>plot_physics %&gt;%<span class="st"> </span>
@@ -363,12 +367,13 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">15</span>, tf_idf) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, tf_idf))
 
-<span class="kw">ggplot</span>(plot_physics, <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> author)) +
-<span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="kw">ggplot</span>(plot_physics, <span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> author)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
-       <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="864" /></p>
+       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
+<p><img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="768" /></p>
 <p>Very interesting indeed. One thing we see here is “gif” in the Einstein text?!</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;gif&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>:<span class="dv">10</span>]</code></pre></div>
 <pre><code>##  [1] &quot;                       Fig. 01: file fig01.gif&quot;
@@ -402,12 +407,13 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
                                             <span class="st">&quot;Tesla, Nikola&quot;</span>,
                                             <span class="st">&quot;Einstein, Albert&quot;</span>)))
 
-<span class="kw">ggplot</span>(plot_physics, <span class="kw">aes</span>(tf_idf, word, <span class="dt">fill =</span> author)) +
-<span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="kw">ggplot</span>(plot_physics, <span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> author)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
-       <span class="dt">y =</span> <span class="ot">NULL</span>, <span class="dt">x =</span> <span class="st">&quot;tf-idf&quot;</span>) +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/mystopwords-1.png" width="864" /></p>
+       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
+<p><img src="04-tf-idf_files/figure-html/mystopwords-1.png" width="768" /></p>
 <p>We don’t hear enough about ramparts or things being ethereal in physics today.</p>
 
 </div>
