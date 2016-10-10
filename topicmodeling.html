@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-10-09">
+<meta name="date" content="2016-10-10">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -138,13 +138,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Working with combinations of words using n-grams and widyr</a><ul>
 <li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
-<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-digrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing digrams</a></li>
-<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-digrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using digrams to provide context in sentiment analysis</a></li>
+<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
+<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-digrams-as-a-network-with-the-ggraph-package"><i class="fa fa-check"></i><b>5.2</b> Visualizing digrams as a network with the ggraph package</a><ul>
+<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-as-a-network-with-the-ggraph-package"><i class="fa fa-check"></i><b>5.2</b> Visualizing bigrams as a network with the ggraph package</a><ul>
 <li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#creating-a-network-with-igraph"><i class="fa fa-check"></i><b>5.2.1</b> Creating a network with igraph</a></li>
 <li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-with-ggraph"><i class="fa fa-check"></i><b>5.2.2</b> Visualizing a network with ggraph</a></li>
-<li class="chapter" data-level="5.2.3" data-path="ngrams.html"><a href="ngrams.html#visualizing-digrams-in-other-texts"><i class="fa fa-check"></i><b>5.2.3</b> Visualizing digrams in other texts</a></li>
+<li class="chapter" data-level="5.2.3" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>5.2.3</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.3</b> Counting and correlating pairs of words with the widyr package</a><ul>
 <li class="chapter" data-level="5.3.1" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.3.1</b> Pairwise correlation</a></li>
@@ -245,7 +245,7 @@ word_counts &lt;-<span class="st"> </span>by_chapter_word %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()
 
 word_counts</code></pre></div>
-<pre><code>## # A tibble: 104,721 x 3
+<pre><code>## # A tibble: 104,721 × 3
 ##               title_chapter    word     n
 ##                       &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;
 ## 1     Great Expectations_57     joe    88
@@ -283,7 +283,7 @@ chapters_lda</code></pre></div>
 
 chapters_lda_td &lt;-<span class="st"> </span>tidytext:::<span class="kw">tidy.LDA</span>(chapters_lda)
 chapters_lda_td</code></pre></div>
-<pre><code>## # A tibble: 72,860 x 3
+<pre><code>## # A tibble: 72,860 × 3
 ##    topic    term         beta
 ##    &lt;int&gt;   &lt;chr&gt;        &lt;dbl&gt;
 ## 1      1     joe 5.830326e-17
@@ -306,7 +306,7 @@ chapters_lda_td</code></pre></div>
 <span class="st">  </span><span class="kw">arrange</span>(topic, -beta)
 
 top_terms</code></pre></div>
-<pre><code>## # A tibble: 20 x 3
+<pre><code>## # A tibble: 20 × 3
 ##    topic      term        beta
 ##    &lt;int&gt;     &lt;chr&gt;       &lt;dbl&gt;
 ## 1      1 elizabeth 0.014107538
@@ -331,13 +331,13 @@ top_terms</code></pre></div>
 ## 20     4      miss 0.006228387</code></pre>
 <p>This model lends itself to a visualization:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-<span class="kw">library</span>(ggstance)
 
 top_terms %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">term =</span> <span class="kw">reorder</span>(term, beta)) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(beta, term)) +
-<span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(term, beta)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="07-topic-models_files/figure-html/top_terms_plot-1.png" width="672" /></p>
 <p>These topics are pretty clearly associated with the four books! There’s no question that the topic of “nemo”, “sea”, and “nautilus” belongs to <em>Twenty Thousand Leagues Under the Sea</em>, and that “jane”, “darcy”, and “elizabeth” belongs to <em>Pride and Prejudice</em>. We see “pip” and “joe” from <em>Great Expectations</em> and “martians”, “black”, and “night” from <em>The War of the Worlds</em>.</p>
 </div>
@@ -346,7 +346,7 @@ top_terms %&gt;%
 <p>Each chapter was a “document” in this analysis. Thus, we may want to know which topics are associated with each document. Can we put the chapters back together in the correct books?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda_gamma &lt;-<span class="st"> </span>tidytext:::<span class="kw">tidy.LDA</span>(chapters_lda, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
 chapters_lda_gamma</code></pre></div>
-<pre><code>## # A tibble: 772 x 3
+<pre><code>## # A tibble: 772 × 3
 ##                    document topic        gamma
 ##                       &lt;chr&gt; &lt;int&gt;        &lt;dbl&gt;
 ## 1     Great Expectations_57     1 1.351886e-05
@@ -364,7 +364,7 @@ chapters_lda_gamma</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda_gamma &lt;-<span class="st"> </span>chapters_lda_gamma %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(document, <span class="kw">c</span>(<span class="st">&quot;title&quot;</span>, <span class="st">&quot;chapter&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>, <span class="dt">convert =</span> <span class="ot">TRUE</span>)
 chapters_lda_gamma</code></pre></div>
-<pre><code>## # A tibble: 772 x 4
+<pre><code>## # A tibble: 772 × 4
 ##                    title chapter topic        gamma
 ## *                  &lt;chr&gt;   &lt;int&gt; &lt;int&gt;        &lt;dbl&gt;
 ## 1     Great Expectations      57     1 1.351886e-05
@@ -391,7 +391,7 @@ chapters_lda_gamma</code></pre></div>
 <span class="st">  </span><span class="kw">arrange</span>(gamma)
 
 chapter_classifications</code></pre></div>
-<pre><code>## # A tibble: 193 x 4
+<pre><code>## # A tibble: 193 × 4
 ##                 title chapter topic     gamma
 ##                 &lt;chr&gt;   &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;
 ## 1  Great Expectations      54     3 0.4803234
@@ -413,7 +413,7 @@ chapter_classifications</code></pre></div>
 <span class="st">  </span><span class="kw">transmute</span>(<span class="dt">consensus =</span> title, topic)
 
 book_topics</code></pre></div>
-<pre><code>## # A tibble: 4 x 2
+<pre><code>## # A tibble: 4 × 2
 ##                               consensus topic
 ##                                   &lt;chr&gt; &lt;int&gt;
 ## 1                    Great Expectations     4
@@ -475,12 +475,8 @@ assignments</code></pre></div>
 ## 2                   Pride and Prejudice                    1                 37229
 ## 3                 The War of the Worlds                    0                     0
 ## 4 Twenty Thousand Leagues under the Sea                    0                     5
-##   `The War of the Worlds` `Twenty Thousand Leagues under the Sea`
-## *                   &lt;dbl&gt;                                   &lt;dbl&gt;
-## 1                    1845                                      77
-## 2                       7                                       5
-## 3                   22561                                       7
-## 4                       0                                   39629</code></pre>
+## # ... with 2 more variables: `The War of the Worlds` &lt;dbl&gt;, `Twenty Thousand Leagues under the
+## #   Sea` &lt;dbl&gt;</code></pre>
 <p>We notice that almost all the words for <em>Pride and Prejudice</em>, <em>Twenty Thousand Leagues Under the Sea</em>, and <em>War of the Worlds</em> were correctly assigned, while <em>Great Expectations</em> had a fair amount of misassignment.</p>
 <p>What were the most commonly mistaken words?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wrong_words &lt;-<span class="st"> </span>assignments %&gt;%
@@ -500,19 +496,7 @@ wrong_words</code></pre></div>
 ## 8                     Great Expectations      46  captain     1      2
 ## 9                     Great Expectations      32  captain     1      2
 ## 10                 The War of the Worlds      17  captain     5      2
-##                                consensus
-##                                    &lt;chr&gt;
-## 1                    Pride and Prejudice
-## 2                    Pride and Prejudice
-## 3                    Pride and Prejudice
-## 4                    Pride and Prejudice
-## 5                    Pride and Prejudice
-## 6                    Pride and Prejudice
-## 7                    Pride and Prejudice
-## 8  Twenty Thousand Leagues under the Sea
-## 9  Twenty Thousand Leagues under the Sea
-## 10 Twenty Thousand Leagues under the Sea
-## # ... with 4,525 more rows</code></pre>
+## # ... with 4,525 more rows, and 1 more variables: consensus &lt;chr&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wrong_words %&gt;%
 <span class="st">  </span><span class="kw">count</span>(title, consensus, term, <span class="dt">wt =</span> count) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%

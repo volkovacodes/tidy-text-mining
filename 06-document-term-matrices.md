@@ -2,11 +2,11 @@
 
 
 
-So far, we've been analyzing data in a tidy text structure: a data frame with one-token-per-document-per-row. This lets us use the popular tidy suite of tools such as dplyr, tidyr, and ggplot2. We've demonstrated that many text analyses can be performed within these.
+So far, we've been analyzing data in a tidy text structure: a data frame with one-token-per-document-per-row. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2. We've demonstrated that many text analyses can be performed using these principles.
 
 But many of the existing tools for natural language processing don't work with this kind of structure. The [CRAN Task View for Natural Language Processing](https://cran.r-project.org/web/views/NaturalLanguageProcessing.html) lists a large selection of packages that take other inputs. One of the most common is the [document-term matrix](https://en.wikipedia.org/wiki/Document-term_matrix), a sparse matrix of counts with one row for each document and one column for each term. MORE HERE
 
-The tidytext package lets us can integrate these packages into an analysis while still relying on our tidy tools. The two key verbs are:
+The tidytext package can integrate these packages into an analysis while still relying on our tidy tools. The two key verbs are:
 
 * `tidy()`: 
 * `cast_`: Turn a tidy one-term-per-row data frame into a document-term matrix. This includes `cast_sparse()` (sparse Matrix), `cast_dtm()` (`DocumentTermMatrix` objects from tm), and `cast_dfm()` (`dfm` objects from quanteda).
@@ -49,7 +49,7 @@ AssociatedPress
 
 We see that this dataset contains  documents (each of them an AP article) and  terms (words).
 
-If we want to analyze this with tidy tools, we need to turn it into a one-token-per-document-per-row data frame first. The broom package [@R-broom] introduced the `tidy` verb, which takes a non-tidy object and turns it into a data frame. The `tidytext` package implements that method for `DocumentTermClass` objects:
+If we want to analyze this with tidy tools, we need to turn it into a one-token-per-document-per-row data frame first. The broom package [@R-broom] introduced the `tidy` verb, which takes a non-tidy object and turns it into a data frame. The tidytext package implements that method for `DocumentTermClass` objects:
 
 
 ```r
@@ -61,7 +61,7 @@ ap_td
 ```
 
 ```
-## # A tibble: 302,031 x 3
+## # A tibble: 302,031 × 3
 ##    document       term count
 ##       <int>      <chr> <dbl>
 ## 1         1     adding     1
@@ -77,7 +77,7 @@ ap_td
 ## # ... with 302,021 more rows
 ```
 
-Notice that we now have a tidy three-column tbl_df, with variables `document`, `term`, and `count`. This tidying operation is similar is similar to the `melt` function from the reshape2 package [@R-reshape2] for non-sparse matrices.
+Notice that we now have a tidy three-column `tbl_df`, with variables `document`, `term`, and `count`. This tidying operation is similar to the `melt` function from the reshape2 package [@R-reshape2] for non-sparse matrices.
 
 As we've seen in chapters 2-5, this form is convenient for analysis with the dplyr and tidytext packages. For example, you can perform sentiment analysis on these newspaper articles.
 
@@ -94,7 +94,7 @@ ap_sentiments
 ```
 
 ```
-## # A tibble: 30,094 x 4
+## # A tibble: 30,094 × 4
 ##    document    term count sentiment
 ##       <int>   <chr> <dbl>     <chr>
 ## 1         1 assault     1  negative
@@ -128,7 +128,7 @@ ap_sentiments %>%
   coord_flip()
 ```
 
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-2-1.png" width="576" />
+<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-2-1.png" width="672" />
 
 A tidier is also available for the `dfm` (document-feature matrix) class from the quanteda package [@R-quanteda]. Consider the corpus of presidential inauguration speeches that comes with the quanteda package:
 
@@ -151,7 +151,7 @@ tidy(d)
 ```
 
 ```
-## # A tibble: 43,719 x 3
+## # A tibble: 43,719 × 3
 ##           document            term count
 ##              <chr>           <chr> <dbl>
 ## 1  1789-Washington fellow-citizens     1
@@ -183,7 +183,7 @@ inaug_tf_idf
 ```
 
 ```
-## # A tibble: 2,690 x 6
+## # A tibble: 2,690 × 6
 ##          document         term count          tf      idf      tf_idf
 ##             <chr>        <chr> <dbl>       <dbl>    <dbl>       <dbl>
 ## 1  1945-Roosevelt      learned     5 0.009009009 1.845827 0.016629069
@@ -205,13 +205,13 @@ inaug_tf_idf %>%
   top_n(6, tf_idf) %>%
   ungroup() %>%
   mutate(term = reorder(term, tf_idf)) %>%
-  ggplot(aes(term, tf_idf)) +
-  geom_bar(stat = "identity") +
+  ggplot(aes(term, tf_idf, fill = document)) +
+  geom_bar(stat = "identity", alpha = 0.8,show.legend = FALSE) +
   facet_wrap(~ document, scales = "free") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  coord_flip()
 ```
 
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<img src="06-document-term-matrices_files/figure-html/presidents-1.png" width="768" />
 
 ## Casting tidy text data into a DocumentTermMatrix
 
@@ -225,7 +225,7 @@ ap_td
 ```
 
 ```
-## # A tibble: 302,031 x 3
+## # A tibble: 302,031 × 3
 ##    document       term count
 ##       <int>      <chr> <dbl>
 ## 1         1     adding     1
@@ -308,7 +308,7 @@ dim(m)
 ## [1]  2246 10473
 ```
 
-This allows for easy reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications.
+This casting process allows for easy reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications.
 
 ## Tidying corpus objects with metadata
 
@@ -338,9 +338,9 @@ reuters_td
 ```
 
 ```
-## # A tibble: 20 x 17
+## # A tibble: 20 × 17
 ##                        author       datetimestamp description
-##                         <chr>              <time>       <chr>
+##                         <chr>              <dttm>       <chr>
 ## 1                        <NA> 1987-02-26 17:00:56            
 ## 2  BY TED D'AFFLISIO, Reuters 1987-02-26 17:34:11            
 ## 3                        <NA> 1987-02-26 18:18:00            
@@ -408,7 +408,7 @@ inaug_td
 ```
 
 ```
-## # A tibble: 57 x 4
+## # A tibble: 57 × 4
 ##                                                                                                                                                        text
 ## *                                                                                                                                                     <chr>
 ## 1  Fellow-Citizens of the Senate and of the House of Representatives:\n\nAmong the vicissitudes incident to life no event could have filled me with greater
@@ -436,7 +436,7 @@ inaug_words
 ```
 
 ```
-## # A tibble: 49,621 x 4
+## # A tibble: 49,621 × 4
 ##     Year President FirstName         word
 ##    <int>     <chr>     <chr>        <chr>
 ## 1   2013     Obama    Barack        waves
@@ -472,7 +472,7 @@ inaug_freq %>%
 ```
 
 ```
-## # A tibble: 57 x 5
+## # A tibble: 57 × 5
 ##     Year    word     n year_total     percent
 ##    <int>   <chr> <dbl>      <dbl>       <dbl>
 ## 1   1789 america     0        529 0.000000000
@@ -498,11 +498,11 @@ inaug_freq %>%
   filter(word %in% c("americans", "century", "foreign", "god",
                      "union", "constitution")) %>%
   ggplot(aes(Year, percent)) +
-  geom_point() +
+  geom_point(alpha = 0.8) +
   geom_smooth() +
   facet_wrap(~ word, scales = "free_y") +
   scale_y_continuous(labels = percent_format()) +
   ylab("Frequency of word in speech")
 ```
 
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-6-1.png" width="768" />

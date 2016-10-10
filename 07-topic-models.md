@@ -65,7 +65,7 @@ word_counts
 ```
 
 ```
-## # A tibble: 104,721 x 3
+## # A tibble: 104,721 × 3
 ##               title_chapter    word     n
 ##                       <chr>   <chr> <int>
 ## 1     Great Expectations_57     joe    88
@@ -127,7 +127,7 @@ chapters_lda_td
 ```
 
 ```
-## # A tibble: 72,860 x 3
+## # A tibble: 72,860 × 3
 ##    topic    term         beta
 ##    <int>   <chr>        <dbl>
 ## 1      1     joe 5.830326e-17
@@ -159,7 +159,7 @@ top_terms
 ```
 
 ```
-## # A tibble: 20 x 3
+## # A tibble: 20 × 3
 ##    topic      term        beta
 ##    <int>     <chr>       <dbl>
 ## 1      1 elizabeth 0.014107538
@@ -189,13 +189,13 @@ This model lends itself to a visualization:
 
 ```r
 library(ggplot2)
-library(ggstance)
 
 top_terms %>%
   mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(beta, term)) +
-  geom_barh(stat = "identity") +
-  facet_wrap(~ topic, scales = "free")
+  ggplot(aes(term, beta)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip()
 ```
 
 <img src="07-topic-models_files/figure-html/top_terms_plot-1.png" width="672" />
@@ -213,7 +213,7 @@ chapters_lda_gamma
 ```
 
 ```
-## # A tibble: 772 x 3
+## # A tibble: 772 × 3
 ##                    document topic        gamma
 ##                       <chr> <int>        <dbl>
 ## 1     Great Expectations_57     1 1.351886e-05
@@ -239,7 +239,7 @@ chapters_lda_gamma
 ```
 
 ```
-## # A tibble: 772 x 4
+## # A tibble: 772 × 4
 ##                    title chapter topic        gamma
 ## *                  <chr>   <int> <int>        <dbl>
 ## 1     Great Expectations      57     1 1.351886e-05
@@ -280,7 +280,7 @@ chapter_classifications
 ```
 
 ```
-## # A tibble: 193 x 4
+## # A tibble: 193 × 4
 ##                 title chapter topic     gamma
 ##                 <chr>   <int> <int>     <dbl>
 ## 1  Great Expectations      54     3 0.4803234
@@ -310,7 +310,7 @@ book_topics
 ```
 
 ```
-## # A tibble: 4 x 2
+## # A tibble: 4 × 2
 ##                               consensus topic
 ##                                   <chr> <int>
 ## 1                    Great Expectations     4
@@ -402,12 +402,8 @@ assignments %>%
 ## 2                   Pride and Prejudice                    1                 37229
 ## 3                 The War of the Worlds                    0                     0
 ## 4 Twenty Thousand Leagues under the Sea                    0                     5
-##   `The War of the Worlds` `Twenty Thousand Leagues under the Sea`
-## *                   <dbl>                                   <dbl>
-## 1                    1845                                      77
-## 2                       7                                       5
-## 3                   22561                                       7
-## 4                       0                                   39629
+## # ... with 2 more variables: `The War of the Worlds` <dbl>, `Twenty Thousand Leagues under the
+## #   Sea` <dbl>
 ```
 
 We notice that almost all the words for *Pride and Prejudice*, *Twenty Thousand Leagues Under the Sea*, and *War of the Worlds* were correctly assigned, while *Great Expectations* had a fair amount of misassignment.
@@ -436,19 +432,7 @@ wrong_words
 ## 8                     Great Expectations      46  captain     1      2
 ## 9                     Great Expectations      32  captain     1      2
 ## 10                 The War of the Worlds      17  captain     5      2
-##                                consensus
-##                                    <chr>
-## 1                    Pride and Prejudice
-## 2                    Pride and Prejudice
-## 3                    Pride and Prejudice
-## 4                    Pride and Prejudice
-## 5                    Pride and Prejudice
-## 6                    Pride and Prejudice
-## 7                    Pride and Prejudice
-## 8  Twenty Thousand Leagues under the Sea
-## 9  Twenty Thousand Leagues under the Sea
-## 10 Twenty Thousand Leagues under the Sea
-## # ... with 4,525 more rows
+## # ... with 4,525 more rows, and 1 more variables: consensus <chr>
 ```
 
 ```r

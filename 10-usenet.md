@@ -81,7 +81,7 @@ usenet_words %>%
 ```
 
 ```
-## # A tibble: 63,937 x 2
+## # A tibble: 63,937 × 2
 ##       word     n
 ##      <chr> <int>
 ## 1   people  3397
@@ -146,7 +146,7 @@ tf_idf
 ```
 
 ```
-## # A tibble: 166,528 x 6
+## # A tibble: 166,528 × 6
 ##                       board           word     n          tf      idf     tf_idf
 ##                       <chr>          <chr> <int>       <dbl>    <dbl>      <dbl>
 ## 1  comp.sys.ibm.pc.hardware           scsi   483 0.018138801 1.203973 0.02183862
@@ -167,17 +167,17 @@ We can visualize this for a few select boards. For example, let's look at all th
 
 ```r
 library(ggplot2)
-library(ggstance)
 
 tf_idf %>%
   filter(str_detect(board, "^sci\\.")) %>%
   group_by(board) %>%
   top_n(12, tf_idf) %>%
   mutate(word = reorder(word, tf_idf)) %>%
-  ggplot(aes(tf_idf, word)) +
-  geom_barh(stat = "identity") +
+  ggplot(aes(word, tf_idf)) +
+  geom_bar(stat = "identity") +
   facet_wrap(~ board, scales = "free_y") +
-  xlab("tf-idf")
+  ylab("tf-idf") +
+  coord_flip()
 ```
 
 <img src="10-usenet_files/figure-html/unnamed-chunk-8-1.png" width="864" />
@@ -226,7 +226,7 @@ contributions
 ```
 
 ```
-## # A tibble: 1,891 x 3
+## # A tibble: 1,891 × 3
 ##         word occurences contribution
 ##        <chr>      <int>        <int>
 ## 1    abandon         12          -24
@@ -274,7 +274,7 @@ top_sentiment_words %>%
   ggplot(aes(word, contribution, fill = contribution > 0)) +
   geom_bar(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ board, scales = "free") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  coord_flip()
 ```
 
 <img src="10-usenet_files/figure-html/top_sentiment_words-1.png" width="960" />
@@ -423,20 +423,20 @@ We can also
 
 
 ```r
-usenet_digrams <- cleaned_text %>%
-  unnest_tokens(digram, text, token = "ngrams", n = 2)
+usenet_bigrams <- cleaned_text %>%
+  unnest_tokens(bigram, text, token = "ngrams", n = 2)
 ```
 
 
 ```r
-usenet_digram_counts <- usenet_digrams %>%
-  count(board, digram)
+usenet_bigram_counts <- usenet_bigrams %>%
+  count(board, bigram)
 ```
 
 
 ```r
-digram_tf_idf <- usenet_digram_counts %>%
-  bind_tf_idf(digram, board, n)
+bigram_tf_idf <- usenet_bigram_counts %>%
+  bind_tf_idf(bigram, board, n)
 ```
 
 
@@ -444,9 +444,9 @@ digram_tf_idf <- usenet_digram_counts %>%
 negate_words <- c("not", "without", "no", "isn't", "can't", "don't",
                   "won't", "couldn't")
 
-usenet_digram_counts %>%
+usenet_bigram_counts %>%
   ungroup() %>%
-  separate(digram, c("word1", "word2"), sep = " ") %>%
+  separate(bigram, c("word1", "word2"), sep = " ") %>%
   filter(word1 %in% negate_words) %>%
   count(word1, word2, wt = n, sort = TRUE) %>%
   inner_join(AFINN, by = c(word2 = "word")) %>%
@@ -457,13 +457,12 @@ usenet_digram_counts %>%
   ggplot(aes(word2, contribution, fill = contribution > 0)) +
   geom_bar(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ word1, scales = "free", nrow = 2) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  coord_flip()
 ```
 
 <img src="10-usenet_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 
-TODO: Something is wrong with that plot? Shouldn't each panel have 10 words? Missing a `group_by`?
-
+TODO: Something is wrong with that plot? Shouldn't each panel have 10 words? Missing a `group_by`? Is it just because some of the words are in more than in panel?
 
 
 

@@ -46,7 +46,7 @@ sapply(metadata$dataset, class)
 ##        "character"        "character"             "list"        "character"        "character"
 ```
 
-It seems likely that the title, description, and keywords for each dataset may be most fruitful for drawing connections between datasets. It's a place to start anyway. Let's check them out.
+It seems likely that the title, description, and keywords for each dataset may be most fruitful for drawing connections between datasets. It's a place to start anyway! Let's check them out.
 
 
 ```r
@@ -87,7 +87,7 @@ nasa_title
 ```
 
 ```
-## # A tibble: 32,089 x 2
+## # A tibble: 32,089 × 2
 ##                          id                                               title
 ##                       <chr>                                               <chr>
 ## 1  55942a57c63a7fe59b495a77             15 Minute Stream Flow Data: USGS (FIFE)
@@ -111,7 +111,7 @@ nasa_desc
 ```
 
 ```
-## # A tibble: 32,089 x 2
+## # A tibble: 32,089 × 2
 ##                          id
 ##                       <chr>
 ## 1  55942a57c63a7fe59b495a77
@@ -137,14 +137,14 @@ nasa_desc %>%
 ```
 
 ```
-## # A tibble: 5 x 1
+## # A tibble: 5 × 1
 ##                                                                                                    desc
 ##                                                                                                   <chr>
-## 1               The cryogenic evaluation of typical and experimental filament winding materials Project
-## 2  The Aura-OMI Daily Gridded Surface UV Irradiance Product (OMUVBd) is now available from the NASA God
-## 3 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
-## 4 The Coastal Zone Color Scanner Experiment (CZCS) was the first instrument devoted to\nthe measurement
-## 5  The EUMETSAT OSI-SAF NAR SST products are SST fields derived from NOAA/AVHRR data and available over
+## 1  The proposed Phase II project includes the design, fabrication, and testing of a fully-functional 32
+## 2 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+## 3                                                  Level 2 Coarse Resolution Snow Cover 5-Min L2 5km...
+## 4 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+## 5    ECHO collection for the Vessel-based CTD profile dataset for SPURS-I field campaign cruises (V1.0)
 ```
 
 Now we can do the keywords, which must be unnested since they are in a list-column.
@@ -160,7 +160,7 @@ nasa_keyword
 ```
 
 ```
-## # A tibble: 126,814 x 2
+## # A tibble: 126,814 × 2
 ##                          id       keyword
 ##                       <chr>         <chr>
 ## 1  55942a57c63a7fe59b495a77 EARTH SCIENCE
@@ -176,7 +176,7 @@ nasa_keyword
 ## # ... with 126,804 more rows
 ```
 
-Now let's do some use tidytext's `unnest_tokens` for the title and description fields so we can do the text analysis. Let's also remove common English words.
+Now let's use tidytext's `unnest_tokens` for the title and description fields so we can do the text analysis. Let's also remove common English words.
 
 
 ```r
@@ -201,7 +201,7 @@ nasa_title %>%
 ```
 
 ```
-## # A tibble: 11,614 x 2
+## # A tibble: 11,614 × 2
 ##       word     n
 ##      <chr> <int>
 ## 1  project  7735
@@ -226,7 +226,7 @@ nasa_desc %>%
 ```
 
 ```
-## # A tibble: 35,936 x 2
+## # A tibble: 35,936 × 2
 ##          word     n
 ##         <chr> <int>
 ## 1        data 68871
@@ -242,7 +242,7 @@ nasa_desc %>%
 ## # ... with 35,926 more rows
 ```
 
-It looks like we might want to remove digits and some "words" like "v1" from these dataframes before approaching something like topic modeling.
+It looks like we might want to remove digits and some "words" like "v1" from these dataframes before approaching something more meaningful like topic modeling.
 
 
 ```r
@@ -265,7 +265,7 @@ nasa_keyword %>%
 ```
 
 ```
-## # A tibble: 1,774 x 2
+## # A tibble: 1,774 × 2
 ##                    keyword     n
 ##                      <chr> <int>
 ## 1            EARTH SCIENCE 14362
@@ -299,11 +299,12 @@ library(widyr)
 
 title_words <- nasa_title %>% 
   pairwise_count(word, id, sort = TRUE)
+
 title_words
 ```
 
 ```
-## # A tibble: 313,774 x 3
+## # A tibble: 313,774 × 3
 ##      item1   item2     n
 ##      <chr>   <chr> <dbl>
 ## 1  project  system   796
@@ -323,11 +324,12 @@ title_words
 ```r
 desc_words <- nasa_desc %>% 
   pairwise_count(word, id, sort = TRUE)
+
 desc_words
 ```
 
 ```
-## # A tibble: 21,775,980 x 3
+## # A tibble: 21,775,980 × 3
 ##         item1      item2     n
 ##         <chr>      <chr> <dbl>
 ## 1      global       data  9864
@@ -350,7 +352,6 @@ Let's plot networks of these co-occurring words.
 library(ggplot2)
 library(igraph)
 library(ggraph)
-library(ggplot2)
 
 set.seed(1234)
 title_words %>%
@@ -422,7 +423,7 @@ Let's make a network of the keywords to see which keywords commonly occur togeth
 keyword_counts <- nasa_keyword %>% 
   pairwise_count(keyword, id, sort = TRUE)
 
-set.seed(4321)
+set.seed(1234)
 keyword_counts %>%
   filter(n >= 700) %>%
   graph_from_data_frame() %>%

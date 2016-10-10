@@ -13,44 +13,44 @@ library(tidytext)
 library(janeaustenr)
 
 # Set n = 2 to divide into pairs of words
-austen_digrams <- austen_books() %>%
-  unnest_tokens(digram, text, token = "ngrams", n = 2)
+austen_bigrams <- austen_books() %>%
+  unnest_tokens(bigram, text, token = "ngrams", n = 2)
 
-austen_digrams
+austen_bigrams
 ```
 
 ```
-## # A tibble: 725,048 x 2
-##                   book          digram
-##                 <fctr>           <chr>
-## 1  Sense & Sensibility       sense and
-## 2  Sense & Sensibility and sensibility
-## 3  Sense & Sensibility  sensibility by
-## 4  Sense & Sensibility         by jane
-## 5  Sense & Sensibility     jane austen
-## 6  Sense & Sensibility     austen 1811
-## 7  Sense & Sensibility    1811 chapter
-## 8  Sense & Sensibility       chapter 1
-## 9  Sense & Sensibility           1 the
-## 10 Sense & Sensibility      the family
+## # A tibble: 725,048 × 2
+##      book             bigram
+##    <fctr>              <chr>
+## 1    Emma            emma by
+## 2    Emma            by jane
+## 3    Emma        jane austen
+## 4    Emma      austen volume
+## 5    Emma           volume i
+## 6    Emma          i chapter
+## 7    Emma          chapter i
+## 8    Emma             i emma
+## 9    Emma     emma woodhouse
+## 10   Emma woodhouse handsome
 ## # ... with 725,038 more rows
 ```
 
-This is still tidy: it's one-row-per-token, but now each token represents a digram. Notice that these digrams are overlapping: "sense and" is one token, "and sensibility" is another.
+This is still tidy: it's one-row-per-token, but now each token represents a bigram. Notice that these bigrams are overlapping: "sense and" is one token, "and sensibility" is another.
 
 ### Counting and filtering n-grams
 
-We can examine the most common digrams using `count`:
+We can examine the most common bigrams using `count`:
 
 
 ```r
-austen_digrams %>%
-  count(digram, sort = TRUE)
+austen_bigrams %>%
+  count(bigram, sort = TRUE)
 ```
 
 ```
-## # A tibble: 211,237 x 2
-##      digram     n
+## # A tibble: 211,237 × 2
+##      bigram     n
 ##       <chr> <int>
 ## 1    of the  3017
 ## 2     to be  2787
@@ -71,30 +71,30 @@ As expected, a lot of them are pairs of common (relatively uninteresting) words.
 ```r
 library(tidyr)
 
-digrams_separated <- austen_digrams %>%
-  separate(digram, c("word1", "word2"), sep = " ")
+bigrams_separated <- austen_bigrams %>%
+  separate(bigram, c("word1", "word2"), sep = " ")
 
-digrams_filtered <- digrams_separated %>%
+bigrams_filtered <- bigrams_separated %>%
   filter(!word1 %in% stop_words$word) %>%
   filter(!word2 %in% stop_words$word)
 
-digrams_filtered
+bigrams_filtered
 ```
 
 ```
-## # A tibble: 44,784 x 3
-##                   book       word1        word2
-##                 <fctr>       <chr>        <chr>
-## 1  Sense & Sensibility        jane       austen
-## 2  Sense & Sensibility      austen         1811
-## 3  Sense & Sensibility        1811      chapter
-## 4  Sense & Sensibility     chapter            1
-## 5  Sense & Sensibility     norland         park
-## 6  Sense & Sensibility surrounding acquaintance
-## 7  Sense & Sensibility        late        owner
-## 8  Sense & Sensibility    advanced          age
-## 9  Sense & Sensibility    constant    companion
-## 10 Sense & Sensibility    happened          ten
+## # A tibble: 44,784 × 3
+##      book        word1       word2
+##    <fctr>        <chr>       <chr>
+## 1    Emma         jane      austen
+## 2    Emma       austen      volume
+## 3    Emma         emma   woodhouse
+## 4    Emma    woodhouse    handsome
+## 5    Emma     handsome      clever
+## 6    Emma  comfortable        home
+## 7    Emma        happy disposition
+## 8    Emma affectionate   indulgent
+## 9    Emma    indulgent      father
+## 10   Emma     sister's    marriage
 ## # ... with 44,774 more rows
 ```
 
@@ -102,7 +102,7 @@ We can now count the most common pairs of words:
 
 
 ```r
-digrams_filtered %>% 
+bigrams_filtered %>% 
   count(word1, word2, sort = TRUE)
 ```
 
@@ -131,26 +131,26 @@ We may want to work with the recombined words. tidyr's `unite()` is the opposite
 
 
 ```r
-digrams_united <- digrams_filtered %>%
-  unite(digram, word1, word2, sep = " ")
+bigrams_united <- bigrams_filtered %>%
+  unite(bigram, word1, word2, sep = " ")
 
-digrams_united
+bigrams_united
 ```
 
 ```
-## # A tibble: 44,784 x 2
-##                   book                   digram
-## *               <fctr>                    <chr>
-## 1  Sense & Sensibility              jane austen
-## 2  Sense & Sensibility              austen 1811
-## 3  Sense & Sensibility             1811 chapter
-## 4  Sense & Sensibility                chapter 1
-## 5  Sense & Sensibility             norland park
-## 6  Sense & Sensibility surrounding acquaintance
-## 7  Sense & Sensibility               late owner
-## 8  Sense & Sensibility             advanced age
-## 9  Sense & Sensibility       constant companion
-## 10 Sense & Sensibility             happened ten
+## # A tibble: 44,784 × 2
+##      book                 bigram
+## *  <fctr>                  <chr>
+## 1    Emma            jane austen
+## 2    Emma          austen volume
+## 3    Emma         emma woodhouse
+## 4    Emma     woodhouse handsome
+## 5    Emma        handsome clever
+## 6    Emma       comfortable home
+## 7    Emma      happy disposition
+## 8    Emma affectionate indulgent
+## 9    Emma       indulgent father
+## 10   Emma      sister's marriage
 ## # ... with 44,774 more rows
 ```
 
@@ -186,25 +186,25 @@ austen_books() %>%
 ## # ... with 8,747 more rows
 ```
 
-### Analyzing digrams
+### Analyzing bigrams
 
-A digram can be treated like a term just as we treated a word. For example, we can look at TF-IDF of digrams:
+A bigram can be considered a term, just in the same way that we dealt with single words. For example, we can look at tf-idf of bigrams:
 
 
 ```r
-digram_tf_idf <- digrams_united %>%
-  count(book, digram) %>%
-  bind_tf_idf(digram, book, n) %>%
+bigram_tf_idf <- bigrams_united %>%
+  count(book, bigram) %>%
+  bind_tf_idf(bigram, book, n) %>%
   arrange(desc(tf_idf))
 
-digram_tf_idf
+bigram_tf_idf
 ```
 
 ```
 ## Source: local data frame [36,217 x 6]
 ## Groups: book [6]
 ## 
-##                   book            digram     n         tf      idf     tf_idf
+##                   book            bigram     n         tf      idf     tf_idf
 ##                 <fctr>             <chr> <int>      <dbl>    <dbl>      <dbl>
 ## 1           Persuasion captain wentworth   170 0.02985599 1.791759 0.05349475
 ## 2       Mansfield Park        sir thomas   287 0.02873160 1.791759 0.05148012
@@ -221,23 +221,23 @@ digram_tf_idf
 
 This can be visualized within each book, just as we did for words:
 
-<img src="05-word-combinations_files/figure-html/digram_tf_idf_plot-1.png" width="864" />
+<img src="05-word-combinations_files/figure-html/bigram_tf_idf_plot-1.png" width="864" />
 
 Much as we discovered in [Chapter 4](#tfidf), the units that distinguish each Austen book are almost exclusively names.
 
-### Using digrams to provide context in sentiment analysis
+### Using bigrams to provide context in sentiment analysis
 
 Our sentiment analysis approch in [Chapter 3](#sentiment) simply counted the appearance of positive or negative words, according to a reference lexicon. One of the problems with this approach is that a word's context can matter nearly as much as its presence. For example, the words "happy" and "like" will be counted as positive, even in a sentence like "I'm not **happy** and I don't **like** it!"
 
 
 ```r
-digrams_separated %>%
+bigrams_separated %>%
   filter(word1 == "not") %>%
   count(word2, sort = TRUE)
 ```
 
 ```
-## # A tibble: 1,246 x 2
+## # A tibble: 1,246 × 2
 ##    word2     n
 ##    <chr> <int>
 ## 1     be   610
@@ -267,7 +267,7 @@ AFINN
 ```
 
 ```
-## # A tibble: 2,476 x 2
+## # A tibble: 2,476 × 2
 ##          word score
 ##         <chr> <int>
 ## 1     abandon    -2
@@ -285,7 +285,7 @@ AFINN
 
 
 ```r
-not_words <- digrams_separated %>%
+not_words <- bigrams_separated %>%
   filter(word1 == "not") %>%
   inner_join(AFINN, by = c(word2 = "word")) %>%
   count(word2, score, sort = TRUE) %>%
@@ -295,7 +295,7 @@ not_words
 ```
 
 ```
-## # A tibble: 245 x 3
+## # A tibble: 245 × 3
 ##      word2 score     n
 ##      <chr> <int> <int>
 ## 1     like     2    99
@@ -322,22 +322,22 @@ not_words %>%
   mutate(word2 = reorder(word2, contribution)) %>%
   ggplot(aes(word2, n * score, fill = n * score > 0)) +
   geom_bar(stat = "identity", show.legend = FALSE) +
-  xlab("Words preceded by \"not\"") +
-  ylab("Sentiment score * # of occurrences") +
+  ylab("Words preceded by \"not\"") +
+  xlab("Sentiment score * # of occurrences") +
   coord_flip()
 ```
 
-<img src="05-word-combinations_files/figure-html/not_words_plot-1.png" width="864" />
+<img src="05-word-combinations_files/figure-html/not_words_plot-1.png" width="768" />
 
-The digrams "not like" and "not help" were overwhelmingly the largest causes of misidentification, making the text seem much more positive than it is. But we can see phrases like "not afraid" and "not fail" sometimes suggest text is more negative than it is.
+The bigrams "not like" and "not help" were overwhelmingly the largest causes of misidentification, making the text seem much more positive than it is. But we can see phrases like "not afraid" and "not fail" sometimes suggest text is more negative than it is.
 
-"Not" isn't the only word that provides context. We could make a vector of words that we suspect , and use the same joining and counting approach to examine all of them:
+"Not" isn't the only word that provides context. We could make a vector of words that we suspect are used in negation, and use the same joining and counting approach to examine all of them at once.
 
 
 ```r
 negation_words <- c("not", "no", "never", "without")
 
-negated_words <- digrams_separated %>%
+negated_words <- bigrams_separated %>%
   filter(word1 %in% negation_words) %>%
   inner_join(AFINN, by = c(word2 = "word")) %>%
   count(word1, word2, score, sort = TRUE) %>%
@@ -347,7 +347,7 @@ negated_words
 ```
 
 ```
-## # A tibble: 531 x 4
+## # A tibble: 531 × 4
 ##    word1 word2 score     n
 ##    <chr> <chr> <int> <int>
 ## 1     no doubt    -1   102
@@ -370,16 +370,17 @@ negated_words %>%
   mutate(word2 = reorder(word2, contribution)) %>%
   group_by(word1) %>%
   top_n(10, abs(contribution)) %>%
-  ggplot(aes(contribution, word2, fill = n * score > 0)) +
-  geom_barh(stat = "identity", show.legend = FALSE) +
+  ggplot(aes(word2, contribution, fill = n * score > 0)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ word1, scales = "free") +
-  ylab("Words preceded by \"not\"") +
-  xlab("Sentiment score * # of occurrences")
+  xlab("Words preceded by negation") +
+  ylab("Sentiment score * # of occurrences") +
+  coord_flip()
 ```
 
 <img src="05-word-combinations_files/figure-html/negated_words_plot-1.png" width="864" />
 
-## Visualizing digrams as a network with the ggraph package
+## Visualizing bigrams as a network with the ggraph package
 
 TODO
 
@@ -389,10 +390,10 @@ Now that we have our TODO
 
 
 ```r
-digram_counts <- digrams_filtered %>% 
+bigram_counts <- bigrams_filtered %>% 
   count(word1, word2, sort = TRUE)
 
-digram_counts
+bigram_counts
 ```
 
 ```
@@ -424,11 +425,11 @@ Here we'll be referring to a "graph" not in the sense of a visualization, but as
 ```r
 library(igraph)
 
-digram_graph <- digram_counts %>%
+bigram_graph <- bigram_counts %>%
   filter(n > 20) %>%
   graph_from_data_frame()
 
-digram_graph
+bigram_graph
 ```
 
 ```
@@ -460,7 +461,7 @@ library(ggraph)
 
 set.seed(2016)
 
-ggraph(digram_graph, layout = "fr") +
+ggraph(bigram_graph, layout = "fr") +
   geom_edge_link() +
   geom_node_point()
 ```
@@ -473,7 +474,7 @@ This gives an idea by adding the three ...
 ```r
 set.seed(2016)
 
-ggraph(digram_graph, layout = "fr") +
+ggraph(bigram_graph, layout = "fr") +
   geom_edge_link() +
   geom_node_point() +
   geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
@@ -484,7 +485,7 @@ ggraph(digram_graph, layout = "fr") +
 
 We can see the graph start to take shape.
 
-* We add the `edge_alpha` aesthetic to the link layer to make links transparent based on how common or rare the digram is
+* We add the `edge_alpha` aesthetic to the link layer to make links transparent based on how common or rare the bigram is
 * We add directionality with an arrow
 * We tinker with the options to the node layer to make the points more attractive (larger, and blue)
 
@@ -494,7 +495,7 @@ set.seed(2016)
 
 a <- grid::arrow(type = "closed", length = unit(.1, "inches"))
 
-ggraph(digram_graph, layout = "fr") +
+ggraph(bigram_graph, layout = "fr") +
   geom_edge_link(aes(edge_alpha = n), show.legend = FALSE, arrow = a) +
   geom_node_point(color = "lightblue", size = 5) +
   geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
@@ -505,25 +506,25 @@ ggraph(digram_graph, layout = "fr") +
 
 It may take a little more experimentation with your plots to get these graphs to work, but in the end we can visualize a lot this way.
 
-### Visualizing digrams in other texts
+### Visualizing bigrams in other texts
 
 We went to a good amount of work setting up this 
 
 
 ```r
-count_digrams <- function(dataset) {
+count_bigrams <- function(dataset) {
   dataset %>%
-    unnest_tokens(digram, text, token = "ngrams", n = 2) %>%
-    separate(digram, c("word1", "word2"), sep = " ") %>%
+    unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
+    separate(bigram, c("word1", "word2"), sep = " ") %>%
     filter(!word1 %in% stop_words$word) %>%
     filter(!word2 %in% stop_words$word) %>%
     count(word1, word2, sort = TRUE)
 }
 
-visualize_digrams <- function(digrams) {
+visualize_bigrams <- function(bigrams) {
   set.seed(2016)
   
-  digrams %>%
+  bigrams %>%
     graph_from_data_frame() %>%
     ggraph(layout = "fr") +
     geom_edge_link(aes(edge_alpha = n), show.legend = FALSE, arrow = a) +
@@ -535,7 +536,7 @@ visualize_digrams <- function(digrams) {
 
 We could visualize pairs in the King James Bible:
 
-At that point, we could visualize digrams in other works, such as the King James Version of the Bible:
+At that point, we could visualize bigrams in other works, such as the King James Version of the Bible:
 
 
 ```r
@@ -547,10 +548,10 @@ kjv <- gutenberg_download(10)
 
 
 ```r
-kjv_digrams <- kjv %>%
-  count_digrams()
+kjv_bigrams <- kjv %>%
+  count_bigrams()
 
-kjv_digrams
+kjv_bigrams
 ```
 
 ```
@@ -574,9 +575,9 @@ kjv_digrams
 
 
 ```r
-kjv_digrams %>%
+kjv_bigrams %>%
   filter(n > 40) %>%
-  visualize_digrams()
+  visualize_bigrams()
 ```
 
 <img src="05-word-combinations_files/figure-html/unnamed-chunk-14-1.png" width="672" />
@@ -609,7 +610,7 @@ word_pairs
 ```
 
 ```
-## # A tibble: 796,030 x 3
+## # A tibble: 796,030 × 3
 ##        item1     item2     n
 ##        <chr>     <chr> <dbl>
 ## 1  elizabeth     darcy   144
@@ -634,7 +635,7 @@ word_pairs %>%
 ```
 
 ```
-## # A tibble: 2,930 x 3
+## # A tibble: 2,930 × 3
 ##    item1     item2     n
 ##    <chr>     <chr> <dbl>
 ## 1  darcy elizabeth   144
@@ -672,7 +673,7 @@ word_cors
 ```
 
 ```
-## # A tibble: 154,842 x 3
+## # A tibble: 154,842 × 3
 ##        item1     item2 correlation
 ##        <chr>     <chr>       <dbl>
 ## 1         de    bourgh   0.9508510
@@ -697,7 +698,7 @@ word_cors %>%
 ```
 
 ```
-## # A tibble: 393 x 3
+## # A tibble: 393 × 3
 ##    item1       item2 correlation
 ##    <chr>       <chr>       <dbl>
 ## 1  darcy        miss  0.17989385
@@ -715,7 +716,7 @@ word_cors %>%
 
 ### Visualizing word correlations
 
-Just as we used ggraph to visualize digrams, we can use it to visualize correlations and clusters among words that we've found through the widyr package.
+Just as we used ggraph to visualize bigrams, we can use it to visualize correlations and clusters among words that we've found through the widyr package.
 
 This graph is an early placeholder, needs to be adjusted:
 
@@ -733,6 +734,6 @@ word_cors %>%
 
 <img src="05-word-combinations_files/figure-html/unnamed-chunk-18-1.png" width="672" />
 
-Note that unlike the digram analysis, the relationship here aren't directional.
+Note that unlike the bigram analysis, the relationship here aren't directional.
 
 This kind of correlation network is a very useful and flexible visualization, and we'll examine it further in later chapters.

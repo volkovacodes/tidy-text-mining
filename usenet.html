@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-10-09">
+<meta name="date" content="2016-10-10">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -138,13 +138,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Working with combinations of words using n-grams and widyr</a><ul>
 <li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
-<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-digrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing digrams</a></li>
-<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-digrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using digrams to provide context in sentiment analysis</a></li>
+<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
+<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-digrams-as-a-network-with-the-ggraph-package"><i class="fa fa-check"></i><b>5.2</b> Visualizing digrams as a network with the ggraph package</a><ul>
+<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-as-a-network-with-the-ggraph-package"><i class="fa fa-check"></i><b>5.2</b> Visualizing bigrams as a network with the ggraph package</a><ul>
 <li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#creating-a-network-with-igraph"><i class="fa fa-check"></i><b>5.2.1</b> Creating a network with igraph</a></li>
 <li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-with-ggraph"><i class="fa fa-check"></i><b>5.2.2</b> Visualizing a network with ggraph</a></li>
-<li class="chapter" data-level="5.2.3" data-path="ngrams.html"><a href="ngrams.html#visualizing-digrams-in-other-texts"><i class="fa fa-check"></i><b>5.2.3</b> Visualizing digrams in other texts</a></li>
+<li class="chapter" data-level="5.2.3" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>5.2.3</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.3</b> Counting and correlating pairs of words with the widyr package</a><ul>
 <li class="chapter" data-level="5.3.1" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.3.1</b> Pairwise correlation</a></li>
@@ -255,7 +255,7 @@ usenet_words &lt;-<span class="st"> </span>cleaned_text %&gt;%
 <p>We could simply find the most common words:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">usenet_words %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## # A tibble: 63,937 x 2
+<pre><code>## # A tibble: 63,937 × 2
 ##       word     n
 ##      &lt;chr&gt; &lt;int&gt;
 ## 1   people  3397
@@ -301,7 +301,7 @@ usenet_words &lt;-<span class="st"> </span>cleaned_text %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf))
 
 tf_idf</code></pre></div>
-<pre><code>## # A tibble: 166,528 x 6
+<pre><code>## # A tibble: 166,528 × 6
 ##                       board           word     n          tf      idf     tf_idf
 ##                       &lt;chr&gt;          &lt;chr&gt; &lt;int&gt;       &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
 ## 1  comp.sys.ibm.pc.hardware           scsi   483 0.018138801 1.203973 0.02183862
@@ -317,17 +317,17 @@ tf_idf</code></pre></div>
 ## # ... with 166,518 more rows</code></pre>
 <p>We can visualize this for a few select boards. For example, let’s look at all the <code>sci.</code> boards:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-<span class="kw">library</span>(ggstance)
 
 tf_idf %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(board, <span class="st">&quot;^sci</span><span class="ch">\\</span><span class="st">.&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(board) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">12</span>, tf_idf) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, tf_idf)) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(tf_idf, word)) +
-<span class="st">  </span><span class="kw">geom_barh</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, tf_idf)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>board, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
-<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;tf-idf&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="10-usenet_files/figure-html/unnamed-chunk-8-1.png" width="864" /></p>
 <p>We could use almost the same code (not shown) to compare the “rec.” (recreation) or “talk.” boards:</p>
 <p><img src="10-usenet_files/figure-html/unnamed-chunk-9-1.png" width="864" /><img src="10-usenet_files/figure-html/unnamed-chunk-9-2.png" width="864" /></p>
@@ -362,7 +362,7 @@ board_sentiments %&gt;%
             <span class="dt">contribution =</span> <span class="kw">sum</span>(score))
 
 contributions</code></pre></div>
-<pre><code>## # A tibble: 1,891 x 3
+<pre><code>## # A tibble: 1,891 × 3
 ##         word occurences contribution
 ##        &lt;chr&gt;      &lt;int&gt;        &lt;int&gt;
 ## 1    abandon         12          -24
@@ -398,7 +398,7 @@ top_sentiment_words %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, contribution, <span class="dt">fill =</span> contribution &gt;<span class="st"> </span><span class="dv">0</span>)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>board, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="10-usenet_files/figure-html/top_sentiment_words-1.png" width="960" /></p>
 <p>We can also see how much sentiment is confounded with topic in this particular approach. An atheism board is likely to discuss “god” in detail even in a negative context, and we can see it makes the board look more positive. Similarly, the negative contribution of the word “gun” to the “talk.politics.guns” board would occur even if the board were positive.</p>
 </div>
@@ -504,18 +504,18 @@ top_sentiment_words %&gt;%
 <div id="n-grams" class="section level2">
 <h2><span class="header-section-number">10.6</span> N-grams</h2>
 <p>We can also</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">usenet_digrams &lt;-<span class="st"> </span>cleaned_text %&gt;%
-<span class="st">  </span><span class="kw">unnest_tokens</span>(digram, text, <span class="dt">token =</span> <span class="st">&quot;ngrams&quot;</span>, <span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">usenet_digram_counts &lt;-<span class="st"> </span>usenet_digrams %&gt;%
-<span class="st">  </span><span class="kw">count</span>(board, digram)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">digram_tf_idf &lt;-<span class="st"> </span>usenet_digram_counts %&gt;%
-<span class="st">  </span><span class="kw">bind_tf_idf</span>(digram, board, n)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">usenet_bigrams &lt;-<span class="st"> </span>cleaned_text %&gt;%
+<span class="st">  </span><span class="kw">unnest_tokens</span>(bigram, text, <span class="dt">token =</span> <span class="st">&quot;ngrams&quot;</span>, <span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">usenet_bigram_counts &lt;-<span class="st"> </span>usenet_bigrams %&gt;%
+<span class="st">  </span><span class="kw">count</span>(board, bigram)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigram_tf_idf &lt;-<span class="st"> </span>usenet_bigram_counts %&gt;%
+<span class="st">  </span><span class="kw">bind_tf_idf</span>(bigram, board, n)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negate_words &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;not&quot;</span>, <span class="st">&quot;without&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;isn&#39;t&quot;</span>, <span class="st">&quot;can&#39;t&quot;</span>, <span class="st">&quot;don&#39;t&quot;</span>,
                   <span class="st">&quot;won&#39;t&quot;</span>, <span class="st">&quot;couldn&#39;t&quot;</span>)
 
-usenet_digram_counts %&gt;%
+usenet_bigram_counts %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
-<span class="st">  </span><span class="kw">separate</span>(digram, <span class="kw">c</span>(<span class="st">&quot;word1&quot;</span>, <span class="st">&quot;word2&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">separate</span>(bigram, <span class="kw">c</span>(<span class="st">&quot;word1&quot;</span>, <span class="st">&quot;word2&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word1 %in%<span class="st"> </span>negate_words) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">wt =</span> n, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">word2 =</span> <span class="st">&quot;word&quot;</span>)) %&gt;%
@@ -526,9 +526,9 @@ usenet_digram_counts %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word2, contribution, <span class="dt">fill =</span> contribution &gt;<span class="st"> </span><span class="dv">0</span>)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>word1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">nrow =</span> <span class="dv">2</span>) +
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="10-usenet_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
-<p>TODO: Something is wrong with that plot? Shouldn’t each panel have 10 words? Missing a <code>group_by</code>?</p>
+<p>TODO: Something is wrong with that plot? Shouldn’t each panel have 10 words? Missing a <code>group_by</code>? Is it just because some of the words are in more than in panel?</p>
 
 </div>
 </div>

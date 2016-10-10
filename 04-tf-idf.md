@@ -35,7 +35,7 @@ book_words
 ```
 
 ```
-## # A tibble: 40,379 x 4
+## # A tibble: 40,379 × 4
 ##                 book  word     n  total
 ##               <fctr> <chr> <int>  <int>
 ## 1     Mansfield Park   the  6206 160460
@@ -80,7 +80,7 @@ book_words
 ```
 
 ```
-## # A tibble: 40,379 x 7
+## # A tibble: 40,379 × 7
 ##                 book  word     n  total         tf   idf tf_idf
 ##               <fctr> <chr> <int>  <int>      <dbl> <dbl>  <dbl>
 ## 1     Mansfield Park   the  6206 160460 0.03867631     0      0
@@ -106,7 +106,7 @@ book_words %>%
 ```
 
 ```
-## # A tibble: 40,379 x 6
+## # A tibble: 40,379 × 6
 ##                   book      word     n          tf      idf      tf_idf
 ##                 <fctr>     <chr> <int>       <dbl>    <dbl>       <dbl>
 ## 1  Sense & Sensibility    elinor   623 0.005193528 1.791759 0.009305552

@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-10-09">
+<meta name="date" content="2016-10-10">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -138,13 +138,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Working with combinations of words using n-grams and widyr</a><ul>
 <li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
-<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-digrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing digrams</a></li>
-<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-digrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using digrams to provide context in sentiment analysis</a></li>
+<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
+<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-digrams-as-a-network-with-the-ggraph-package"><i class="fa fa-check"></i><b>5.2</b> Visualizing digrams as a network with the ggraph package</a><ul>
+<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-as-a-network-with-the-ggraph-package"><i class="fa fa-check"></i><b>5.2</b> Visualizing bigrams as a network with the ggraph package</a><ul>
 <li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#creating-a-network-with-igraph"><i class="fa fa-check"></i><b>5.2.1</b> Creating a network with igraph</a></li>
 <li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-with-ggraph"><i class="fa fa-check"></i><b>5.2.2</b> Visualizing a network with ggraph</a></li>
-<li class="chapter" data-level="5.2.3" data-path="ngrams.html"><a href="ngrams.html#visualizing-digrams-in-other-texts"><i class="fa fa-check"></i><b>5.2.3</b> Visualizing digrams in other texts</a></li>
+<li class="chapter" data-level="5.2.3" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>5.2.3</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.3</b> Counting and correlating pairs of words with the widyr package</a><ul>
 <li class="chapter" data-level="5.3.1" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.3.1</b> Pairwise correlation</a></li>
@@ -226,7 +226,7 @@ text</code></pre></div>
 text_df &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">line =</span> <span class="dv">1</span>:<span class="dv">4</span>, <span class="dt">text =</span> text)
 
 text_df</code></pre></div>
-<pre><code>## # A tibble: 4 x 2
+<pre><code>## # A tibble: 4 × 2
 ##    line                                   text
 ##   &lt;int&gt;                                  &lt;chr&gt;
 ## 1     1   Because I could not stop for Death -
@@ -238,7 +238,7 @@ text_df</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 text_df %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text)</code></pre></div>
-<pre><code>## # A tibble: 20 x 2
+<pre><code>## # A tibble: 20 × 2
 ##     line    word
 ##    &lt;int&gt;   &lt;chr&gt;
 ## 1      1 because
@@ -275,7 +275,7 @@ original_books &lt;-<span class="st"> </span><span class="kw">austen_books</span
 <span class="st">  </span><span class="kw">ungroup</span>()
 
 original_books</code></pre></div>
-<pre><code>## # A tibble: 73,422 x 4
+<pre><code>## # A tibble: 73,422 × 4
 ##                     text                book linenumber chapter
 ##                    &lt;chr&gt;              &lt;fctr&gt;      &lt;int&gt;   &lt;int&gt;
 ## 1  SENSE AND SENSIBILITY Sense &amp; Sensibility          1       0
@@ -295,7 +295,7 @@ tidy_books &lt;-<span class="st"> </span>original_books %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text)
 
 tidy_books</code></pre></div>
-<pre><code>## # A tibble: 725,054 x 4
+<pre><code>## # A tibble: 725,054 × 4
 ##                   book linenumber chapter        word
 ##                 &lt;fctr&gt;      &lt;int&gt;   &lt;int&gt;       &lt;chr&gt;
 ## 1  Sense &amp; Sensibility          1       0       sense
@@ -318,7 +318,7 @@ tidy_books &lt;-<span class="st"> </span>tidy_books %&gt;%
 <p>We can also use <code>count</code> to find the most common words in all the books as a whole.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_books %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) </code></pre></div>
-<pre><code>## # A tibble: 13,914 x 2
+<pre><code>## # A tibble: 13,914 × 2
 ##      word     n
 ##     &lt;chr&gt; &lt;int&gt;
 ## 1    miss  1855
@@ -361,7 +361,7 @@ hgwells &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>
 <p>Just for kicks, what are the most common words in these novels of H.G. Wells?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_hgwells %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## # A tibble: 11,769 x 2
+<pre><code>## # A tibble: 11,769 × 2
 ##      word     n
 ##     &lt;chr&gt; &lt;int&gt;
 ## 1    time   454
@@ -383,7 +383,7 @@ hgwells &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>
 <p>What are the most common words in these novels of the Brontë sisters?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_bronte %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## # A tibble: 25,714 x 2
+<pre><code>## # A tibble: 25,714 × 2
 ##      word     n
 ##     &lt;chr&gt; &lt;int&gt;
 ## 1    time  1586

@@ -14,7 +14,7 @@ sentiments
 ```
 
 ```
-## # A tibble: 23,165 x 4
+## # A tibble: 23,165 × 4
 ##           word sentiment lexicon score
 ##          <chr>     <chr>   <chr> <int>
 ## 1       abacus     trust     nrc    NA

@@ -40,7 +40,7 @@ text_df
 ```
 
 ```
-## # A tibble: 4 x 2
+## # A tibble: 4 × 2
 ##    line                                   text
 ##   <int>                                  <chr>
 ## 1     1   Because I could not stop for Death -
@@ -61,7 +61,7 @@ text_df %>%
 ```
 
 ```
-## # A tibble: 20 x 2
+## # A tibble: 20 × 2
 ##     line    word
 ##    <int>   <chr>
 ## 1      1 because
@@ -106,7 +106,7 @@ original_books
 ```
 
 ```
-## # A tibble: 73,422 x 4
+## # A tibble: 73,422 × 4
 ##                     text                book linenumber chapter
 ##                    <chr>              <fctr>      <int>   <int>
 ## 1  SENSE AND SENSIBILITY Sense & Sensibility          1       0
@@ -134,7 +134,7 @@ tidy_books
 ```
 
 ```
-## # A tibble: 725,054 x 4
+## # A tibble: 725,054 × 4
 ##                   book linenumber chapter        word
 ##                 <fctr>      <int>   <int>       <chr>
 ## 1  Sense & Sensibility          1       0       sense
@@ -171,7 +171,7 @@ tidy_books %>%
 ```
 
 ```
-## # A tibble: 13,914 x 2
+## # A tibble: 13,914 × 2
 ##      word     n
 ##     <chr> <int>
 ## 1    miss  1855
@@ -239,7 +239,7 @@ tidy_hgwells %>%
 ```
 
 ```
-## # A tibble: 11,769 x 2
+## # A tibble: 11,769 × 2
 ##      word     n
 ##     <chr> <int>
 ## 1    time   454
@@ -280,7 +280,7 @@ tidy_bronte %>%
 ```
 
 ```
-## # A tibble: 25,714 x 2
+## # A tibble: 25,714 × 2
 ##      word     n
 ##     <chr> <int>
 ## 1    time  1586
