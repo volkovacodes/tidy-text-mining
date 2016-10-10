@@ -140,11 +140,11 @@ nasa_desc %>%
 ## # A tibble: 5 × 1
 ##                                                                                                    desc
 ##                                                                                                   <chr>
-## 1  The proposed Phase II project includes the design, fabrication, and testing of a fully-functional 32
-## 2 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
-## 3                                                  Level 2 Coarse Resolution Snow Cover 5-Min L2 5km...
-## 4 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
-## 5    ECHO collection for the Vessel-based CTD profile dataset for SPURS-I field campaign cruises (V1.0)
+## 1                                           CERES Single Satellite Fluxes and Clouds (FSW) data in HDF.
+## 2  The Level-3 Aura/OMI daily global TOMS-Like Total Column Ozone gridded product (OMTO3d) is generated
+## 3  In support of the fourth Convection and Moisture Experiment (CAMEX-4), imagery from the Geostationar
+## 4  ABSTRACT: Tree basal area, percent tree canopy cover, and proportional contribution of main species 
+## 5 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
 ```
 
 Now we can do the keywords, which must be unnested since they are in a list-column.
@@ -439,4 +439,4 @@ keyword_counts %>%
 
 These are the most commonly co-occurring words, but also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find the correlation among the keywords as described in [Chapter 5](#ngrams).
 
-TODO: correlation of keywords, tf-idf, and topic modeling
+TODO: correlation of keywords, tf-idf, topic modeling

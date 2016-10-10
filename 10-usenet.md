@@ -274,7 +274,7 @@ top_sentiment_words %>%
   ggplot(aes(word, contribution, fill = contribution > 0)) +
   geom_bar(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ board, scales = "free") +
-  coord_flip()
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 <img src="10-usenet_files/figure-html/top_sentiment_words-1.png" width="960" />
@@ -457,7 +457,7 @@ usenet_bigram_counts %>%
   ggplot(aes(word2, contribution, fill = contribution > 0)) +
   geom_bar(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ word1, scales = "free", nrow = 2) +
-  coord_flip()
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 <img src="10-usenet_files/figure-html/unnamed-chunk-17-1.png" width="672" />
