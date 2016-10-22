@@ -173,10 +173,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences"><i class="fa fa-check"></i><b>9.4</b> Word co-ocurrences</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
-<li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#setup"><i class="fa fa-check"></i><b>10.1</b> Setup</a></li>
+<li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#wrangling-the-data"><i class="fa fa-check"></i><b>10.1</b> Wrangling the data</a></li>
 <li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#term-frequency-and-inverse-document-frequency-tf-idf"><i class="fa fa-check"></i><b>10.2</b> Term frequency and inverse document frequency (tf-idf)</a></li>
-<li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment Analysis</a></li>
-<li class="chapter" data-level="10.4" data-path="usenet.html"><a href="usenet.html#looking-by-word"><i class="fa fa-check"></i><b>10.4</b> Looking by word</a></li>
+<li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a></li>
+<li class="chapter" data-level="10.4" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>10.4</b> Sentiment analysis by word</a></li>
 <li class="chapter" data-level="10.5" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>10.5</b> Sentiment analysis by message</a></li>
 <li class="chapter" data-level="10.6" data-path="usenet.html"><a href="usenet.html#n-grams"><i class="fa fa-check"></i><b>10.6</b> N-grams</a></li>
 </ul></li>
@@ -203,9 +203,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="usenet" class="section level1">
 <h1><span class="header-section-number">10</span> Case study: analyzing usenet text</h1>
-<p>Here we’ll use what we’ve learned in the book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this data set include boards for topics like politics, autos, “for sale”, atheism, etc. This data set is <a href="http://qwone.com/~jason/20Newsgroups/">publicly available</a> and has become popular for testing and exercises in text analysis and machine learning.</p>
-<div id="setup" class="section level2">
-<h2><span class="header-section-number">10.1</span> Setup</h2>
+<p>In our final chapter, we’ll use what we’ve learned in this book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this data set include boards for topics like politics, autos, “for sale”, atheism, etc. This data set is <a href="http://qwone.com/~jason/20Newsgroups/">publicly available</a> and has become popular for testing and exercises in text analysis and machine learning.</p>
+<div id="wrangling-the-data" class="section level2">
+<h2><span class="header-section-number">10.1</span> Wrangling the data</h2>
 <p>We’ll start by reading in all the messages. (Note that this step takes several minutes).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidyr)
@@ -230,7 +230,7 @@ raw_text &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span 
 <li>Every email has one or more headers (e.g. “from:”, “in_reply_to:”)</li>
 <li>Many have signatures, which (since they’re constant for each user) we wouldn’t want to examine alongside the content</li>
 </ul>
-<p>We need to remove headers and signatures:</p>
+<p>We need to remove headers and signatures.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># remove headers and signatures</span>
 cleaned_text &lt;-<span class="st"> </span>raw_text %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(id) %&gt;%
@@ -245,6 +245,7 @@ cleaned_text &lt;-<span class="st"> </span>cleaned_text %&gt;%
          !<span class="kw">str_detect</span>(text, <span class="st">&quot;writes(:|</span><span class="ch">\\</span><span class="st">.</span><span class="ch">\\</span><span class="st">.</span><span class="ch">\\</span><span class="st">.)$&quot;</span>),
          !<span class="kw">str_detect</span>(text, <span class="st">&quot;^In article &lt;&quot;</span>),
          !id %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">9704</span>, <span class="dv">9985</span>))</code></pre></div>
+<p>Now it is time to use <code>unnest_tokens</code> to identify the words in this data set.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
 usenet_words &lt;-<span class="st"> </span>cleaned_text %&gt;%
@@ -252,7 +253,7 @@ usenet_words &lt;-<span class="st"> </span>cleaned_text %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(word, <span class="st">&quot;^[a-z]&quot;</span>),
          <span class="kw">str_detect</span>(word, <span class="st">&quot;[a-z]$&quot;</span>),
          !word %in%<span class="st"> </span>stop_words$word)</code></pre></div>
-<p>We could simply find the most common words:</p>
+<p>What are the most common words?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">usenet_words %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## # A tibble: 63,937 × 2
@@ -269,7 +270,7 @@ usenet_words &lt;-<span class="st"> </span>cleaned_text %&gt;%
 ## 9      bit  1070
 ## 10   space  1062
 ## # ... with 63,927 more rows</code></pre>
-<p>Or we could look at the most common words by board:</p>
+<p>Or perhaps more sensibly, we could examine the most common words by board.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">words_by_board &lt;-<span class="st"> </span>usenet_words %&gt;%
 <span class="st">  </span><span class="kw">count</span>(board, word) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
@@ -292,10 +293,11 @@ usenet_words &lt;-<span class="st"> </span>cleaned_text %&gt;%
 ## 9   comp.os.ms-windows.misc  windows   625
 ## 10 comp.sys.ibm.pc.hardware     card   237
 ## # ... with 50 more rows</code></pre>
+<p>These look sensible and illuminating so far; let’s move on to some more sophisticated analysis!</p>
 </div>
 <div id="term-frequency-and-inverse-document-frequency-tf-idf" class="section level2">
 <h2><span class="header-section-number">10.2</span> Term frequency and inverse document frequency (tf-idf)</h2>
-<p>We notice that some words are likely to be more common on particular boards. Let’s try quantifying this using the tf-idf metric we learned in <a href="tfidf">Chapter 4</a>.</p>
+<p>Some words are likely to be more common on particular boards. Let’s try quantifying this using the tf-idf metric we learned in <a href="tfidf.html#tfidf">Chapter 4</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tf_idf &lt;-<span class="st"> </span>words_by_board %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(word, board, n) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf))
@@ -315,7 +317,7 @@ tf_idf</code></pre></div>
 ## 9           rec.motorcycles          bikes    97 0.004155065 2.995732 0.01244746
 ## 10         rec.sport.hockey         hockey   265 0.007530762 1.609438 0.01212029
 ## # ... with 166,518 more rows</code></pre>
-<p>We can visualize this for a few select boards. For example, let’s look at all the <code>sci.</code> boards:</p>
+<p>We can visualize this for a few select boards. First, let’s look at all the <code>sci.</code> boards.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 tf_idf %&gt;%
@@ -323,17 +325,19 @@ tf_idf %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(board) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">12</span>, tf_idf) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, tf_idf)) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, tf_idf)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>board, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> board)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>board, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="10-usenet_files/figure-html/unnamed-chunk-8-1.png" width="864" /></p>
+<p><img src="10-usenet_files/figure-html/unnamed-chunk-7-1.png" width="864" /></p>
 <p>We could use almost the same code (not shown) to compare the “rec.” (recreation) or “talk.” boards:</p>
-<p><img src="10-usenet_files/figure-html/unnamed-chunk-9-1.png" width="864" /><img src="10-usenet_files/figure-html/unnamed-chunk-9-2.png" width="864" /></p>
+<p><img src="10-usenet_files/figure-html/unnamed-chunk-8-1.png" width="864" /><img src="10-usenet_files/figure-html/unnamed-chunk-8-2.png" width="864" /></p>
+<p>We see lots of characteristic words for these boards, from “pitching” and “hitter” for the baseball board to “firearm” and “militia” on the guns board. Notice how high tf-idf is for words like “Stephanopoulos” or “Armenian”; this means that these words are very unique among the documents as a whole and important to those particular boards.</p>
 </div>
 <div id="sentiment-analysis" class="section level2">
-<h2><span class="header-section-number">10.3</span> Sentiment Analysis</h2>
+<h2><span class="header-section-number">10.3</span> Sentiment analysis</h2>
+<p>We can use the sentiment analysis techniques we explored in [Chapter 3]{#sentiment} to examine how positive and negative words were used in these Usenet posts. Which boards used the most positive and negative words?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AFINN &lt;-<span class="st"> </span>sentiments %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(lexicon ==<span class="st"> &quot;AFINN&quot;</span>)
 
@@ -347,14 +351,14 @@ board_sentiments &lt;-<span class="st"> </span>word_board_sentiments %&gt;%
 board_sentiments %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">board =</span> <span class="kw">reorder</span>(board, score)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(board, score, <span class="dt">fill =</span> score &gt;<span class="st"> </span><span class="dv">0</span>)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>() +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Average sentiment score&quot;</span>)</code></pre></div>
-<p><img src="10-usenet_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p><img src="10-usenet_files/figure-html/board_sentiments-1.png" width="864" /></p>
 </div>
-<div id="looking-by-word" class="section level2">
-<h2><span class="header-section-number">10.4</span> Looking by word</h2>
-<p>It’s worth discovering <em>why</em> some topics ended up more positive then others. For that, we can examine the total positive and negative contributions of each word:</p>
+<div id="sentiment-analysis-by-word" class="section level2">
+<h2><span class="header-section-number">10.4</span> Sentiment analysis by word</h2>
+<p>It’s worth looking deeper to understand <em>why</em> some boards ended up more positive than others. For that, we can examine the total positive and negative contributions of each word.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contributions &lt;-<span class="st"> </span>usenet_words %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(word) %&gt;%
@@ -376,16 +380,16 @@ contributions</code></pre></div>
 ## 9    ability        160          320
 ## 10    aboard          8            8
 ## # ... with 1,881 more rows</code></pre>
-<p>We can visualize which words had the most effect.</p>
+<p>Which words had the most effect?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contributions %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">25</span>, <span class="kw">abs</span>(contribution)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, contribution)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, contribution, <span class="dt">fill =</span> contribution &gt;<span class="st"> </span><span class="dv">0</span>)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="10-usenet_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<p>These words look generally reasonable as indicators of each message’s sentiment, but we can spot possible problems with the approach. “True” could just as easily be a part of “not true” or a similar negative expression, and the words “God” and “Jesus” are apparently very common on Usenet but could easily be used in many contexts.</p>
-<p>We may also care about which words contributed the most <em>within each board</em>. We can calculate each word’s contribution to each board’s sentiment score from our <code>word_board_sentiments</code> variable:</p>
+<p><img src="10-usenet_files/figure-html/unnamed-chunk-9-1.png" width="864" /></p>
+<p>These words look generally reasonable as indicators of each message’s sentiment, but we can spot possible problems with the approach. “True” could just as easily be a part of “not true” or a similar negative expression, and the words “God” and “Jesus” are apparently very common on Usenet but could easily be used in many contexts, positive or negative.</p>
+<p>The important point is that we may also care about which words contributed the most <em>within each board</em>. We can calculate each word’s contribution to each board’s sentiment score from our <code>word_board_sentiments</code> variable:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_sentiment_words &lt;-<span class="st"> </span>word_board_sentiments %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> score *<span class="st"> </span>n /<span class="st"> </span><span class="kw">sum</span>(n))
 
@@ -396,15 +400,15 @@ top_sentiment_words %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">board =</span> <span class="kw">reorder</span>(board, contribution),
          <span class="dt">word =</span> <span class="kw">reorder</span>(word, contribution)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, contribution, <span class="dt">fill =</span> contribution &gt;<span class="st"> </span><span class="dv">0</span>)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alph =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>board, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
 <p><img src="10-usenet_files/figure-html/top_sentiment_words-1.png" width="960" /></p>
-<p>We can also see how much sentiment is confounded with topic in this particular approach. An atheism board is likely to discuss “god” in detail even in a negative context, and we can see it makes the board look more positive. Similarly, the negative contribution of the word “gun” to the “talk.politics.guns” board would occur even if the board were positive.</p>
+<p>We can see here how much sentiment is confounded with topic in this particular approach. An atheism board is likely to discuss “god” in detail even in a negative context, and we can see it makes the board look more positive. Similarly, the negative contribution of the word “gun” to the “talk.politics.guns” board would occur even if the board were discussing guns positively.</p>
 </div>
 <div id="sentiment-analysis-by-message" class="section level2">
 <h2><span class="header-section-number">10.5</span> Sentiment analysis by message</h2>
-<p>We can also try finding the most positive and negative <em>messages</em>:</p>
+<p>We can also try finding the most positive and negative <em>messages</em>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sentiment_messages &lt;-<span class="st"> </span>usenet_words %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(board, id) %&gt;%
@@ -413,7 +417,7 @@ top_sentiment_words %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(words &gt;=<span class="st"> </span><span class="dv">5</span>)</code></pre></div>
 <p>As a simple measure to reduce the role of randomness, we filtered out messages that had fewer than five words that contributed to sentiment.</p>
-<p>What was the most positive messages?</p>
+<p>What were the most positive messages?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sentiment_messages %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(sentiment))</code></pre></div>
 <pre><code>## # A tibble: 3,385 × 4
@@ -430,7 +434,7 @@ top_sentiment_words %&gt;%
 ## 9  comp.os.ms-windows.misc   9620  2.857143     7
 ## 10            misc.forsale  74787  2.833333     6
 ## # ... with 3,375 more rows</code></pre>
-<p>Let’s check this by looking at the message?</p>
+<p>Let’s check this by looking at the most positive message in the whole data set.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">print_message &lt;-<span class="st"> </span>function(message_id) {
   cleaned_text %&gt;%
 <span class="st">    </span><span class="kw">filter</span>(id ==<span class="st"> </span>message_id) %&gt;%
@@ -475,7 +479,7 @@ top_sentiment_words %&gt;%
 ## Steven M. Knapp                             Computer Engineering Student
 ## sknapp@iastate.edu                  President Cyclone Amateur Radio Club
 ## Iowa State University; Ames, IA; USA      Durham Center Operations Staff</code></pre>
-<p>Looks like it’s because the message uses the word “winner” a lot! How about the most negative message? Turns out it’s also from the hockey site, but has a very different attitude:</p>
+<p>Looks like it’s because the message uses the word “winner” a lot! How about the most negative message? Turns out it’s also from the hockey site, but has a very different attitude.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sentiment_messages %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(sentiment)</code></pre></div>
 <pre><code>## # A tibble: 3,385 × 4
@@ -500,6 +504,7 @@ top_sentiment_words %&gt;%
 ## the North Stars should be moved because for the past few years they have
 ## just been SHIT. A real team like Toronto would never be moved!!!
 ## Andrew--</code></pre>
+<p>Well then.</p>
 </div>
 <div id="n-grams" class="section level2">
 <h2><span class="header-section-number">10.6</span> N-grams</h2>
@@ -527,7 +532,7 @@ usenet_bigram_counts %&gt;%
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>word1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">nrow =</span> <span class="dv">2</span>) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
-<p><img src="10-usenet_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="10-usenet_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <p>TODO: Something is wrong with that plot? Shouldn’t each panel have 10 words? Missing a <code>group_by</code>? Is it just because some of the words are in more than in panel?</p>
 
 </div>

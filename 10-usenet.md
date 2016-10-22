@@ -2,9 +2,9 @@
 
 
 
-Here we'll use what we've learned in the book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this data set include boards for topics like politics, autos, "for sale", atheism, etc. This data set is [publicly available](http://qwone.com/~jason/20Newsgroups/) and has become popular for testing and exercises in text analysis and machine learning.
+In our final chapter, we'll use what we've learned in this book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this data set include boards for topics like politics, autos, "for sale", atheism, etc. This data set is [publicly available](http://qwone.com/~jason/20Newsgroups/) and has become popular for testing and exercises in text analysis and machine learning.
 
-## Setup
+## Wrangling the data
 
 We'll start by reading in all the messages. (Note that this step takes several minutes).
 
@@ -41,7 +41,7 @@ Each email has structure we need to remove. For starters:
 * Every email has one or more headers (e.g. "from:", "in_reply_to:")
 * Many have signatures, which (since they're constant for each user) we wouldn't want to examine alongside the content
 
-We need to remove headers and signatures:
+We need to remove headers and signatures.
 
 
 ```r
@@ -61,6 +61,8 @@ cleaned_text <- cleaned_text %>%
          !id %in% c(9704, 9985))
 ```
 
+Now it is time to use `unnest_tokens` to identify the words in this data set.
+
 
 ```r
 library(tidytext)
@@ -72,7 +74,7 @@ usenet_words <- cleaned_text %>%
          !word %in% stop_words$word)
 ```
 
-We could simply find the most common words:
+What are the most common words?
 
 
 ```r
@@ -97,7 +99,7 @@ usenet_words %>%
 ## # ... with 63,927 more rows
 ```
 
-Or we could look at the most common words by board:
+Or perhaps more sensibly, we could examine the most common words by board.
 
 
 ```r
@@ -132,9 +134,11 @@ words_by_board %>%
 ## # ... with 50 more rows
 ```
 
+These look sensible and illuminating so far; let's move on to some more sophisticated analysis!
+
 ## Term frequency and inverse document frequency (tf-idf)
 
-We notice that some words are likely to be more common on particular boards. Let's try quantifying this using the tf-idf metric we learned in [Chapter 4](tfidf).
+Some words are likely to be more common on particular boards. Let's try quantifying this using the tf-idf metric we learned in [Chapter 4](#tfidf).
 
 
 ```r
@@ -162,7 +166,7 @@ tf_idf
 ## # ... with 166,518 more rows
 ```
 
-We can visualize this for a few select boards. For example, let's look at all the `sci.` boards:
+We can visualize this for a few select boards. First, let's look at all the `sci.` boards.
 
 
 ```r
@@ -173,20 +177,24 @@ tf_idf %>%
   group_by(board) %>%
   top_n(12, tf_idf) %>%
   mutate(word = reorder(word, tf_idf)) %>%
-  ggplot(aes(word, tf_idf)) +
-  geom_bar(stat = "identity") +
-  facet_wrap(~ board, scales = "free_y") +
+  ggplot(aes(word, tf_idf, fill = board)) +
+  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+  facet_wrap(~ board, scales = "free") +
   ylab("tf-idf") +
   coord_flip()
 ```
 
-<img src="10-usenet_files/figure-html/unnamed-chunk-8-1.png" width="864" />
+<img src="10-usenet_files/figure-html/unnamed-chunk-7-1.png" width="864" />
 
 We could use almost the same code (not shown) to compare the "rec." (recreation) or "talk." boards:
 
-<img src="10-usenet_files/figure-html/unnamed-chunk-9-1.png" width="864" /><img src="10-usenet_files/figure-html/unnamed-chunk-9-2.png" width="864" />
+<img src="10-usenet_files/figure-html/unnamed-chunk-8-1.png" width="864" /><img src="10-usenet_files/figure-html/unnamed-chunk-8-2.png" width="864" />
 
-## Sentiment Analysis
+We see lots of characteristic words for these boards, from "pitching" and "hitter" for the baseball board to "firearm" and "militia" on the guns board. Notice how high tf-idf is for words like "Stephanopoulos" or "Armenian"; this means that these words are very unique among the documents as a whole and important to those particular boards.
+
+## Sentiment analysis
+
+We can use the sentiment analysis techniques we explored in [Chapter 3]{#sentiment} to examine how positive and negative words were used in these Usenet posts. Which boards used the most positive and negative words?
 
 
 ```r
@@ -203,16 +211,16 @@ board_sentiments <- word_board_sentiments %>%
 board_sentiments %>%
   mutate(board = reorder(board, score)) %>%
   ggplot(aes(board, score, fill = score > 0)) +
-  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
   coord_flip() +
   ylab("Average sentiment score")
 ```
 
-<img src="10-usenet_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="10-usenet_files/figure-html/board_sentiments-1.png" width="864" />
 
-## Looking by word
+## Sentiment analysis by word
 
-It's worth discovering *why* some topics ended up more positive then others. For that, we can examine the total positive and negative contributions of each word:
+It's worth looking deeper to understand *why* some boards ended up more positive than others. For that, we can examine the total positive and negative contributions of each word.
 
 
 ```r
@@ -242,7 +250,7 @@ contributions
 ## # ... with 1,881 more rows
 ```
 
-We can visualize which words had the most effect.
+Which words had the most effect?
 
 
 ```r
@@ -250,15 +258,15 @@ contributions %>%
   top_n(25, abs(contribution)) %>%
   mutate(word = reorder(word, contribution)) %>%
   ggplot(aes(word, contribution, fill = contribution > 0)) +
-  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
   coord_flip()
 ```
 
-<img src="10-usenet_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="10-usenet_files/figure-html/unnamed-chunk-9-1.png" width="864" />
 
-These words look generally reasonable as indicators of each message's sentiment, but we can spot possible problems with the approach. "True" could just as easily be a part of "not true" or a similar negative expression, and the words "God" and "Jesus" are apparently very common on Usenet but could easily be used in many contexts.
+These words look generally reasonable as indicators of each message's sentiment, but we can spot possible problems with the approach. "True" could just as easily be a part of "not true" or a similar negative expression, and the words "God" and "Jesus" are apparently very common on Usenet but could easily be used in many contexts, positive or negative.
 
-We may also care about which words contributed the most *within each board*. We can calculate each word's contribution to each board's sentiment score from our `word_board_sentiments` variable:
+The important point is that we may also care about which words contributed the most *within each board*. We can calculate each word's contribution to each board's sentiment score from our `word_board_sentiments` variable:
 
 
 ```r
@@ -272,18 +280,18 @@ top_sentiment_words %>%
   mutate(board = reorder(board, contribution),
          word = reorder(word, contribution)) %>%
   ggplot(aes(word, contribution, fill = contribution > 0)) +
-  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_bar(alph = 0.8, stat = "identity", show.legend = FALSE) +
   facet_wrap(~ board, scales = "free") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
 <img src="10-usenet_files/figure-html/top_sentiment_words-1.png" width="960" />
 
-We can also see how much sentiment is confounded with topic in this particular approach. An atheism board is likely to discuss "god" in detail even in a negative context, and we can see it makes the board look more positive. Similarly, the negative contribution of the word "gun" to the "talk.politics.guns" board would occur even if the board were positive.
+We can see here how much sentiment is confounded with topic in this particular approach. An atheism board is likely to discuss "god" in detail even in a negative context, and we can see it makes the board look more positive. Similarly, the negative contribution of the word "gun" to the "talk.politics.guns" board would occur even if the board were discussing guns positively.
 
 ## Sentiment analysis by message
 
-We can also try finding the most positive and negative *messages*:
+We can also try finding the most positive and negative *messages*.
 
 
 ```r
@@ -298,7 +306,7 @@ sentiment_messages <- usenet_words %>%
 
 As a simple measure to reduce the role of randomness, we filtered out messages that had fewer than five words that contributed to sentiment.
 
-What was the most positive messages?
+What were the most positive messages?
 
 
 ```r
@@ -323,7 +331,7 @@ sentiment_messages %>%
 ## # ... with 3,375 more rows
 ```
 
-Let's check this by looking at the message?
+Let's check this by looking at the most positive message in the whole data set.
 
 
 ```r
@@ -376,7 +384,7 @@ print_message(53560)
 ## Iowa State University; Ames, IA; USA      Durham Center Operations Staff
 ```
 
-Looks like it's because the message uses the word "winner" a lot! How about the most negative message? Turns out it's also from the hockey site, but has a very different attitude:
+Looks like it's because the message uses the word "winner" a lot! How about the most negative message? Turns out it's also from the hockey site, but has a very different attitude.
 
 
 ```r
@@ -415,7 +423,7 @@ print_message(53907)
 ## Andrew--
 ```
 
-
+Well then.
 
 ## N-grams
 
@@ -460,7 +468,7 @@ usenet_bigram_counts %>%
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-<img src="10-usenet_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="10-usenet_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 
 TODO: Something is wrong with that plot? Shouldn't each panel have 10 words? Missing a `group_by`? Is it just because some of the words are in more than in panel?
 
