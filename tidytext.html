@@ -262,7 +262,7 @@ text_df %&gt;%
 </div>
 <div id="tidying-the-works-of-jane-austen" class="section level2">
 <h2><span class="header-section-number">2.2</span> Tidying the works of Jane Austen</h2>
-<p>Let’s use the text of Jane Austen’s 6 completed, published novels from the <a href="https://cran.r-project.org/package=janeaustenr">janeaustenr</a> package, and transform them into a tidy format. The janeaustenr package provides these texts in a one-row-per-line format. Let’s start with that, annotate a <code>linenumber</code> quantity to keep track of lines in the original format, and use a regex to find where all the chapters are.</p>
+<p>Let’s use the text of Jane Austen’s 6 completed, published novels from the <a href="https://cran.r-project.org/package=janeaustenr">janeaustenr</a> package <span class="citation">(Silge <a href="#ref-R-janeaustenr">2016</a>)</span>, and transform them into a tidy format. The janeaustenr package provides these texts in a one-row-per-line format. Let’s start with that, annotate a <code>linenumber</code> quantity to keep track of lines in the original format, and use a regex to find where all the chapters are.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(janeaustenr)
 <span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(stringr)
@@ -309,7 +309,7 @@ tidy_books</code></pre></div>
 ## 9  Sense &amp; Sensibility         10       1           1
 ## 10 Sense &amp; Sensibility         13       1         the
 ## # ... with 725,044 more rows</code></pre>
-<p>This function uses the <a href="https://github.com/lmullen/tokenizers">tokenizers package</a> to separate each line into words. The default tokenizing is for words, but other options include characters, n-grams, sentences, lines, paragraphs, or separation around a regex pattern.</p>
+<p>This function uses the <a href="https://github.com/lmullen/tokenizers">tokenizers package</a> <span class="citation">(Mullen <a href="#ref-R-tokenizers">2016</a>)</span> to separate each line into words. The default tokenizing is for words, but other options include characters, n-grams, sentences, lines, paragraphs, or separation around a regex pattern.</p>
 <p>Now that the data is in one-word-per-row format, we can manipulate it with tidy tools like dplyr. We can remove stop words (kept in the tidytext dataset <code>stop_words</code>) with an <code>anti_join</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(stop_words)
 
@@ -348,7 +348,7 @@ tidy_books %&gt;%
 </div>
 <div id="the-gutenbergr-package" class="section level2">
 <h2><span class="header-section-number">2.3</span> The gutenbergr package</h2>
-<p>TODO: Now that we’ve introduced the janeaustenr package, also include a brief intro to the gutenberg package.</p>
+<p>Now that we’ve used the janeaustenr package, let’s introduce the <a href="https://github.com/ropenscilabs/gutenbergr">gutenbergr</a> package <span class="citation">(Robinson <a href="#ref-R-gutenbergr">2016</a>)</span>. The gutenbergr package provides access to the public domain works from the <a href="https://www.gutenberg.org/">Project Gutenberg</a> collection. The package includes tools both for downloading books (stripping out the unhelpful header/footer information), and a complete dataset of Project Gutenberg metadata that can be used to find works of interest. In this book, we will use the function <code>gutenberg_download()</code> that downloads one or more works from Project Gutenberg by ID, but you can also use other functions to explore metadata, pair Gutenberg ID with title, author, language, etc., or gather information about authors. To learn more about gutenbergr, check out the <a href="https://ropensci.org/tutorials/gutenbergr_tutorial.html">package’s tutorial at rOpenSci</a>, where it is one of rOpenSci’s packages for data access.</p>
 </div>
 <div id="word-frequencies" class="section level2">
 <h2><span class="header-section-number">2.4</span> Word frequencies</h2>
@@ -414,7 +414,7 @@ frequency &lt;-<span class="st"> </span>tidy_both %&gt;%
 <p>We use <code>str_extract</code> here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words but we don’t want to count “_any_” separately from “any”. Now let’s plot.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
 <span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(<span class="dt">x =</span> other, <span class="dt">y =</span> Austen, <span class="dt">color =</span> <span class="kw">abs</span>(Austen -<span class="st"> </span>other))) +
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">color =</span> <span class="st">&quot;gray40&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">color =</span> <span class="st">&quot;gray40&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>) +
 <span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">alpha =</span> <span class="fl">0.1</span>, <span class="dt">size =</span> <span class="fl">2.5</span>, <span class="dt">width =</span> <span class="fl">0.4</span>, <span class="dt">height =</span> <span class="fl">0.4</span>) +
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> word), <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">vjust =</span> <span class="fl">1.5</span>) +
 <span class="st">  </span><span class="kw">scale_x_log10</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>()) +
@@ -455,6 +455,18 @@ frequency &lt;-<span class="st"> </span>tidy_both %&gt;%
 ## 0.4231236</code></pre>
 <p>The relationship between the word frequencies is different between these sets of texts, as it appears in the plots.</p>
 
+</div>
+</div>
+<h3> References</h3>
+<div id="refs" class="references">
+<div id="ref-R-janeaustenr">
+<p>Silge, Julia. 2016. <em>Janeaustenr: Jane Austen’s Complete Novels</em>. <a href="https://CRAN.R-project.org/package=janeaustenr" class="uri">https://CRAN.R-project.org/package=janeaustenr</a>.</p>
+</div>
+<div id="ref-R-tokenizers">
+<p>Mullen, Lincoln. 2016. <em>Tokenizers: A Consistent Interface to Tokenize Natural Language Text</em>. <a href="https://CRAN.R-project.org/package=tokenizers" class="uri">https://CRAN.R-project.org/package=tokenizers</a>.</p>
+</div>
+<div id="ref-R-gutenbergr">
+<p>Robinson, David. 2016. <em>Gutenbergr: Download and Process Public Domain Works from Project Gutenberg</em>. <a href="https://cran.rstudio.com/package=gutenbergr" class="uri">https://cran.rstudio.com/package=gutenbergr</a>.</p>
 </div>
 </div>
             </section>
