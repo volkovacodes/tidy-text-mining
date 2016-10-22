@@ -112,7 +112,7 @@ Now we can plot these sentiment scores across the plot trajectory of each novel.
 library(ggplot2)
 
 ggplot(janeaustensentiment, aes(index, sentiment, fill = book)) +
-        geom_bar(stat = "identity", show.legend = FALSE) +
+        geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
         facet_wrap(~book, ncol = 2, scales = "free_x")
 ```
 
@@ -162,7 +162,7 @@ bing_word_counts %>%
   mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
   mutate(word = reorder(word, n)) %>%
   ggplot(aes(word, n, fill = sentiment)) +
-  geom_bar(stat = "identity") +
+  geom_bar(alpha = 0.8, stat = "identity") +
   labs(y = "Contribution to sentiment",
        x = NULL) +
   coord_flip()
@@ -190,7 +190,7 @@ tidy_books %>%
 
 <img src="03-sentiment-analysis_files/figure-html/firstwordcloud-1.png" width="576" />
 
-In other functions, such as `comparison.cloud`, you may need to turn it into a matrix with reshape2's `acast`. Let's do the sentiment analysis to tag positive and negative words using an inner join, then find the most common positive and negative words. Until the step where we need to send the data to `comparison.cloud`, this can all be done with joins, piping, and dplyr because our data is in tidy format.
+In other functions, such as `comparison.cloud`, you may need to turn the data frame into a matrix with reshape2's `acast`. Let's do the sentiment analysis to tag positive and negative words using an inner join, then find the most common positive and negative words. Until the step where we need to send the data to `comparison.cloud`, this can all be done with joins, piping, and dplyr because our data is in tidy format.
 
 
 ```r
@@ -238,23 +238,27 @@ Another option in `unnest_tokens` is to split into tokens using a regex pattern.
 
 ```r
 austen_chapters <- austen_books() %>%
+  mutate(book = factor(book, levels = unique(book))) %>%
   group_by(book) %>%
   unnest_tokens(chapter, text, token = "regex", 
                 pattern = "Chapter|CHAPTER [\\dIVXLC]") %>%
   ungroup()
-austen_chapters %>% group_by(book) %>% summarise(chapters = n())
+
+austen_chapters %>% 
+  group_by(book) %>% 
+  summarise(chapters = n())
 ```
 
 ```
 ## # A tibble: 6 × 2
 ##                  book chapters
 ##                <fctr>    <int>
-## 1                Emma       56
-## 2      Mansfield Park       49
-## 3    Northanger Abbey       32
-## 4          Persuasion       25
-## 5   Pride & Prejudice       62
-## 6 Sense & Sensibility       51
+## 1 Sense & Sensibility       51
+## 2   Pride & Prejudice       62
+## 3      Mansfield Park       49
+## 4                Emma       56
+## 5    Northanger Abbey       32
+## 6          Persuasion       25
 ```
 
 We have recovered the correct number of chapters in each novel (plus an "extra" row for each novel title). In this data frame, each row corresponds to one chapter.
@@ -271,27 +275,27 @@ wordcounts <- tidy_books %>%
   summarize(words = n())
 
 tidy_books %>%
+  mutate(book = factor(book, levels = unique(book))) %>%
   semi_join(bingnegative) %>%
   group_by(book, chapter) %>%
   summarize(negativewords = n()) %>%
   left_join(wordcounts, by = c("book", "chapter")) %>%
   mutate(ratio = negativewords/words) %>%
   filter(chapter != 0) %>%
-  top_n(1)
+  top_n(1) %>%
+  ungroup
 ```
 
 ```
-## Source: local data frame [6 x 5]
-## Groups: book [6]
-## 
+## # A tibble: 6 × 5
 ##                  book chapter negativewords words      ratio
-##                <fctr>   <int>         <int> <int>      <dbl>
-## 1                Emma      15           151  3340 0.04520958
-## 2      Mansfield Park      46           173  3685 0.04694708
-## 3    Northanger Abbey      21           149  2982 0.04996647
-## 4          Persuasion       4            62  1807 0.03431101
-## 5   Pride & Prejudice      34           111  2104 0.05275665
-## 6 Sense & Sensibility      43           161  3405 0.04728341
+##                 <chr>   <int>         <int> <int>      <dbl>
+## 1 Sense & Sensibility      43           161  3405 0.04728341
+## 2   Pride & Prejudice      34           111  2104 0.05275665
+## 3      Mansfield Park      46           173  3685 0.04694708
+## 4                Emma      15           151  3340 0.04520958
+## 5    Northanger Abbey      21           149  2982 0.04996647
+## 6          Persuasion       4            62  1807 0.03431101
 ```
 
 These are the chapters with the most sad words in each book, normalized for number of words in the chapter. What is happening in these chapters? In Chapter 43 of *Sense and Sensibility* Marianne is seriously ill, near death, and in Chapter 34 of *Pride and Prejudice* Mr. Darcy proposes for the first time (so badly!). Chapter 46 of *Mansfield Park* is almost the end, when everyone learns of Henry's scandalous adultery, Chapter 15 of *Emma* is when horrifying Mr. Elton proposes, and in Chapter 21 of *Northanger Abbey* Catherine is deep in her Gothic faux fantasy of murder, etc. Chapter 4 of *Persuasion* is when the reader gets the full flashback of Anne refusing Captain Wentworth and how sad she was and what a terrible mistake she realized it to be.
