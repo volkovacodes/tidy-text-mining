@@ -280,7 +280,7 @@ top_sentiment_words %>%
   mutate(board = reorder(board, contribution),
          word = reorder(word, contribution)) %>%
   ggplot(aes(word, contribution, fill = contribution > 0)) +
-  geom_bar(alph = 0.8, stat = "identity", show.legend = FALSE) +
+  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
   facet_wrap(~ board, scales = "free") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
@@ -427,30 +427,99 @@ Well then.
 
 ## N-grams
 
-We can also 
+We can also examine the effect of words that are used in negation, like we did in [Chapter 5]{#ngrams}. Let's start by finding all the bigrams in the Usenet posts.
 
 
 ```r
 usenet_bigrams <- cleaned_text %>%
   unnest_tokens(bigram, text, token = "ngrams", n = 2)
+
+usenet_bigrams
 ```
+
+```
+## # A tibble: 1,762,089 × 3
+##          board    id            bigram
+##          <chr> <chr>             <chr>
+## 1  alt.atheism 49960      archive name
+## 2  alt.atheism 49960      name atheism
+## 3  alt.atheism 49960 atheism resources
+## 4  alt.atheism 49960     resources alt
+## 5  alt.atheism 49960       alt atheism
+## 6  alt.atheism 49960   atheism archive
+## 7  alt.atheism 49960      archive name
+## 8  alt.atheism 49960    name resources
+## 9  alt.atheism 49960    resources last
+## 10 alt.atheism 49960     last modified
+## # ... with 1,762,079 more rows
+```
+
+Now let's count how many of these bigrams are used in each board.
 
 
 ```r
 usenet_bigram_counts <- usenet_bigrams %>%
   count(board, bigram)
+
+usenet_bigram_counts %>% 
+  arrange(desc(n))
 ```
+
+```
+## Source: local data frame [1,006,415 x 3]
+## Groups: board [20]
+## 
+##                     board bigram     n
+##                     <chr>  <chr> <int>
+## 1  soc.religion.christian of the  1141
+## 2   talk.politics.mideast of the  1135
+## 3   talk.politics.mideast in the   857
+## 4               sci.space of the   684
+## 5               sci.crypt of the   671
+## 6      talk.politics.misc of the   645
+## 7  soc.religion.christian in the   637
+## 8      talk.religion.misc of the   630
+## 9      talk.politics.guns of the   618
+## 10            alt.atheism of the   474
+## # ... with 1,006,405 more rows
+```
+
+Next, we can calculate tf-idf for the bigrams to find the ones that are important for each board.
 
 
 ```r
 bigram_tf_idf <- usenet_bigram_counts %>%
   bind_tf_idf(bigram, board, n)
+
+bigram_tf_idf %>%
+  arrange(desc(tf_idf))
 ```
+
+```
+## Source: local data frame [1,006,415 x 6]
+## Groups: board [20]
+## 
+##                       board            bigram     n          tf      idf      tf_idf
+##                       <chr>             <chr> <int>       <dbl>    <dbl>       <dbl>
+## 1        talk.politics.misc mr stephanopoulos   155 0.001477344 2.995732 0.004425728
+## 2            comp.windows.x               n x   177 0.001917577 2.302585 0.004415384
+## 3            comp.windows.x          x printf   130 0.001408390 2.995732 0.004219158
+## 4           rec.motorcycles          the bike   104 0.001675663 2.302585 0.003858356
+## 5  comp.sys.ibm.pc.hardware            scsi 2   107 0.001478983 2.302585 0.003405485
+## 6            comp.windows.x            file x   104 0.001126712 2.995732 0.003375327
+## 7     talk.politics.mideast     the armenians   169 0.001111988 2.995732 0.003331220
+## 8          rec.sport.hockey               1 0   256 0.002733816 1.203973 0.003291440
+## 9            comp.windows.x      output oname   100 0.001083377 2.995732 0.003245506
+## 10           comp.windows.x            x char    98 0.001061709 2.995732 0.003180596
+## # ... with 1,006,405 more rows
+```
+
+Now we come back to the words used in negation that we are interested in examining. Let's define a vector of words that we suspect are used in negation, and use the same joining and counting approach from [Chapter 5]{#ngrams} to examine all of them at once.
 
 
 ```r
 negate_words <- c("not", "without", "no", "isn't", "can't", "don't",
-                  "won't", "couldn't")
+                  "won't", "couldn't", "never")
 
 usenet_bigram_counts %>%
   ungroup() %>%
@@ -463,15 +532,16 @@ usenet_bigram_counts %>%
   ungroup() %>%
   mutate(word2 = reorder(word2, contribution)) %>%
   ggplot(aes(word2, contribution, fill = contribution > 0)) +
-  geom_bar(stat = "identity", show.legend = FALSE) +
-  facet_wrap(~ word1, scales = "free", nrow = 2) +
+  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+  facet_wrap(~ word1, scales = "free", nrow = 3) +
+  ylab("Words preceded by negation") +
+  xlab("Sentiment score * # of occurrences") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-<img src="10-usenet_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="10-usenet_files/figure-html/negate_words-1.png" width="960" />
 
-TODO: Something is wrong with that plot? Shouldn't each panel have 10 words? Missing a `group_by`? Is it just because some of the words are in more than in panel?
-
+These words are the ones that contribute the most to the sentiment scores in the wrong direction, because they are being used with negation words before them. Phrases like "no problem" and "don't want" are important sources of misidentification.
 
 
 
