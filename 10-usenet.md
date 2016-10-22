@@ -216,7 +216,7 @@ board_sentiments %>%
   ylab("Average sentiment score")
 ```
 
-<img src="10-usenet_files/figure-html/board_sentiments-1.png" width="576" />
+<img src="10-usenet_files/figure-html/board_sentiments-1.png" width="672" />
 
 ## Sentiment analysis by word
 
