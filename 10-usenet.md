@@ -136,7 +136,7 @@ words_by_board %>%
 
 These look sensible and illuminating so far; let's move on to some more sophisticated analysis!
 
-## Term frequency and inverse document frequency (tf-idf)
+## Term frequency and inverse document frequency: tf-idf
 
 Some words are likely to be more common on particular boards. Let's try quantifying this using the tf-idf metric we learned in [Chapter 4](#tfidf).
 
@@ -194,7 +194,7 @@ We see lots of characteristic words for these boards, from "pitching" and "hitte
 
 ## Sentiment analysis
 
-We can use the sentiment analysis techniques we explored in [Chapter 3]{#sentiment} to examine how positive and negative words were used in these Usenet posts. Which boards used the most positive and negative words?
+We can use the sentiment analysis techniques we explored in [Chapter 3](#sentiment) to examine how positive and negative words were used in these Usenet posts. Which boards used the most positive and negative words?
 
 
 ```r
@@ -216,7 +216,7 @@ board_sentiments %>%
   ylab("Average sentiment score")
 ```
 
-<img src="10-usenet_files/figure-html/board_sentiments-1.png" width="864" />
+<img src="10-usenet_files/figure-html/board_sentiments-1.png" width="576" />
 
 ## Sentiment analysis by word
 
@@ -262,7 +262,7 @@ contributions %>%
   coord_flip()
 ```
 
-<img src="10-usenet_files/figure-html/unnamed-chunk-9-1.png" width="864" />
+<img src="10-usenet_files/figure-html/unnamed-chunk-9-1.png" width="576" />
 
 These words look generally reasonable as indicators of each message's sentiment, but we can spot possible problems with the approach. "True" could just as easily be a part of "not true" or a similar negative expression, and the words "God" and "Jesus" are apparently very common on Usenet but could easily be used in many contexts, positive or negative.
 
@@ -287,7 +287,7 @@ top_sentiment_words %>%
 
 <img src="10-usenet_files/figure-html/top_sentiment_words-1.png" width="960" />
 
-We can see here how much sentiment is confounded with topic in this particular approach. An atheism board is likely to discuss "god" in detail even in a negative context, and we can see it makes the board look more positive. Similarly, the negative contribution of the word "gun" to the "talk.politics.guns" board would occur even if the board were discussing guns positively.
+We can see here how much sentiment is confounded with topic in this particular approach. An atheism board is likely to discuss "god" in detail even in a negative context, and we can see it makes the board look more positive. Similarly, the negative contribution of the word "gun" to the "talk.politics.guns" board would occur even if the board members were discussing guns positively.
 
 ## Sentiment analysis by message
 
@@ -427,7 +427,7 @@ Well then.
 
 ## N-grams
 
-We can also examine the effect of words that are used in negation, like we did in [Chapter 5]{#ngrams}. Let's start by finding all the bigrams in the Usenet posts.
+We can also examine the effect of words that are used in negation, like we did in [Chapter 5](#ngrams). Let's start by finding all the bigrams in the Usenet posts.
 
 
 ```r
@@ -514,7 +514,7 @@ bigram_tf_idf %>%
 ## # ... with 1,006,405 more rows
 ```
 
-Now we come back to the words used in negation that we are interested in examining. Let's define a vector of words that we suspect are used in negation, and use the same joining and counting approach from [Chapter 5]{#ngrams} to examine all of them at once.
+Now we come back to the words used in negation that we are interested in examining. Let's define a vector of words that we suspect are used in negation, and use the same joining and counting approach from [Chapter 5](#ngrams) to examine all of them at once.
 
 
 ```r
