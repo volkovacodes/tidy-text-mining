@@ -518,8 +518,7 @@ Now we come back to the words used in negation that we are interested in examini
 
 
 ```r
-negate_words <- c("not", "without", "no", "isn't", "can't", "don't",
-                  "won't", "couldn't", "never")
+negate_words <- c("not", "without", "no", "can't", "don't", "won't")
 
 usenet_bigram_counts %>%
   ungroup() %>%
@@ -534,12 +533,12 @@ usenet_bigram_counts %>%
   ggplot(aes(word2, contribution, fill = contribution > 0)) +
   geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
   facet_wrap(~ word1, scales = "free", nrow = 3) +
-  ylab("Words preceded by negation") +
-  xlab("Sentiment score * # of occurrences") +
+  xlab("Words preceded by negation") +
+  ylab("Sentiment score * # of occurrences") +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
-<img src="10-usenet_files/figure-html/negate_words-1.png" width="960" />
+<img src="10-usenet_files/figure-html/negate_words-1.png" width="768" />
 
 These words are the ones that contribute the most to the sentiment scores in the wrong direction, because they are being used with negation words before them. Phrases like "no problem" and "don't want" are important sources of misidentification.
 

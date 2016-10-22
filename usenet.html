@@ -572,8 +572,7 @@ bigram_tf_idf %&gt;%
 ## 10           comp.windows.x            x char    98 0.001061709 2.995732 0.003180596
 ## # ... with 1,006,405 more rows</code></pre>
 <p>Now we come back to the words used in negation that we are interested in examining. Let’s define a vector of words that we suspect are used in negation, and use the same joining and counting approach from <a href="ngrams.html#ngrams">Chapter 5</a> to examine all of them at once.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negate_words &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;not&quot;</span>, <span class="st">&quot;without&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;isn&#39;t&quot;</span>, <span class="st">&quot;can&#39;t&quot;</span>, <span class="st">&quot;don&#39;t&quot;</span>,
-                  <span class="st">&quot;won&#39;t&quot;</span>, <span class="st">&quot;couldn&#39;t&quot;</span>, <span class="st">&quot;never&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negate_words &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;not&quot;</span>, <span class="st">&quot;without&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;can&#39;t&quot;</span>, <span class="st">&quot;don&#39;t&quot;</span>, <span class="st">&quot;won&#39;t&quot;</span>)
 
 usenet_bigram_counts %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
@@ -588,10 +587,10 @@ usenet_bigram_counts %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word2, contribution, <span class="dt">fill =</span> contribution &gt;<span class="st"> </span><span class="dv">0</span>)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>word1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">nrow =</span> <span class="dv">3</span>) +
-<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Words preceded by negation&quot;</span>) +
-<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Words preceded by negation&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
-<p><img src="10-usenet_files/figure-html/negate_words-1.png" width="960" /></p>
+<p><img src="10-usenet_files/figure-html/negate_words-1.png" width="768" /></p>
 <p>These words are the ones that contribute the most to the sentiment scores in the wrong direction, because they are being used with negation words before them. Phrases like “no problem” and “don’t want” are important sources of misidentification.</p>
 
 </div>
