@@ -289,7 +289,7 @@ tidy_books %>%
 ```
 ## # A tibble: 6 × 5
 ##                  book chapter negativewords words      ratio
-##                 <chr>   <int>         <int> <int>      <dbl>
+##                <fctr>   <int>         <int> <int>      <dbl>
 ## 1 Sense & Sensibility      43           161  3405 0.04728341
 ## 2   Pride & Prejudice      34           111  2104 0.05275665
 ## 3      Mansfield Park      46           173  3685 0.04694708

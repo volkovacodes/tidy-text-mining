@@ -140,10 +140,10 @@ nasa_desc %>%
 ## # A tibble: 5 × 1
 ##                                                                                                    desc
 ##                                                                                                   <chr>
-## 1                                           CERES Single Satellite Fluxes and Clouds (FSW) data in HDF.
-## 2  The Level-3 Aura/OMI daily global TOMS-Like Total Column Ozone gridded product (OMTO3d) is generated
-## 3  In support of the fourth Convection and Moisture Experiment (CAMEX-4), imagery from the Geostationar
-## 4  ABSTRACT: Tree basal area, percent tree canopy cover, and proportional contribution of main species 
+## 1  In a large network of computers, wireless sensors, or mobile devices, each of the components (hence,
+## 2  LAT solar gamma-ray flux > 100 MeV, one point per solar exposure (i.e. average of the 20-40 minutes 
+## 3  ML1OA is the EOS Aura Microwave Limb Sounder (MLS) product containing the level 1 orbit attitude and
+## 4  This data set reports the oxygen isotope signatures of water extracted from plant tissue (xylem from
 ## 5 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
 ```
 
@@ -226,7 +226,7 @@ nasa_desc %>%
 ```
 
 ```
-## # A tibble: 35,936 × 2
+## # A tibble: 35,940 × 2
 ##          word     n
 ##         <chr> <int>
 ## 1        data 68871
@@ -239,7 +239,7 @@ nasa_desc %>%
 ## 8        aqua 14738
 ## 9       earth 14373
 ## 10 resolution 13879
-## # ... with 35,926 more rows
+## # ... with 35,930 more rows
 ```
 
 It looks like we might want to remove digits and some "words" like "v1" from these dataframes before approaching something more meaningful like topic modeling.
@@ -329,7 +329,7 @@ desc_words
 ```
 
 ```
-## # A tibble: 21,775,980 × 3
+## # A tibble: 21,779,288 × 3
 ##         item1      item2     n
 ##         <chr>      <chr> <dbl>
 ## 1      global       data  9864
@@ -342,7 +342,7 @@ desc_words
 ## 8        data    surface  8180
 ## 9  resolution     global  8139
 ## 10     global resolution  8139
-## # ... with 21,775,970 more rows
+## # ... with 21,779,278 more rows
 ```
 
 Let's plot networks of these co-occurring words.
@@ -439,4 +439,4 @@ keyword_counts %>%
 
 These are the most commonly co-occurring words, but also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find the correlation among the keywords as described in [Chapter 5](#ngrams).
 
-TODO: correlation of keywords, tf-idf, topic modeling
+TODO: correlation of keywords, tf-idf, and topic modeling

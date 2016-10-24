@@ -281,10 +281,10 @@ nasa_desc</code></pre></div>
 <pre><code>## # A tibble: 5 × 1
 ##                                                                                                    desc
 ##                                                                                                   &lt;chr&gt;
-## 1                                           CERES Single Satellite Fluxes and Clouds (FSW) data in HDF.
-## 2  The Level-3 Aura/OMI daily global TOMS-Like Total Column Ozone gridded product (OMTO3d) is generated
-## 3  In support of the fourth Convection and Moisture Experiment (CAMEX-4), imagery from the Geostationar
-## 4  ABSTRACT: Tree basal area, percent tree canopy cover, and proportional contribution of main species 
+## 1  In a large network of computers, wireless sensors, or mobile devices, each of the components (hence,
+## 2  LAT solar gamma-ray flux &gt; 100 MeV, one point per solar exposure (i.e. average of the 20-40 minutes 
+## 3  ML1OA is the EOS Aura Microwave Limb Sounder (MLS) product containing the level 1 orbit attitude and
+## 4  This data set reports the oxygen isotope signatures of water extracted from plant tissue (xylem from
 ## 5 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A</code></pre>
 <p>Now we can do the keywords, which must be unnested since they are in a list-column.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
@@ -339,7 +339,7 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 <p>What about the descriptions?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_desc %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## # A tibble: 35,936 × 2
+<pre><code>## # A tibble: 35,940 × 2
 ##          word     n
 ##         &lt;chr&gt; &lt;int&gt;
 ## 1        data 68871
@@ -352,7 +352,7 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 ## 8        aqua 14738
 ## 9       earth 14373
 ## 10 resolution 13879
-## # ... with 35,926 more rows</code></pre>
+## # ... with 35,930 more rows</code></pre>
 <p>It looks like we might want to remove digits and some “words” like “v1” from these dataframes before approaching something more meaningful like topic modeling.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mystopwords &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">1</span>:<span class="dv">10</span>), 
                                    <span class="st">&quot;v1&quot;</span>, <span class="st">&quot;v03&quot;</span>, <span class="st">&quot;l2&quot;</span>, <span class="st">&quot;l3&quot;</span>, <span class="st">&quot;v5.2.0&quot;</span>, 
@@ -410,7 +410,7 @@ title_words</code></pre></div>
 <span class="st">  </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 
 desc_words</code></pre></div>
-<pre><code>## # A tibble: 21,775,980 × 3
+<pre><code>## # A tibble: 21,779,288 × 3
 ##         item1      item2     n
 ##         &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;
 ## 1      global       data  9864
@@ -423,7 +423,7 @@ desc_words</code></pre></div>
 ## 8        data    surface  8180
 ## 9  resolution     global  8139
 ## 10     global resolution  8139
-## # ... with 21,775,970 more rows</code></pre>
+## # ... with 21,779,278 more rows</code></pre>
 <p>Let’s plot networks of these co-occurring words.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(igraph)
@@ -491,7 +491,7 @@ keyword_counts %&gt;%
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_counts-1.png" width="864" /></p>
 <p>These are the most commonly co-occurring words, but also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>.</p>
-<p>TODO: correlation of keywords, tf-idf, topic modeling</p>
+<p>TODO: correlation of keywords, tf-idf, and topic modeling</p>
 
 </div>
 </div>

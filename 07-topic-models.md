@@ -402,8 +402,12 @@ assignments %>%
 ## 2                   Pride and Prejudice                    1                 37229
 ## 3                 The War of the Worlds                    0                     0
 ## 4 Twenty Thousand Leagues under the Sea                    0                     5
-## # ... with 2 more variables: `The War of the Worlds` <dbl>, `Twenty Thousand Leagues under the
-## #   Sea` <dbl>
+##   `The War of the Worlds` `Twenty Thousand Leagues under the Sea`
+## *                   <dbl>                                   <dbl>
+## 1                    1845                                      77
+## 2                       7                                       5
+## 3                   22561                                       7
+## 4                       0                                   39629
 ```
 
 We notice that almost all the words for *Pride and Prejudice*, *Twenty Thousand Leagues Under the Sea*, and *War of the Worlds* were correctly assigned, while *Great Expectations* had a fair amount of misassignment.
@@ -432,7 +436,19 @@ wrong_words
 ## 8                     Great Expectations      46  captain     1      2
 ## 9                     Great Expectations      32  captain     1      2
 ## 10                 The War of the Worlds      17  captain     5      2
-## # ... with 4,525 more rows, and 1 more variables: consensus <chr>
+##                                consensus
+##                                    <chr>
+## 1                    Pride and Prejudice
+## 2                    Pride and Prejudice
+## 3                    Pride and Prejudice
+## 4                    Pride and Prejudice
+## 5                    Pride and Prejudice
+## 6                    Pride and Prejudice
+## 7                    Pride and Prejudice
+## 8  Twenty Thousand Leagues under the Sea
+## 9  Twenty Thousand Leagues under the Sea
+## 10 Twenty Thousand Leagues under the Sea
+## # ... with 4,525 more rows
 ```
 
 ```r

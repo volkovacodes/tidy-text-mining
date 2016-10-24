@@ -26,18 +26,18 @@ austen_bigrams
 
 ```
 ## # A tibble: 725,048 × 2
-##                   book             bigram
-##                 <fctr>              <chr>
-## 1  Sense & Sensibility            emma by
-## 2  Sense & Sensibility            by jane
-## 3  Sense & Sensibility        jane austen
-## 4  Sense & Sensibility      austen volume
-## 5  Sense & Sensibility           volume i
-## 6  Sense & Sensibility          i chapter
-## 7  Sense & Sensibility          chapter i
-## 8  Sense & Sensibility             i emma
-## 9  Sense & Sensibility     emma woodhouse
-## 10 Sense & Sensibility woodhouse handsome
+##                   book          bigram
+##                 <fctr>           <chr>
+## 1  Sense & Sensibility       sense and
+## 2  Sense & Sensibility and sensibility
+## 3  Sense & Sensibility  sensibility by
+## 4  Sense & Sensibility         by jane
+## 5  Sense & Sensibility     jane austen
+## 6  Sense & Sensibility     austen 1811
+## 7  Sense & Sensibility    1811 chapter
+## 8  Sense & Sensibility       chapter 1
+## 9  Sense & Sensibility           1 the
+## 10 Sense & Sensibility      the family
 ## # ... with 725,038 more rows
 ```
 
@@ -88,18 +88,18 @@ bigrams_filtered
 
 ```
 ## # A tibble: 44,784 × 3
-##                   book        word1       word2
-##                 <fctr>        <chr>       <chr>
-## 1  Sense & Sensibility         jane      austen
-## 2  Sense & Sensibility       austen      volume
-## 3  Sense & Sensibility         emma   woodhouse
-## 4  Sense & Sensibility    woodhouse    handsome
-## 5  Sense & Sensibility     handsome      clever
-## 6  Sense & Sensibility  comfortable        home
-## 7  Sense & Sensibility        happy disposition
-## 8  Sense & Sensibility affectionate   indulgent
-## 9  Sense & Sensibility    indulgent      father
-## 10 Sense & Sensibility     sister's    marriage
+##                   book       word1        word2
+##                 <fctr>       <chr>        <chr>
+## 1  Sense & Sensibility        jane       austen
+## 2  Sense & Sensibility      austen         1811
+## 3  Sense & Sensibility        1811      chapter
+## 4  Sense & Sensibility     chapter            1
+## 5  Sense & Sensibility     norland         park
+## 6  Sense & Sensibility surrounding acquaintance
+## 7  Sense & Sensibility        late        owner
+## 8  Sense & Sensibility    advanced          age
+## 9  Sense & Sensibility    constant    companion
+## 10 Sense & Sensibility    happened          ten
 ## # ... with 44,774 more rows
 ```
 
@@ -144,18 +144,18 @@ bigrams_united
 
 ```
 ## # A tibble: 44,784 × 2
-##      book                 bigram
-## *  <fctr>                  <chr>
-## 1    Emma            jane austen
-## 2    Emma          austen volume
-## 3    Emma         emma woodhouse
-## 4    Emma     woodhouse handsome
-## 5    Emma        handsome clever
-## 6    Emma       comfortable home
-## 7    Emma      happy disposition
-## 8    Emma affectionate indulgent
-## 9    Emma       indulgent father
-## 10   Emma      sister's marriage
+##                   book                   bigram
+## *               <fctr>                    <chr>
+## 1  Sense & Sensibility              jane austen
+## 2  Sense & Sensibility              austen 1811
+## 3  Sense & Sensibility             1811 chapter
+## 4  Sense & Sensibility                chapter 1
+## 5  Sense & Sensibility             norland park
+## 6  Sense & Sensibility surrounding acquaintance
+## 7  Sense & Sensibility               late owner
+## 8  Sense & Sensibility             advanced age
+## 9  Sense & Sensibility       constant companion
+## 10 Sense & Sensibility             happened ten
 ## # ... with 44,774 more rows
 ```
 
@@ -458,7 +458,7 @@ bigram_graph
 ## + ... omitted several edges
 ```
 
-igraph has plotting functions built in, but they're not what the package is designed to do. Many others have developed visualization methods for graphs. But we recommend the ggraph package, because it implements these visualizations in terms of the grammar of graphics, which we are already familiar with from ggplot2.
+igraph has plotting functions built in, but they're not what the package is designed to do. Many others have developed visualization methods for graphs. We recommend the ggraph package, because it implements these visualizations in terms of the grammar of graphics, which we are already familiar with from ggplot2.
 
 We can convert an igraph object into a ggraph with the `ggraph` function, after which we add layers to it, much like layers are added in ggplot2. For example, here we add nodes, edges, and text to construct the basics of a graph:
 
@@ -613,20 +613,20 @@ austen_section_words
 ```
 
 ```
-## # A tibble: 47,963 × 3
-##                 book section       word
-##               <fctr>   <dbl>      <chr>
-## 1  Pride & Prejudice       1    chapter
-## 2  Pride & Prejudice       1     thirty
-## 3  Pride & Prejudice       1        ago
-## 4  Pride & Prejudice       1       miss
-## 5  Pride & Prejudice       1      maria
-## 6  Pride & Prejudice       1       ward
-## 7  Pride & Prejudice       1 huntingdon
-## 8  Pride & Prejudice       1   thousand
-## 9  Pride & Prejudice       1     pounds
-## 10 Pride & Prejudice       1       luck
-## # ... with 47,953 more rows
+## # A tibble: 37,240 × 3
+##                 book section         word
+##               <fctr>   <dbl>        <chr>
+## 1  Pride & Prejudice       1        truth
+## 2  Pride & Prejudice       1  universally
+## 3  Pride & Prejudice       1 acknowledged
+## 4  Pride & Prejudice       1       single
+## 5  Pride & Prejudice       1   possession
+## 6  Pride & Prejudice       1      fortune
+## 7  Pride & Prejudice       1         wife
+## 8  Pride & Prejudice       1     feelings
+## 9  Pride & Prejudice       1        views
+## 10 Pride & Prejudice       1     entering
+## # ... with 37,230 more rows
 ```
 
 One example of the widyr pattern is the `pairwise_count` function. The prefix "pairwise" means it will result in one row for each pair of words in the `word` variable. This lets us count common pairs of words co-appearing within the same section:
@@ -643,20 +643,20 @@ word_pairs
 ```
 
 ```
-## # A tibble: 1,065,234 × 3
-##       item1    item2     n
-##       <chr>    <chr> <dbl>
-## 1    thomas      sir   239
-## 2       sir   thomas   239
-## 3  crawford     miss   224
-## 4      miss crawford   224
-## 5  crawford    fanny   182
-## 6     fanny crawford   182
-## 7    edmund    fanny   155
-## 8     fanny   edmund   155
-## 9     fanny     miss   144
-## 10     miss    fanny   144
-## # ... with 1,065,224 more rows
+## # A tibble: 796,008 × 3
+##        item1     item2     n
+##        <chr>     <chr> <dbl>
+## 1      darcy elizabeth   144
+## 2  elizabeth     darcy   144
+## 3       miss elizabeth   110
+## 4  elizabeth      miss   110
+## 5  elizabeth      jane   106
+## 6       jane elizabeth   106
+## 7       miss     darcy    92
+## 8      darcy      miss    92
+## 9  elizabeth   bingley    91
+## 10   bingley elizabeth    91
+## # ... with 795,998 more rows
 ```
 
 For example, we discover that the most common pair of words in a section is "Elizabeth" and "Darcy" (the two main characters).
@@ -668,8 +668,20 @@ word_pairs %>%
 ```
 
 ```
-## # A tibble: 0 × 3
-## # ... with 3 variables: item1 <chr>, item2 <chr>, n <dbl>
+## # A tibble: 2,930 × 3
+##    item1     item2     n
+##    <chr>     <chr> <dbl>
+## 1  darcy elizabeth   144
+## 2  darcy      miss    92
+## 3  darcy   bingley    86
+## 4  darcy      jane    46
+## 5  darcy    bennet    45
+## 6  darcy    sister    45
+## 7  darcy      time    41
+## 8  darcy      lady    38
+## 9  darcy    friend    37
+## 10 darcy   wickham    37
+## # ... with 2,920 more rows
 ```
 
 ### Pairwise correlation
@@ -694,20 +706,20 @@ word_cors
 ```
 
 ```
-## # A tibble: 212,982 × 3
-##       item1    item2 correlation
-##       <chr>    <chr>       <dbl>
-## 1    thomas      sir   0.8892807
-## 2       sir   thomas   0.8892807
-## 3      lady  bertram   0.5388732
-## 4   bertram     lady   0.5388732
-## 5     grant       dr   0.5379974
-## 6        dr    grant   0.5379974
-## 7  crawford     miss   0.4733778
-## 8      miss crawford   0.4733778
-## 9     julia    maria   0.3509280
-## 10    maria    julia   0.3509280
-## # ... with 212,972 more rows
+## # A tibble: 154,842 × 3
+##        item1     item2 correlation
+##        <chr>     <chr>       <dbl>
+## 1     bourgh        de   0.9508501
+## 2         de    bourgh   0.9508501
+## 3     pounds  thousand   0.7005808
+## 4   thousand    pounds   0.7005808
+## 5    william       sir   0.6644719
+## 6        sir   william   0.6644719
+## 7  catherine      lady   0.6633048
+## 8       lady catherine   0.6633048
+## 9    forster   colonel   0.6220950
+## 10   colonel   forster   0.6220950
+## # ... with 154,832 more rows
 ```
 
 For instance, we could find the words most correlated with a word like "pounds" by filtering:
@@ -719,8 +731,20 @@ word_cors %>%
 ```
 
 ```
-## # A tibble: 0 × 3
-## # ... with 3 variables: item1 <chr>, item2 <chr>, correlation <dbl>
+## # A tibble: 393 × 3
+##     item1     item2 correlation
+##     <chr>     <chr>       <dbl>
+## 1  pounds  thousand  0.70058081
+## 2  pounds       ten  0.23057580
+## 3  pounds   fortune  0.16386264
+## 4  pounds   settled  0.14946049
+## 5  pounds wickham's  0.14152401
+## 6  pounds  children  0.12900011
+## 7  pounds  mother's  0.11905928
+## 8  pounds  believed  0.09321518
+## 9  pounds    estate  0.08896876
+## 10 pounds     ready  0.08597038
+## # ... with 383 more rows
 ```
 
 This would let us examine the most-correlated words with any selection of words:

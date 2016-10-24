@@ -472,8 +472,12 @@ assignments</code></pre></div>
 ## 2                   Pride and Prejudice                    1                 37229
 ## 3                 The War of the Worlds                    0                     0
 ## 4 Twenty Thousand Leagues under the Sea                    0                     5
-## # ... with 2 more variables: `The War of the Worlds` &lt;dbl&gt;, `Twenty Thousand Leagues under the
-## #   Sea` &lt;dbl&gt;</code></pre>
+##   `The War of the Worlds` `Twenty Thousand Leagues under the Sea`
+## *                   &lt;dbl&gt;                                   &lt;dbl&gt;
+## 1                    1845                                      77
+## 2                       7                                       5
+## 3                   22561                                       7
+## 4                       0                                   39629</code></pre>
 <p>We notice that almost all the words for <em>Pride and Prejudice</em>, <em>Twenty Thousand Leagues Under the Sea</em>, and <em>War of the Worlds</em> were correctly assigned, while <em>Great Expectations</em> had a fair amount of misassignment.</p>
 <p>What were the most commonly mistaken words?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wrong_words &lt;-<span class="st"> </span>assignments %&gt;%
@@ -493,7 +497,19 @@ wrong_words</code></pre></div>
 ## 8                     Great Expectations      46  captain     1      2
 ## 9                     Great Expectations      32  captain     1      2
 ## 10                 The War of the Worlds      17  captain     5      2
-## # ... with 4,525 more rows, and 1 more variables: consensus &lt;chr&gt;</code></pre>
+##                                consensus
+##                                    &lt;chr&gt;
+## 1                    Pride and Prejudice
+## 2                    Pride and Prejudice
+## 3                    Pride and Prejudice
+## 4                    Pride and Prejudice
+## 5                    Pride and Prejudice
+## 6                    Pride and Prejudice
+## 7                    Pride and Prejudice
+## 8  Twenty Thousand Leagues under the Sea
+## 9  Twenty Thousand Leagues under the Sea
+## 10 Twenty Thousand Leagues under the Sea
+## # ... with 4,525 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wrong_words %&gt;%
 <span class="st">  </span><span class="kw">count</span>(title, consensus, term, <span class="dt">wt =</span> count) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
