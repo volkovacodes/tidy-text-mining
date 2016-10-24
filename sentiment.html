@@ -359,7 +359,6 @@ tidy_books %&gt;%
 <p>The sentence tokenizing does seem to have a bit of trouble with UTF-8 encoded text, especially with sections of dialogue; it does much better with punctuation in ASCII. One possibility, if this is important, is to try using <code>iconv()</code>, with something like <code>iconv(text, to = 'latin1')</code> in a mutate statement before unnesting.</p>
 <p>Another option in <code>unnest_tokens</code> is to split into tokens using a regex pattern. We could use this, for example, to split the text of Jane Austen’s novels into a data frame by chapter.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">austen_chapters &lt;-<span class="st"> </span><span class="kw">austen_books</span>() %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">book =</span> <span class="kw">factor</span>(book, <span class="dt">levels =</span> <span class="kw">unique</span>(book))) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(book) %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(chapter, text, <span class="dt">token =</span> <span class="st">&quot;regex&quot;</span>, 
                 <span class="dt">pattern =</span> <span class="st">&quot;Chapter|CHAPTER [</span><span class="ch">\\</span><span class="st">dIVXLC]&quot;</span>) %&gt;%
@@ -387,7 +386,6 @@ wordcounts &lt;-<span class="st"> </span>tidy_books %&gt;%
 <span class="st">  </span><span class="kw">summarize</span>(<span class="dt">words =</span> <span class="kw">n</span>())
 
 tidy_books %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">book =</span> <span class="kw">factor</span>(book, <span class="dt">levels =</span> <span class="kw">unique</span>(book))) %&gt;%
 <span class="st">  </span><span class="kw">semi_join</span>(bingnegative) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(book, chapter) %&gt;%
 <span class="st">  </span><span class="kw">summarize</span>(<span class="dt">negativewords =</span> <span class="kw">n</span>()) %&gt;%

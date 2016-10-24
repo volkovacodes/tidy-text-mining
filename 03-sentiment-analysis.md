@@ -238,7 +238,6 @@ Another option in `unnest_tokens` is to split into tokens using a regex pattern.
 
 ```r
 austen_chapters <- austen_books() %>%
-  mutate(book = factor(book, levels = unique(book))) %>%
   group_by(book) %>%
   unnest_tokens(chapter, text, token = "regex", 
                 pattern = "Chapter|CHAPTER [\\dIVXLC]") %>%
@@ -275,7 +274,6 @@ wordcounts <- tidy_books %>%
   summarize(words = n())
 
 tidy_books %>%
-  mutate(book = factor(book, levels = unique(book))) %>%
   semi_join(bingnegative) %>%
   group_by(book, chapter) %>%
   summarize(negativewords = n()) %>%
