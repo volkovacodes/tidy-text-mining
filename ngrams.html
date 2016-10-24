@@ -481,12 +481,12 @@ negated_words %&gt;%
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>word1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Words preceded by negation&quot;</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>) +
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="05-word-combinations_files/figure-html/negated_words_plot-1.png" width="864" /></p>
 </div>
 <div id="visualizing-a-network-of-bigrams-with-igraph" class="section level3">
 <h3><span class="header-section-number">5.1.4</span> Visualizing a network of bigrams with igraph</h3>
-<p>We may be interested in .</p>
+<p>We may be interested in visualizing all of the relationships among words simultaneously, rather than just the top few at a time.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigram_counts &lt;-<span class="st"> </span>bigrams_filtered %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 
@@ -730,7 +730,7 @@ word_cors</code></pre></div>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(item2, correlation)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>item1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="05-word-combinations_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
 <p>Just as we used ggraph to visualize bigrams, we can use it to visualize the correlations and clusters of words that were found by the widyr package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)

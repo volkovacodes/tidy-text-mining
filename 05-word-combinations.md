@@ -2,7 +2,7 @@
 
 
 
-So far we've considered words as individual units, and connected them to documents or sentiments. However, many interesting text analyses are based on the relationships between words, whether examining words commonly used in proximity to each other or within the same documents. 
+So far we've considered words as individual units, and connected them to documents or sentiments. However, many interesting text analyses are based on the relationships between words, whether examining words commonly used in proximity to each other or within the same documents.
 
 Here, we'll explore some of the tools tidytext offers for determining relationships between words in your text corpus. We'll also introduce the widyr package, which is useful for calculating pairwise correlations and distances within a tidy format.
 
@@ -387,14 +387,14 @@ negated_words %>%
   facet_wrap(~ word1, scales = "free") +
   xlab("Words preceded by negation") +
   ylab("Sentiment score * # of occurrences") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  coord_flip()
 ```
 
 <img src="05-word-combinations_files/figure-html/negated_words_plot-1.png" width="864" />
 
 ### Visualizing a network of bigrams with igraph
 
-We may be interested in . 
+We may be interested in visualizing all of the relationships among words simultaneously, rather than just the top few at a time.
 
 
 ```r
@@ -735,7 +735,7 @@ word_cors %>%
   ggplot(aes(item2, correlation)) +
   geom_bar(stat = "identity") +
   facet_wrap(~ item1, scales = "free") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  coord_flip()
 ```
 
 <img src="05-word-combinations_files/figure-html/unnamed-chunk-12-1.png" width="768" />
