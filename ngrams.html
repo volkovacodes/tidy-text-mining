@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-10-22">
+<meta name="date" content="2016-10-24">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -140,15 +140,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
 <li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
 <li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
+<li class="chapter" data-level="5.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>5.1.4</b> Visualizing a network of bigrams with igraph</a></li>
+<li class="chapter" data-level="5.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>5.1.5</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-as-a-network-with-the-ggraph-package"><i class="fa fa-check"></i><b>5.2</b> Visualizing bigrams as a network with the ggraph package</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#creating-a-network-with-igraph"><i class="fa fa-check"></i><b>5.2.1</b> Creating a network with igraph</a></li>
-<li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-with-ggraph"><i class="fa fa-check"></i><b>5.2.2</b> Visualizing a network with ggraph</a></li>
-<li class="chapter" data-level="5.2.3" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>5.2.3</b> Visualizing bigrams in other texts</a></li>
-</ul></li>
-<li class="chapter" data-level="5.3" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.3</b> Counting and correlating pairs of words with the widyr package</a><ul>
-<li class="chapter" data-level="5.3.1" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.3.1</b> Pairwise correlation</a></li>
-<li class="chapter" data-level="5.3.2" data-path="ngrams.html"><a href="ngrams.html#visualizing-word-correlations"><i class="fa fa-check"></i><b>5.3.2</b> Visualizing word correlations</a></li>
+<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-among-sections"><i class="fa fa-check"></i><b>5.2.1</b> Counting and correlating among sections</a></li>
+<li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.2.2</b> Pairwise correlation</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>6</b> Tidying and casting document-term matrices</a><ul>
@@ -203,36 +200,38 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="ngrams" class="section level1">
 <h1><span class="header-section-number">5</span> Working with combinations of words using n-grams and widyr</h1>
+<p>So far we’ve considered words as individual units, and connected them to documents or sentiments. However, many interesting text analyses are based on the relationships between words, whether examining words commonly used in proximity to each other or within the same documents.</p>
+<p>Here, we’ll explore some of the tools tidytext offers for determining relationships between words in your text corpus. We’ll also introduce the widyr package, which is useful for calculating pairwise correlations and distances within a tidy format.</p>
 <div id="tokenizing-by-n-gram" class="section level2">
 <h2><span class="header-section-number">5.1</span> Tokenizing by n-gram</h2>
 <p>We’ve been using the <code>unnest_tokens</code> function to tokenize by word, or sometimes by sentence or paragraph. But we can also tokenize into consecutive sequences of words, called <strong>n-grams</strong>.</p>
+<p>We do this by adding the <code>token = &quot;ngrams&quot;</code> option to <code>unnest_tokens()</code>, as well as the <code>n</code> argument. When we set <code>n</code> to 2, we are examining pairs of two words, often called <code>bigrams</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidytext)
 <span class="kw">library</span>(janeaustenr)
 
-<span class="co"># Set n = 2 to divide into pairs of words</span>
 austen_bigrams &lt;-<span class="st"> </span><span class="kw">austen_books</span>() %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(bigram, text, <span class="dt">token =</span> <span class="st">&quot;ngrams&quot;</span>, <span class="dt">n =</span> <span class="dv">2</span>)
 
 austen_bigrams</code></pre></div>
 <pre><code>## # A tibble: 725,048 × 2
-##      book             bigram
-##    &lt;fctr&gt;              &lt;chr&gt;
-## 1    Emma            emma by
-## 2    Emma            by jane
-## 3    Emma        jane austen
-## 4    Emma      austen volume
-## 5    Emma           volume i
-## 6    Emma          i chapter
-## 7    Emma          chapter i
-## 8    Emma             i emma
-## 9    Emma     emma woodhouse
-## 10   Emma woodhouse handsome
+##                   book             bigram
+##                 &lt;fctr&gt;              &lt;chr&gt;
+## 1  Sense &amp; Sensibility            emma by
+## 2  Sense &amp; Sensibility            by jane
+## 3  Sense &amp; Sensibility        jane austen
+## 4  Sense &amp; Sensibility      austen volume
+## 5  Sense &amp; Sensibility           volume i
+## 6  Sense &amp; Sensibility          i chapter
+## 7  Sense &amp; Sensibility          chapter i
+## 8  Sense &amp; Sensibility             i emma
+## 9  Sense &amp; Sensibility     emma woodhouse
+## 10 Sense &amp; Sensibility woodhouse handsome
 ## # ... with 725,038 more rows</code></pre>
-<p>This is still tidy: it’s one-row-per-token, but now each token represents a bigram. Notice that these bigrams are overlapping: “sense and” is one token, “and sensibility” is another.</p>
+<p>This data structure is still a variation of the tidy text format. It is structured as one-row-per-token, but now each token represents a bigram. Notice that these bigrams are overlapping: “sense and” is one token, while “and sensibility” is another.</p>
 <div id="counting-and-filtering-n-grams" class="section level3">
 <h3><span class="header-section-number">5.1.1</span> Counting and filtering n-grams</h3>
-<p>We can examine the most common bigrams using <code>count</code>:</p>
+<p>Our usual tidy tools apply equally well to n-gram analysis. We can examine the most common bigrams using <code>count</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">austen_bigrams %&gt;%
 <span class="st">  </span><span class="kw">count</span>(bigram, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## # A tibble: 211,237 × 2
@@ -261,21 +260,21 @@ bigrams_filtered &lt;-<span class="st"> </span>bigrams_separated %&gt;%
 
 bigrams_filtered</code></pre></div>
 <pre><code>## # A tibble: 44,784 × 3
-##      book        word1       word2
-##    &lt;fctr&gt;        &lt;chr&gt;       &lt;chr&gt;
-## 1    Emma         jane      austen
-## 2    Emma       austen      volume
-## 3    Emma         emma   woodhouse
-## 4    Emma    woodhouse    handsome
-## 5    Emma     handsome      clever
-## 6    Emma  comfortable        home
-## 7    Emma        happy disposition
-## 8    Emma affectionate   indulgent
-## 9    Emma    indulgent      father
-## 10   Emma     sister&#39;s    marriage
+##                   book        word1       word2
+##                 &lt;fctr&gt;        &lt;chr&gt;       &lt;chr&gt;
+## 1  Sense &amp; Sensibility         jane      austen
+## 2  Sense &amp; Sensibility       austen      volume
+## 3  Sense &amp; Sensibility         emma   woodhouse
+## 4  Sense &amp; Sensibility    woodhouse    handsome
+## 5  Sense &amp; Sensibility     handsome      clever
+## 6  Sense &amp; Sensibility  comfortable        home
+## 7  Sense &amp; Sensibility        happy disposition
+## 8  Sense &amp; Sensibility affectionate   indulgent
+## 9  Sense &amp; Sensibility    indulgent      father
+## 10 Sense &amp; Sensibility     sister&#39;s    marriage
 ## # ... with 44,774 more rows</code></pre>
 <p>We can now count the most common pairs of words:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigrams_filtered %&gt;%<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigrams_filtered %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## Source: local data frame [33,421 x 3]
 ## Groups: word1 [6,711]
@@ -294,7 +293,7 @@ bigrams_filtered</code></pre></div>
 ## 10 colonel   brandon   108
 ## # ... with 33,411 more rows</code></pre>
 <p>We can see that names (whether first and last or with a salutation) are the most common pairs in Jane Austen books.</p>
-<p>We may want to work with the recombined words. tidyr’s <code>unite()</code> is the opposite of <code>separate()</code>, and lets us recombine the columns into one.</p>
+<p>We may want to work with the recombined words. tidyr’s <code>unite()</code> function is the inverse of <code>separate()</code>, and lets us recombine the columns into one.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigrams_united &lt;-<span class="st"> </span>bigrams_filtered %&gt;%
 <span class="st">  </span><span class="kw">unite</span>(bigram, word1, word2, <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)
 
@@ -340,7 +339,7 @@ bigrams_united</code></pre></div>
 </div>
 <div id="analyzing-bigrams" class="section level3">
 <h3><span class="header-section-number">5.1.2</span> Analyzing bigrams</h3>
-<p>A bigram can be considered a term, just in the same way that we dealt with single words. For example, we can look at tf-idf of bigrams:</p>
+<p>A bigram can be treated as a term in a document in the same way that we treated individual words. For example, we can look at tf-idf of bigrams:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigram_tf_idf &lt;-<span class="st"> </span>bigrams_united %&gt;%
 <span class="st">  </span><span class="kw">count</span>(book, bigram) %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(bigram, book, n) %&gt;%
@@ -372,23 +371,25 @@ bigram_tf_idf</code></pre></div>
 <p>Our sentiment analysis approch in <a href="sentiment.html#sentiment">Chapter 3</a> simply counted the appearance of positive or negative words, according to a reference lexicon. One of the problems with this approach is that a word’s context can matter nearly as much as its presence. For example, the words “happy” and “like” will be counted as positive, even in a sentence like “I’m not <strong>happy</strong> and I don’t <strong>like</strong> it!”</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigrams_separated %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word1 ==<span class="st"> &quot;not&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">count</span>(word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>## # A tibble: 1,246 × 2
-##    word2     n
-##    &lt;chr&gt; &lt;int&gt;
-## 1     be   610
-## 2     to   355
-## 3   have   327
-## 4   know   252
-## 5      a   189
-## 6  think   176
-## 7   been   160
-## 8    the   147
-## 9     at   129
-## 10    in   118
+<span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Source: local data frame [1,246 x 3]
+## Groups: word1 [1]
+## 
+##    word1 word2     n
+##    &lt;chr&gt; &lt;chr&gt; &lt;int&gt;
+## 1    not    be   610
+## 2    not    to   355
+## 3    not  have   327
+## 4    not  know   252
+## 5    not     a   189
+## 6    not think   176
+## 7    not  been   160
+## 8    not   the   147
+## 9    not    at   129
+## 10   not    in   118
 ## # ... with 1,236 more rows</code></pre>
-<p>We can use <code>word2</code> to TODO</p>
-<p>Let’s use the AFINN lexicon for sentiment analysis, which gives a sentiment score for each word:</p>
+<p>By performing sentiment analysis on the bigram data, we can examine how often sentiment-associated words are preceded by “not” or other negating words. We could use this to ignore or even reverse their contribution to the sentiment score.</p>
+<p>Let’s use the AFINN lexicon for sentiment analysis, which gives a numeric sentiment score for each word:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AFINN &lt;-<span class="st"> </span>sentiments %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(lexicon ==<span class="st"> &quot;AFINN&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">select</span>(word, score)
@@ -408,6 +409,7 @@ AFINN</code></pre></div>
 ## 9   abhorrent    -3
 ## 10     abhors    -3
 ## # ... with 2,466 more rows</code></pre>
+<p>We can then examine the most frequent words that were preceded by “not” and were associated with a sentiment.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">not_words &lt;-<span class="st"> </span>bigrams_separated %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word1 ==<span class="st"> &quot;not&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">word2 =</span> <span class="st">&quot;word&quot;</span>)) %&gt;%
@@ -466,7 +468,10 @@ negated_words</code></pre></div>
 ## 9     no  harm    -2    22
 ## 10   not sorry    -1    21
 ## # ... with 521 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negated_words %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## TODO: make the ordering vary depending on each facet
+## (not easy to fix)
+
+negated_words %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> n *<span class="st"> </span>score) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word2 =</span> <span class="kw">reorder</span>(word2, contribution)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(word1) %&gt;%
@@ -476,16 +481,12 @@ negated_words</code></pre></div>
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>word1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Words preceded by negation&quot;</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>) +
-<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
 <p><img src="05-word-combinations_files/figure-html/negated_words_plot-1.png" width="864" /></p>
 </div>
-</div>
-<div id="visualizing-bigrams-as-a-network-with-the-ggraph-package" class="section level2">
-<h2><span class="header-section-number">5.2</span> Visualizing bigrams as a network with the ggraph package</h2>
-<p>TODO</p>
-<div id="creating-a-network-with-igraph" class="section level3">
-<h3><span class="header-section-number">5.2.1</span> Creating a network with igraph</h3>
-<p>Now that we have our TODO</p>
+<div id="visualizing-a-network-of-bigrams-with-igraph" class="section level3">
+<h3><span class="header-section-number">5.1.4</span> Visualizing a network of bigrams with igraph</h3>
+<p>We may be interested in .</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigram_counts &lt;-<span class="st"> </span>bigrams_filtered %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 
@@ -506,14 +507,16 @@ bigram_counts</code></pre></div>
 ## 9     miss   fairfax   109
 ## 10 colonel   brandon   108
 ## # ... with 33,411 more rows</code></pre>
-<p>Here we’ll be referring to a “graph” not in the sense of a visualization, but as a . A graph can be created from a tidy object because a graph has three variables:</p>
+<p>As one powerful visualization, we can arrange the words into a network, or “graph.” Here we’ll be referring to a “graph” not in the sense of a visualization, but as a combination of connected nodes. A graph can be created from a tidy object because a graph has three variables:</p>
 <ul>
 <li><strong>from</strong>: the node an edge is coming from</li>
 <li><strong>to</strong>: the node an edge is going towards</li>
 <li><strong>weight</strong> A numeric value associated with each edge</li>
 </ul>
+<p>The <a href="http://igraph.org/">igraph</a> package has many powerful functions for manipulating and analyzing networks. The most typical way to create an igraph object from tidy data is the <code>graph_from_data_frame()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(igraph)
 
+<span class="co"># filter for only relatively common combinations</span>
 bigram_graph &lt;-<span class="st"> </span>bigram_counts %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;<span class="st"> </span><span class="dv">20</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>()
@@ -531,50 +534,39 @@ bigram_graph</code></pre></div>
 ## [25] miss    -&gt;smith      miss    -&gt;crawford&#39;s henry   -&gt;crawford   miss    -&gt;elliot    
 ## [29] dr      -&gt;grant      miss    -&gt;bertram    sir     -&gt;thomas&#39;s   ten     -&gt;minutes   
 ## + ... omitted several edges</code></pre>
-<p>The igraph package has many powerful functions for manipulating and analyzing networks.</p>
-<p>TODO: examples of igraph package</p>
-</div>
-<div id="visualizing-a-network-with-ggraph" class="section level3">
-<h3><span class="header-section-number">5.2.2</span> Visualizing a network with ggraph</h3>
-<p>igraph has plotting functions built in, but they’re not what the package is designed to do. Many others have developed visualization methods for graphs. But we like the ggraph package, because it implements it in terms of the grammar of graphics.</p>
+<p>igraph has plotting functions built in, but they’re not what the package is designed to do. Many others have developed visualization methods for graphs. But we recommend the ggraph package, because it implements these visualizations in terms of the grammar of graphics, which we are already familiar with from ggplot2.</p>
+<p>We can convert an igraph object into a ggraph with the <code>ggraph</code> function, after which we add layers to it, much like layers are added in ggplot2. For example, here we add nodes, edges, and text to construct the basics of a graph:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggraph)
-
 <span class="kw">set.seed</span>(<span class="dv">2016</span>)
 
 <span class="kw">ggraph</span>(bigram_graph, <span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_edge_link</span>() +
-<span class="st">  </span><span class="kw">geom_node_point</span>()</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
-<p>This gives an idea by adding the three …</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
-
-<span class="kw">ggraph</span>(bigram_graph, <span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
-<span class="st">  </span><span class="kw">geom_edge_link</span>() +
 <span class="st">  </span><span class="kw">geom_node_point</span>() +
-<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
-<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
-<p>We can see the graph start to take shape.</p>
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)</code></pre></div>
+<p><img src="05-word-combinations_files/figure-html/bigram_ggraph_austen-1.png" width="672" /></p>
+<p>We now see more details of the network structure. For example, we see that salutations such as “miss”, “lady”, “sir”, “and”colonel&quot; form common centers of nodes, which are often followed by names. We also see pairs or triplets along the outside that form common short phrases (“half hour,” “ten minutes”, “thousand pounds”).</p>
+<p>As a few polishing operations:</p>
 <ul>
 <li>We add the <code>edge_alpha</code> aesthetic to the link layer to make links transparent based on how common or rare the bigram is</li>
-<li>We add directionality with an arrow</li>
-<li>We tinker with the options to the node layer to make the points more attractive (larger, and blue)</li>
+<li>We add directionality with an arrow, constructed using <code>grid::arrow()</code></li>
+<li>We tinker with the options to the node layer to make the nodes more attractive (larger, blue points)</li>
+<li>We add a theme that’s useful for plotting networks, <code>theme_void()</code></li>
 </ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
 
-a &lt;-<span class="st"> </span>grid::<span class="kw">arrow</span>(<span class="dt">type =</span> <span class="st">&quot;closed&quot;</span>, <span class="dt">length =</span> <span class="kw">unit</span>(.<span class="dv">1</span>, <span class="st">&quot;inches&quot;</span>))
+a &lt;-<span class="st"> </span>grid::<span class="kw">arrow</span>(<span class="dt">type =</span> <span class="st">&quot;closed&quot;</span>, <span class="dt">length =</span> <span class="kw">unit</span>(.<span class="dv">15</span>, <span class="st">&quot;inches&quot;</span>))
 
 <span class="kw">ggraph</span>(bigram_graph, <span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">arrow =</span> a) +
 <span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
-<p>It may take a little more experimentation with your plots to get these graphs to work, but in the end we can visualize a lot this way.</p>
+<p><img src="05-word-combinations_files/figure-html/bigram_ggraph_austen2-1.png" width="672" /></p>
+<p>It may take a some experimentation with ggraph to get your networks into a presentable format like this, but the network structure is useful and flexible way to visualize relational tidy data.</p>
 </div>
 <div id="visualizing-bigrams-in-other-texts" class="section level3">
-<h3><span class="header-section-number">5.2.3</span> Visualizing bigrams in other texts</h3>
-<p>We went to a good amount of work setting up this</p>
+<h3><span class="header-section-number">5.1.5</span> Visualizing bigrams in other texts</h3>
+<p>We went to a good amount of work in cleaning and visualizing bigrams on a text dataset. So let’s collect it into a function so that we can do it on other text datasets easily.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">count_bigrams &lt;-<span class="st"> </span>function(dataset) {
   dataset %&gt;%
 <span class="st">    </span><span class="kw">unnest_tokens</span>(bigram, text, <span class="dt">token =</span> <span class="st">&quot;ngrams&quot;</span>, <span class="dt">n =</span> <span class="dv">2</span>) %&gt;%
@@ -595,11 +587,13 @@ visualize_bigrams &lt;-<span class="st"> </span>function(bigrams) {
 <span class="st">    </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
 <span class="st">    </span><span class="kw">theme_void</span>()
 }</code></pre></div>
-<p>We could visualize pairs in the King James Bible:</p>
-<p>At that point, we could visualize bigrams in other works, such as the King James Version of the Bible:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gutenbergr)
+<p>At this point, we could visualize bigrams in other works, such as the King James Version of the Bible:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The King James version is book 10 on Project Gutenberg:</span>
+<span class="kw">library</span>(gutenbergr)
 kjv &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>(<span class="dv">10</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">kjv_bigrams &lt;-<span class="st"> </span>kjv %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
+
+kjv_bigrams &lt;-<span class="st"> </span>kjv %&gt;%
 <span class="st">  </span><span class="kw">count_bigrams</span>()
 
 kjv_bigrams</code></pre></div>
@@ -619,67 +613,86 @@ kjv_bigrams</code></pre></div>
 ## 9  jesus   christ   196
 ## 10 burnt offering   184
 ## # ... with 47,541 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">kjv_bigrams %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(n &gt;<span class="st"> </span><span class="dv">40</span>) %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># filter out rare combinations, as well as digits</span>
+<span class="kw">set.seed</span>(<span class="dv">2016</span>)
+
+kjv_bigrams %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(n &gt;<span class="st"> </span><span class="dv">40</span>,
+         !<span class="kw">str_detect</span>(word1, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d&quot;</span>),
+         !<span class="kw">str_detect</span>(word2, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">visualize_bigrams</span>()</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="05-word-combinations_files/figure-html/kjv_bigrams-1.png" width="672" /></p>
+<p>TODO: Description of bible network</p>
 </div>
 </div>
 <div id="counting-and-correlating-pairs-of-words-with-the-widyr-package" class="section level2">
-<h2><span class="header-section-number">5.3</span> Counting and correlating pairs of words with the widyr package</h2>
-<p>We’ve previously analyzed</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">austen_section_words &lt;-<span class="st"> </span><span class="kw">austen_books</span>() %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(book ==<span class="st"> &quot;Pride &amp; Prejudice&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">section =</span> <span class="kw">row_number</span>() %/%<span class="st"> </span><span class="dv">10</span>) %&gt;%
-<span class="st">  </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
-<span class="st">  </span><span class="kw">anti_join</span>(stop_words, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>)</code></pre></div>
+<h2><span class="header-section-number">5.2</span> Counting and correlating pairs of words with the widyr package</h2>
+<p>Tokenizing by n-gram is a useful way to explore pairs of adjacent words. However, we may also be interested in words that tend to co-occur within particular documents or particular chapters.</p>
+<p>Tidy data is a useful structure for comparing between variables or grouping by rows, but it can be challenging to compare between rows: for example, to count the number of times that two words appear within the same document.</p>
+<p>This is provided by the <a href="https://github.com/dgrtwo/widyr">widyr</a> package, which focuses on encapsulating the pattern of “widen data, perform an operation, then re-tidy data.”</p>
 <div class="figure">
 <img src="images/widyr.jpg" alt="The philosophy behind the widyr package, which can operations such as counting and correlating on pairs of values in a tidy dataset." />
 <p class="caption">The philosophy behind the widyr package, which can operations such as counting and correlating on pairs of values in a tidy dataset.</p>
 </div>
+<p>This makes certain operations for comparing words much easier. We’ll focus on a set of functions that make pairwise comparisons between groups of observations (for example, between documents, or sections).</p>
+<div id="counting-and-correlating-among-sections" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> Counting and correlating among sections</h3>
+<p>Consider the book “Pride and Prejudice” divided into 10-line sections, as we did for sentiment analysis in Chapter 3. We may be interested in what words tend to appear within the same section.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">austen_section_words &lt;-<span class="st"> </span><span class="kw">austen_books</span>() %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(book ==<span class="st"> &quot;Pride &amp; Prejudice&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">section =</span> <span class="kw">row_number</span>() %/%<span class="st"> </span><span class="dv">10</span>) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(section &gt;<span class="st"> </span><span class="dv">0</span>) %&gt;%
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(!word %in%<span class="st"> </span>stop_words$word)
+
+austen_section_words</code></pre></div>
+<pre><code>## # A tibble: 47,963 × 3
+##                 book section       word
+##               &lt;fctr&gt;   &lt;dbl&gt;      &lt;chr&gt;
+## 1  Pride &amp; Prejudice       1    chapter
+## 2  Pride &amp; Prejudice       1     thirty
+## 3  Pride &amp; Prejudice       1        ago
+## 4  Pride &amp; Prejudice       1       miss
+## 5  Pride &amp; Prejudice       1      maria
+## 6  Pride &amp; Prejudice       1       ward
+## 7  Pride &amp; Prejudice       1 huntingdon
+## 8  Pride &amp; Prejudice       1   thousand
+## 9  Pride &amp; Prejudice       1     pounds
+## 10 Pride &amp; Prejudice       1       luck
+## # ... with 47,953 more rows</code></pre>
 <p>One example of the widyr pattern is the <code>pairwise_count</code> function. The prefix “pairwise” means it will result in one row for each pair of words in the <code>word</code> variable. This lets us count common pairs of words co-appearing within the same section:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
 
+<span class="co"># count words co-occuring within sections</span>
 word_pairs &lt;-<span class="st"> </span>austen_section_words %&gt;%
 <span class="st">  </span><span class="kw">pairwise_count</span>(word, section, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 
 word_pairs</code></pre></div>
-<pre><code>## # A tibble: 796,030 × 3
-##        item1     item2     n
-##        &lt;chr&gt;     &lt;chr&gt; &lt;dbl&gt;
-## 1  elizabeth     darcy   144
-## 2      darcy elizabeth   144
-## 3  elizabeth      miss   110
-## 4       miss elizabeth   110
-## 5       jane elizabeth   106
-## 6  elizabeth      jane   106
-## 7      darcy      miss    92
-## 8       miss     darcy    92
-## 9    bingley elizabeth    91
-## 10 elizabeth   bingley    91
-## # ... with 796,020 more rows</code></pre>
+<pre><code>## # A tibble: 1,065,234 × 3
+##       item1    item2     n
+##       &lt;chr&gt;    &lt;chr&gt; &lt;dbl&gt;
+## 1    thomas      sir   239
+## 2       sir   thomas   239
+## 3  crawford     miss   224
+## 4      miss crawford   224
+## 5  crawford    fanny   182
+## 6     fanny crawford   182
+## 7    edmund    fanny   155
+## 8     fanny   edmund   155
+## 9     fanny     miss   144
+## 10     miss    fanny   144
+## # ... with 1,065,224 more rows</code></pre>
 <p>For example, we discover that the most common pair of words in a section is “Elizabeth” and “Darcy” (the two main characters).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_pairs %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(item1 ==<span class="st"> &quot;darcy&quot;</span>)</code></pre></div>
-<pre><code>## # A tibble: 2,930 × 3
-##    item1     item2     n
-##    &lt;chr&gt;     &lt;chr&gt; &lt;dbl&gt;
-## 1  darcy elizabeth   144
-## 2  darcy      miss    92
-## 3  darcy   bingley    86
-## 4  darcy      jane    46
-## 5  darcy    sister    45
-## 6  darcy    bennet    45
-## 7  darcy      time    41
-## 8  darcy      lady    38
-## 9  darcy   wickham    37
-## 10 darcy    friend    37
-## # ... with 2,920 more rows</code></pre>
+<pre><code>## # A tibble: 0 × 3
+## # ... with 3 variables: item1 &lt;chr&gt;, item2 &lt;chr&gt;, n &lt;dbl&gt;</code></pre>
+</div>
 <div id="pairwise-correlation" class="section level3">
-<h3><span class="header-section-number">5.3.1</span> Pairwise correlation</h3>
+<h3><span class="header-section-number">5.2.2</span> Pairwise correlation</h3>
 <p>Pairs like “Elizabeth” and “Darcy” are the most common co-occurring words, but that’s not particularly meaningful since <strong>they’re also the most common words.</strong> We instead want to examine <em>correlation</em> among words, which is how often they appear together relative to how often they appear separately.</p>
 <p>TODO: formula for Pearson correlation, explanation of phi coefficient</p>
-<p>The <code>pairwise_cor()</code> function in widyr lets us perform a Pearson correlation across words.</p>
+<p>The <code>pairwise_cor()</code> function in widyr lets us perform a Pearson correlation between words based on how often they appear in the same section.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
 
 <span class="co"># We need to filter for at least relatively common words first</span>
@@ -689,53 +702,50 @@ word_cors &lt;-<span class="st"> </span>austen_section_words %&gt;%
 <span class="st">  </span><span class="kw">pairwise_cor</span>(word, section, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 
 word_cors</code></pre></div>
-<pre><code>## # A tibble: 154,842 × 3
-##        item1     item2 correlation
-##        &lt;chr&gt;     &lt;chr&gt;       &lt;dbl&gt;
-## 1         de    bourgh   0.9508510
-## 2     bourgh        de   0.9508510
-## 3   thousand    pounds   0.7005850
-## 4     pounds  thousand   0.7005850
-## 5        sir   william   0.6644804
-## 6    william       sir   0.6644804
-## 7       lady catherine   0.6633289
-## 8  catherine      lady   0.6633289
-## 9    colonel   forster   0.6221042
-## 10   forster   colonel   0.6221042
-## # ... with 154,832 more rows</code></pre>
-<p>We could find the words most correlated with Elizabeth:</p>
+<pre><code>## # A tibble: 212,982 × 3
+##       item1    item2 correlation
+##       &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;
+## 1    thomas      sir   0.8892807
+## 2       sir   thomas   0.8892807
+## 3      lady  bertram   0.5388732
+## 4   bertram     lady   0.5388732
+## 5     grant       dr   0.5379974
+## 6        dr    grant   0.5379974
+## 7  crawford     miss   0.4733778
+## 8      miss crawford   0.4733778
+## 9     julia    maria   0.3509280
+## 10    maria    julia   0.3509280
+## # ... with 212,972 more rows</code></pre>
+<p>For instance, we could find the words most correlated with a word like “pounds” by filtering:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_cors %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(item1 ==<span class="st"> &quot;darcy&quot;</span>)</code></pre></div>
-<pre><code>## # A tibble: 393 × 3
-##    item1       item2 correlation
-##    &lt;chr&gt;       &lt;chr&gt;       &lt;dbl&gt;
-## 1  darcy        miss  0.17989385
-## 2  darcy fitzwilliam  0.17899838
-## 3  darcy     bingley  0.17878908
-## 4  darcy       hurst  0.10658328
-## 5  darcy   pemberley  0.09581220
-## 6  darcy      friend  0.09281731
-## 7  darcy      manner  0.09143830
-## 8  darcy       eliza  0.08663187
-## 9  darcy       proud  0.07751503
-## 10 darcy        eyes  0.07700740
-## # ... with 383 more rows</code></pre>
-</div>
-<div id="visualizing-word-correlations" class="section level3">
-<h3><span class="header-section-number">5.3.2</span> Visualizing word correlations</h3>
-<p>Just as we used ggraph to visualize bigrams, we can use it to visualize correlations and clusters among words that we’ve found through the widyr package.</p>
-<p>This graph is an early placeholder, needs to be adjusted:</p>
+<span class="st">  </span><span class="kw">filter</span>(item1 ==<span class="st"> &quot;pounds&quot;</span>)</code></pre></div>
+<pre><code>## # A tibble: 0 × 3
+## # ... with 3 variables: item1 &lt;chr&gt;, item2 &lt;chr&gt;, correlation &lt;dbl&gt;</code></pre>
+<p>This would let us examine the most-correlated words with any selection of words:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_cors %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(item1 %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elizabeth&quot;</span>, <span class="st">&quot;pounds&quot;</span>, <span class="st">&quot;married&quot;</span>, <span class="st">&quot;pride&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(item1) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">6</span>) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">item2 =</span> <span class="kw">reorder</span>(item2, -correlation)) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(item2, correlation)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>item1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>))</code></pre></div>
+<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-12-1.png" width="768" /></p>
+<p>Just as we used ggraph to visualize bigrams, we can use it to visualize the correlations and clusters of words that were found by the widyr package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
+
+word_cors %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(correlation &gt;<span class="st"> </span>.<span class="dv">15</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> correlation), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
-<p>Note that unlike the bigram analysis, the relationship here aren’t directional.</p>
-<p>This kind of correlation network is a very useful and flexible visualization, and we’ll examine it further in later chapters.</p>
+<p><img src="05-word-combinations_files/figure-html/word_cors_network-1.png" width="672" /></p>
+<p>Note that unlike the bigram analysis, the relationship here are symmetric, rather than directional. We can also see that while pairings of names and titles that dominated bigram pairings are common, such as “colonel/fitzwilliam”, we can also see pairings of words that appear close to each other, such as “walk” and “park”.</p>
+<p>These network visualizations are a flexible tool for exploring relationships, and will play an important role in the case studies in later chapters.</p>
 
 </div>
 </div>
