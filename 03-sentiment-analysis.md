@@ -36,7 +36,72 @@ The three lexicons are
 * `bing` from [Bing Liu and collaborators](https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html), and
 * `nrc` from [Saif Mohammad and Peter Turney](http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm).
 
-All three of these lexicons are based on unigrams (or single words). These lexicons contain many English words and the words are assigned scores for positive/negative sentiment, and also possibly emotions like joy, anger, sadness, and so forth. The `nrc` lexicon categorizes words in a binary fashion ("yes"/"no") into categories of positive, negative, anger, anticipation, disgust, fear, joy, sadness, surprise, and trust. The `bing` lexicon categorizes words in a binary fashion into positive and negative categories. The `AFINN` lexicon assigns words with a score that runs between -5 and 5, with negative scores indicating negative sentiment and positive scores indicating positive sentiment. All of this information is tabulated in the `sentiments` dataset.
+All three of these lexicons are based on unigrams (or single words). These lexicons contain many English words and the words are assigned scores for positive/negative sentiment, and also possibly emotions like joy, anger, sadness, and so forth. The `nrc` lexicon categorizes words in a binary fashion ("yes"/"no") into categories of positive, negative, anger, anticipation, disgust, fear, joy, sadness, surprise, and trust. The `bing` lexicon categorizes words in a binary fashion into positive and negative categories. The `AFINN` lexicon assigns words with a score that runs between -5 and 5, with negative scores indicating negative sentiment and positive scores indicating positive sentiment. All of this information is tabulated in the `sentiments` dataset, and tidytext provides a function `get_sentiments()` to get specific sentiment lexicons without the columns that are not used in that lexicon.
+
+
+```r
+get_sentiments("afinn")
+```
+
+```
+## # A tibble: 2,476 × 2
+##          word score
+##         <chr> <int>
+## 1     abandon    -2
+## 2   abandoned    -2
+## 3    abandons    -2
+## 4    abducted    -2
+## 5   abduction    -2
+## 6  abductions    -2
+## 7       abhor    -3
+## 8    abhorred    -3
+## 9   abhorrent    -3
+## 10     abhors    -3
+## # ... with 2,466 more rows
+```
+
+```r
+get_sentiments("bing")
+```
+
+```
+## # A tibble: 6,788 × 2
+##           word sentiment
+##          <chr>     <chr>
+## 1      2-faced  negative
+## 2      2-faces  negative
+## 3           a+  positive
+## 4     abnormal  negative
+## 5      abolish  negative
+## 6   abominable  negative
+## 7   abominably  negative
+## 8    abominate  negative
+## 9  abomination  negative
+## 10       abort  negative
+## # ... with 6,778 more rows
+```
+
+```r
+get_sentiments("nrc")
+```
+
+```
+## # A tibble: 13,901 × 2
+##           word sentiment
+##          <chr>     <chr>
+## 1       abacus     trust
+## 2      abandon      fear
+## 3      abandon  negative
+## 4      abandon   sadness
+## 5    abandoned     anger
+## 6    abandoned      fear
+## 7    abandoned  negative
+## 8    abandoned   sadness
+## 9  abandonment     anger
+## 10 abandonment      fear
+## # ... with 13,891 more rows
+```
+
 
 These dictionary-based methods find the total sentiment of a piece of text by adding up the individual sentiment scores for each word in the text. Not every English word is in the lexicons because many English words are pretty neutral. It is important to keep in mind that these methods do not take into account qualifiers before a word, such as in "no good" or "not true"; a lexicon-based method like this is based on unigrams only. For many kinds of text (like the narrative examples below), there are not sustained sections of sarcasm or negated text, so this is not an important effect. 
 
@@ -63,8 +128,8 @@ tidy_books <- austen_books() %>%
 
 
 ```r
-nrcjoy <- sentiments %>%
-  filter(lexicon == "nrc", sentiment == "joy")
+nrcjoy <- get_sentiments("nrc") %>% 
+  filter(sentiment == "joy")
 
 tidy_books %>%
   filter(book == "Emma") %>%
@@ -94,12 +159,9 @@ Or instead we could examine how sentiment changes during each novel. Let's find 
 
 ```r
 library(tidyr)
-bing <- sentiments %>%
-  filter(lexicon == "bing") %>%
-  select(-score)
 
 janeaustensentiment <- tidy_books %>%
-  inner_join(bing) %>%
+  inner_join(get_sentiments("bing")) %>%
   count(book, index = linenumber %/% 80, sentiment) %>%
   spread(sentiment, n, fill = 0) %>%
   mutate(sentiment = positive - negative)
@@ -129,7 +191,7 @@ One advantage of having the data frame with both sentiment and word is that we c
 
 ```r
 bing_word_counts <- tidy_books %>%
-  inner_join(bing) %>%
+  inner_join(get_sentiments("bing")) %>%
   count(word, sentiment, sort = TRUE) %>%
   ungroup()
 
@@ -197,7 +259,7 @@ In other functions, such as `comparison.cloud`, you may need to turn the data fr
 library(reshape2)
 
 tidy_books %>%
-  inner_join(bing) %>%
+  inner_join(get_sentiments("bing")) %>%
   count(word, sentiment, sort = TRUE) %>%
   acast(word ~ sentiment, value.var = "n", fill = 0) %>%
   comparison.cloud(colors = c("#F8766D", "#00BFC4"),
@@ -266,8 +328,8 @@ Near the beginning of this vignette, we used a similar regex to find where all t
 
 
 ```r
-bingnegative <- sentiments %>%
-  filter(lexicon == "bing", sentiment == "negative")
+bingnegative <- get_sentiments("bing") %>% 
+  filter(sentiment == "negative")
 
 wordcounts <- tidy_books %>%
   group_by(book, chapter) %>%

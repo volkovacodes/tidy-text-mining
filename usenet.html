@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-10-24">
+<meta name="date" content="2016-10-25">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -335,8 +335,7 @@ tf_idf %&gt;%
 <div id="sentiment-analysis" class="section level2">
 <h2><span class="header-section-number">10.3</span> Sentiment analysis</h2>
 <p>We can use the sentiment analysis techniques we explored in <a href="sentiment.html#sentiment">Chapter 3</a> to examine how positive and negative words were used in these Usenet posts. Which boards used the most positive and negative words?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AFINN &lt;-<span class="st"> </span>sentiments %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(lexicon ==<span class="st"> &quot;AFINN&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AFINN &lt;-<span class="st"> </span><span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>)
 
 word_board_sentiments &lt;-<span class="st"> </span>words_by_board %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>)

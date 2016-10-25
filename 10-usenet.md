@@ -198,8 +198,7 @@ We can use the sentiment analysis techniques we explored in [Chapter 3](#sentime
 
 
 ```r
-AFINN <- sentiments %>%
-  filter(lexicon == "AFINN")
+AFINN <- get_sentiments("afinn")
 
 word_board_sentiments <- words_by_board %>%
   inner_join(AFINN, by = "word")

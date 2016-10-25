@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-10-24">
+<meta name="date" content="2016-10-25">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -251,12 +251,8 @@ ap_td</code></pre></div>
 ## # ... with 302,021 more rows</code></pre>
 <p>Notice that we now have a tidy three-column <code>tbl_df</code>, with variables <code>document</code>, <code>term</code>, and <code>count</code>. This tidying operation is similar to the <code>melt</code> function from the reshape2 package <span class="citation">(Wickham <a href="#ref-R-reshape2">2007</a>)</span> for non-sparse matrices.</p>
 <p>As we’ve seen in chapters 2-5, this form is convenient for analysis with the dplyr and tidytext packages. For example, you can perform sentiment analysis on these newspaper articles.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bing &lt;-<span class="st"> </span>sentiments %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(lexicon ==<span class="st"> &quot;bing&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">select</span>(word, sentiment)
-
-ap_sentiments &lt;-<span class="st"> </span>ap_td %&gt;%
-<span class="st">  </span><span class="kw">inner_join</span>(bing, <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">term =</span> <span class="st">&quot;word&quot;</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_sentiments &lt;-<span class="st"> </span>ap_td %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>), <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">term =</span> <span class="st">&quot;word&quot;</span>))
 
 ap_sentiments</code></pre></div>
 <pre><code>## # A tibble: 30,094 × 4

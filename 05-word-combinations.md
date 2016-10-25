@@ -266,9 +266,7 @@ Let's use the AFINN lexicon for sentiment analysis, which gives a numeric sentim
 
 
 ```r
-AFINN <- sentiments %>%
-  filter(lexicon == "AFINN") %>%
-  select(word, score)
+AFINN <- get_sentiments("afinn")
 
 AFINN
 ```

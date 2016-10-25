@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-10-24">
+<meta name="date" content="2016-10-25">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -226,7 +226,52 @@ sentiments</code></pre></div>
 <li><code>bing</code> from <a href="https://www.cs.uic.edu/~liub/FBS/sentiment-analysis.html">Bing Liu and collaborators</a>, and</li>
 <li><code>nrc</code> from <a href="http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htm">Saif Mohammad and Peter Turney</a>.</li>
 </ul>
-<p>All three of these lexicons are based on unigrams (or single words). These lexicons contain many English words and the words are assigned scores for positive/negative sentiment, and also possibly emotions like joy, anger, sadness, and so forth. The <code>nrc</code> lexicon categorizes words in a binary fashion (“yes”/“no”) into categories of positive, negative, anger, anticipation, disgust, fear, joy, sadness, surprise, and trust. The <code>bing</code> lexicon categorizes words in a binary fashion into positive and negative categories. The <code>AFINN</code> lexicon assigns words with a score that runs between -5 and 5, with negative scores indicating negative sentiment and positive scores indicating positive sentiment. All of this information is tabulated in the <code>sentiments</code> dataset.</p>
+<p>All three of these lexicons are based on unigrams (or single words). These lexicons contain many English words and the words are assigned scores for positive/negative sentiment, and also possibly emotions like joy, anger, sadness, and so forth. The <code>nrc</code> lexicon categorizes words in a binary fashion (“yes”/“no”) into categories of positive, negative, anger, anticipation, disgust, fear, joy, sadness, surprise, and trust. The <code>bing</code> lexicon categorizes words in a binary fashion into positive and negative categories. The <code>AFINN</code> lexicon assigns words with a score that runs between -5 and 5, with negative scores indicating negative sentiment and positive scores indicating positive sentiment. All of this information is tabulated in the <code>sentiments</code> dataset, and tidytext provides a function <code>get_sentiments()</code> to get specific sentiment lexicons without the columns that are not used in that lexicon.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>)</code></pre></div>
+<pre><code>## # A tibble: 2,476 × 2
+##          word score
+##         &lt;chr&gt; &lt;int&gt;
+## 1     abandon    -2
+## 2   abandoned    -2
+## 3    abandons    -2
+## 4    abducted    -2
+## 5   abduction    -2
+## 6  abductions    -2
+## 7       abhor    -3
+## 8    abhorred    -3
+## 9   abhorrent    -3
+## 10     abhors    -3
+## # ... with 2,466 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>)</code></pre></div>
+<pre><code>## # A tibble: 6,788 × 2
+##           word sentiment
+##          &lt;chr&gt;     &lt;chr&gt;
+## 1      2-faced  negative
+## 2      2-faces  negative
+## 3           a+  positive
+## 4     abnormal  negative
+## 5      abolish  negative
+## 6   abominable  negative
+## 7   abominably  negative
+## 8    abominate  negative
+## 9  abomination  negative
+## 10       abort  negative
+## # ... with 6,778 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_sentiments</span>(<span class="st">&quot;nrc&quot;</span>)</code></pre></div>
+<pre><code>## # A tibble: 13,901 × 2
+##           word sentiment
+##          &lt;chr&gt;     &lt;chr&gt;
+## 1       abacus     trust
+## 2      abandon      fear
+## 3      abandon  negative
+## 4      abandon   sadness
+## 5    abandoned     anger
+## 6    abandoned      fear
+## 7    abandoned  negative
+## 8    abandoned   sadness
+## 9  abandonment     anger
+## 10 abandonment      fear
+## # ... with 13,891 more rows</code></pre>
 <p>These dictionary-based methods find the total sentiment of a piece of text by adding up the individual sentiment scores for each word in the text. Not every English word is in the lexicons because many English words are pretty neutral. It is important to keep in mind that these methods do not take into account qualifiers before a word, such as in “no good” or “not true”; a lexicon-based method like this is based on unigrams only. For many kinds of text (like the narrative examples below), there are not sustained sections of sarcasm or negated text, so this is not an important effect.</p>
 <p>One last caveat is that the size of the chunk of text that we add up unigram sentiment scores for can have an important effect for an analysis. A paragraph-sized text can often have positive and negative sentiment averaged out to about zero, while sentence-sized text often works better.</p>
 </div>
@@ -244,8 +289,8 @@ tidy_books &lt;-<span class="st"> </span><span class="kw">austen_books</span>() 
                                                  <span class="dt">ignore_case =</span> <span class="ot">TRUE</span>)))) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nrcjoy &lt;-<span class="st"> </span>sentiments %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(lexicon ==<span class="st"> &quot;nrc&quot;</span>, sentiment ==<span class="st"> &quot;joy&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nrcjoy &lt;-<span class="st"> </span><span class="kw">get_sentiments</span>(<span class="st">&quot;nrc&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(sentiment ==<span class="st"> &quot;joy&quot;</span>)
 
 tidy_books %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(book ==<span class="st"> &quot;Emma&quot;</span>) %&gt;%
@@ -267,12 +312,9 @@ tidy_books %&gt;%
 ## # ... with 293 more rows</code></pre>
 <p>Or instead we could examine how sentiment changes during each novel. Let’s find a sentiment score for each word using the Bing lexicon, then count the number of positive and negative words in defined sections of each novel.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
-bing &lt;-<span class="st"> </span>sentiments %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(lexicon ==<span class="st"> &quot;bing&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">select</span>(-score)
 
 janeaustensentiment &lt;-<span class="st"> </span>tidy_books %&gt;%
-<span class="st">  </span><span class="kw">inner_join</span>(bing) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(book, <span class="dt">index =</span> linenumber %/%<span class="st"> </span><span class="dv">80</span>, sentiment) %&gt;%
 <span class="st">  </span><span class="kw">spread</span>(sentiment, n, <span class="dt">fill =</span> <span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentiment =</span> positive -<span class="st"> </span>negative)</code></pre></div>
@@ -290,7 +332,7 @@ janeaustensentiment &lt;-<span class="st"> </span>tidy_books %&gt;%
 <h2><span class="header-section-number">3.3</span> Most common positive and negative words</h2>
 <p>One advantage of having the data frame with both sentiment and word is that we can analyze word counts that contribute to each sentiment.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bing_word_counts &lt;-<span class="st"> </span>tidy_books %&gt;%
-<span class="st">  </span><span class="kw">inner_join</span>(bing) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, sentiment, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()
 
@@ -337,7 +379,7 @@ tidy_books %&gt;%
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(reshape2)
 
 tidy_books %&gt;%
-<span class="st">  </span><span class="kw">inner_join</span>(bing) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, sentiment, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">acast</span>(word ~<span class="st"> </span>sentiment, <span class="dt">value.var =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">fill =</span> <span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">comparison.cloud</span>(<span class="dt">colors =</span> <span class="kw">c</span>(<span class="st">&quot;#F8766D&quot;</span>, <span class="st">&quot;#00BFC4&quot;</span>),
@@ -378,8 +420,8 @@ austen_chapters %&gt;%<span class="st"> </span>
 ## 6          Persuasion       25</code></pre>
 <p>We have recovered the correct number of chapters in each novel (plus an “extra” row for each novel title). In this data frame, each row corresponds to one chapter.</p>
 <p>Near the beginning of this vignette, we used a similar regex to find where all the chapters were in Austen’s novels for a tidy data frame organized by one-word-per-row. We can use tidy text analysis to ask questions such as what are the most negative chapters in each of Jane Austen’s novels? First, let’s get the list of negative words from the Bing lexicon. Second, let’s make a dataframe of how many words are in each chapter so we can normalize for the length of chapters. Then, let’s find the number of negative words in each chapter and divide by the total words in each chapter. Which chapter has the highest proportion of negative words?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bingnegative &lt;-<span class="st"> </span>sentiments %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(lexicon ==<span class="st"> &quot;bing&quot;</span>, sentiment ==<span class="st"> &quot;negative&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bingnegative &lt;-<span class="st"> </span><span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(sentiment ==<span class="st"> &quot;negative&quot;</span>)
 
 wordcounts &lt;-<span class="st"> </span>tidy_books %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(book, chapter) %&gt;%

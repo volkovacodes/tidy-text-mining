@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-10-24">
+<meta name="date" content="2016-10-25">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -390,9 +390,7 @@ bigram_tf_idf</code></pre></div>
 ## # ... with 1,236 more rows</code></pre>
 <p>By performing sentiment analysis on the bigram data, we can examine how often sentiment-associated words are preceded by “not” or other negating words. We could use this to ignore or even reverse their contribution to the sentiment score.</p>
 <p>Let’s use the AFINN lexicon for sentiment analysis, which gives a numeric sentiment score for each word:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AFINN &lt;-<span class="st"> </span>sentiments %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(lexicon ==<span class="st"> &quot;AFINN&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">select</span>(word, score)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AFINN &lt;-<span class="st"> </span><span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>)
 
 AFINN</code></pre></div>
 <pre><code>## # A tibble: 2,476 × 2

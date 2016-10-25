@@ -83,12 +83,8 @@ As we've seen in chapters 2-5, this form is convenient for analysis with the dpl
 
 
 ```r
-bing <- sentiments %>%
-  filter(lexicon == "bing") %>%
-  select(word, sentiment)
-
 ap_sentiments <- ap_td %>%
-  inner_join(bing, by = c(term = "word"))
+  inner_join(get_sentiments("bing"), by = c(term = "word"))
 
 ap_sentiments
 ```
