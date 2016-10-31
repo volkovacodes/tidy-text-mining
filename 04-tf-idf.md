@@ -249,23 +249,23 @@ Very interesting indeed. One thing we see here is "gif" in the Einstein text?!
 
 
 ```r
-grep("gif", physics$text, value = TRUE)[1:10]
+grep("eq\\.", physics$text, value = TRUE)[1:10]
 ```
 
 ```
-##  [1] "                       Fig. 01: file fig01.gif"
-##  [2] "                         eq. 1: file eq01.gif" 
-##  [3] "                         eq. 2: file eq02.gif" 
-##  [4] "                         eq. 3: file eq03.gif" 
-##  [5] "                         eq. 4: file eq04.gif" 
-##  [6] "                       eq. 05a: file eq05a.gif"
-##  [7] "                       eq. 05b: file eq05b.gif"
-##  [8] "                        eq. 07: file eq07.gif" 
-##  [9] "                        eq. 08: file eq08.gif" 
-## [10] "                        eq. 09: file eq09.gif"
+##  [1] "                         eq. 1: file eq01.gif"                  
+##  [2] "                         eq. 2: file eq02.gif"                  
+##  [3] "                         eq. 3: file eq03.gif"                  
+##  [4] "                         eq. 4: file eq04.gif"                  
+##  [5] "                       eq. 05a: file eq05a.gif"                 
+##  [6] "                       eq. 05b: file eq05b.gif"                 
+##  [7] "the distance between the points being eq. 06 ."                 
+##  [8] "direction of its length with a velocity v is eq. 06 of a metre."
+##  [9] "velocity v=c we should have eq. 06a ,"                          
+## [10] "the rod as judged from K1 would have been eq. 06 ;"
 ```
 
-Some cleaning up of the text might be in order. The same thing is true for "eq", obviously here. "K1" is the name of a coordinate system for Einstein:
+Some cleaning up of the text might be in order. "K1" is the name of a coordinate system for Einstein:
 
 
 ```r
@@ -276,7 +276,9 @@ grep("K1", physics$text, value = TRUE)[1]
 ## [1] "to a second co-ordinate system K1 provided that the latter is"
 ```
 
-Also notice that in this line we have "co-ordinate", which explains why there are separate "co" and "ordinate" items in the high tf-idf words for the Einstein text. "AB", "RC", and so forth are names of rays, circles, angles, and so forth for Huygens.
+Maybe it makes sense to keep this one. Also notice that in this line we have "co-ordinate", which explains why there are separate "co" and "ordinate" items in the high tf-idf words for the Einstein text.
+
+"AB", "RC", and so forth are names of rays, circles, angles, and so forth for Huygens.
 
 
 ```r
@@ -291,8 +293,8 @@ Let's remove some of these less meaningful words to make a better, more meaningf
 
 
 ```r
-mystopwords <- data_frame(word = c("gif", "eq", "co", "rc", "ac", "ak", "bn", 
-                                   "fig", "file", "cg", "cb"))
+mystopwords <- data_frame(word = c("eq", "co", "rc", "ac", "ak", "bn", 
+                                   "fig", "file", "cg", "cb", "cm"))
 physics_words <- anti_join(physics_words, mystopwords, by = "word")
 plot_physics <- physics_words %>%
   arrange(desc(tf_idf)) %>%

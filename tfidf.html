@@ -25,7 +25,7 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-10-30">
+<meta name="date" content="2016-10-31">
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -373,26 +373,27 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="768" /></p>
 <p>Very interesting indeed. One thing we see here is “gif” in the Einstein text?!</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;gif&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>:<span class="dv">10</span>]</code></pre></div>
-<pre><code>##  [1] &quot;                       Fig. 01: file fig01.gif&quot;
-##  [2] &quot;                         eq. 1: file eq01.gif&quot; 
-##  [3] &quot;                         eq. 2: file eq02.gif&quot; 
-##  [4] &quot;                         eq. 3: file eq03.gif&quot; 
-##  [5] &quot;                         eq. 4: file eq04.gif&quot; 
-##  [6] &quot;                       eq. 05a: file eq05a.gif&quot;
-##  [7] &quot;                       eq. 05b: file eq05b.gif&quot;
-##  [8] &quot;                        eq. 07: file eq07.gif&quot; 
-##  [9] &quot;                        eq. 08: file eq08.gif&quot; 
-## [10] &quot;                        eq. 09: file eq09.gif&quot;</code></pre>
-<p>Some cleaning up of the text might be in order. The same thing is true for “eq”, obviously here. “K1” is the name of a coordinate system for Einstein:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;eq</span><span class="ch">\\</span><span class="st">.&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>:<span class="dv">10</span>]</code></pre></div>
+<pre><code>##  [1] &quot;                         eq. 1: file eq01.gif&quot;                  
+##  [2] &quot;                         eq. 2: file eq02.gif&quot;                  
+##  [3] &quot;                         eq. 3: file eq03.gif&quot;                  
+##  [4] &quot;                         eq. 4: file eq04.gif&quot;                  
+##  [5] &quot;                       eq. 05a: file eq05a.gif&quot;                 
+##  [6] &quot;                       eq. 05b: file eq05b.gif&quot;                 
+##  [7] &quot;the distance between the points being eq. 06 .&quot;                 
+##  [8] &quot;direction of its length with a velocity v is eq. 06 of a metre.&quot;
+##  [9] &quot;velocity v=c we should have eq. 06a ,&quot;                          
+## [10] &quot;the rod as judged from K1 would have been eq. 06 ;&quot;</code></pre>
+<p>Some cleaning up of the text might be in order. “K1” is the name of a coordinate system for Einstein:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;K1&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>]</code></pre></div>
 <pre><code>## [1] &quot;to a second co-ordinate system K1 provided that the latter is&quot;</code></pre>
-<p>Also notice that in this line we have “co-ordinate”, which explains why there are separate “co” and “ordinate” items in the high tf-idf words for the Einstein text. “AB”, “RC”, and so forth are names of rays, circles, angles, and so forth for Huygens.</p>
+<p>Maybe it makes sense to keep this one. Also notice that in this line we have “co-ordinate”, which explains why there are separate “co” and “ordinate” items in the high tf-idf words for the Einstein text.</p>
+<p>“AB”, “RC”, and so forth are names of rays, circles, angles, and so forth for Huygens.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;AK&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>]</code></pre></div>
 <pre><code>## [1] &quot;Now let us assume that the ray has come from A to C along AK, KC; the&quot;</code></pre>
 <p>Let’s remove some of these less meaningful words to make a better, more meaningful plot. Notice that we make a custom list of stop words and use <code>anti_join</code> to remove them.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mystopwords &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;gif&quot;</span>, <span class="st">&quot;eq&quot;</span>, <span class="st">&quot;co&quot;</span>, <span class="st">&quot;rc&quot;</span>, <span class="st">&quot;ac&quot;</span>, <span class="st">&quot;ak&quot;</span>, <span class="st">&quot;bn&quot;</span>, 
-                                   <span class="st">&quot;fig&quot;</span>, <span class="st">&quot;file&quot;</span>, <span class="st">&quot;cg&quot;</span>, <span class="st">&quot;cb&quot;</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mystopwords &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;eq&quot;</span>, <span class="st">&quot;co&quot;</span>, <span class="st">&quot;rc&quot;</span>, <span class="st">&quot;ac&quot;</span>, <span class="st">&quot;ak&quot;</span>, <span class="st">&quot;bn&quot;</span>, 
+                                   <span class="st">&quot;fig&quot;</span>, <span class="st">&quot;file&quot;</span>, <span class="st">&quot;cg&quot;</span>, <span class="st">&quot;cb&quot;</span>, <span class="st">&quot;cm&quot;</span>))
 physics_words &lt;-<span class="st"> </span><span class="kw">anti_join</span>(physics_words, mystopwords, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>)
 plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf)) %&gt;%
