@@ -8,7 +8,7 @@
   <title>Tidy Text Mining with R</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
-  <meta name="generator" content="bookdown 0.1 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.2 and GitBook 2.6.7">
 
   <meta property="og:title" content="Tidy Text Mining with R" />
   <meta property="og:type" content="book" />
@@ -25,13 +25,8 @@
 
 <meta name="author" content="Julia Silge and David Robinson">
 
-<meta name="date" content="2016-11-04">
 
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-});
-</script>
+<meta name="date" content="2016-11-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -216,7 +211,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">9.1</span> Getting the metadata</h2>
 <p>First, let’s download the JSON file and take a look at the names.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(jsonlite)
-
 metadata &lt;-<span class="st"> </span><span class="kw">fromJSON</span>(<span class="st">&quot;https://data.nasa.gov/data.json&quot;</span>)
 <span class="kw">names</span>(metadata$dataset)</code></pre></div>
 <pre><code>##  [1] &quot;_id&quot;                &quot;@type&quot;              &quot;accessLevel&quot;        &quot;accrualPeriodicity&quot;
@@ -290,13 +284,13 @@ nasa_desc</code></pre></div>
 <span class="st">  </span><span class="kw">select</span>(desc) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">5</span>)</code></pre></div>
 <pre><code>## # A tibble: 5 × 1
-##                                                                                                    desc
-##                                                                                                   &lt;chr&gt;
-## 1  In a large network of computers, wireless sensors, or mobile devices, each of the components (hence,
-## 2  LAT solar gamma-ray flux &gt; 100 MeV, one point per solar exposure (i.e. average of the 20-40 minutes 
-## 3  ML1OA is the EOS Aura Microwave Limb Sounder (MLS) product containing the level 1 orbit attitude and
-## 4  This data set reports the oxygen isotope signatures of water extracted from plant tissue (xylem from
-## 5 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A</code></pre>
+##                                                                                                   desc
+##                                                                                                  &lt;chr&gt;
+## 1 The Lightning Imaging Sensor (LIS) Science Computing Facility (SCF) generates a cloud-to-ground ligh
+## 2 Conceptual design tools for rotorcraft are used to size vehicles for intended flight operations, as 
+## 3 The complexity and interdependence of operations on the airport surface motivate the need for a comp
+## 4 This product is similar to AIRX2SUP. However, it contains science retrievals that use the Humidity S
+## 5 NRC&#39;s Committee on Government Data Centers made a set of technology recommendations for data centers</code></pre>
 <p>Now we can do the keywords, which must be unnested since they are in a list-column.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
@@ -540,7 +534,7 @@ gitbook.start({
 },
 "edit": {
 "link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/09-nasa-metadata.Rmd",
-"text": null
+"text": "Edit"
 },
 "download": null,
 "toc": {

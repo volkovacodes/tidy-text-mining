@@ -11,10 +11,10 @@ First, let's download the JSON file and take a look at the names.
 
 ```r
 library(jsonlite)
-
 metadata <- fromJSON("https://data.nasa.gov/data.json")
 names(metadata$dataset)
 ```
+
 
 ```
 ##  [1] "_id"                "@type"              "accessLevel"        "accrualPeriodicity"
@@ -138,13 +138,13 @@ nasa_desc %>%
 
 ```
 ## # A tibble: 5 × 1
-##                                                                                                    desc
-##                                                                                                   <chr>
-## 1  In a large network of computers, wireless sensors, or mobile devices, each of the components (hence,
-## 2  LAT solar gamma-ray flux > 100 MeV, one point per solar exposure (i.e. average of the 20-40 minutes 
-## 3  ML1OA is the EOS Aura Microwave Limb Sounder (MLS) product containing the level 1 orbit attitude and
-## 4  This data set reports the oxygen isotope signatures of water extracted from plant tissue (xylem from
-## 5 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+##                                                                                                   desc
+##                                                                                                  <chr>
+## 1 The Lightning Imaging Sensor (LIS) Science Computing Facility (SCF) generates a cloud-to-ground ligh
+## 2 Conceptual design tools for rotorcraft are used to size vehicles for intended flight operations, as 
+## 3 The complexity and interdependence of operations on the airport surface motivate the need for a comp
+## 4 This product is similar to AIRX2SUP. However, it contains science retrievals that use the Humidity S
+## 5 NRC's Committee on Government Data Centers made a set of technology recommendations for data centers
 ```
 
 Now we can do the keywords, which must be unnested since they are in a list-column.
