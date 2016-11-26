@@ -198,7 +198,7 @@ word_ratios %>%
   scale_fill_discrete(name = "", labels = c("David", "Julia"))
 ```
 
-<img src="08-tweet-archives_files/figure-html/plotratios-1.png" width="768" />
+<img src="08-tweet-archives_files/figure-html/plotratios-1.png" width="672" />
 
 So David has tweeted about bioinformatics and Stack Overflow while Julia has been tweeting about preschool, naps, and the snow.
 
