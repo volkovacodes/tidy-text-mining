@@ -139,7 +139,7 @@ This may not even need to be pointed out, but David and Julia have used their Tw
 We just made a plot comparing raw word frequencies, but now let's find which words are more or less likely to come from each person's account using the log odds ratio. First, let's use `str_detect` to remove Twitter usernames from the `word` column, because otherwise, the results here are dominated only by people who Julia or David know and the other does not. After removing these, we count how many times each person uses each word and keep only the words used more than 5 times. After a `spread` operation, we can calculate the log odds ratio for each word, using
 
 
-
+$$\text{log odds ratio} = \ln{\left(\frac{\left[\frac{n+1}{\text{total}+1}\right]_\text{David}}{\left[\frac{n+1}{\text{total}+1}\right]_\text{Julia}}\right)}$$
 
 where $n$ is the number of times the word in question is used by each person and the total indicates the total words for each person.
 
@@ -198,7 +198,7 @@ word_ratios %>%
   scale_fill_discrete(name = "", labels = c("David", "Julia"))
 ```
 
-<img src="08-tweet-archives_files/figure-html/plotratios-1.png" width="576" />
+<img src="08-tweet-archives_files/figure-html/plotratios-1.png" width="672" />
 
 So David has tweeted about bioinformatics and Stack Overflow while Julia has been tweeting about preschool, naps, and the snow.
 

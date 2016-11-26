@@ -312,6 +312,7 @@ frequency</code></pre></div>
 <div id="comparing-word-usage" class="section level2">
 <h2><span class="header-section-number">8.3</span> Comparing word usage</h2>
 <p>We just made a plot comparing raw word frequencies, but now let’s find which words are more or less likely to come from each person’s account using the log odds ratio. First, let’s use <code>str_detect</code> to remove Twitter usernames from the <code>word</code> column, because otherwise, the results here are dominated only by people who Julia or David know and the other does not. After removing these, we count how many times each person uses each word and keep only the words used more than 5 times. After a <code>spread</code> operation, we can calculate the log odds ratio for each word, using</p>
+<p><span class="math display">\[\text{log odds ratio} = \ln{\left(\frac{\left[\frac{n+1}{\text{total}+1}\right]_\text{David}}{\left[\frac{n+1}{\text{total}+1}\right]_\text{Julia}}\right)}\]</span></p>
 <p>where <span class="math inline">\(n\)</span> is the number of times the word in question is used by each person and the total indicates the total words for each person.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 word_ratios &lt;-<span class="st"> </span>tidy_tweets %&gt;%
@@ -351,7 +352,7 @@ word_ratios &lt;-<span class="st"> </span>tidy_tweets %&gt;%
 <span class="st">  </span><span class="kw">coord_flip</span>() +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;log odds ratio (David/Julia)&quot;</span>) +
 <span class="st">  </span><span class="kw">scale_fill_discrete</span>(<span class="dt">name =</span> <span class="st">&quot;&quot;</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;David&quot;</span>, <span class="st">&quot;Julia&quot;</span>))</code></pre></div>
-<p><img src="08-tweet-archives_files/figure-html/plotratios-1.png" width="576" /></p>
+<p><img src="08-tweet-archives_files/figure-html/plotratios-1.png" width="672" /></p>
 <p>So David has tweeted about bioinformatics and Stack Overflow while Julia has been tweeting about preschool, naps, and the snow.</p>
 </div>
 <div id="sentiment-analysis" class="section level2">
