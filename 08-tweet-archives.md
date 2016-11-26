@@ -134,5 +134,74 @@ ggplot(frequency, aes(Julia, David)) +
 
 This may not even need to be pointed out, but David and Julia have used their Twitter accounts rather differently over the course of the past several years. David has used his Twitter account almost exclusively for professional purposes since he became more active, while Julia used it for entirely personal purposes until late 2015. We see these differences immediately in this plot exploring word frequencies, and they will continue to be obvious in the rest of this chapter. Words near the red line in this plot are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Because of the inner join we did above, words, hashtags, and usernames that appear in this plot are ones that we have both used at least once.
 
+## Comparing word usage 
 
-TODO: lots
+We just made a plot comparing raw word frequencies, but now let's find which words are more or less likely to come from each person's account using the log odds ratio. First, let's use `str_detect` to remove Twitter usernames from the `word` column, because otherwise, the results here are dominated only by people who Julia or David know and the other does not. After removing these, we count how many times each person uses each word and keep only the words used more than 5 times. After a `spread` operation, we can calculate the log odds ratio for each word, using
+
+
+
+
+where $n$ is the number of times the word in question is used by each person and the total indicates the total words for each person.
+
+
+```r
+library(tidyr)
+word_ratios <- tidy_tweets %>%
+  filter(!str_detect(word, "^@")) %>%
+  count(word, person) %>%
+  filter(sum(n) >= 5) %>%
+  spread(person, n, fill = 0) %>%
+  ungroup() %>%
+  mutate_each(funs((. + 1) / sum(. + 1)), -word) %>%
+  mutate(logratio = log(David / Julia)) %>%
+  arrange(desc(logratio))
+```
+
+What are some words that are about equally likely to come from David or Julia's account?
+
+
+```r
+word_ratios %>% 
+  arrange(abs(logratio))
+```
+
+```
+## # A tibble: 3,483 × 4
+##           word        David        Julia    logratio
+##          <chr>        <dbl>        <dbl>       <dbl>
+## 1        alive 0.0001932118 0.0001920358 0.006105552
+## 2       fallen 0.0001932118 0.0001920358 0.006105552
+## 3        focus 0.0001932118 0.0001920358 0.006105552
+## 4    forgotten 0.0001932118 0.0001920358 0.006105552
+## 5  information 0.0001932118 0.0001920358 0.006105552
+## 6         nice 0.0023185419 0.0023044290 0.006105552
+## 7     painting 0.0001932118 0.0001920358 0.006105552
+## 8        phone 0.0007728473 0.0007681430 0.006105552
+## 9       random 0.0001932118 0.0001920358 0.006105552
+## 10      system 0.0003864236 0.0003840715 0.006105552
+## # ... with 3,473 more rows
+```
+
+Which words are most likely to be from Julia's account or from David's account? Let's just take the top 15 most distinctive words for each account and plot them.
+
+
+```r
+word_ratios %>%
+  group_by(logratio < 0) %>%
+  top_n(15, abs(logratio)) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, logratio)) %>%
+  ggplot(aes(word, logratio, fill = logratio < 0)) +
+  geom_bar(alpha = 0.8, stat = "identity") +
+  coord_flip() +
+  ylab("log odds ratio (David/Julia)") +
+  scale_fill_discrete(name = "", labels = c("David", "Julia"))
+```
+
+<img src="08-tweet-archives_files/figure-html/plotratios-1.png" width="576" />
+
+So David has tweeted about bioinformatics and Stack Overflow while Julia has been tweeting about preschool, naps, and the snow.
+
+## Sentiment analysis
+
+## Words that contribute to sentiment in tweets

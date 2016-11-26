@@ -169,6 +169,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
 <li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
 <li class="chapter" data-level="8.2" data-path="twitter.html"><a href="twitter.html#word-frequencies-1"><i class="fa fa-check"></i><b>8.2</b> Word frequencies</a></li>
+<li class="chapter" data-level="8.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>8.3</b> Comparing word usage</a></li>
+<li class="chapter" data-level="8.4" data-path="twitter.html"><a href="twitter.html#sentiment-analysis"><i class="fa fa-check"></i><b>8.4</b> Sentiment analysis</a></li>
+<li class="chapter" data-level="8.5" data-path="twitter.html"><a href="twitter.html#words-that-contribute-to-sentiment-in-tweets"><i class="fa fa-check"></i><b>8.5</b> Words that contribute to sentiment in tweets</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>9</b> Case study: mining NASA metadata</a><ul>
 <li class="chapter" data-level="9.1" data-path="nasa.html"><a href="nasa.html#getting-the-metadata"><i class="fa fa-check"></i><b>9.1</b> Getting the metadata</a></li>
@@ -179,7 +182,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
 <li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#wrangling-the-data"><i class="fa fa-check"></i><b>10.1</b> Wrangling the data</a></li>
 <li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#term-frequency-and-inverse-document-frequency-tf-idf"><i class="fa fa-check"></i><b>10.2</b> Term frequency and inverse document frequency: tf-idf</a></li>
-<li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a></li>
+<li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-1"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a></li>
 <li class="chapter" data-level="10.4" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>10.4</b> Sentiment analysis by word</a></li>
 <li class="chapter" data-level="10.5" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>10.5</b> Sentiment analysis by message</a></li>
 <li class="chapter" data-level="10.6" data-path="usenet.html"><a href="usenet.html#n-grams"><i class="fa fa-check"></i><b>10.6</b> N-grams</a></li>
@@ -305,7 +308,57 @@ frequency</code></pre></div>
 <span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</code></pre></div>
 <p><img src="08-tweet-archives_files/figure-html/spread-1.png" width="672" /></p>
 <p>This may not even need to be pointed out, but David and Julia have used their Twitter accounts rather differently over the course of the past several years. David has used his Twitter account almost exclusively for professional purposes since he became more active, while Julia used it for entirely personal purposes until late 2015. We see these differences immediately in this plot exploring word frequencies, and they will continue to be obvious in the rest of this chapter. Words near the red line in this plot are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Because of the inner join we did above, words, hashtags, and usernames that appear in this plot are ones that we have both used at least once.</p>
-<p>TODO: lots</p>
+</div>
+<div id="comparing-word-usage" class="section level2">
+<h2><span class="header-section-number">8.3</span> Comparing word usage</h2>
+<p>We just made a plot comparing raw word frequencies, but now let’s find which words are more or less likely to come from each person’s account using the log odds ratio. First, let’s use <code>str_detect</code> to remove Twitter usernames from the <code>word</code> column, because otherwise, the results here are dominated only by people who Julia or David know and the other does not. After removing these, we count how many times each person uses each word and keep only the words used more than 5 times. After a <code>spread</code> operation, we can calculate the log odds ratio for each word, using</p>
+<p>where <span class="math inline">\(n\)</span> is the number of times the word in question is used by each person and the total indicates the total words for each person.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
+word_ratios &lt;-<span class="st"> </span>tidy_tweets %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">str_detect</span>(word, <span class="st">&quot;^@&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(word, person) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">sum</span>(n) &gt;=<span class="st"> </span><span class="dv">5</span>) %&gt;%
+<span class="st">  </span><span class="kw">spread</span>(person, n, <span class="dt">fill =</span> <span class="dv">0</span>) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">  </span><span class="kw">mutate_each</span>(<span class="kw">funs</span>((. +<span class="st"> </span><span class="dv">1</span>) /<span class="st"> </span><span class="kw">sum</span>(. +<span class="st"> </span><span class="dv">1</span>)), -word) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">logratio =</span> <span class="kw">log</span>(David /<span class="st"> </span>Julia)) %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(logratio))</code></pre></div>
+<p>What are some words that are about equally likely to come from David or Julia’s account?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_ratios %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">abs</span>(logratio))</code></pre></div>
+<pre><code>## # A tibble: 3,483 × 4
+##           word        David        Julia    logratio
+##          &lt;chr&gt;        &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+## 1        alive 0.0001932118 0.0001920358 0.006105552
+## 2       fallen 0.0001932118 0.0001920358 0.006105552
+## 3        focus 0.0001932118 0.0001920358 0.006105552
+## 4    forgotten 0.0001932118 0.0001920358 0.006105552
+## 5  information 0.0001932118 0.0001920358 0.006105552
+## 6         nice 0.0023185419 0.0023044290 0.006105552
+## 7     painting 0.0001932118 0.0001920358 0.006105552
+## 8        phone 0.0007728473 0.0007681430 0.006105552
+## 9       random 0.0001932118 0.0001920358 0.006105552
+## 10      system 0.0003864236 0.0003840715 0.006105552
+## # ... with 3,473 more rows</code></pre>
+<p>Which words are most likely to be from Julia’s account or from David’s account? Let’s just take the top 15 most distinctive words for each account and plot them.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_ratios %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(logratio &lt;<span class="st"> </span><span class="dv">0</span>) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">15</span>, <span class="kw">abs</span>(logratio)) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, logratio)) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, logratio, <span class="dt">fill =</span> logratio &lt;<span class="st"> </span><span class="dv">0</span>)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>() +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;log odds ratio (David/Julia)&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_fill_discrete</span>(<span class="dt">name =</span> <span class="st">&quot;&quot;</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;David&quot;</span>, <span class="st">&quot;Julia&quot;</span>))</code></pre></div>
+<p><img src="08-tweet-archives_files/figure-html/plotratios-1.png" width="576" /></p>
+<p>So David has tweeted about bioinformatics and Stack Overflow while Julia has been tweeting about preschool, naps, and the snow.</p>
+</div>
+<div id="sentiment-analysis" class="section level2">
+<h2><span class="header-section-number">8.4</span> Sentiment analysis</h2>
+</div>
+<div id="words-that-contribute-to-sentiment-in-tweets" class="section level2">
+<h2><span class="header-section-number">8.5</span> Words that contribute to sentiment in tweets</h2>
 
 </div>
 </div>
