@@ -8,7 +8,7 @@
   <title>Tidy Text Mining with R</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
-  <meta name="generator" content="bookdown 0.2 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
   <meta property="og:title" content="Tidy Text Mining with R" />
   <meta property="og:type" content="book" />
@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2016-11-26">
+<meta name="date" content="2016-11-29">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -320,7 +320,7 @@ tidy_books %&gt;%
 ## 9  present    89
 ## 10    kind    82
 ## # ... with 293 more rows</code></pre>
-<p>Or instead we could examine how sentiment changes during each novel. Let’s find a sentiment score for each word using the Bing lexicon, then count the number of positive and negative words in defined sections of each novel.</p>
+<p>Or instead we could examine how sentiment changes during each novel. We can do this with just a handful of lines that are mostly dplyr functions. First, we find a sentiment score for each word using the Bing lexicon and <code>inner_join</code>. Next, we count up how many positive and negative words there are in defined sections of each book. We define an <code>index</code> here to keep track of where we are in the narrative; this index (using integer division) counts up sections of 80 lines of text. Small sections of text may not have enough words in them to get a good estimate of sentiment while really large sections can wash out narrative structure. For these books, using 80 lines works well, but this can vary depending on individual texts, how long the lines were to start with, etc. We then use a <code>spread</code> operation so that we have negative and positive sentiment in separate columns, and lastly calculate a net sentiment (positive - minus).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
 janeaustensentiment &lt;-<span class="st"> </span>tidy_books %&gt;%
@@ -328,7 +328,7 @@ janeaustensentiment &lt;-<span class="st"> </span>tidy_books %&gt;%
 <span class="st">  </span><span class="kw">count</span>(book, <span class="dt">index =</span> linenumber %/%<span class="st"> </span><span class="dv">80</span>, sentiment) %&gt;%
 <span class="st">  </span><span class="kw">spread</span>(sentiment, n, <span class="dt">fill =</span> <span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentiment =</span> positive -<span class="st"> </span>negative)</code></pre></div>
-<p>Now we can plot these sentiment scores across the plot trajectory of each novel.</p>
+<p>Now we can plot these sentiment scores across the plot trajectory of each novel. Notice that we are plotting against the <code>index</code> on the x-axis that keeps track of narrative time in sections of text.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 <span class="kw">ggplot</span>(janeaustensentiment, <span class="kw">aes</span>(index, sentiment, <span class="dt">fill =</span> book)) +
@@ -543,6 +543,7 @@ tidy_books %&gt;%
 require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "google": false,

@@ -8,7 +8,7 @@
   <title>Tidy Text Mining with R</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
   <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
-  <meta name="generator" content="bookdown 0.2 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
   <meta property="og:title" content="Tidy Text Mining with R" />
   <meta property="og:type" content="book" />
@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2016-11-26">
+<meta name="date" content="2016-11-29">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -288,13 +288,13 @@ nasa_desc</code></pre></div>
 <span class="st">  </span><span class="kw">select</span>(desc) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">5</span>)</code></pre></div>
 <pre><code>## # A tibble: 5 × 1
-##                                                                                                   desc
-##                                                                                                  &lt;chr&gt;
-## 1 The Lightning Imaging Sensor (LIS) Science Computing Facility (SCF) generates a cloud-to-ground ligh
-## 2 Conceptual design tools for rotorcraft are used to size vehicles for intended flight operations, as 
-## 3 The complexity and interdependence of operations on the airport surface motivate the need for a comp
-## 4 This product is similar to AIRX2SUP. However, it contains science retrievals that use the Humidity S
-## 5 NRC&#39;s Committee on Government Data Centers made a set of technology recommendations for data centers</code></pre>
+##                                                                                                         desc
+##                                                                                                        &lt;chr&gt;
+## 1       The Level-1B (L1B) Radiance Product OML1BIRR (Version-3) from the Aura-OMI is now available (http://
+## 2      The SeaWiFS instrument was launched by Orbital Sciences Corporation on the OrbView-2\n(a.k.a. SeaStar
+## 3      MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+## 4      MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+## 5 \r\n\r\nA variety of rule-based, model-based and datadriven\r\ntechniques have been proposed for detection</code></pre>
 <p>Now we can do the keywords, which must be unnested since they are in a list-column.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
@@ -500,7 +500,7 @@ keyword_counts %&gt;%
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_counts-1.png" width="864" /></p>
 <p>These are the most commonly co-occurring words, but also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>.</p>
-<p>TODO: correlation of keywords, tf-idf, and topic modeling</p>
+<p>TODO: correlation of keywords, tf-idf, topic modeling</p>
 
 </div>
 </div>
@@ -523,6 +523,7 @@ keyword_counts %&gt;%
 require(["gitbook"], function(gitbook) {
 gitbook.start({
 "sharing": {
+"github": false,
 "facebook": true,
 "twitter": true,
 "google": false,

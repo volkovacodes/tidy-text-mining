@@ -138,13 +138,13 @@ nasa_desc %>%
 
 ```
 ## # A tibble: 5 × 1
-##                                                                                                   desc
-##                                                                                                  <chr>
-## 1 The Lightning Imaging Sensor (LIS) Science Computing Facility (SCF) generates a cloud-to-ground ligh
-## 2 Conceptual design tools for rotorcraft are used to size vehicles for intended flight operations, as 
-## 3 The complexity and interdependence of operations on the airport surface motivate the need for a comp
-## 4 This product is similar to AIRX2SUP. However, it contains science retrievals that use the Humidity S
-## 5 NRC's Committee on Government Data Centers made a set of technology recommendations for data centers
+##                                                                                                         desc
+##                                                                                                        <chr>
+## 1       The Level-1B (L1B) Radiance Product OML1BIRR (Version-3) from the Aura-OMI is now available (http://
+## 2      The SeaWiFS instrument was launched by Orbital Sciences Corporation on the OrbView-2\n(a.k.a. SeaStar
+## 3      MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+## 4      MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+## 5 \r\n\r\nA variety of rule-based, model-based and datadriven\r\ntechniques have been proposed for detection
 ```
 
 Now we can do the keywords, which must be unnested since they are in a list-column.
@@ -439,4 +439,4 @@ keyword_counts %>%
 
 These are the most commonly co-occurring words, but also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find the correlation among the keywords as described in [Chapter 5](#ngrams).
 
-TODO: correlation of keywords, tf-idf, and topic modeling
+TODO: correlation of keywords, tf-idf, topic modeling
