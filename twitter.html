@@ -357,6 +357,108 @@ word_ratios &lt;-<span class="st"> </span>tidy_tweets %&gt;%
 </div>
 <div id="sentiment-analysis" class="section level2">
 <h2><span class="header-section-number">8.4</span> Sentiment analysis</h2>
+<p>David and Julia have tweeted using different words, reflecting the difference of a professional vs. a personal Twitter account over the bulk of our tweets, but what about the sentiment of each person’s tweets? Let’s look for similarities and differences in the emotional content of these tweets.</p>
+<p>First, let’s find the total number of words from each person; Julia has a much larger total number of tweets than David.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">totals &lt;-<span class="st"> </span>tidy_tweets %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(person) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">total_words =</span> <span class="kw">n</span>())
+
+totals</code></pre></div>
+<pre><code>## # A tibble: 2 × 2
+##   person total_words
+##    &lt;chr&gt;       &lt;int&gt;
+## 1  David       22074
+## 2  Julia       76504</code></pre>
+<p>Now let’s measure the sentiment for each word in our tweet archives. First we use <code>inner_join</code> and the NRC sentiment lexicon to identify words that are associated with joy, anger, surprise, etc. Then we count how many of these words each person used. Next, we join the data frame with the total words so that we will be able to look at proportions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sentiment_by_person &lt;-<span class="st"> </span>tidy_tweets %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;nrc&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(sentiment, person) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">  </span><span class="kw">left_join</span>(totals) %&gt;%
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">words =</span> n)
+
+sentiment_by_person</code></pre></div>
+<pre><code>## # A tibble: 20 × 4
+##       sentiment person words total_words
+##           &lt;chr&gt;  &lt;chr&gt; &lt;int&gt;       &lt;int&gt;
+## 1         anger  David   447       22074
+## 2         anger  Julia  2235       76504
+## 3  anticipation  David   744       22074
+## 4  anticipation  Julia  4683       76504
+## 5       disgust  David   304       22074
+## 6       disgust  Julia  2271       76504
+## 7          fear  David   497       22074
+## 8          fear  Julia  2667       76504
+## 9           joy  David   520       22074
+## 10          joy  Julia  5202       76504
+## 11     negative  David  1078       22074
+## 12     negative  Julia  5007       76504
+## 13     positive  David  1650       22074
+## 14     positive  Julia  9080       76504
+## 15      sadness  David   447       22074
+## 16      sadness  Julia  2862       76504
+## 17     surprise  David   311       22074
+## 18     surprise  Julia  2022       76504
+## 19        trust  David   914       22074
+## 20        trust  Julia  4660       76504</code></pre>
+<p>This is count data, so let’s use a Poisson test to measure the difference between David’s word use and Julia’s. We want to test each sentiment separately, so first let’s <code>nest</code> the data so that we have a list-column with the data for each sentiment. Then let’s use <code>map</code> from the purrr library to apply the Poisson test to each little data frame individually.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)
+
+sentiment_differences &lt;-<span class="st"> </span>sentiment_by_person %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">nest</span>(-sentiment) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tests =</span> <span class="kw">map</span>(data, ~<span class="st"> </span><span class="kw">poisson.test</span>(.$words, .$total_words)))
+
+sentiment_differences</code></pre></div>
+<pre><code>## # A tibble: 10 × 3
+##       sentiment             data       tests
+##           &lt;chr&gt;           &lt;list&gt;      &lt;list&gt;
+## 1         anger &lt;tibble [2 × 3]&gt; &lt;S3: htest&gt;
+## 2  anticipation &lt;tibble [2 × 3]&gt; &lt;S3: htest&gt;
+## 3       disgust &lt;tibble [2 × 3]&gt; &lt;S3: htest&gt;
+## 4          fear &lt;tibble [2 × 3]&gt; &lt;S3: htest&gt;
+## 5           joy &lt;tibble [2 × 3]&gt; &lt;S3: htest&gt;
+## 6      negative &lt;tibble [2 × 3]&gt; &lt;S3: htest&gt;
+## 7      positive &lt;tibble [2 × 3]&gt; &lt;S3: htest&gt;
+## 8       sadness &lt;tibble [2 × 3]&gt; &lt;S3: htest&gt;
+## 9      surprise &lt;tibble [2 × 3]&gt; &lt;S3: htest&gt;
+## 10        trust &lt;tibble [2 × 3]&gt; &lt;S3: htest&gt;</code></pre>
+<p>Now we can use <code>tidy</code> from the broom library and <code>unnest</code> to get back to a data frame without list-columns.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(broom)
+
+sentiment_differences &lt;-<span class="st"> </span>sentiment_differences %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">unnest</span>(<span class="kw">map</span>(tests, tidy)) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(-data, -tests)
+
+sentiment_differences</code></pre></div>
+<pre><code>## # A tibble: 10 × 9
+##       sentiment  estimate statistic       p.value parameter  conf.low conf.high
+##           &lt;chr&gt;     &lt;dbl&gt;     &lt;dbl&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1         anger 0.6931594       447  2.231075e-13  600.5647 0.6248241 0.7675962
+## 2  anticipation 0.5506199       744  4.746477e-59 1215.2366 0.5089522 0.5950353
+## 3       disgust 0.4639376       304  1.948674e-43  576.6048 0.4102417 0.5231585
+## 4          fear 0.6458572       497  7.419529e-21  708.4962 0.5857010 0.7110327
+## 5           joy 0.3464464       520 8.526864e-156 1281.2943 0.3159762 0.3792032
+## 6      negative 0.7461812      1078  2.789775e-19 1362.5788 0.6980139 0.7971034
+## 7      positive 0.6297979      1650  5.922101e-74 2402.7067 0.5972567 0.6637915
+## 8       sadness 0.5413037       447  2.145804e-38  740.9652 0.4888538 0.5982540
+## 9      surprise 0.5330677       311  1.091952e-28  522.4152 0.4715559 0.6009547
+## 10        trust 0.6797722       914  1.103873e-28 1248.1535 0.6325550 0.7298829
+## # ... with 2 more variables: method &lt;fctr&gt;, alternative &lt;fctr&gt;</code></pre>
+<p>We have measured the differences in sentiment between our two Twitter feeds; now let’s plot them!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
+
+sentiment_differences %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentiment =</span> <span class="kw">reorder</span>(sentiment, estimate)) %&gt;%
+<span class="st">  </span><span class="kw">mutate_each</span>(<span class="kw">funs</span>(<span class="dv">1</span> -<span class="st"> </span>.), estimate, conf.low, conf.high) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(estimate, sentiment)) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="fl">2.5</span>) +
+<span class="st">  </span><span class="kw">geom_errorbarh</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> conf.low, <span class="dt">xmax =</span> conf.high)) +
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>()) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;% increase for Julia relative to David&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Sentiment&quot;</span>)</code></pre></div>
+<p><img src="08-tweet-archives_files/figure-html/plot_unnest-1.png" width="576" /></p>
+<p>We see here that Julia uses about 65% more words related to joy and 55% more words related to disgust than David; in fact, she uses more of <em>all</em> words associated with sentiments, both negative and positive. David’s tweets are more neutral in sentiment while Julia’s involve more dramatic word choices that communicate more emotions. This, again, reflects the different ways we have used our Twitter accounts.</p>
 </div>
 <div id="words-that-contribute-to-sentiment-in-tweets" class="section level2">
 <h2><span class="header-section-number">8.5</span> Words that contribute to sentiment in tweets</h2>

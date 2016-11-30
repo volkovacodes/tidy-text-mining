@@ -204,4 +204,146 @@ So David has tweeted about bioinformatics and Stack Overflow while Julia has bee
 
 ## Sentiment analysis
 
+David and Julia have tweeted using different words, reflecting the difference of a professional vs. a personal Twitter account over the bulk of our tweets, but what about the sentiment of each person's tweets? Let's look for similarities and differences in the emotional content of these tweets. 
+
+First, let's find the total number of words from each person; Julia has a much larger total number of tweets than David.
+
+
+```r
+totals <- tidy_tweets %>%
+  group_by(person) %>%
+  summarise(total_words = n())
+
+totals
+```
+
+```
+## # A tibble: 2 × 2
+##   person total_words
+##    <chr>       <int>
+## 1  David       22074
+## 2  Julia       76504
+```
+
+Now let's measure the sentiment for each word in our tweet archives. First we use `inner_join` and the NRC sentiment lexicon to identify words that are associated with joy, anger, surprise, etc. Then we count how many of these words each person used. Next, we join the data frame with the total words so that we will be able to look at proportions.
+
+
+```r
+sentiment_by_person <- tidy_tweets %>%
+  inner_join(get_sentiments("nrc")) %>%
+  count(sentiment, person) %>%
+  ungroup() %>%
+  left_join(totals) %>%
+  rename(words = n)
+
+sentiment_by_person
+```
+
+```
+## # A tibble: 20 × 4
+##       sentiment person words total_words
+##           <chr>  <chr> <int>       <int>
+## 1         anger  David   447       22074
+## 2         anger  Julia  2235       76504
+## 3  anticipation  David   744       22074
+## 4  anticipation  Julia  4683       76504
+## 5       disgust  David   304       22074
+## 6       disgust  Julia  2271       76504
+## 7          fear  David   497       22074
+## 8          fear  Julia  2667       76504
+## 9           joy  David   520       22074
+## 10          joy  Julia  5202       76504
+## 11     negative  David  1078       22074
+## 12     negative  Julia  5007       76504
+## 13     positive  David  1650       22074
+## 14     positive  Julia  9080       76504
+## 15      sadness  David   447       22074
+## 16      sadness  Julia  2862       76504
+## 17     surprise  David   311       22074
+## 18     surprise  Julia  2022       76504
+## 19        trust  David   914       22074
+## 20        trust  Julia  4660       76504
+```
+
+This is count data, so let's use a Poisson test to measure the difference between David's word use and Julia's. We want to test each sentiment separately, so first let's `nest` the data so that we have a list-column with the data for each sentiment. Then let's use `map` from the purrr library to apply the Poisson test to each little data frame individually.
+
+
+```r
+library(purrr)
+
+sentiment_differences <- sentiment_by_person %>% 
+  nest(-sentiment) %>%
+  mutate(tests = map(data, ~ poisson.test(.$words, .$total_words)))
+
+sentiment_differences
+```
+
+```
+## # A tibble: 10 × 3
+##       sentiment             data       tests
+##           <chr>           <list>      <list>
+## 1         anger <tibble [2 × 3]> <S3: htest>
+## 2  anticipation <tibble [2 × 3]> <S3: htest>
+## 3       disgust <tibble [2 × 3]> <S3: htest>
+## 4          fear <tibble [2 × 3]> <S3: htest>
+## 5           joy <tibble [2 × 3]> <S3: htest>
+## 6      negative <tibble [2 × 3]> <S3: htest>
+## 7      positive <tibble [2 × 3]> <S3: htest>
+## 8       sadness <tibble [2 × 3]> <S3: htest>
+## 9      surprise <tibble [2 × 3]> <S3: htest>
+## 10        trust <tibble [2 × 3]> <S3: htest>
+```
+
+Now we can use `tidy` from the broom library and `unnest` to get back to a data frame without list-columns.
+
+
+```r
+library(broom)
+
+sentiment_differences <- sentiment_differences %>% 
+  unnest(map(tests, tidy)) %>% 
+  select(-data, -tests)
+
+sentiment_differences
+```
+
+```
+## # A tibble: 10 × 9
+##       sentiment  estimate statistic       p.value parameter  conf.low conf.high
+##           <chr>     <dbl>     <dbl>         <dbl>     <dbl>     <dbl>     <dbl>
+## 1         anger 0.6931594       447  2.231075e-13  600.5647 0.6248241 0.7675962
+## 2  anticipation 0.5506199       744  4.746477e-59 1215.2366 0.5089522 0.5950353
+## 3       disgust 0.4639376       304  1.948674e-43  576.6048 0.4102417 0.5231585
+## 4          fear 0.6458572       497  7.419529e-21  708.4962 0.5857010 0.7110327
+## 5           joy 0.3464464       520 8.526864e-156 1281.2943 0.3159762 0.3792032
+## 6      negative 0.7461812      1078  2.789775e-19 1362.5788 0.6980139 0.7971034
+## 7      positive 0.6297979      1650  5.922101e-74 2402.7067 0.5972567 0.6637915
+## 8       sadness 0.5413037       447  2.145804e-38  740.9652 0.4888538 0.5982540
+## 9      surprise 0.5330677       311  1.091952e-28  522.4152 0.4715559 0.6009547
+## 10        trust 0.6797722       914  1.103873e-28 1248.1535 0.6325550 0.7298829
+## # ... with 2 more variables: method <fctr>, alternative <fctr>
+```
+
+We have measured the differences in sentiment between our two Twitter feeds; now let's plot them!
+
+
+```r
+library(scales)
+
+sentiment_differences %>%
+  ungroup() %>%
+  mutate(sentiment = reorder(sentiment, estimate)) %>%
+  mutate_each(funs(1 - .), estimate, conf.low, conf.high) %>%
+  ggplot(aes(estimate, sentiment)) +
+  geom_point(size = 2.5) +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high)) +
+  scale_x_continuous(labels = percent_format()) +
+  labs(x = "% increase for Julia relative to David",
+       y = "Sentiment")
+```
+
+<img src="08-tweet-archives_files/figure-html/plot_unnest-1.png" width="576" />
+
+We see here that Julia uses about 65% more words related to joy and 55% more words related to disgust than David; in fact, she uses more of *all* words associated with sentiments, both negative and positive. David's tweets are more neutral in sentiment while Julia's involve more dramatic word choices that communicate more emotions. This, again, reflects the different ways we have used our Twitter accounts.
+
 ## Words that contribute to sentiment in tweets
