@@ -342,7 +342,7 @@ sentiment_differences %>%
        y = "Sentiment")
 ```
 
-<img src="08-tweet-archives_files/figure-html/plot_unnest-1.png" width="576" />
+<img src="08-tweet-archives_files/figure-html/plot_unnest-1.png" width="672" />
 
 We see here that Julia uses about 65% more words related to joy and about 55% more words related to disgust than David; in fact, she uses more of *all* words associated with sentiments, both negative and positive. David's tweets are more neutral in sentiment while Julia's involve more dramatic word choices that communicate more emotions. This, again, reflects the different ways we have used our Twitter accounts.
 
@@ -369,7 +369,7 @@ word_ratios %>%
   scale_fill_discrete(name = "", labels = c("David", "Julia"))
 ```
 
-<img src="08-tweet-archives_files/figure-html/plotsentiments-1.png" width="672" />
+<img src="08-tweet-archives_files/figure-html/plotsentiments-1.png" width="768" />
 
 We see here that Julia's tweets have such a higher joy score because she has tweeted about things like birthdays, babies, and things that are delicious and sweet (probably sweet babies even!). Her disgust score is higher because she has tweeted about pregnancy, diapers, and being sick with stomach bugs. We see that there are some misidentifications visible in this plot; David's only joy word should actually be Excel, the Microsoft product (not excel, the verb) and he uses "wrangling" in the sense of "data wrangling", which is not fraught with disgust, anger, or fear (or is it?!). These misidentifications due to domain-specific word use mean that the difference between Julia and David for joy, digust, and some others should actually be even larger.
 
