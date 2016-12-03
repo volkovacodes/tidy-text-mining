@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2016-12-02">
+<meta name="date" content="2016-12-03">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -172,7 +172,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>8.3</b> Comparing word usage</a></li>
 <li class="chapter" data-level="8.4" data-path="twitter.html"><a href="twitter.html#sentiment-analysis"><i class="fa fa-check"></i><b>8.4</b> Sentiment analysis</a></li>
 <li class="chapter" data-level="8.5" data-path="twitter.html"><a href="twitter.html#words-that-contribute-to-sentiment-in-tweets"><i class="fa fa-check"></i><b>8.5</b> Words that contribute to sentiment in tweets</a></li>
-<li class="chapter" data-level="8.6" data-path="twitter.html"><a href="twitter.html#more-favorites-or-retweets"><i class="fa fa-check"></i><b>8.6</b> More favorites or retweets</a></li>
+<li class="chapter" data-level="8.6" data-path="twitter.html"><a href="twitter.html#favorites-and-retweets"><i class="fa fa-check"></i><b>8.6</b> Favorites and retweets</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>9</b> Case study: mining NASA metadata</a><ul>
 <li class="chapter" data-level="9.1" data-path="nasa.html"><a href="nasa.html#getting-the-metadata"><i class="fa fa-check"></i><b>9.1</b> Getting the metadata</a></li>
@@ -218,18 +218,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(dplyr)
+<span class="kw">library</span>(readr)
 
-tweets_julia &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/tweets_julia.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
-tweets_dave &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/tweets_dave.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
-<span class="co"># take out the timezone thing if we don&#39;t do anything with times of day</span>
-tweets_julia$timestamp &lt;-<span class="st"> </span><span class="kw">with_tz</span>(<span class="kw">ymd_hms</span>(tweets_julia$timestamp), 
-                                  <span class="st">&quot;America/Denver&quot;</span>)
-tweets_dave$timestamp &lt;-<span class="st"> </span><span class="kw">with_tz</span>(<span class="kw">ymd_hms</span>(tweets_dave$timestamp), 
-                                 <span class="st">&quot;America/New_York&quot;</span>)
+tweets_julia &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/tweets_julia.csv&quot;</span>)
+tweets_dave &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/tweets_dave.csv&quot;</span>)
 tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_julia %&gt;%<span class="st"> </span>
 <span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;Julia&quot;</span>),
                     tweets_dave %&gt;%<span class="st"> </span>
-<span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;David&quot;</span>))
+<span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;David&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">timestamp =</span> <span class="kw">ymd_hms</span>(timestamp))
 
 <span class="kw">ggplot</span>(tweets, <span class="kw">aes</span>(<span class="dt">x =</span> timestamp, <span class="dt">fill =</span> person)) +
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>)</code></pre></div>
@@ -482,8 +479,94 @@ sentiment_differences %&gt;%
 <p><img src="08-tweet-archives_files/figure-html/plotsentiments-1.png" width="768" /></p>
 <p>We see here that Julia’s tweets have such a higher joy score because she has tweeted about things like birthdays, babies, and things that are delicious and sweet (probably sweet babies even!). Her disgust score is higher because she has tweeted about pregnancy, diapers, and being sick with stomach bugs. We see that there are some misidentifications visible in this plot; David’s only joy word should actually be Excel, the Microsoft product (not excel, the verb) and he uses “wrangling” in the sense of “data wrangling”, which is not fraught with disgust, anger, or fear (or is it?!). These misidentifications due to domain-specific word use mean that the difference between Julia and David for joy, digust, and some others should actually be even larger.</p>
 </div>
-<div id="more-favorites-or-retweets" class="section level2">
-<h2><span class="header-section-number">8.6</span> More favorites or retweets</h2>
+<div id="favorites-and-retweets" class="section level2">
+<h2><span class="header-section-number">8.6</span> Favorites and retweets</h2>
+<p>Another important characteristic of tweets is how many times they are favorited or retweeted. Let’s explore which words are more likely to be retweeted or favorited for Julia’s and David’s tweets. When a user downloads their own Twitter archive, favorites and retweets are not included, so we constructed another dataset of the author’s tweets that includes this information. We accessed our own tweets via the Twitter API and downloaded about 3200 tweets for each person. In both cases, that is about the last 18 months worth of Twitter activity. This corresponds to a period of increasing activity and increasing numbers of followers for both of us.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tweets_julia &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/juliasilge_tweets.csv&quot;</span>)
+tweets_dave &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/drob_tweets.csv&quot;</span>)
+tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_julia %&gt;%<span class="st"> </span>
+<span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;Julia&quot;</span>),
+                    tweets_dave %&gt;%<span class="st"> </span>
+<span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;David&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">created_at =</span> <span class="kw">ymd_hms</span>(created_at))</code></pre></div>
+<p>Now that we have this second, smaller set of only recent tweets, let’s use <code>unnest_tokens</code> to transform these tweets to a tidy data set.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_tweets &lt;-<span class="st"> </span>tweets %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">str_detect</span>(text, <span class="st">&quot;^RT&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">text =</span> <span class="kw">str_replace_all</span>(text, <span class="st">&quot;https://t.co/[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|http://[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|&amp;amp;|&amp;lt;|&amp;gt;|RT&quot;</span>, <span class="st">&quot;&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, text, <span class="dt">token =</span> <span class="st">&quot;regex&quot;</span>, <span class="dt">pattern =</span> reg) %&gt;%
+<span class="st">  </span><span class="kw">anti_join</span>(stop_words)
+
+tidy_tweets</code></pre></div>
+<pre><code>## # A tibble: 30,725 × 7
+##              id          created_at             source retweets favorites person        word
+##           &lt;dbl&gt;              &lt;dttm&gt;              &lt;chr&gt;    &lt;int&gt;     &lt;int&gt;  &lt;chr&gt;       &lt;chr&gt;
+## 1  8.043967e+17 2016-12-01 18:48:07 Twitter Web Client        4         6  David         j&#39;s
+## 2  8.043611e+17 2016-12-01 16:26:39 Twitter Web Client        8        12  David   bangalore
+## 3  8.043611e+17 2016-12-01 16:26:39 Twitter Web Client        8        12  David      london
+## 4  8.043435e+17 2016-12-01 15:16:48 Twitter for iPhone        0         1  David @rodneyfort
+## 5  8.043120e+17 2016-12-01 13:11:37 Twitter for iPhone        0         1  Julia         sho
+## 6  8.040632e+17 2016-11-30 20:43:03 Twitter Web Client        0         2  David       arbor
+## 7  8.040632e+17 2016-11-30 20:43:03 Twitter Web Client        0         2  David       arbor
+## 8  8.040632e+17 2016-11-30 20:43:03 Twitter Web Client        0         2  David         ann
+## 9  8.040632e+17 2016-11-30 20:43:03 Twitter Web Client        0         2  David         ann
+## 10 8.040582e+17 2016-11-30 20:23:14 Twitter Web Client       30        41  David          sf
+## # ... with 30,715 more rows</code></pre>
+<p>To start with, let’s look at retweets. Let’s find the total number of retweets for each person.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">totals &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(person, id) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">rts =</span> <span class="kw">sum</span>(retweets)) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(person) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">total_rts =</span> <span class="kw">sum</span>(rts))
+
+totals</code></pre></div>
+<pre><code>## # A tibble: 2 × 2
+##   person total_rts
+##    &lt;chr&gt;     &lt;int&gt;
+## 1  David    111863
+## 2  Julia     12906</code></pre>
+<p>Now let’s find the number of retweets for each word and person (making sure to count each tweet only once) and join to this data frame of retweet totals.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_by_rts &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(id, word, person) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">rts =</span> <span class="kw">sum</span>(retweets)) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(person, word) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">retweets =</span> <span class="kw">sum</span>(rts)) %&gt;%
+<span class="st">  </span><span class="kw">left_join</span>(totals) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(retweets !=<span class="st"> </span><span class="dv">0</span>) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>()
+
+word_by_rts %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(retweets))</code></pre></div>
+<pre><code>## # A tibble: 3,519 × 4
+##    person     word retweets total_rts
+##     &lt;chr&gt;    &lt;chr&gt;    &lt;int&gt;     &lt;int&gt;
+## 1   David  #rstats     6833    111863
+## 2   David    trump     3778    111863
+## 3   David     post     2936    111863
+## 4   David analysis     2732    111863
+## 5   David   tweets     2067    111863
+## 6   David  android     1820    111863
+## 7   David overflow     1768    111863
+## 8   David    stack     1768    111863
+## 9   David  angrier     1757    111863
+## 10  David confirms     1757    111863
+## # ... with 3,509 more rows</code></pre>
+<p>Now we can plot the words that have contributed the most to each of our retweets.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_rts &lt;-<span class="st"> </span>word_by_rts %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ratio =</span> retweets /<span class="st"> </span>total_rts) %&gt;%<span class="st">  </span>
+<span class="st">  </span><span class="kw">group_by</span>(person) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">8</span>, ratio) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(person, ratio) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">order =</span> <span class="kw">row_number</span>())
+
+<span class="kw">ggplot</span>(plot_rts, <span class="kw">aes</span>(order, ratio, <span class="dt">fill =</span> person)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>person, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>() +
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> plot_rts$order, <span class="dt">labels =</span> plot_rts$word) +
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>()) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;proportion of total RTs due to each word&quot;</span>)</code></pre></div>
+<p><img src="08-tweet-archives_files/figure-html/plot_rts-1.png" width="960" /></p>
 
 </div>
 </div>
