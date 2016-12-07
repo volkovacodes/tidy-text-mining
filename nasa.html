@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2016-12-03">
+<meta name="date" content="2016-12-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -178,7 +178,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.1" data-path="nasa.html"><a href="nasa.html#getting-the-metadata"><i class="fa fa-check"></i><b>9.1</b> Getting the metadata</a></li>
 <li class="chapter" data-level="9.2" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>9.2</b> Wrangling and tidying the data</a></li>
 <li class="chapter" data-level="9.3" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>9.3</b> Some initial simple exploration</a></li>
-<li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences"><i class="fa fa-check"></i><b>9.4</b> Word co-ocurrences</a></li>
+<li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>9.4</b> Word co-ocurrences and correlations</a></li>
+<li class="chapter" data-level="9.5" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>9.5</b> Calculating tf-idf for the description fields</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
 <li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#wrangling-the-data"><i class="fa fa-check"></i><b>10.1</b> Wrangling the data</a></li>
@@ -393,8 +394,8 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_keyword &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">keyword =</span> <span class="kw">toupper</span>(keyword))</code></pre></div>
 </div>
-<div id="word-co-ocurrences" class="section level2">
-<h2><span class="header-section-number">9.4</span> Word co-ocurrences</h2>
+<div id="word-co-ocurrences-and-correlations" class="section level2">
+<h2><span class="header-section-number">9.4</span> Word co-ocurrences and correlations</h2>
 <p>Let’s examine which words commonly occur together in the titles and descriptions of NASA datasets. We can then examine a word network in titles/descriptions; this may help us decide, for example, how many topics to look at in topic modeling.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
 
@@ -439,7 +440,7 @@ desc_words</code></pre></div>
 <span class="kw">library</span>(igraph)
 <span class="kw">library</span>(ggraph)
 
-<span class="kw">set.seed</span>(<span class="dv">1234</span>)
+<span class="kw">set.seed</span>(<span class="dv">2016</span>)
 title_words %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">250</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
@@ -463,7 +464,7 @@ desc_words %&gt;%
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Word Network in NASA Dataset Descriptions&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_desc-1.png" width="864" /></p>
-<p>Here there are such <em>strong</em> connections between the top dozen or so words (words like “data”, “resolution”, and “instrument”) that we may do better if we exclude these very highly connected words. Also, this may mean that tf-idf (as described in detail in <a href="tfidf.html#tfidf">Chapter 4</a>) will be a good option to explore. But for now, let’s add a few more stop words and look at one more word network for the description fields. Notice how we use <code>bind_rows</code> to add more custom stop words to the words we are already using; this approach can be used in many instances.</p>
+<p>Here there are such <em>strong</em> connections between the top dozen or so words (words like “data”, “resolution”, and “instrument”) that we may do better if we exclude these very highly connected words or use tf-idf (as described in detail in <a href="tfidf.html#tfidf">Chapter 4</a>) as a metric. But for now, let’s add a few more stop words and look at one more word network for the description fields. Notice how we use <code>bind_rows</code> to add more custom stop words to the words we are already using; this approach can be used in many instances.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mystopwords &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(mystopwords,
                          <span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;global&quot;</span>, 
                                              <span class="st">&quot;instrument&quot;</span>, <span class="st">&quot;resolution&quot;</span>,
@@ -489,7 +490,22 @@ desc_words %&gt;%
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_counts &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">pairwise_count</span>(keyword, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 
-<span class="kw">set.seed</span>(<span class="dv">1234</span>)
+keyword_counts</code></pre></div>
+<pre><code>## # A tibble: 26,780 × 3
+##            item1         item2     n
+##            &lt;chr&gt;         &lt;chr&gt; &lt;dbl&gt;
+## 1   OCEAN OPTICS        OCEANS  7324
+## 2         OCEANS  OCEAN OPTICS  7324
+## 3     ATMOSPHERE EARTH SCIENCE  7318
+## 4  EARTH SCIENCE    ATMOSPHERE  7318
+## 5    OCEAN COLOR        OCEANS  7270
+## 6    OCEAN COLOR  OCEAN OPTICS  7270
+## 7         OCEANS   OCEAN COLOR  7270
+## 8   OCEAN OPTICS   OCEAN COLOR  7270
+## 9      COMPLETED       PROJECT  6450
+## 10       PROJECT     COMPLETED  6450
+## # ... with 26,770 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
 keyword_counts %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">700</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
@@ -501,7 +517,66 @@ keyword_counts %&gt;%
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_counts-1.png" width="864" /></p>
 <p>These are the most commonly co-occurring words, but also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>.</p>
-<p>TODO: correlation of keywords, tf-idf, topic modeling</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_cors &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">20</span>) %&gt;%
+<span class="st">  </span><span class="kw">pairwise_cor</span>(keyword, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
+
+keyword_cors</code></pre></div>
+<pre><code>## # A tibble: 51,756 × 3
+##        item1     item2 correlation
+##        &lt;chr&gt;     &lt;chr&gt;       &lt;dbl&gt;
+## 1        LAT       GBM           1
+## 2        GBM       LAT           1
+## 3     NAVCAM    HAZCAM           1
+## 4     HAZCAM    NAVCAM           1
+## 5      MARCI       CTX           1
+## 6        CTX     MARCI           1
+## 7       MTES        MB           1
+## 8         MB      MTES           1
+## 9    SHARING KNOWLEDGE           1
+## 10 KNOWLEDGE   SHARING           1
+## # ... with 51,746 more rows</code></pre>
+<p>Notice that these keywords at the top of this sorted data frame have correlation coefficients equal to 1; they always occur together. This means these are redundant keywords and it may not make sense to continue to use both of these sets of pairs. Let’s visualize the network of keyword correlations, just as we did for keyword co-occurences.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
+keyword_cors %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(correlation &gt;<span class="st"> </span>.<span class="dv">6</span>) %&gt;%
+<span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
+<span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> correlation, <span class="dt">edge_width =</span> correlation)) +
+<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;royalblue3&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Correlation Network in NASA Dataset Keywords&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
+<p><img src="09-nasa-metadata_files/figure-html/plot_cors-1.png" width="864" /></p>
+<p>This network looks much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keyword pairs occur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted from the <code>graph_from_data_frame()</code> function above.</p>
+</div>
+<div id="calculating-tf-idf-for-the-description-fields" class="section level2">
+<h2><span class="header-section-number">9.5</span> Calculating tf-idf for the description fields</h2>
+<p>As discussed in <a href="#tf-idf">Chapter 4</a>, we can use tf-idf, the term frequency times inverse document frequency, to identify words that are especially important to a document within a collection of documents. Let’s apply that approach to the description fields of these NASA datasets. We will consider each description field a document, and the whole set of description fields the collection or corpus of documents. We have already used <code>unnest_tokens</code> above to make a tidy data frame of the words in the description fields, so now we can use <code>bind_tf_idf</code> to calculate tf-idf for each word.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_tf_idf &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">count</span>(id, word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">  </span><span class="kw">bind_tf_idf</span>(word, id, n)</code></pre></div>
+<p>What are the highest tf-idf words in the NASA description fields?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_tf_idf %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">arrange</span>(-tf_idf)</code></pre></div>
+<pre><code>## # A tibble: 1,847,770 × 6
+##                          id                                          word     n    tf       idf
+##                       &lt;chr&gt;                                         &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;     &lt;dbl&gt;
+## 1  55942a7cc63a7fe59b49774a                                           rdr     1     1 10.375052
+## 2  55942ac9c63a7fe59b49b688 palsar_radiometric_terrain_corrected_high_res     1     1 10.375052
+## 3  55942ac9c63a7fe59b49b689  palsar_radiometric_terrain_corrected_low_res     1     1 10.375052
+## 4  55942a7bc63a7fe59b4976ca                                          lgrs     1     1  8.765615
+## 5  55942a7bc63a7fe59b4976d2                                          lgrs     1     1  8.765615
+## 6  55942a7bc63a7fe59b4976e3                                          lgrs     1     1  8.765615
+## 7  55942a7dc63a7fe59b497820                                           mri     1     1  8.583293
+## 8  55942ad8c63a7fe59b49cf6c                      template_proddescription     1     1  8.295611
+## 9  55942ad8c63a7fe59b49cf6d                      template_proddescription     1     1  8.295611
+## 10 55942ad8c63a7fe59b49cf6e                      template_proddescription     1     1  8.295611
+## # ... with 1,847,760 more rows, and 1 more variables: tf_idf &lt;dbl&gt;</code></pre>
+<p>These are the most important words in the description fields as measured by tf-idf, meaning they are common but not too common. Notice we have run into an issue here; both <span class="math inline">\(n\)</span> and term frequency are equal to 1 for these terms, meaning that these were description fields that only had a single word in them. If a description field only contains one word, the tf-idf algorithm will think that is a really important word. Depending on our analytic goals, it might be a good idea to throw out all description fields that have fewer than 5 words or similar.</p>
+<p>TODO: tf-idf, topic modeling</p>
 
 </div>
 </div>

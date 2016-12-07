@@ -289,7 +289,7 @@ nasa_keyword <- nasa_keyword %>%
   mutate(keyword = toupper(keyword))
 ```
 
-## Word co-ocurrences
+## Word co-ocurrences and correlations
 
 Let's examine which words commonly occur together in the titles and descriptions of NASA datasets. We can then examine a word network in titles/descriptions; this may help us decide, for example, how many topics to look at in topic modeling.
 
@@ -353,7 +353,7 @@ library(ggplot2)
 library(igraph)
 library(ggraph)
 
-set.seed(1234)
+set.seed(2016)
 title_words %>%
   filter(n >= 250) %>%
   graph_from_data_frame() %>%
@@ -387,7 +387,7 @@ desc_words %>%
 
 <img src="09-nasa-metadata_files/figure-html/plot_desc-1.png" width="864" />
 
-Here there are such *strong* connections between the top dozen or so words (words like "data", "resolution", and "instrument") that we may do better if we exclude these very highly connected words. Also, this may mean that tf-idf (as described in detail in [Chapter 4](#tfidf)) will be a good option to explore. But for now, let's add a few more stop words and look at one more word network for the description fields. Notice how we use `bind_rows` to add more custom stop words to the words we are already using; this approach can be used in many instances.
+Here there are such *strong* connections between the top dozen or so words (words like "data", "resolution", and "instrument") that we may do better if we exclude these very highly connected words or use tf-idf (as described in detail in [Chapter 4](#tfidf)) as a metric. But for now, let's add a few more stop words and look at one more word network for the description fields. Notice how we use `bind_rows` to add more custom stop words to the words we are already using; this approach can be used in many instances.
 
 
 ```r
@@ -423,7 +423,28 @@ Let's make a network of the keywords to see which keywords commonly occur togeth
 keyword_counts <- nasa_keyword %>% 
   pairwise_count(keyword, id, sort = TRUE)
 
-set.seed(1234)
+keyword_counts
+```
+
+```
+## # A tibble: 26,780 × 3
+##            item1         item2     n
+##            <chr>         <chr> <dbl>
+## 1   OCEAN OPTICS        OCEANS  7324
+## 2         OCEANS  OCEAN OPTICS  7324
+## 3     ATMOSPHERE EARTH SCIENCE  7318
+## 4  EARTH SCIENCE    ATMOSPHERE  7318
+## 5    OCEAN COLOR        OCEANS  7270
+## 6    OCEAN COLOR  OCEAN OPTICS  7270
+## 7         OCEANS   OCEAN COLOR  7270
+## 8   OCEAN OPTICS   OCEAN COLOR  7270
+## 9      COMPLETED       PROJECT  6450
+## 10       PROJECT     COMPLETED  6450
+## # ... with 26,770 more rows
+```
+
+```r
+set.seed(2016)
 keyword_counts %>%
   filter(n >= 700) %>%
   graph_from_data_frame() %>%
@@ -439,4 +460,90 @@ keyword_counts %>%
 
 These are the most commonly co-occurring words, but also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find the correlation among the keywords as described in [Chapter 5](#ngrams).
 
-TODO: correlation of keywords, tf-idf, topic modeling
+
+```r
+keyword_cors <- nasa_keyword %>% 
+  group_by(keyword) %>%
+  filter(n() >= 20) %>%
+  pairwise_cor(keyword, id, sort = TRUE)
+
+keyword_cors
+```
+
+```
+## # A tibble: 51,756 × 3
+##        item1     item2 correlation
+##        <chr>     <chr>       <dbl>
+## 1        LAT       GBM           1
+## 2        GBM       LAT           1
+## 3     NAVCAM    HAZCAM           1
+## 4     HAZCAM    NAVCAM           1
+## 5      MARCI       CTX           1
+## 6        CTX     MARCI           1
+## 7       MTES        MB           1
+## 8         MB      MTES           1
+## 9    SHARING KNOWLEDGE           1
+## 10 KNOWLEDGE   SHARING           1
+## # ... with 51,746 more rows
+```
+
+Notice that these keywords at the top of this sorted data frame have correlation coefficients equal to 1; they always occur together. This means these are redundant keywords and it may not make sense to continue to use both of these sets of pairs. Let's visualize the network of keyword correlations, just as we did for keyword co-occurences.
+
+
+```r
+set.seed(2016)
+keyword_cors %>%
+  filter(correlation > .6) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = correlation, edge_width = correlation)) +
+  geom_node_point(color = "royalblue3", size = 5) +
+  geom_node_text(aes(label = name), vjust = 1.8) +
+  ggtitle("Correlation Network in NASA Dataset Keywords") +
+  theme_void()
+```
+
+<img src="09-nasa-metadata_files/figure-html/plot_cors-1.png" width="864" />
+
+This network looks much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keyword pairs occur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted from the `graph_from_data_frame()` function above.
+
+## Calculating tf-idf for the description fields
+
+As discussed in [Chapter 4](#tf-idf), we can use tf-idf, the term frequency times inverse document frequency, to identify words that are especially important to a document within a collection of documents. Let's apply that approach to the description fields of these NASA datasets. We will consider each description field a document, and the whole set of description fields the collection or corpus of documents. We have already used `unnest_tokens` above to make a tidy data frame of the words in the description fields, so now we can use `bind_tf_idf` to calculate tf-idf for each word.
+
+
+```r
+desc_tf_idf <- nasa_desc %>% 
+  count(id, word, sort = TRUE) %>%
+  ungroup() %>%
+  bind_tf_idf(word, id, n)
+```
+
+What are the highest tf-idf words in the NASA description fields?
+
+
+```r
+desc_tf_idf %>% 
+  arrange(-tf_idf)
+```
+
+```
+## # A tibble: 1,847,770 × 6
+##                          id                                          word     n    tf       idf
+##                       <chr>                                         <chr> <int> <dbl>     <dbl>
+## 1  55942a7cc63a7fe59b49774a                                           rdr     1     1 10.375052
+## 2  55942ac9c63a7fe59b49b688 palsar_radiometric_terrain_corrected_high_res     1     1 10.375052
+## 3  55942ac9c63a7fe59b49b689  palsar_radiometric_terrain_corrected_low_res     1     1 10.375052
+## 4  55942a7bc63a7fe59b4976ca                                          lgrs     1     1  8.765615
+## 5  55942a7bc63a7fe59b4976d2                                          lgrs     1     1  8.765615
+## 6  55942a7bc63a7fe59b4976e3                                          lgrs     1     1  8.765615
+## 7  55942a7dc63a7fe59b497820                                           mri     1     1  8.583293
+## 8  55942ad8c63a7fe59b49cf6c                      template_proddescription     1     1  8.295611
+## 9  55942ad8c63a7fe59b49cf6d                      template_proddescription     1     1  8.295611
+## 10 55942ad8c63a7fe59b49cf6e                      template_proddescription     1     1  8.295611
+## # ... with 1,847,760 more rows, and 1 more variables: tf_idf <dbl>
+```
+
+These are the most important words in the description fields as measured by tf-idf, meaning they are common but not too common. Notice we have run into an issue here; both $n$ and term frequency are equal to 1 for these terms, meaning that these were description fields that only had a single word in them. If a description field only contains one word, the tf-idf algorithm will think that is a really important word. Depending on our analytic goals, it might be a good idea to throw out all description fields that have fewer than 5 words or similar.
+
+TODO: tf-idf, topic modeling
