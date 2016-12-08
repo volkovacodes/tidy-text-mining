@@ -353,14 +353,14 @@ library(ggplot2)
 library(igraph)
 library(ggraph)
 
-set.seed(2016)
+set.seed(1234)
 title_words %>%
   filter(n >= 250) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
   geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
   geom_node_point(color = "darkslategray4", size = 5) +
-  geom_node_text(aes(label = name), vjust = 1.8) +
+  geom_node_text(aes(label = name), repel = TRUE) +
   ggtitle("Word Network in NASA Dataset Titles") +
   theme_void()
 ```
@@ -373,14 +373,14 @@ Let's look at the words in descriptions.
 
 
 ```r
-set.seed(2016)
+set.seed(1234)
 desc_words %>%
   filter(n >= 5000) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
   geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
   geom_node_point(color = "indianred4", size = 5) +
-  geom_node_text(aes(label = name), vjust = 1.8) +
+  geom_node_text(aes(label = name), repel = TRUE) +
   ggtitle("Word Network in NASA Dataset Descriptions") +
   theme_void()
 ```
@@ -396,18 +396,16 @@ my_stopwords <- bind_rows(my_stopwords,
                                              "instrument", "resolution",
                                              "product", "level")))
 
-nasa_desc <- nasa_desc %>% 
-  anti_join(my_stopwords)
-desc_words <- nasa_desc %>% 
-  pairwise_count(word, id, sort = TRUE)
 set.seed(1234)
-desc_words %>%
+nasa_desc %>% 
+  anti_join(my_stopwords) %>%
+  pairwise_count(word, id, sort = TRUE) %>%
   filter(n >= 4600) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
   geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
   geom_node_point(color = "indianred4", size = 5) +
-  geom_node_text(aes(label = name), vjust = 1.8) +
+  geom_node_text(aes(label = name), repel = TRUE) +
   ggtitle("Word Network in NASA Dataset Descriptions") +
   theme_void()
 ```
@@ -444,14 +442,14 @@ keyword_counts
 ```
 
 ```r
-set.seed(2016)
+set.seed(1234)
 keyword_counts %>%
   filter(n >= 700) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
   geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
   geom_node_point(color = "royalblue3", size = 5) +
-  geom_node_text(aes(label = name), vjust = 1.8) +
+  geom_node_text(aes(label = name), repel = TRUE) +
   ggtitle("Co-occurrence Network in NASA Dataset Keywords") +
   theme_void()
 ```
@@ -464,46 +462,46 @@ These are the most commonly co-occurring words, but also just the most common ke
 ```r
 keyword_cors <- nasa_keyword %>% 
   group_by(keyword) %>%
-  filter(n() >= 20) %>%
+  filter(n() >= 50) %>%
   pairwise_cor(keyword, id, sort = TRUE)
 
 keyword_cors
 ```
 
 ```
-## # A tibble: 51,756 × 3
-##        item1     item2 correlation
-##        <chr>     <chr>       <dbl>
-## 1        LAT       GBM           1
-## 2        GBM       LAT           1
-## 3     NAVCAM    HAZCAM           1
-## 4     HAZCAM    NAVCAM           1
-## 5      MARCI       CTX           1
-## 6        CTX     MARCI           1
-## 7       MTES        MB           1
-## 8         MB      MTES           1
-## 9    SHARING KNOWLEDGE           1
-## 10 KNOWLEDGE   SHARING           1
-## # ... with 51,746 more rows
+## # A tibble: 15,750 × 3
+##         item1      item2 correlation
+##         <chr>      <chr>       <dbl>
+## 1     SHARING  KNOWLEDGE   1.0000000
+## 2   KNOWLEDGE    SHARING   1.0000000
+## 3        AMES   DASHLINK   1.0000000
+## 4    DASHLINK       AMES   1.0000000
+## 5  EXPEDITION   SCHEDULE   1.0000000
+## 6    SCHEDULE EXPEDITION   1.0000000
+## 7      MODELS TURBULENCE   0.9971871
+## 8  TURBULENCE     MODELS   0.9971871
+## 9   KNOWLEDGE      APPEL   0.9967945
+## 10    SHARING      APPEL   0.9967945
+## # ... with 15,740 more rows
 ```
 
 Notice that these keywords at the top of this sorted data frame have correlation coefficients equal to 1; they always occur together. This means these are redundant keywords and it may not make sense to continue to use both of these sets of pairs. Let's visualize the network of keyword correlations, just as we did for keyword co-occurences.
 
 
 ```r
-set.seed(2016)
+set.seed(1234)
 keyword_cors %>%
   filter(correlation > .6) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
   geom_edge_link(aes(edge_alpha = correlation, edge_width = correlation)) +
   geom_node_point(color = "royalblue3", size = 5) +
-  geom_node_text(aes(label = name), vjust = 1.8) +
+  geom_node_text(aes(label = name), repel = TRUE) +
   ggtitle("Correlation Network in NASA Dataset Keywords") +
   theme_void()
 ```
 
-<img src="09-nasa-metadata_files/figure-html/plot_cors-1.png" width="864" />
+<img src="09-nasa-metadata_files/figure-html/plot_cors-1.png" width="1152" />
 
 This network looks much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keyword pairs occur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted from the `graph_from_data_frame()` function above.
 
@@ -584,9 +582,9 @@ Using tf-idf has allowed us to identify important description words for each of 
 
 ## Topic modeling
 
-Let's try another approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in [Chapter 7](#topicmodeling) to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use [latent Dirichlet allocation (LDA)](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) for our topic modeling; there are other possible approaches.
+Let's try another approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in [Chapter 7](#topicmodeling) to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use [latent Dirichlet allocation (LDA)](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) for our topic modeling; there are other possible approaches for topic modeling.
 
-To do the topic modeling as implemented here, we need to make a `DocumentTermMatrix`, a special kind of matrix from the tm package (of course, there is just a general concept of a "document-term matrix"). Rows correspond to documents (description texts in our case) and columns correspond to terms (i.e., words); it is a sparse matrix and the values are word counts.
+To do the topic modeling as implemented here, we need to make a `DocumentTermMatrix`, a special kind of matrix from the tm package (of course, this is just a specific implementation of the general concept of a "document-term matrix"). Rows correspond to documents (description texts in our case) and columns correspond to terms (i.e., words); it is a sparse matrix and the values are word counts.
 
 Let’s clean up the text a bit using stop words to remove some of the nonsense "words" leftover from HTML or other character encoding.
 
@@ -652,11 +650,90 @@ Now let’s use the [topicmodels](https://cran.r-project.org/package=topicmodels
 library(topicmodels)
 
 desc_lda <- LDA(desc_dtm, k = 24, control = list(seed = 1234))
-
 desc_lda
 ```
 
+
+```
+## A LDA_VEM topic model with 24 topics.
+```
+
 This is a stochastic algorithm that could have different results depending on where the algorithm starts, so we need to specify a `seed` for reproducibility.
+
+Now that we have built the model, let's `tidy` the results of the model. The tidytext package includes a tidying method for LDA models from the topicmodels package.
+
+
+```r
+tidy_lda <- tidy(desc_lda)
+
+tidy_lda
+```
+
+```
+## # A tibble: 861,792 × 3
+##    topic  term          beta
+##    <int> <chr>         <dbl>
+## 1      1  suit  1.504577e-62
+## 2      2  suit  3.453300e-63
+## 3      3  suit 6.482644e-100
+## 4      4  suit  2.237356e-84
+## 5      5  suit 5.824520e-112
+## 6      6  suit  1.253670e-72
+## 7      7  suit  1.327232e-03
+## 8      8  suit 3.334593e-124
+## 9      9  suit  3.649836e-09
+## 10    10  suit  4.879224e-21
+## # ... with 861,782 more rows
+```
+
+The column $\beta$ tells us the probability of that term being generated from that topic for that document. Notice that some of very, very low, and some are not so low.
+
+What are the top 5 terms for each topic?
+
+
+```r
+top_terms <- tidy_lda %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+top_terms
+```
+
+```
+## # A tibble: 240 × 3
+##    topic        term       beta
+##    <int>       <chr>      <dbl>
+## 1      1        data 0.03849671
+## 2      1         sea 0.02500301
+## 3      1     surface 0.02457409
+## 4      1         sst 0.02081033
+## 5      1 temperature 0.01701900
+## 6      1       level 0.01654994
+## 7      1       avhrr 0.01221112
+## 8      1     version 0.01176028
+## 9      1     product 0.01103262
+## 10     1          ir 0.01056180
+## # ... with 230 more rows
+```
+
+Let’s look at this visually.
+
+
+```r
+ggplot(top_terms, aes(term, beta, fill = as.factor(topic))) +
+    geom_bar(stat = "identity", show.legend = FALSE, alpha = 0.8) +
+    coord_flip() +
+    labs(title = "Top 10 Terms in Each LDA Topic",
+         subtitle = "Topic modeling of NASA metadata description field texts",
+         x = NULL, y = expression(beta)) +
+    facet_wrap(~topic, ncol = 4, scales = "free")
+```
+
+<img src="09-nasa-metadata_files/figure-html/plot_lda-1.png" width="960" />
+
+We can see what a dominant word “data” is in these description texts. In addition, there are meaningful differences between these collections of terms, from terms about soil and biomass to terms about design, systems, and technology.
 
 TODO: finish topic modeling
 

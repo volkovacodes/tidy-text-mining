@@ -441,27 +441,27 @@ desc_words</code></pre></div>
 <span class="kw">library</span>(igraph)
 <span class="kw">library</span>(ggraph)
 
-<span class="kw">set.seed</span>(<span class="dv">2016</span>)
+<span class="kw">set.seed</span>(<span class="dv">1234</span>)
 title_words %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">250</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
 <span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;darkslategray4&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Word Network in NASA Dataset Titles&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_title-1.png" width="864" /></p>
 <p>This is a good start, although it looks like there may still a bit more cleaning to be done.</p>
 <p>Let’s look at the words in descriptions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
 desc_words %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">5000</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
 <span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;indianred4&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Word Network in NASA Dataset Descriptions&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_desc-1.png" width="864" /></p>
@@ -471,18 +471,16 @@ desc_words %&gt;%
                                              <span class="st">&quot;instrument&quot;</span>, <span class="st">&quot;resolution&quot;</span>,
                                              <span class="st">&quot;product&quot;</span>, <span class="st">&quot;level&quot;</span>)))
 
-nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">anti_join</span>(my_stopwords)
-desc_words &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 <span class="kw">set.seed</span>(<span class="dv">1234</span>)
-desc_words %&gt;%
+nasa_desc %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">anti_join</span>(my_stopwords) %&gt;%
+<span class="st">  </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">4600</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
 <span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;indianred4&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Word Network in NASA Dataset Descriptions&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_desc2-1.png" width="864" /></p>
@@ -506,50 +504,50 @@ keyword_counts</code></pre></div>
 ## 9      COMPLETED       PROJECT  6450
 ## 10       PROJECT     COMPLETED  6450
 ## # ... with 26,770 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
 keyword_counts %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">700</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
 <span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;royalblue3&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Co-occurrence Network in NASA Dataset Keywords&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_counts-1.png" width="864" /></p>
 <p>These are the most commonly co-occurring words, but also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_cors &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">20</span>) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">50</span>) %&gt;%
 <span class="st">  </span><span class="kw">pairwise_cor</span>(keyword, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 
 keyword_cors</code></pre></div>
-<pre><code>## # A tibble: 51,756 × 3
-##        item1     item2 correlation
-##        &lt;chr&gt;     &lt;chr&gt;       &lt;dbl&gt;
-## 1        LAT       GBM           1
-## 2        GBM       LAT           1
-## 3     NAVCAM    HAZCAM           1
-## 4     HAZCAM    NAVCAM           1
-## 5      MARCI       CTX           1
-## 6        CTX     MARCI           1
-## 7       MTES        MB           1
-## 8         MB      MTES           1
-## 9    SHARING KNOWLEDGE           1
-## 10 KNOWLEDGE   SHARING           1
-## # ... with 51,746 more rows</code></pre>
+<pre><code>## # A tibble: 15,750 × 3
+##         item1      item2 correlation
+##         &lt;chr&gt;      &lt;chr&gt;       &lt;dbl&gt;
+## 1     SHARING  KNOWLEDGE   1.0000000
+## 2   KNOWLEDGE    SHARING   1.0000000
+## 3        AMES   DASHLINK   1.0000000
+## 4    DASHLINK       AMES   1.0000000
+## 5  EXPEDITION   SCHEDULE   1.0000000
+## 6    SCHEDULE EXPEDITION   1.0000000
+## 7      MODELS TURBULENCE   0.9971871
+## 8  TURBULENCE     MODELS   0.9971871
+## 9   KNOWLEDGE      APPEL   0.9967945
+## 10    SHARING      APPEL   0.9967945
+## # ... with 15,740 more rows</code></pre>
 <p>Notice that these keywords at the top of this sorted data frame have correlation coefficients equal to 1; they always occur together. This means these are redundant keywords and it may not make sense to continue to use both of these sets of pairs. Let’s visualize the network of keyword correlations, just as we did for keyword co-occurences.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
 keyword_cors %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(correlation &gt;<span class="st"> </span>.<span class="dv">6</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> correlation, <span class="dt">edge_width =</span> correlation)) +
 <span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;royalblue3&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="fl">1.8</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Correlation Network in NASA Dataset Keywords&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
-<p><img src="09-nasa-metadata_files/figure-html/plot_cors-1.png" width="864" /></p>
+<p><img src="09-nasa-metadata_files/figure-html/plot_cors-1.png" width="1152" /></p>
 <p>This network looks much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keyword pairs occur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted from the <code>graph_from_data_frame()</code> function above.</p>
 </div>
 <div id="calculating-tf-idf-for-the-description-fields" class="section level2">
@@ -604,8 +602,8 @@ keyword_cors %&gt;%
 </div>
 <div id="topic-modeling" class="section level2">
 <h2><span class="header-section-number">9.6</span> Topic modeling</h2>
-<p>Let’s try another approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in <a href="topicmodeling.html#topicmodeling">Chapter 7</a> to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use <a href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">latent Dirichlet allocation (LDA)</a> for our topic modeling; there are other possible approaches.</p>
-<p>To do the topic modeling as implemented here, we need to make a <code>DocumentTermMatrix</code>, a special kind of matrix from the tm package (of course, there is just a general concept of a “document-term matrix”). Rows correspond to documents (description texts in our case) and columns correspond to terms (i.e., words); it is a sparse matrix and the values are word counts.</p>
+<p>Let’s try another approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in <a href="topicmodeling.html#topicmodeling">Chapter 7</a> to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use <a href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">latent Dirichlet allocation (LDA)</a> for our topic modeling; there are other possible approaches for topic modeling.</p>
+<p>To do the topic modeling as implemented here, we need to make a <code>DocumentTermMatrix</code>, a special kind of matrix from the tm package (of course, this is just a specific implementation of the general concept of a “document-term matrix”). Rows correspond to documents (description texts in our case) and columns correspond to terms (i.e., words); it is a sparse matrix and the values are word counts.</p>
 <p>Let’s clean up the text a bit using stop words to remove some of the nonsense “words” leftover from HTML or other character encoding.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_stop_words &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(stop_words, 
                            <span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;nbsp&quot;</span>, <span class="st">&quot;amp&quot;</span>, <span class="st">&quot;gt&quot;</span>, <span class="st">&quot;lt&quot;</span>,
@@ -650,9 +648,60 @@ desc_dtm</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(topicmodels)
 
 desc_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(desc_dtm, <span class="dt">k =</span> <span class="dv">24</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">seed =</span> <span class="dv">1234</span>))
-
 desc_lda</code></pre></div>
+<pre><code>## A LDA_VEM topic model with 24 topics.</code></pre>
 <p>This is a stochastic algorithm that could have different results depending on where the algorithm starts, so we need to specify a <code>seed</code> for reproducibility.</p>
+<p>Now that we have built the model, let’s <code>tidy</code> the results of the model. The tidytext package includes a tidying method for LDA models from the topicmodels package.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_lda &lt;-<span class="st"> </span><span class="kw">tidy</span>(desc_lda)
+
+tidy_lda</code></pre></div>
+<pre><code>## # A tibble: 861,792 × 3
+##    topic  term          beta
+##    &lt;int&gt; &lt;chr&gt;         &lt;dbl&gt;
+## 1      1  suit  1.504577e-62
+## 2      2  suit  3.453300e-63
+## 3      3  suit 6.482644e-100
+## 4      4  suit  2.237356e-84
+## 5      5  suit 5.824520e-112
+## 6      6  suit  1.253670e-72
+## 7      7  suit  1.327232e-03
+## 8      8  suit 3.334593e-124
+## 9      9  suit  3.649836e-09
+## 10    10  suit  4.879224e-21
+## # ... with 861,782 more rows</code></pre>
+<p>The column <span class="math inline">\(\beta\)</span> tells us the probability of that term being generated from that topic for that document. Notice that some of very, very low, and some are not so low.</p>
+<p>What are the top 5 terms for each topic?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_terms &lt;-<span class="st"> </span>tidy_lda %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(topic) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, beta) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(topic, -beta)
+
+top_terms</code></pre></div>
+<pre><code>## # A tibble: 240 × 3
+##    topic        term       beta
+##    &lt;int&gt;       &lt;chr&gt;      &lt;dbl&gt;
+## 1      1        data 0.03849671
+## 2      1         sea 0.02500301
+## 3      1     surface 0.02457409
+## 4      1         sst 0.02081033
+## 5      1 temperature 0.01701900
+## 6      1       level 0.01654994
+## 7      1       avhrr 0.01221112
+## 8      1     version 0.01176028
+## 9      1     product 0.01103262
+## 10     1          ir 0.01056180
+## # ... with 230 more rows</code></pre>
+<p>Let’s look at this visually.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(top_terms, <span class="kw">aes</span>(term, beta, <span class="dt">fill =</span> <span class="kw">as.factor</span>(topic))) +
+<span class="st">    </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +
+<span class="st">    </span><span class="kw">coord_flip</span>() +
+<span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Top 10 Terms in Each LDA Topic&quot;</span>,
+         <span class="dt">subtitle =</span> <span class="st">&quot;Topic modeling of NASA metadata description field texts&quot;</span>,
+         <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="kw">expression</span>(beta)) +
+<span class="st">    </span><span class="kw">facet_wrap</span>(~topic, <span class="dt">ncol =</span> <span class="dv">4</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
+<p><img src="09-nasa-metadata_files/figure-html/plot_lda-1.png" width="960" /></p>
+<p>We can see what a dominant word “data” is in these description texts. In addition, there are meaningful differences between these collections of terms, from terms about soil and biomass to terms about design, systems, and technology.</p>
 <p>TODO: finish topic modeling</p>
 
 </div>
