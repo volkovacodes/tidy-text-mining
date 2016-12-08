@@ -180,6 +180,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.3" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>9.3</b> Some initial simple exploration</a></li>
 <li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>9.4</b> Word co-ocurrences and correlations</a></li>
 <li class="chapter" data-level="9.5" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>9.5</b> Calculating tf-idf for the description fields</a></li>
+<li class="chapter" data-level="9.6" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>9.6</b> Topic modeling</a></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
 <li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#wrangling-the-data"><i class="fa fa-check"></i><b>10.1</b> Wrangling the data</a></li>
@@ -290,13 +291,13 @@ nasa_desc</code></pre></div>
 <span class="st">  </span><span class="kw">select</span>(desc) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">5</span>)</code></pre></div>
 <pre><code>## # A tibble: 5 × 1
-##                                                                                                         desc
-##                                                                                                        &lt;chr&gt;
-## 1       The Level-1B (L1B) Radiance Product OML1BIRR (Version-3) from the Aura-OMI is now available (http://
-## 2      The SeaWiFS instrument was launched by Orbital Sciences Corporation on the OrbView-2\n(a.k.a. SeaStar
-## 3      MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
-## 4      MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
-## 5 \r\n\r\nA variety of rule-based, model-based and datadriven\r\ntechniques have been proposed for detection</code></pre>
+##                                                                                                    desc
+##                                                                                                   &lt;chr&gt;
+## 1  Plasma catalytic techniques are proposed for the extraction of oxygen from the abundant carbon dioxi
+## 2 On August 17, 1996, the Japanese Space Agency (NASDA - National Space Development Agency)\nlaunched t
+## 3  The Tropical Rainfall Measuring Mission (TRMM) is a joint U.S.-Japan satellite mission to monitor tr
+## 4                          Field saturated hydraulic conductivity, using constant well head permeameter
+## 5  The Advanced Microwave Precipitation Radiometer (AMPR) was deployed during the First Kwajelein Exper</code></pre>
 <p>Now we can do the keywords, which must be unnested since they are in a list-column.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
@@ -331,7 +332,7 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 <div id="some-initial-simple-exploration" class="section level2">
 <h2><span class="header-section-number">9.3</span> Some initial simple exploration</h2>
 <p>What are the most common words in the NASA dataset titles?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_title %&gt;%<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_title %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## # A tibble: 11,614 × 2
 ##       word     n
@@ -365,13 +366,13 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 ## 10 resolution 13879
 ## # ... with 35,930 more rows</code></pre>
 <p>It looks like we might want to remove digits and some “words” like “v1” from these dataframes before approaching something more meaningful like topic modeling.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mystopwords &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">1</span>:<span class="dv">10</span>), 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_stopwords &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">1</span>:<span class="dv">10</span>), 
                                    <span class="st">&quot;v1&quot;</span>, <span class="st">&quot;v03&quot;</span>, <span class="st">&quot;l2&quot;</span>, <span class="st">&quot;l3&quot;</span>, <span class="st">&quot;v5.2.0&quot;</span>, 
                                    <span class="st">&quot;v003&quot;</span>, <span class="st">&quot;v004&quot;</span>, <span class="st">&quot;v005&quot;</span>, <span class="st">&quot;v006&quot;</span>))
 nasa_title &lt;-<span class="st"> </span>nasa_title %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">anti_join</span>(mystopwords)
+<span class="st">  </span><span class="kw">anti_join</span>(my_stopwords)
 nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">anti_join</span>(mystopwords)</code></pre></div>
+<span class="st">  </span><span class="kw">anti_join</span>(my_stopwords)</code></pre></div>
 <p>What are the most common keywords?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%<span class="st"> </span>
@@ -465,13 +466,13 @@ desc_words %&gt;%
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_desc-1.png" width="864" /></p>
 <p>Here there are such <em>strong</em> connections between the top dozen or so words (words like “data”, “resolution”, and “instrument”) that we may do better if we exclude these very highly connected words or use tf-idf (as described in detail in <a href="tfidf.html#tfidf">Chapter 4</a>) as a metric. But for now, let’s add a few more stop words and look at one more word network for the description fields. Notice how we use <code>bind_rows</code> to add more custom stop words to the words we are already using; this approach can be used in many instances.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mystopwords &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(mystopwords,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_stopwords &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(my_stopwords,
                          <span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;global&quot;</span>, 
                                              <span class="st">&quot;instrument&quot;</span>, <span class="st">&quot;resolution&quot;</span>,
                                              <span class="st">&quot;product&quot;</span>, <span class="st">&quot;level&quot;</span>)))
 
 nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">anti_join</span>(mystopwords)
+<span class="st">  </span><span class="kw">anti_join</span>(my_stopwords)
 desc_words &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 <span class="kw">set.seed</span>(<span class="dv">1234</span>)
@@ -600,7 +601,59 @@ keyword_cors %&gt;%
        <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>)</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_tf_idf-1.png" width="960" /></p>
 <p>Using tf-idf has allowed us to identify important description words for each of these keywords. Datasets labeled with the keyword <strong>SEISMOLOGY</strong> have words like “earthquake”, “risk”, and “hazard” in their description, while those labeled with <strong>HUMAN HEALTH</strong> have descriptions characterized by words like “wellbeing”, “vulnerability”, and “children.” Most of the combinations of letters that are not English words are certainly acronyms (like OMB for the Office of Management and Budget), and the examples of years and numbers are important for these topics. The tf-idf statistic has identified the kinds of words it is intended to, important words for individual documents within a collection of documents.</p>
-<p>TODO: topic modeling</p>
+</div>
+<div id="topic-modeling" class="section level2">
+<h2><span class="header-section-number">9.6</span> Topic modeling</h2>
+<p>Let’s try another approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in <a href="topicmodeling.html#topicmodeling">Chapter 7</a> to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use <a href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">latent Dirichlet allocation (LDA)</a> for our topic modeling; there are other possible approaches.</p>
+<p>To do the topic modeling as implemented here, we need to make a <code>DocumentTermMatrix</code>, a special kind of matrix from the tm package (of course, there is just a general concept of a “document-term matrix”). Rows correspond to documents (description texts in our case) and columns correspond to terms (i.e., words); it is a sparse matrix and the values are word counts.</p>
+<p>Let’s clean up the text a bit using stop words to remove some of the nonsense “words” leftover from HTML or other character encoding.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_stop_words &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(stop_words, 
+                           <span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;nbsp&quot;</span>, <span class="st">&quot;amp&quot;</span>, <span class="st">&quot;gt&quot;</span>, <span class="st">&quot;lt&quot;</span>,
+                                               <span class="st">&quot;timesnewromanpsmt&quot;</span>, <span class="st">&quot;font&quot;</span>,
+                                               <span class="st">&quot;td&quot;</span>, <span class="st">&quot;li&quot;</span>, <span class="st">&quot;br&quot;</span>, <span class="st">&quot;tr&quot;</span>, <span class="st">&quot;quot&quot;</span>,
+                                               <span class="st">&quot;st&quot;</span>, <span class="st">&quot;img&quot;</span>, <span class="st">&quot;src&quot;</span>, <span class="st">&quot;strong&quot;</span>,
+                                               <span class="kw">as.character</span>(<span class="dv">1</span>:<span class="dv">10</span>)), 
+                                      <span class="dt">lexicon =</span> <span class="kw">rep</span>(<span class="st">&quot;custom&quot;</span>, <span class="dv">25</span>)))
+
+word_counts &lt;-<span class="st"> </span>nasa_desc %&gt;%
+<span class="st">    </span><span class="kw">anti_join</span>(my_stop_words) %&gt;%
+<span class="st">    </span><span class="kw">count</span>(id, word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
+<span class="st">    </span><span class="kw">ungroup</span>()
+
+word_counts</code></pre></div>
+<pre><code>## # A tibble: 1,842,559 × 3
+##                          id     word     n
+##                       &lt;chr&gt;    &lt;chr&gt; &lt;int&gt;
+## 1  55942a8ec63a7fe59b4986ef     suit    82
+## 2  55942a8ec63a7fe59b4986ef    space    69
+## 3  56cf5b00a759fdadc44e564a     leak    40
+## 4  56cf5b00a759fdadc44e564a     tree    39
+## 5  55942a8ec63a7fe59b4986ef pressure    34
+## 6  55942a8ec63a7fe59b4986ef   system    34
+## 7  55942a89c63a7fe59b4982d9       em    32
+## 8  55942a8ec63a7fe59b4986ef       al    32
+## 9  55942a8ec63a7fe59b4986ef    human    31
+## 10 56cf5b00a759fdadc44e55cd   sparse    31
+## # ... with 1,842,549 more rows</code></pre>
+<p>This is the information we need, the number of times each word is used in each document, to make a <code>DocumentTermMatrix</code>. We can <code>cast</code> from our tidy text format to this non-tidy format as described in detail in <a href="dtm.html#dtm">Chapter 6</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_dtm &lt;-<span class="st"> </span>word_counts %&gt;%
+<span class="st">  </span><span class="kw">cast_dtm</span>(id, word, n)
+
+desc_dtm</code></pre></div>
+<pre><code>## &lt;&lt;DocumentTermMatrix (documents: 32003, terms: 35902)&gt;&gt;
+## Non-/sparse entries: 1842559/1147129147
+## Sparsity           : 100%
+## Maximal term length: 166
+## Weighting          : term frequency (tf)</code></pre>
+<p>We see that this dataset contains documents (each of them a NASA description field) and terms (words). Notice that this example document-term matrix is (nearly) 100% sparse.</p>
+<p>Now let’s use the <a href="https://cran.r-project.org/package=topicmodels">topicmodels</a> package to create an LDA model. How many topics will we tell the algorithm to make? This is a question much like in <span class="math inline">\(k\)</span>-means clustering; we don’t really know ahead of time. We tried this modeling procedure using 8, 16, 24, 32, and 64 topics; we found that at 24 topics, documents were still getting sorted into topics cleanly but going much beyond that caused the distributions of <span class="math inline">\(\gamma\)</span>, the probability that each document belongs in each topic, to look worrisome. We will show more details on this below.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(topicmodels)
+
+desc_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(desc_dtm, <span class="dt">k =</span> <span class="dv">24</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">seed =</span> <span class="dv">1234</span>))
+
+desc_lda</code></pre></div>
+<p>This is a stochastic algorithm that could have different results depending on where the algorithm starts, so we need to specify a <code>seed</code> for reproducibility.</p>
+<p>TODO: finish topic modeling</p>
 
 </div>
 </div>

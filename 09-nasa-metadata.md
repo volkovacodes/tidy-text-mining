@@ -138,13 +138,13 @@ nasa_desc %>%
 
 ```
 ## # A tibble: 5 × 1
-##                                                                                                         desc
-##                                                                                                        <chr>
-## 1       The Level-1B (L1B) Radiance Product OML1BIRR (Version-3) from the Aura-OMI is now available (http://
-## 2      The SeaWiFS instrument was launched by Orbital Sciences Corporation on the OrbView-2\n(a.k.a. SeaStar
-## 3      MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
-## 4      MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
-## 5 \r\n\r\nA variety of rule-based, model-based and datadriven\r\ntechniques have been proposed for detection
+##                                                                                                    desc
+##                                                                                                   <chr>
+## 1  Plasma catalytic techniques are proposed for the extraction of oxygen from the abundant carbon dioxi
+## 2 On August 17, 1996, the Japanese Space Agency (NASDA - National Space Development Agency)\nlaunched t
+## 3  The Tropical Rainfall Measuring Mission (TRMM) is a joint U.S.-Japan satellite mission to monitor tr
+## 4                          Field saturated hydraulic conductivity, using constant well head permeameter
+## 5  The Advanced Microwave Precipitation Radiometer (AMPR) was deployed during the First Kwajelein Exper
 ```
 
 Now we can do the keywords, which must be unnested since they are in a list-column.
@@ -196,7 +196,7 @@ What are the most common words in the NASA dataset titles?
 
 
 ```r
-nasa_title %>% 
+nasa_title %>%
   count(word, sort = TRUE)
 ```
 
@@ -246,13 +246,13 @@ It looks like we might want to remove digits and some "words" like "v1" from the
 
 
 ```r
-mystopwords <- data_frame(word = c(as.character(1:10), 
+my_stopwords <- data_frame(word = c(as.character(1:10), 
                                    "v1", "v03", "l2", "l3", "v5.2.0", 
                                    "v003", "v004", "v005", "v006"))
 nasa_title <- nasa_title %>% 
-  anti_join(mystopwords)
+  anti_join(my_stopwords)
 nasa_desc <- nasa_desc %>% 
-  anti_join(mystopwords)
+  anti_join(my_stopwords)
 ```
 
 What are the most common keywords?
@@ -391,13 +391,13 @@ Here there are such *strong* connections between the top dozen or so words (word
 
 
 ```r
-mystopwords <- bind_rows(mystopwords,
+my_stopwords <- bind_rows(my_stopwords,
                          data_frame(word = c("data", "global", 
                                              "instrument", "resolution",
                                              "product", "level")))
 
 nasa_desc <- nasa_desc %>% 
-  anti_join(mystopwords)
+  anti_join(my_stopwords)
 desc_words <- nasa_desc %>% 
   pairwise_count(word, id, sort = TRUE)
 set.seed(1234)
@@ -582,4 +582,81 @@ desc_tf_idf %>%
 
 Using tf-idf has allowed us to identify important description words for each of these keywords. Datasets labeled with the keyword **SEISMOLOGY** have words like "earthquake", "risk", and "hazard" in their description, while those labeled with **HUMAN HEALTH** have descriptions characterized by words like "wellbeing", "vulnerability", and "children." Most of the combinations of letters that are not English words are certainly acronyms (like OMB for the Office of Management and Budget), and the examples of years and numbers are important for these topics. The tf-idf statistic has identified the kinds of words it is intended to, important words for individual documents within a collection of documents.
 
-TODO: topic modeling
+## Topic modeling
+
+Let's try another approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in [Chapter 7](#topicmodeling) to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use [latent Dirichlet allocation (LDA)](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) for our topic modeling; there are other possible approaches.
+
+To do the topic modeling as implemented here, we need to make a `DocumentTermMatrix`, a special kind of matrix from the tm package (of course, there is just a general concept of a "document-term matrix"). Rows correspond to documents (description texts in our case) and columns correspond to terms (i.e., words); it is a sparse matrix and the values are word counts.
+
+Let’s clean up the text a bit using stop words to remove some of the nonsense "words" leftover from HTML or other character encoding.
+
+
+```r
+my_stop_words <- bind_rows(stop_words, 
+                           data_frame(word = c("nbsp", "amp", "gt", "lt",
+                                               "timesnewromanpsmt", "font",
+                                               "td", "li", "br", "tr", "quot",
+                                               "st", "img", "src", "strong",
+                                               as.character(1:10)), 
+                                      lexicon = rep("custom", 25)))
+
+word_counts <- nasa_desc %>%
+    anti_join(my_stop_words) %>%
+    count(id, word, sort = TRUE) %>%
+    ungroup()
+
+word_counts
+```
+
+```
+## # A tibble: 1,842,559 × 3
+##                          id     word     n
+##                       <chr>    <chr> <int>
+## 1  55942a8ec63a7fe59b4986ef     suit    82
+## 2  55942a8ec63a7fe59b4986ef    space    69
+## 3  56cf5b00a759fdadc44e564a     leak    40
+## 4  56cf5b00a759fdadc44e564a     tree    39
+## 5  55942a8ec63a7fe59b4986ef pressure    34
+## 6  55942a8ec63a7fe59b4986ef   system    34
+## 7  55942a89c63a7fe59b4982d9       em    32
+## 8  55942a8ec63a7fe59b4986ef       al    32
+## 9  55942a8ec63a7fe59b4986ef    human    31
+## 10 56cf5b00a759fdadc44e55cd   sparse    31
+## # ... with 1,842,549 more rows
+```
+
+This is the information we need, the number of times each word is used in each document, to make a `DocumentTermMatrix`. We can `cast` from our tidy text format to this non-tidy format as described in detail in [Chapter 6](#dtm).
+
+
+```r
+desc_dtm <- word_counts %>%
+  cast_dtm(id, word, n)
+
+desc_dtm
+```
+
+```
+## <<DocumentTermMatrix (documents: 32003, terms: 35902)>>
+## Non-/sparse entries: 1842559/1147129147
+## Sparsity           : 100%
+## Maximal term length: 166
+## Weighting          : term frequency (tf)
+```
+
+We see that this dataset contains documents (each of them a NASA description field) and terms (words). Notice that this example document-term matrix is (nearly) 100% sparse.
+
+Now let’s use the [topicmodels](https://cran.r-project.org/package=topicmodels) package to create an LDA model. How many topics will we tell the algorithm to make? This is a question much like in $k$-means clustering; we don’t really know ahead of time. We tried this modeling procedure using 8, 16, 24, 32, and 64 topics; we found that at 24 topics, documents were still getting sorted into topics cleanly but going much beyond that caused the distributions of $\gamma$, the probability that each document belongs in each topic, to look worrisome. We will show more details on this below.
+
+
+```r
+library(topicmodels)
+
+desc_lda <- LDA(desc_dtm, k = 24, control = list(seed = 1234))
+
+desc_lda
+```
+
+This is a stochastic algorithm that could have different results depending on where the algorithm starts, so we need to specify a `seed` for reproducibility.
+
+TODO: finish topic modeling
+
