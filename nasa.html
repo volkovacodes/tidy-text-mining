@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2016-12-07">
+<meta name="date" content="2016-12-08">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -576,7 +576,31 @@ keyword_cors %&gt;%
 ## 10 55942ad8c63a7fe59b49cf6e                      template_proddescription     1     1  8.295611
 ## # ... with 1,847,760 more rows, and 1 more variables: tf_idf &lt;dbl&gt;</code></pre>
 <p>These are the most important words in the description fields as measured by tf-idf, meaning they are common but not too common. Notice we have run into an issue here; both <span class="math inline">\(n\)</span> and term frequency are equal to 1 for these terms, meaning that these were description fields that only had a single word in them. If a description field only contains one word, the tf-idf algorithm will think that is a really important word. Depending on our analytic goals, it might be a good idea to throw out all description fields that have fewer than 5 words or similar.</p>
-<p>TODO: tf-idf, topic modeling</p>
+<p>We now know which words in the descriptions have high tf-idf, and we also have labels for these descriptions in the keywords. Let’s do a full join of the keyword data frame and the data frame of description words with tf-idf, and then find the highest tf-idf words for a given keyword.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_tf_idf &lt;-<span class="st"> </span><span class="kw">full_join</span>(desc_tf_idf, nasa_keyword, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>)</code></pre></div>
+<p>Let’s plot some of the most important words, as measured by tf-idf, for a few example keywords used on NASA datasets. First, let’s use dplyr operations to filter for the keywords we want to examine and take just the top 15 words for each keyword. Then, let’s plot those words.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_tf_idf %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">near</span>(tf, <span class="dv">1</span>)) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(keyword %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;SOLAR ACTIVITY&quot;</span>, <span class="st">&quot;CLOUDS&quot;</span>, 
+                        <span class="st">&quot;SEISMOLOGY&quot;</span>, <span class="st">&quot;ASTROPHYSICS&quot;</span>,
+                        <span class="st">&quot;HUMAN HEALTH&quot;</span>, <span class="st">&quot;BUDGET&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf)) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%
+<span class="st">  </span><span class="kw">distinct</span>(word, keyword, <span class="dt">.keep_all =</span> <span class="ot">TRUE</span>) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">15</span>, tf_idf) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">unique</span>(word)))) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> keyword)) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~keyword, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>() +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in NASA Metadata Description Fields&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Distribution of tf-idf for words from datasets labeled with select keywords&quot;</span>,
+       <span class="dt">caption =</span> <span class="st">&quot;NASA metadata from https://data.nasa.gov/data.json&quot;</span>,
+       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>)</code></pre></div>
+<p><img src="09-nasa-metadata_files/figure-html/plot_tf_idf-1.png" width="960" /></p>
+<p>Using tf-idf has allowed us to identify important description words for each of these keywords. Datasets labeled with the keyword <strong>SEISMOLOGY</strong> have words like “earthquake”, “risk”, and “hazard” in their description, while those labeled with <strong>HUMAN HEALTH</strong> have descriptions characterized by words like “wellbeing”, “vulnerability”, and “children.” Most of the combinations of letters that are not English words are certainly acronyms (like OMB for the Office of Management and Budget), and the examples of years and numbers are important for these topics. The tf-idf statistic has identified the kinds of words it is intended to, important words for individual documents within a collection of documents.</p>
+<p>TODO: topic modeling</p>
 
 </div>
 </div>
