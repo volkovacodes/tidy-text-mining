@@ -82,7 +82,7 @@ Let's set up tidy data frames for title, description, and keyword and keep the d
 library(dplyr)
 
 nasa_title <- data_frame(id = metadata$dataset$`_id`$`$oid`, 
-                        title = metadata$dataset$title)
+                         title = metadata$dataset$title)
 nasa_title
 ```
 
@@ -106,7 +106,7 @@ nasa_title
 
 ```r
 nasa_desc <- data_frame(id = metadata$dataset$`_id`$`$oid`, 
-                       desc = metadata$dataset$description)
+                        desc = metadata$dataset$description)
 nasa_desc
 ```
 
@@ -140,11 +140,11 @@ nasa_desc %>%
 ## # A tibble: 5 × 1
 ##                                                                                                    desc
 ##                                                                                                   <chr>
-## 1  Plasma catalytic techniques are proposed for the extraction of oxygen from the abundant carbon dioxi
-## 2 On August 17, 1996, the Japanese Space Agency (NASDA - National Space Development Agency)\nlaunched t
-## 3  The Tropical Rainfall Measuring Mission (TRMM) is a joint U.S.-Japan satellite mission to monitor tr
-## 4                          Field saturated hydraulic conductivity, using constant well head permeameter
-## 5  The Advanced Microwave Precipitation Radiometer (AMPR) was deployed during the First Kwajelein Exper
+## 1  This SBIR Phase I effort proposes to establish the feasibility of developing a UV Planar Lightwave C
+## 2  This dataset consists of VHS tapes which record the forward and nadir views from the NASA DC-8 aircr
+## 3 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+## 4  The Coastal Zone Color Scanner Experiment (CZCS) was the first instrument devoted to the measurement
+## 5 The SeaWiFS instrument was launched by Orbital Sciences Corporation on the OrbView-2\n(a.k.a. SeaStar
 ```
 
 Now we can do the keywords, which must be unnested since they are in a list-column.
@@ -154,7 +154,7 @@ Now we can do the keywords, which must be unnested since they are in a list-colu
 library(tidyr)
 
 nasa_keyword <- data_frame(id = metadata$dataset$`_id`$`$oid`, 
-                          keyword = metadata$dataset$keyword) %>%
+                           keyword = metadata$dataset$keyword) %>%
   unnest(keyword)
 nasa_keyword
 ```
@@ -247,8 +247,8 @@ It looks like we might want to remove digits and some "words" like "v1" from the
 
 ```r
 my_stopwords <- data_frame(word = c(as.character(1:10), 
-                                   "v1", "v03", "l2", "l3", "v5.2.0", 
-                                   "v003", "v004", "v005", "v006"))
+                                    "v1", "v03", "l2", "l3", "v5.2.0", 
+                                    "v003", "v004", "v005", "v006"))
 nasa_title <- nasa_title %>% 
   anti_join(my_stopwords)
 nasa_desc <- nasa_desc %>% 
@@ -392,9 +392,9 @@ Here there are such *strong* connections between the top dozen or so words (word
 
 ```r
 my_stopwords <- bind_rows(my_stopwords,
-                         data_frame(word = c("data", "global", 
-                                             "instrument", "resolution",
-                                             "product", "level")))
+                          data_frame(word = c("data", "global", 
+                                              "instrument", "resolution",
+                                              "product", "level")))
 
 set.seed(1234)
 nasa_desc %>% 
@@ -526,7 +526,7 @@ desc_tf_idf %>%
 ```
 
 ```
-## # A tibble: 1,847,770 × 6
+## # A tibble: 1,913,349 × 6
 ##                          id                                          word     n    tf       idf
 ##                       <chr>                                         <chr> <int> <dbl>     <dbl>
 ## 1  55942a7cc63a7fe59b49774a                                           rdr     1     1 10.375052
@@ -539,7 +539,7 @@ desc_tf_idf %>%
 ## 8  55942ad8c63a7fe59b49cf6c                      template_proddescription     1     1  8.295611
 ## 9  55942ad8c63a7fe59b49cf6d                      template_proddescription     1     1  8.295611
 ## 10 55942ad8c63a7fe59b49cf6e                      template_proddescription     1     1  8.295611
-## # ... with 1,847,760 more rows, and 1 more variables: tf_idf <dbl>
+## # ... with 1,913,339 more rows, and 1 more variables: tf_idf <dbl>
 ```
 
 These are the most important words in the description fields as measured by tf-idf, meaning they are common but not too common. Notice we have run into an issue here; both $n$ and term frequency are equal to 1 for these terms, meaning that these were description fields that only had a single word in them. If a description field only contains one word, the tf-idf algorithm will think that is a really important word. Depending on our analytic goals, it might be a good idea to throw out all description fields that have fewer than 5 words or similar.
@@ -599,28 +599,28 @@ my_stop_words <- bind_rows(stop_words,
                                       lexicon = rep("custom", 25)))
 
 word_counts <- nasa_desc %>%
-    anti_join(my_stop_words) %>%
-    count(id, word, sort = TRUE) %>%
-    ungroup()
+  anti_join(my_stop_words) %>%
+  count(id, word, sort = TRUE) %>%
+  ungroup()
 
 word_counts
 ```
 
 ```
-## # A tibble: 1,842,559 × 3
+## # A tibble: 1,908,138 × 3
 ##                          id     word     n
 ##                       <chr>    <chr> <int>
 ## 1  55942a8ec63a7fe59b4986ef     suit    82
 ## 2  55942a8ec63a7fe59b4986ef    space    69
-## 3  56cf5b00a759fdadc44e564a     leak    40
-## 4  56cf5b00a759fdadc44e564a     tree    39
-## 5  55942a8ec63a7fe59b4986ef pressure    34
-## 6  55942a8ec63a7fe59b4986ef   system    34
-## 7  55942a89c63a7fe59b4982d9       em    32
-## 8  55942a8ec63a7fe59b4986ef       al    32
-## 9  55942a8ec63a7fe59b4986ef    human    31
-## 10 56cf5b00a759fdadc44e55cd   sparse    31
-## # ... with 1,842,549 more rows
+## 3  56cf5b00a759fdadc44e564a     data    41
+## 4  56cf5b00a759fdadc44e564a     leak    40
+## 5  56cf5b00a759fdadc44e564a     tree    39
+## 6  55942a8ec63a7fe59b4986ef pressure    34
+## 7  55942a8ec63a7fe59b4986ef   system    34
+## 8  55942a89c63a7fe59b4982d9       em    32
+## 9  55942a8ec63a7fe59b4986ef       al    32
+## 10 55942a8ec63a7fe59b4986ef    human    31
+## # ... with 1,908,128 more rows
 ```
 
 This is the information we need, the number of times each word is used in each document, to make a `DocumentTermMatrix`. We can `cast` from our tidy text format to this non-tidy format as described in detail in [Chapter 6](#dtm).
@@ -634,8 +634,8 @@ desc_dtm
 ```
 
 ```
-## <<DocumentTermMatrix (documents: 32003, terms: 35902)>>
-## Non-/sparse entries: 1842559/1147129147
+## <<DocumentTermMatrix (documents: 32003, terms: 35908)>>
+## Non-/sparse entries: 1908138/1147255586
 ## Sparsity           : 100%
 ## Maximal term length: 166
 ## Weighting          : term frequency (tf)
@@ -659,6 +659,8 @@ desc_lda
 ```
 
 This is a stochastic algorithm that could have different results depending on where the algorithm starts, so we need to specify a `seed` for reproducibility.
+
+## Interpreting the topic model
 
 Now that we have built the model, let's `tidy` the results of the model. The tidytext package includes a tidying method for LDA models from the topicmodels package.
 
@@ -723,17 +725,120 @@ Let’s look at this visually.
 
 ```r
 ggplot(top_terms, aes(term, beta, fill = as.factor(topic))) +
-    geom_bar(stat = "identity", show.legend = FALSE, alpha = 0.8) +
-    coord_flip() +
-    labs(title = "Top 10 Terms in Each LDA Topic",
-         subtitle = "Topic modeling of NASA metadata description field texts",
-         x = NULL, y = expression(beta)) +
-    facet_wrap(~topic, ncol = 4, scales = "free")
+  geom_bar(stat = "identity", show.legend = FALSE, alpha = 0.8) +
+  coord_flip() +
+  labs(title = "Top 10 Terms in Each LDA Topic",
+       subtitle = "Topic modeling of NASA metadata description field texts",
+       x = NULL, y = expression(beta)) +
+  facet_wrap(~topic, ncol = 4, scales = "free")
 ```
 
-<img src="09-nasa-metadata_files/figure-html/plot_lda-1.png" width="960" />
+<img src="09-nasa-metadata_files/figure-html/plot_beta-1.png" width="1152" />
 
 We can see what a dominant word “data” is in these description texts. In addition, there are meaningful differences between these collections of terms, from terms about soil and biomass to terms about design, systems, and technology.
+
+Next, let’s examine which topics are associated with which description fields (i.e., documents). We will look at a different probability for this, $\gamma$, the probability that each document belongs in each topic.
+
+
+```r
+lda_gamma <- tidy(desc_lda, matrix = "gamma")
+
+lda_gamma
+```
+
+```
+## # A tibble: 768,072 × 3
+##                    document topic        gamma
+##                       <chr> <int>        <dbl>
+## 1  55942a8ec63a7fe59b4986ef     1 6.282939e-06
+## 2  56cf5b00a759fdadc44e564a     1 1.123270e-05
+## 3  55942a89c63a7fe59b4982d9     1 3.587508e-05
+## 4  56cf5b00a759fdadc44e55cd     1 2.195722e-05
+## 5  55942a89c63a7fe59b4982c6     1 6.461393e-05
+## 6  55942a86c63a7fe59b498077     1 5.539564e-05
+## 7  56cf5b00a759fdadc44e56f8     1 4.607134e-05
+## 8  55942a8bc63a7fe59b4984b5     1 4.211972e-05
+## 9  55942a6ec63a7fe59b496bf7     1 4.098247e-05
+## 10 55942a8ec63a7fe59b4986f6     1 2.813661e-05
+## # ... with 768,062 more rows
+```
+
+Notice that these probabilites visible at the top of the data frame are quite low; some are higher, as we will see in a moment. Our model has assigned some probability to each description belonging to each of the topics we constructed from the sets of words. How are the probabilities distributed? Let's visualize them.
+
+
+```r
+ggplot(lda_gamma, aes(gamma, fill = as.factor(topic))) +
+  geom_histogram(show.legend = FALSE, alpha = 0.8) +
+  facet_wrap(~topic, ncol = 4) +
+  scale_y_log10() +
+  labs(title = "Distribution of Probability for Each Topic",
+       subtitle = "Topic modeling of NASA metadata description field texts",
+       y = "Number of documents", x = expression(gamma))
+```
+
+<img src="09-nasa-metadata_files/figure-html/plot_gamma-1.png" width="1152" />
+
+First notice that the y-axis is plotted on a log scale; otherwise it is difficult to make out any detail. Next, notice that $\gamma$ runs from 0 to 1 in each panel and remember that this is the probability that a given document belongs in a given topic. There are many values near zero, which means there are many documents that do not belong in those topics. Also, most of these panels show a higher number of documents near $\gamma = 1$; these are the documents that *do* belong in those topics.
+
+## Connecting topic modeling with keywords
+
+Let’s connect these topic models with the keywords and see what happens. We can `join` this dataframe to the human-tagged keywords and see which keywords are associated with which topic.
+
+
+```r
+lda_gamma <- full_join(lda_gamma, nasa_keyword, by = c("document" = "id"))
+
+lda_gamma
+```
+
+```
+## # A tibble: 3,037,671 × 4
+##                    document topic        gamma                     keyword
+##                       <chr> <int>        <dbl>                       <chr>
+## 1  55942a8ec63a7fe59b4986ef     1 6.282939e-06        JOHNSON SPACE CENTER
+## 2  55942a8ec63a7fe59b4986ef     1 6.282939e-06                     PROJECT
+## 3  55942a8ec63a7fe59b4986ef     1 6.282939e-06                   COMPLETED
+## 4  56cf5b00a759fdadc44e564a     1 1.123270e-05                    DASHLINK
+## 5  56cf5b00a759fdadc44e564a     1 1.123270e-05                        AMES
+## 6  56cf5b00a759fdadc44e564a     1 1.123270e-05                        NASA
+## 7  55942a89c63a7fe59b4982d9     1 3.587508e-05 GODDARD SPACE FLIGHT CENTER
+## 8  55942a89c63a7fe59b4982d9     1 3.587508e-05                     PROJECT
+## 9  55942a89c63a7fe59b4982d9     1 3.587508e-05                   COMPLETED
+## 10 56cf5b00a759fdadc44e55cd     1 2.195722e-05                    DASHLINK
+## # ... with 3,037,661 more rows
+```
+
+Now we can use `filter` to keep only the document-topic entries that have probabilities greater than 0.9. After that, let's find the top keywords for each topic.
+
+
+```r
+top_keywords <- lda_gamma %>% 
+  filter(gamma > 0.9) %>% 
+  group_by(topic, keyword) %>% 
+  count(keyword, sort = TRUE)
+
+top_keywords
+```
+
+```
+## Source: local data frame [1,198 x 3]
+## Groups: topic [24]
+## 
+##    topic       keyword     n
+##    <int>         <chr> <int>
+## 1      5   OCEAN COLOR  4480
+## 2      5  OCEAN OPTICS  4480
+## 3      5        OCEANS  4480
+## 4     16   OCEAN COLOR  1968
+## 5     16  OCEAN OPTICS  1968
+## 6     16        OCEANS  1968
+## 7      1 EARTH SCIENCE  1279
+## 8      1        OCEANS  1277
+## 9      6 EARTH SCIENCE  1057
+## 10     9       PROJECT   905
+## # ... with 1,188 more rows
+```
+
 
 TODO: finish topic modeling
 
