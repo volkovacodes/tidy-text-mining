@@ -778,7 +778,7 @@ ggplot(lda_gamma, aes(gamma, fill = as.factor(topic))) +
 
 <img src="09-nasa-metadata_files/figure-html/plot_gamma-1.png" width="1152" />
 
-First notice that the y-axis is plotted on a log scale; otherwise it is difficult to make out any detail. Next, notice that $\gamma$ runs from 0 to 1 in each panel and remember that this is the probability that a given document belongs in a given topic. There are many values near zero, which means there are many documents that do not belong in those topics. Also, most of these panels show a higher number of documents near $\gamma = 1$; these are the documents that *do* belong in those topics.
+First notice that the y-axis is plotted on a log scale; otherwise it is difficult to make out any detail. Next, notice that $\gamma$ runs from 0 to 1 in each panel and remember that this is the probability that a given document belongs in a given topic. There are many values near zero, which means there are many documents that do not belong in each topics. Also, most of these panels show a higher number of documents near $\gamma = 1$; these are the documents that *do* belong in those topics. This is the type of information we used to choose how many topics to use in our topic modeling procedure. When we tried options higher than 24 (like 32 or 64), the distributions for $\gamma$ started to look very flat; documents were not getting sorted into topics very well.
 
 ## Connecting topic modeling with keywords
 
@@ -839,6 +839,25 @@ top_keywords
 ## # ... with 1,188 more rows
 ```
 
+What are the top keywords for each topic?
 
-TODO: finish topic modeling
+
+```r
+top_keywords %>%
+  top_n(10, n) %>%
+  ggplot(aes(keyword, n, fill = as.factor(topic))) +
+  geom_bar(stat = "identity", show.legend = FALSE, alpha = 0.8) +
+  labs(title = "Top Keywords for Each LDA Topic",
+       subtitle = "Topic modeling of NASA metadata description field texts",
+       x = NULL, y = "Number of documents") +
+  coord_flip() +
+  facet_wrap(~topic, ncol = 2, scales = "free")
+```
+
+<img src="09-nasa-metadata_files/figure-html/plot_top_keywords-1.png" width="1536" />
+
+Let's take a step back and remind ourselves what this plot is telling us. NASA datasets are tagged with keywords by human beings, and we have built an LDA topic model (with 24 topics) for the description fields of the NASA datasets. This plot answers the question, "For the datasets that have description fields with a high probability of belonging to a given topic, what are the most common human-assigned keywords?"
+
+It’s interesting that the keywords for topics 5, 15, and 16 are essentially duplicates of each other, because the top terms in those topics do exhibit meaningful differences. Also note that by number of documents, the combination of 5, 15, and 16 is quite a large percentage of the total number of datasets represented in this plot.
+
 

@@ -734,7 +734,7 @@ lda_gamma</code></pre></div>
        <span class="dt">subtitle =</span> <span class="st">&quot;Topic modeling of NASA metadata description field texts&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Number of documents&quot;</span>, <span class="dt">x =</span> <span class="kw">expression</span>(gamma))</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_gamma-1.png" width="1152" /></p>
-<p>First notice that the y-axis is plotted on a log scale; otherwise it is difficult to make out any detail. Next, notice that <span class="math inline">\(\gamma\)</span> runs from 0 to 1 in each panel and remember that this is the probability that a given document belongs in a given topic. There are many values near zero, which means there are many documents that do not belong in those topics. Also, most of these panels show a higher number of documents near <span class="math inline">\(\gamma = 1\)</span>; these are the documents that <em>do</em> belong in those topics.</p>
+<p>First notice that the y-axis is plotted on a log scale; otherwise it is difficult to make out any detail. Next, notice that <span class="math inline">\(\gamma\)</span> runs from 0 to 1 in each panel and remember that this is the probability that a given document belongs in a given topic. There are many values near zero, which means there are many documents that do not belong in each topics. Also, most of these panels show a higher number of documents near <span class="math inline">\(\gamma = 1\)</span>; these are the documents that <em>do</em> belong in those topics. This is the type of information we used to choose how many topics to use in our topic modeling procedure. When we tried options higher than 24 (like 32 or 64), the distributions for <span class="math inline">\(\gamma\)</span> started to look very flat; documents were not getting sorted into topics very well.</p>
 </div>
 <div id="connecting-topic-modeling-with-keywords" class="section level2">
 <h2><span class="header-section-number">9.8</span> Connecting topic modeling with keywords</h2>
@@ -779,7 +779,19 @@ top_keywords</code></pre></div>
 ## 9      6 EARTH SCIENCE  1057
 ## 10     9       PROJECT   905
 ## # ... with 1,188 more rows</code></pre>
-<p>TODO: finish topic modeling</p>
+<p>What are the top keywords for each topic?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_keywords %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, n) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(keyword, n, <span class="dt">fill =</span> <span class="kw">as.factor</span>(topic))) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Top Keywords for Each LDA Topic&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Topic modeling of NASA metadata description field texts&quot;</span>,
+       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;Number of documents&quot;</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>() +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~topic, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
+<p><img src="09-nasa-metadata_files/figure-html/plot_top_keywords-1.png" width="1536" /></p>
+<p>Let’s take a step back and remind ourselves what this plot is telling us. NASA datasets are tagged with keywords by human beings, and we have built an LDA topic model (with 24 topics) for the description fields of the NASA datasets. This plot answers the question, “For the datasets that have description fields with a high probability of belonging to a given topic, what are the most common human-assigned keywords?”</p>
+<p>It’s interesting that the keywords for topics 5, 15, and 16 are essentially duplicates of each other, because the top terms in those topics do exhibit meaningful differences. Also note that by number of documents, the combination of 5, 15, and 16 is quite a large percentage of the total number of datasets represented in this plot.</p>
 
 </div>
 </div>
