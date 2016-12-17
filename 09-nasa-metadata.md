@@ -166,7 +166,7 @@ nasa_keyword
 
 This is a tidy data frame because we have one row for each keyword; this means we will have multiple rows for each dataset because a dataset can have more than one keyword.
 
-Now it is time to use tidytext's `unnest_tokens` for the title and description fields so we can do the text analysis. Let's also remove common English words from the titles and descriptions. We will not remove stop words from the keywords, because those are short, human-assigned keywords like "RADIATION" or "CLIMATE INDICATORS".
+Now it is time to use tidytext's `unnest_tokens` for the title and description fields so we can do the text analysis. Let's also remove common English words from the titles and descriptions. We will not remove stop words from the keywords, because those are short, human-assigned keywords like **RADIATION** or **CLIMATE INDICATORS**.
 
 
 ```r
@@ -175,14 +175,61 @@ library(tidytext)
 nasa_title <- nasa_title %>% 
   unnest_tokens(word, title) %>% 
   anti_join(stop_words)
+
 nasa_desc <- nasa_desc %>% 
   unnest_tokens(word, desc) %>% 
   anti_join(stop_words)
 ```
 
+These are now in the tidy text format that we have been working with throughout this book, with one token (word, in this case) per row; let's take a look before we move on in our analysis.
+
+
+```r
+nasa_title
+```
+
+```
+## # A tibble: 210,914 × 2
+##                          id         word
+##                       <chr>        <chr>
+## 1  56d07ee5a759fdadc44e5923       marble
+## 2  56d07ee5a759fdadc44e5923         epic
+## 3  56d07c16a759fdadc44e5922       fitara
+## 4  56d07c16a759fdadc44e5922         ocio
+## 5  56cf5b00a759fdadc44e5849 implementing
+## 6  56cf5b00a759fdadc44e5846     receding
+## 7  56cf5b00a759fdadc44e5846    recursive
+## 8  56cf5b00a759fdadc44e5840   complaints
+## 9  56cf5b00a759fdadc44e583b        score
+## 10 56cf5b00a759fdadc44e583a          fix
+## # ... with 210,904 more rows
+```
+
+```r
+nasa_desc
+```
+
+```
+## # A tibble: 2,677,811 × 2
+##                          id            word
+##                       <chr>           <chr>
+## 1  56d07c16a759fdadc44e5922          fitara
+## 2  56d07c16a759fdadc44e5922            ocio
+## 3  56cf5b00a759fdadc44e584a   degradation's
+## 4  56cf5b00a759fdadc44e5847         dchwp1s
+## 5  56cf5b00a759fdadc44e5847        dchwp1sp
+## 6  56cf5b00a759fdadc44e5847          dchwdp
+## 7  56cf5b00a759fdadc44e5847         dchwsnf
+## 8  56cf5b00a759fdadc44e5847         dchwssf
+## 9  56cf5b00a759fdadc44e5847        bursting
+## 10 56cf5b00a759fdadc44e5847 consequentially
+## # ... with 2,677,801 more rows
+```
+
+
 ## Some initial simple exploration
 
-What are the most common words in the NASA dataset titles? We can use `count` from dplyr to find this.
+What are the most common words in the NASA dataset titles? We can use `count` from dplyr to check this out.
 
 
 ```r
@@ -232,13 +279,13 @@ nasa_desc %>%
 ## # ... with 35,930 more rows
 ```
 
-Words like "data" and "global" are used very often in NASA titles and descriptions. We may want to remove digits and some "words" like "v1" from these data frames for many types of analyses; they are not too meaningful for most audiences. We can do this by making a list of custom stop words and using `anti_join` to remove them from the data frame, just like we removed the default stop words that are in the tidytext package. This approach can be used in many instances.
+Words like "data" and "global" are used very often in NASA titles and descriptions. We may want to remove digits and some "words" like "v1" from these data frames for many types of analyses; they are not too meaningful for most audiences. We can do this by making a list of custom stop words and using `anti_join` to remove them from the data frame, just like we removed the default stop words that are in the tidytext package. This approach can be used in many instances and is a great tool to bear in mind.
 
 
 ```r
 my_stopwords <- data_frame(word = c(as.character(1:10), 
-                                    "v1", "v03", "l2", "l3", "v5.2.0", 
-                                    "v003", "v004", "v005", "v006"))
+                                    "v1", "v03", "l2", "l3", "l4", "v5.2.0", 
+                                    "v003", "v004", "v005", "v006", "v7"))
 nasa_title <- nasa_title %>% 
   anti_join(my_stopwords)
 nasa_desc <- nasa_desc %>% 
@@ -271,7 +318,7 @@ nasa_keyword %>%
 ## # ... with 1,764 more rows
 ```
 
-Many NASA datasets have *Project completed* as a set of keywords. We likely want to change all of the keywords to either lower or upper case to get rid of duplicates like *OCEANS* and *Oceans*. Let's do that here.
+Many NASA datasets have **Project completed** as a set of keywords. We likely want to change all of the keywords to either lower or upper case to get rid of duplicates like **OCEANS** and **Oceans**. Let's do that here.
 
 
 ```r
@@ -294,7 +341,7 @@ title_words
 ```
 
 ```
-## # A tibble: 156,887 × 3
+## # A tibble: 156,689 × 3
 ##     item1   item2     n
 ##     <chr>   <chr> <dbl>
 ## 1  system project   796
@@ -307,7 +354,7 @@ title_words
 ## 8  global   daily   574
 ## 9    data  boreas   551
 ## 10 ground     gpm   550
-## # ... with 156,877 more rows
+## # ... with 156,679 more rows
 ```
 
 These are the pairs of words that occur together most often in title fields. Some of these words are obviously acronyms used within NASA, and we see how often words like "project" and "system" are used.
@@ -321,7 +368,7 @@ desc_words
 ```
 
 ```
-## # A tibble: 10,889,644 × 3
+## # A tibble: 10,889,084 × 3
 ##         item1      item2     n
 ##         <chr>      <chr> <dbl>
 ## 1        data     global  9864
@@ -334,7 +381,7 @@ desc_words
 ## 8  resolution      bands  7584
 ## 9        data      earth  7576
 ## 10      orbit resolution  7462
-## # ... with 10,889,634 more rows
+## # ... with 10,889,074 more rows
 ```
 
 These are the pairs of words that occur together most often in descripton fields. "Data" is a very common word in description fields; there is no shortage of data in the datasets at NASA!
@@ -381,7 +428,7 @@ desc_words %>%
 
 <img src="09-nasa-metadata_files/figure-html/plot_desc-1.png" width="864" />
 
-Here there are such *strong* connections between the top dozen or so words (words like "data", "resolution", and "instrument") that we do not see clear clustering structure in the network. We may want to use tf-idf (as described in detail in [Chapter 4](#tfidf)) as a metric to find characteristic words for each description field, instead of looking at counts of words. 
+Here there are such *strong* connections between the top dozen or so words (words like "data", "global", "resolution", and "instrument") that we do not see clear clustering structure in the network. We may want to use tf-idf (as described in detail in [Chapter 4](#tfidf)) as a metric to find characteristic words for each description field, instead of looking at counts of words. 
 
 Next, let's make a network of the keywords to see which keywords commonly occur together in the same datasets.
 
@@ -425,7 +472,7 @@ keyword_counts %>%
 
 <img src="09-nasa-metadata_files/figure-html/plot_counts-1.png" width="864" />
 
-We definitely see clustering here, and strong connections between keywords like *OCEANS*, *OCEAN OPTICS*, and *OCEAN COLOR*, or *PROJECT* and *COMPLETED*. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in [Chapter 5](#ngrams). This looks for which keywords that are more likely to occur together than with other keywords in a description field.
+We definitely see clustering here, and strong connections between keywords like **OCEANS**, **OCEAN OPTICS**, and **OCEAN COLOR**, or **PROJECT* and *COMPLETED**. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in [Chapter 5](#ngrams). This looks for which keywords that are more likely to occur together than with other keywords in a description field.
 
 
 ```r
@@ -497,7 +544,7 @@ desc_tf_idf %>%
 ```
 
 ```
-## # A tibble: 1,913,349 × 6
+## # A tibble: 1,913,224 × 6
 ##                          id                                          word     n    tf       idf
 ##                       <chr>                                         <chr> <int> <dbl>     <dbl>
 ## 1  55942a7cc63a7fe59b49774a                                           rdr     1     1 10.375052
@@ -510,7 +557,7 @@ desc_tf_idf %>%
 ## 8  55942ad8c63a7fe59b49cf6c                      template_proddescription     1     1  8.295611
 ## 9  55942ad8c63a7fe59b49cf6d                      template_proddescription     1     1  8.295611
 ## 10 55942ad8c63a7fe59b49cf6e                      template_proddescription     1     1  8.295611
-## # ... with 1,913,339 more rows, and 1 more variables: tf_idf <dbl>
+## # ... with 1,913,214 more rows, and 1 more variables: tf_idf <dbl>
 ```
 
 These are the most important words in the description fields as measured by tf-idf, meaning they are common but not too common. Notice we have run into an issue here; both $n$ and term frequency are equal to 1 for these terms, meaning that these were description fields that only had a single word in them. If a description field only contains one word, the tf-idf algorithm will think that is a really important word. Depending on our analytic goals, it might be a good idea to throw out all description fields that have fewer than 5 words or similar.
@@ -578,7 +625,7 @@ word_counts
 ```
 
 ```
-## # A tibble: 1,908,138 × 3
+## # A tibble: 1,908,013 × 3
 ##                          id     word     n
 ##                       <chr>    <chr> <int>
 ## 1  55942a8ec63a7fe59b4986ef     suit    82
@@ -591,7 +638,7 @@ word_counts
 ## 8  55942a89c63a7fe59b4982d9       em    32
 ## 9  55942a8ec63a7fe59b4986ef       al    32
 ## 10 55942a8ec63a7fe59b4986ef    human    31
-## # ... with 1,908,128 more rows
+## # ... with 1,908,003 more rows
 ```
 
 This is the information we need, the number of times each word is used in each document, to make a `DocumentTermMatrix`. We can `cast` from our tidy text format to this non-tidy format as described in detail in [Chapter 6](#dtm).
@@ -605,8 +652,8 @@ desc_dtm
 ```
 
 ```
-## <<DocumentTermMatrix (documents: 32003, terms: 35908)>>
-## Non-/sparse entries: 1908138/1147255586
+## <<DocumentTermMatrix (documents: 32003, terms: 35906)>>
+## Non-/sparse entries: 1908013/1147191705
 ## Sparsity           : 100%
 ## Maximal term length: 166
 ## Weighting          : term frequency (tf)

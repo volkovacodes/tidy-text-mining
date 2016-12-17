@@ -313,19 +313,51 @@ nasa_keyword</code></pre></div>
 ## 10 55942a58c63a7fe59b495a7a EARTH SCIENCE
 ## # ... with 126,804 more rows</code></pre>
 <p>This is a tidy data frame because we have one row for each keyword; this means we will have multiple rows for each dataset because a dataset can have more than one keyword.</p>
-<p>Now it is time to use tidytext’s <code>unnest_tokens</code> for the title and description fields so we can do the text analysis. Let’s also remove common English words from the titles and descriptions. We will not remove stop words from the keywords, because those are short, human-assigned keywords like “RADIATION” or “CLIMATE INDICATORS”.</p>
+<p>Now it is time to use tidytext’s <code>unnest_tokens</code> for the title and description fields so we can do the text analysis. Let’s also remove common English words from the titles and descriptions. We will not remove stop words from the keywords, because those are short, human-assigned keywords like <strong>RADIATION</strong> or <strong>CLIMATE INDICATORS</strong>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
 nasa_title &lt;-<span class="st"> </span>nasa_title %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, title) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words)
+
 nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, desc) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words)</code></pre></div>
+<p>These are now in the tidy text format that we have been working with throughout this book, with one token (word, in this case) per row; let’s take a look before we move on in our analysis.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_title</code></pre></div>
+<pre><code>## # A tibble: 210,914 × 2
+##                          id         word
+##                       &lt;chr&gt;        &lt;chr&gt;
+## 1  56d07ee5a759fdadc44e5923       marble
+## 2  56d07ee5a759fdadc44e5923         epic
+## 3  56d07c16a759fdadc44e5922       fitara
+## 4  56d07c16a759fdadc44e5922         ocio
+## 5  56cf5b00a759fdadc44e5849 implementing
+## 6  56cf5b00a759fdadc44e5846     receding
+## 7  56cf5b00a759fdadc44e5846    recursive
+## 8  56cf5b00a759fdadc44e5840   complaints
+## 9  56cf5b00a759fdadc44e583b        score
+## 10 56cf5b00a759fdadc44e583a          fix
+## # ... with 210,904 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_desc</code></pre></div>
+<pre><code>## # A tibble: 2,677,811 × 2
+##                          id            word
+##                       &lt;chr&gt;           &lt;chr&gt;
+## 1  56d07c16a759fdadc44e5922          fitara
+## 2  56d07c16a759fdadc44e5922            ocio
+## 3  56cf5b00a759fdadc44e584a   degradation&#39;s
+## 4  56cf5b00a759fdadc44e5847         dchwp1s
+## 5  56cf5b00a759fdadc44e5847        dchwp1sp
+## 6  56cf5b00a759fdadc44e5847          dchwdp
+## 7  56cf5b00a759fdadc44e5847         dchwsnf
+## 8  56cf5b00a759fdadc44e5847         dchwssf
+## 9  56cf5b00a759fdadc44e5847        bursting
+## 10 56cf5b00a759fdadc44e5847 consequentially
+## # ... with 2,677,801 more rows</code></pre>
 </div>
 <div id="some-initial-simple-exploration" class="section level2">
 <h2><span class="header-section-number">9.3</span> Some initial simple exploration</h2>
-<p>What are the most common words in the NASA dataset titles? We can use <code>count</code> from dplyr to find this.</p>
+<p>What are the most common words in the NASA dataset titles? We can use <code>count</code> from dplyr to check this out.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_title %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## # A tibble: 11,614 × 2
@@ -359,10 +391,10 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 ## 9       earth 14373
 ## 10 resolution 13879
 ## # ... with 35,930 more rows</code></pre>
-<p>Words like “data” and “global” are used very often in NASA titles and descriptions. We may want to remove digits and some “words” like “v1” from these data frames for many types of analyses; they are not too meaningful for most audiences. We can do this by making a list of custom stop words and using <code>anti_join</code> to remove them from the data frame, just like we removed the default stop words that are in the tidytext package. This approach can be used in many instances.</p>
+<p>Words like “data” and “global” are used very often in NASA titles and descriptions. We may want to remove digits and some “words” like “v1” from these data frames for many types of analyses; they are not too meaningful for most audiences. We can do this by making a list of custom stop words and using <code>anti_join</code> to remove them from the data frame, just like we removed the default stop words that are in the tidytext package. This approach can be used in many instances and is a great tool to bear in mind.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_stopwords &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">1</span>:<span class="dv">10</span>), 
-                                    <span class="st">&quot;v1&quot;</span>, <span class="st">&quot;v03&quot;</span>, <span class="st">&quot;l2&quot;</span>, <span class="st">&quot;l3&quot;</span>, <span class="st">&quot;v5.2.0&quot;</span>, 
-                                    <span class="st">&quot;v003&quot;</span>, <span class="st">&quot;v004&quot;</span>, <span class="st">&quot;v005&quot;</span>, <span class="st">&quot;v006&quot;</span>))
+                                    <span class="st">&quot;v1&quot;</span>, <span class="st">&quot;v03&quot;</span>, <span class="st">&quot;l2&quot;</span>, <span class="st">&quot;l3&quot;</span>, <span class="st">&quot;l4&quot;</span>, <span class="st">&quot;v5.2.0&quot;</span>, 
+                                    <span class="st">&quot;v003&quot;</span>, <span class="st">&quot;v004&quot;</span>, <span class="st">&quot;v005&quot;</span>, <span class="st">&quot;v006&quot;</span>, <span class="st">&quot;v7&quot;</span>))
 nasa_title &lt;-<span class="st"> </span>nasa_title %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">anti_join</span>(my_stopwords)
 nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
@@ -385,7 +417,7 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 ## 9                   OCEANS  2765
 ## 10            LAND SURFACE  2720
 ## # ... with 1,764 more rows</code></pre>
-<p>Many NASA datasets have <em>Project completed</em> as a set of keywords. We likely want to change all of the keywords to either lower or upper case to get rid of duplicates like <em>OCEANS</em> and <em>Oceans</em>. Let’s do that here.</p>
+<p>Many NASA datasets have <strong>Project completed</strong> as a set of keywords. We likely want to change all of the keywords to either lower or upper case to get rid of duplicates like <strong>OCEANS</strong> and <strong>Oceans</strong>. Let’s do that here.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_keyword &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">keyword =</span> <span class="kw">toupper</span>(keyword))</code></pre></div>
 </div>
@@ -398,7 +430,7 @@ title_words &lt;-<span class="st"> </span>nasa_title %&gt;%<span class="st"> </s
 <span class="st">  </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>, <span class="dt">upper =</span> <span class="ot">FALSE</span>)
 
 title_words</code></pre></div>
-<pre><code>## # A tibble: 156,887 × 3
+<pre><code>## # A tibble: 156,689 × 3
 ##     item1   item2     n
 ##     &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;
 ## 1  system project   796
@@ -411,13 +443,13 @@ title_words</code></pre></div>
 ## 8  global   daily   574
 ## 9    data  boreas   551
 ## 10 ground     gpm   550
-## # ... with 156,877 more rows</code></pre>
+## # ... with 156,679 more rows</code></pre>
 <p>These are the pairs of words that occur together most often in title fields. Some of these words are obviously acronyms used within NASA, and we see how often words like “project” and “system” are used.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_words &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>, <span class="dt">upper =</span> <span class="ot">FALSE</span>)
 
 desc_words</code></pre></div>
-<pre><code>## # A tibble: 10,889,644 × 3
+<pre><code>## # A tibble: 10,889,084 × 3
 ##         item1      item2     n
 ##         &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;
 ## 1        data     global  9864
@@ -430,7 +462,7 @@ desc_words</code></pre></div>
 ## 8  resolution      bands  7584
 ## 9        data      earth  7576
 ## 10      orbit resolution  7462
-## # ... with 10,889,634 more rows</code></pre>
+## # ... with 10,889,074 more rows</code></pre>
 <p>These are the pairs of words that occur together most often in descripton fields. “Data” is a very common word in description fields; there is no shortage of data in the datasets at NASA!</p>
 <p>Let’s plot networks of these co-occurring words so we can see these relationships better. We will again use the ggraph package for visualizing our networks.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
@@ -461,7 +493,7 @@ desc_words %&gt;%
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Word Network in NASA Dataset Descriptions&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_desc-1.png" width="864" /></p>
-<p>Here there are such <em>strong</em> connections between the top dozen or so words (words like “data”, “resolution”, and “instrument”) that we do not see clear clustering structure in the network. We may want to use tf-idf (as described in detail in <a href="tfidf.html#tfidf">Chapter 4</a>) as a metric to find characteristic words for each description field, instead of looking at counts of words.</p>
+<p>Here there are such <em>strong</em> connections between the top dozen or so words (words like “data”, “global”, “resolution”, and “instrument”) that we do not see clear clustering structure in the network. We may want to use tf-idf (as described in detail in <a href="tfidf.html#tfidf">Chapter 4</a>) as a metric to find characteristic words for each description field, instead of looking at counts of words.</p>
 <p>Next, let’s make a network of the keywords to see which keywords commonly occur together in the same datasets.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_counts &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">pairwise_count</span>(keyword, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>, <span class="dt">upper =</span> <span class="ot">FALSE</span>)
@@ -492,7 +524,7 @@ keyword_counts %&gt;%
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Co-occurrence Network in NASA Dataset Keywords&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <p><img src="09-nasa-metadata_files/figure-html/plot_counts-1.png" width="864" /></p>
-<p>We definitely see clustering here, and strong connections between keywords like <em>OCEANS</em>, <em>OCEAN OPTICS</em>, and <em>OCEAN COLOR</em>, or <em>PROJECT</em> and <em>COMPLETED</em>. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>. This looks for which keywords that are more likely to occur together than with other keywords in a description field.</p>
+<p>We definitely see clustering here, and strong connections between keywords like <strong>OCEANS</strong>, <strong>OCEAN OPTICS</strong>, and <strong>OCEAN COLOR</strong>, or **PROJECT* and *COMPLETED**. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>. This looks for which keywords that are more likely to occur together than with other keywords in a description field.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_cors &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">50</span>) %&gt;%
@@ -538,7 +570,7 @@ keyword_cors %&gt;%
 <p>What are the highest tf-idf words in the NASA description fields?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_tf_idf %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">arrange</span>(-tf_idf)</code></pre></div>
-<pre><code>## # A tibble: 1,913,349 × 6
+<pre><code>## # A tibble: 1,913,224 × 6
 ##                          id                                          word     n    tf       idf
 ##                       &lt;chr&gt;                                         &lt;chr&gt; &lt;int&gt; &lt;dbl&gt;     &lt;dbl&gt;
 ## 1  55942a7cc63a7fe59b49774a                                           rdr     1     1 10.375052
@@ -551,7 +583,7 @@ keyword_cors %&gt;%
 ## 8  55942ad8c63a7fe59b49cf6c                      template_proddescription     1     1  8.295611
 ## 9  55942ad8c63a7fe59b49cf6d                      template_proddescription     1     1  8.295611
 ## 10 55942ad8c63a7fe59b49cf6e                      template_proddescription     1     1  8.295611
-## # ... with 1,913,339 more rows, and 1 more variables: tf_idf &lt;dbl&gt;</code></pre>
+## # ... with 1,913,214 more rows, and 1 more variables: tf_idf &lt;dbl&gt;</code></pre>
 <p>These are the most important words in the description fields as measured by tf-idf, meaning they are common but not too common. Notice we have run into an issue here; both <span class="math inline">\(n\)</span> and term frequency are equal to 1 for these terms, meaning that these were description fields that only had a single word in them. If a description field only contains one word, the tf-idf algorithm will think that is a really important word. Depending on our analytic goals, it might be a good idea to throw out all description fields that have fewer than 5 words or similar.</p>
 <p>We now know which words in the descriptions have high tf-idf, and we also have labels for these descriptions in the keywords. Let’s do a full join of the keyword data frame and the data frame of description words with tf-idf, and then find the highest tf-idf words for a given keyword.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_tf_idf &lt;-<span class="st"> </span><span class="kw">full_join</span>(desc_tf_idf, nasa_keyword, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>)</code></pre></div>
@@ -597,7 +629,7 @@ word_counts &lt;-<span class="st"> </span>nasa_desc %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()
 
 word_counts</code></pre></div>
-<pre><code>## # A tibble: 1,908,138 × 3
+<pre><code>## # A tibble: 1,908,013 × 3
 ##                          id     word     n
 ##                       &lt;chr&gt;    &lt;chr&gt; &lt;int&gt;
 ## 1  55942a8ec63a7fe59b4986ef     suit    82
@@ -610,14 +642,14 @@ word_counts</code></pre></div>
 ## 8  55942a89c63a7fe59b4982d9       em    32
 ## 9  55942a8ec63a7fe59b4986ef       al    32
 ## 10 55942a8ec63a7fe59b4986ef    human    31
-## # ... with 1,908,128 more rows</code></pre>
+## # ... with 1,908,003 more rows</code></pre>
 <p>This is the information we need, the number of times each word is used in each document, to make a <code>DocumentTermMatrix</code>. We can <code>cast</code> from our tidy text format to this non-tidy format as described in detail in <a href="dtm.html#dtm">Chapter 6</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_dtm &lt;-<span class="st"> </span>word_counts %&gt;%
 <span class="st">  </span><span class="kw">cast_dtm</span>(id, word, n)
 
 desc_dtm</code></pre></div>
-<pre><code>## &lt;&lt;DocumentTermMatrix (documents: 32003, terms: 35908)&gt;&gt;
-## Non-/sparse entries: 1908138/1147255586
+<pre><code>## &lt;&lt;DocumentTermMatrix (documents: 32003, terms: 35906)&gt;&gt;
+## Non-/sparse entries: 1908013/1147191705
 ## Sparsity           : 100%
 ## Maximal term length: 166
 ## Weighting          : term frequency (tf)</code></pre>
