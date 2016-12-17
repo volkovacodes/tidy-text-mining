@@ -2,13 +2,15 @@
 
 
 
-There are 32,000+ datasets at [NASA](https://www.nasa.gov/), and we can use the metadata for these datasets to understand the connections between them. What is metadata? Metadata is data that gives information about other data, in this case, data about what is in these numerous NASA datasets (but not the datasets themselves). It includes information like the title of the dataset, description fields, what organization(s) within NASA is responsible for the dataset, keywords for the dataset that have been assigned by a human being, and so forth. NASA places a high priority on making its data accessible, even requiring all NASA-funded research to be [openly accessible online](https://www.nasa.gov/press-release/nasa-unveils-new-public-web-portal-for-research-results), and the metadata for all its datasets is [publicly available online in JSON format](https://data.nasa.gov/data.json).
+There are over 32,000 datasets hosted and/or maintained by [NASA](https://www.nasa.gov/); these datasets cover topics from Earth science to aerospace engineering to management of NASA itself. We can use the metadata for these datasets to understand the connections between them. 
 
-In this chapter, we will treat the NASA metadata as a text dataset and show how to implement several tidy text approaches with this real-life text. We will use word co-occurrences and correlations, tf-idf, and topic modeling. Since we have several text fields in the NASA metadata, most importantly the title, description, and keyword fields, we can explore the connections between the fields to better understand the complex world of data at NASA. This type of approach can be extended to many domains, so let's take a look at this metadata and get started.
+What is metadata? Metadata is a term that refers to data that gives information about other data; in this case, the metadata informs users about what is in these numerous NASA datasets but does include the content of the datasets themselves. The metadata includes information like the title of the dataset, a description field, what organization(s) within NASA is responsible for the dataset, keywords for the dataset that have been assigned by a human being, and so forth. NASA places a high priority on making its data open and accessible, even requiring all NASA-funded research to be [openly accessible online](https://www.nasa.gov/press-release/nasa-unveils-new-public-web-portal-for-research-results). The metadata for all its datasets is [publicly available online in JSON format](https://data.nasa.gov/data.json).
+
+In this chapter, we will treat the NASA metadata as a text dataset and show how to implement several tidy text approaches with this real-life text. We will use word co-occurrences and correlations, tf-idf, and topic modeling to explore the connections between the datasets. Can we find datasets that are related to each other? Can we find clusters of similar datasets? Since we have several text fields in the NASA metadata, most importantly the title, description, and keyword fields, we can explore the connections between the fields to better understand the complex world of data at NASA. This type of approach can be extended to many domains, so let's take a look at this metadata and get started.
 
 ## Getting the metadata
 
-First, let's download the JSON file and take a look at the names.
+First, let's download the JSON file and take a look at the names of what is stored in the metadata.
 
 
 ```r
@@ -28,7 +30,7 @@ names(metadata$dataset)
 ## [25] "describedBy"
 ```
 
-What kind of data is available here?
+We see here that we could extract information from who publishes each dataset to what license they are released under. What type of data is available here?
 
 
 ```r
@@ -48,7 +50,7 @@ sapply(metadata$dataset, class)
 ##        "character"        "character"             "list"        "character"        "character"
 ```
 
-It seems likely that the title, description, and keywords for each dataset may be most fruitful for drawing connections between datasets. It's a place to start anyway! Let's check them out.
+It seems likely that the title, description, and keywords for each dataset may be most fruitful for drawing connections between datasets. Let's check them out.
 
 
 ```r
@@ -75,9 +77,11 @@ class(metadata$dataset$keyword)
 ## [1] "list"
 ```
 
+The title and description fields are stored as character vectors, but the keywords are stored as a list of character vectors.
+
 ## Wrangling and tidying the data
 
-Let's set up tidy data frames for title, description, and keyword and keep the dataset ids.
+Let's set up separate tidy data frames for title, description, and keyword, keeping the dataset ids for each so that we can connect them later in the analysis if necessary.
 
 
 ```r
@@ -105,34 +109,13 @@ nasa_title
 ## # ... with 32,079 more rows
 ```
 
+These are just a few example titles from the datasets we will be exploring. Notice that we have the NASA-assigned ids here, and also that there are duplicate titles on separate datasets.
+
 
 ```r
 nasa_desc <- data_frame(id = metadata$dataset$`_id`$`$oid`, 
                         desc = metadata$dataset$description)
-nasa_desc
-```
 
-```
-## # A tibble: 32,089 × 2
-##                          id
-##                       <chr>
-## 1  55942a57c63a7fe59b495a77
-## 2  55942a57c63a7fe59b495a78
-## 3  55942a58c63a7fe59b495a79
-## 4  55942a58c63a7fe59b495a7a
-## 5  55942a58c63a7fe59b495a7b
-## 6  55942a58c63a7fe59b495a7c
-## 7  55942a58c63a7fe59b495a7d
-## 8  55942a58c63a7fe59b495a7e
-## 9  55942a58c63a7fe59b495a7f
-## 10 55942a58c63a7fe59b495a80
-## # ... with 32,079 more rows, and 1 more variables: desc <chr>
-```
-
-These are having a hard time printing out; let’s print out part of a few.
-
-
-```r
 nasa_desc %>% 
   select(desc) %>% 
   sample_n(5)
@@ -142,14 +125,16 @@ nasa_desc %>%
 ## # A tibble: 5 × 1
 ##                                                                                                    desc
 ##                                                                                                   <chr>
-## 1  This SBIR Phase I effort proposes to establish the feasibility of developing a UV Planar Lightwave C
-## 2  This dataset consists of VHS tapes which record the forward and nadir views from the NASA DC-8 aircr
-## 3 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
-## 4  The Coastal Zone Color Scanner Experiment (CZCS) was the first instrument devoted to the measurement
-## 5 The SeaWiFS instrument was launched by Orbital Sciences Corporation on the OrbView-2\n(a.k.a. SeaStar
+## 1  This dataset consists of VHS tapes which record the forward and nadir views from the NASA DC-8 aircr
+## 2 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+## 3  The Coastal Zone Color Scanner Experiment (CZCS) was the first instrument devoted to the measurement
+## 4 The SeaWiFS instrument was launched by Orbital Sciences Corporation on the OrbView-2\n(a.k.a. SeaStar
+## 5  Lynntech proposes to develop and demonstrate the ability of a compact, light-weight, and automated u
 ```
 
-Now we can do the keywords, which must be unnested since they are in a list-column.
+Here we see the first part of several selected description fields from the metadata.
+
+Now we can build the tidy data frame for the keywords. For this one, we need to use `unnest` from tidyr, because they are in a list-column.
 
 
 ```r
@@ -158,6 +143,7 @@ library(tidyr)
 nasa_keyword <- data_frame(id = metadata$dataset$`_id`$`$oid`, 
                            keyword = metadata$dataset$keyword) %>%
   unnest(keyword)
+
 nasa_keyword
 ```
 
@@ -178,7 +164,9 @@ nasa_keyword
 ## # ... with 126,804 more rows
 ```
 
-Now let's use tidytext's `unnest_tokens` for the title and description fields so we can do the text analysis. Let's also remove common English words.
+This is a tidy data frame because we have one row for each keyword; this means we will have multiple rows for each dataset because a dataset can have more than one keyword.
+
+Now it is time to use tidytext's `unnest_tokens` for the title and description fields so we can do the text analysis. Let's also remove common English words from the titles and descriptions. We will not remove stop words from the keywords, because those are short, human-assigned keywords like "RADIATION" or "CLIMATE INDICATORS".
 
 
 ```r
@@ -194,7 +182,7 @@ nasa_desc <- nasa_desc %>%
 
 ## Some initial simple exploration
 
-What are the most common words in the NASA dataset titles?
+What are the most common words in the NASA dataset titles? We can use `count` from dplyr to find this.
 
 
 ```r
@@ -244,7 +232,7 @@ nasa_desc %>%
 ## # ... with 35,930 more rows
 ```
 
-It looks like we might want to remove digits and some "words" like "v1" from these dataframes before approaching something more meaningful like topic modeling.
+Words like "data" and "global" are used very often in NASA titles and descriptions. We may want to remove digits and some "words" like "v1" from these data frames for many types of analyses; they are not too meaningful for most audiences. We can do this by making a list of custom stop words and using `anti_join` to remove them from the data frame, just like we removed the default stop words that are in the tidytext package. This approach can be used in many instances.
 
 
 ```r
@@ -283,7 +271,7 @@ nasa_keyword %>%
 ## # ... with 1,764 more rows
 ```
 
-It is possible that "Project completed" may not be a useful set of keywords to keep around for some purposes, and we may want to change all of these to lower or upper case to get rid of duplicates like "OCEANS" and "Oceans". Let's do that, actually.
+Many NASA datasets have *Project completed* as a set of keywords. We likely want to change all of the keywords to either lower or upper case to get rid of duplicates like *OCEANS* and *Oceans*. Let's do that here.
 
 
 ```r
@@ -293,61 +281,65 @@ nasa_keyword <- nasa_keyword %>%
 
 ## Word co-ocurrences and correlations
 
-Let's examine which words commonly occur together in the titles and descriptions of NASA datasets. We can then examine a word network in titles/descriptions; this may help us decide, for example, how many topics to look at in topic modeling.
+As a next step, let's examine which words commonly occur together in the titles and descriptions of NASA datasets, as described in [Chapter 5](#ngrams). We can then examine a word network in titles/descriptions; this may help us decide, for example, how many topics to look at in topic modeling. We can use `pairwise_count` from the widyr package to count how many times each pair of words occurs together in a title or description field.
 
 
 ```r
 library(widyr)
 
 title_words <- nasa_title %>% 
-  pairwise_count(word, id, sort = TRUE)
+  pairwise_count(word, id, sort = TRUE, upper = FALSE)
 
 title_words
 ```
 
 ```
-## # A tibble: 313,774 × 3
-##      item1   item2     n
-##      <chr>   <chr> <dbl>
-## 1  project  system   796
-## 2   system project   796
-## 3      eco     lba   683
-## 4      lba     eco   683
-## 5     aqua    airs   641
-## 6     airs    aqua   641
-## 7     aqua   level   623
-## 8    level    aqua   623
-## 9     airs   level   612
-## 10   level    airs   612
-## # ... with 313,764 more rows
+## # A tibble: 156,887 × 3
+##     item1   item2     n
+##     <chr>   <chr> <dbl>
+## 1  system project   796
+## 2     lba     eco   683
+## 3    airs    aqua   641
+## 4   level    aqua   623
+## 5   level    airs   612
+## 6    aura     omi   607
+## 7  global    grid   597
+## 8  global   daily   574
+## 9    data  boreas   551
+## 10 ground     gpm   550
+## # ... with 156,877 more rows
 ```
+
+These are the pairs of words that occur together most often in title fields. Some of these words are obviously acronyms used within NASA, and we see how often words like "project" and "system" are used.
 
 
 ```r
 desc_words <- nasa_desc %>% 
-  pairwise_count(word, id, sort = TRUE)
+  pairwise_count(word, id, sort = TRUE, upper = FALSE)
 
 desc_words
 ```
 
 ```
-## # A tibble: 21,779,288 × 3
+## # A tibble: 10,889,644 × 3
 ##         item1      item2     n
 ##         <chr>      <chr> <dbl>
-## 1      global       data  9864
-## 2        data     global  9864
-## 3  resolution       data  9302
-## 4        data resolution  9302
-## 5  resolution instrument  8189
-## 6  instrument resolution  8189
-## 7     surface       data  8180
-## 8        data    surface  8180
-## 9  resolution     global  8139
-## 10     global resolution  8139
-## # ... with 21,779,278 more rows
+## 1        data     global  9864
+## 2        data resolution  9302
+## 3  instrument resolution  8189
+## 4        data    surface  8180
+## 5      global resolution  8139
+## 6        data instrument  7994
+## 7        data     system  7870
+## 8  resolution      bands  7584
+## 9        data      earth  7576
+## 10      orbit resolution  7462
+## # ... with 10,889,634 more rows
 ```
 
-Let's plot networks of these co-occurring words.
+These are the pairs of words that occur together most often in descripton fields. "Data" is a very common word in description fields; there is no shortage of data in the datasets at NASA!
+
+Let's plot networks of these co-occurring words so we can see these relationships better. We will again use the ggraph package for visualizing our networks.
 
 
 ```r
@@ -369,9 +361,9 @@ title_words %>%
 
 <img src="09-nasa-metadata_files/figure-html/plot_title-1.png" width="864" />
 
-This is a good start, although it looks like there may still a bit more cleaning to be done.
+We see some clear clustering in this network of title words; words in NASA dataset titles are largely organized into several families of words that tend to go together.
 
-Let's look at the words in descriptions.
+What about the words from the description fields?
 
 
 ```r
@@ -389,58 +381,33 @@ desc_words %>%
 
 <img src="09-nasa-metadata_files/figure-html/plot_desc-1.png" width="864" />
 
-Here there are such *strong* connections between the top dozen or so words (words like "data", "resolution", and "instrument") that we may do better if we exclude these very highly connected words or use tf-idf (as described in detail in [Chapter 4](#tfidf)) as a metric. But for now, let's add a few more stop words and look at one more word network for the description fields. Notice how we use `bind_rows` to add more custom stop words to the words we are already using; this approach can be used in many instances.
+Here there are such *strong* connections between the top dozen or so words (words like "data", "resolution", and "instrument") that we do not see clear clustering structure in the network. We may want to use tf-idf (as described in detail in [Chapter 4](#tfidf)) as a metric to find characteristic words for each description field, instead of looking at counts of words. 
 
-
-```r
-my_stopwords <- bind_rows(my_stopwords,
-                          data_frame(word = c("data", "global", 
-                                              "instrument", "resolution",
-                                              "product", "level")))
-
-set.seed(1234)
-nasa_desc %>% 
-  anti_join(my_stopwords) %>%
-  pairwise_count(word, id, sort = TRUE) %>%
-  filter(n >= 4600) %>%
-  graph_from_data_frame() %>%
-  ggraph(layout = "fr") +
-  geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
-  geom_node_point(color = "indianred4", size = 5) +
-  geom_node_text(aes(label = name), repel = TRUE) +
-  ggtitle("Word Network in NASA Dataset Descriptions") +
-  theme_void()
-```
-
-<img src="09-nasa-metadata_files/figure-html/plot_desc2-1.png" width="864" />
-
-We still are not seeing clusters the way we did with the titles (the descriptions appear to use very similar words compared to each other), so using tf-idf may be a better way to go when approaching the description fields.
-
-Let's make a network of the keywords to see which keywords commonly occur together in the same datasets.
+Next, let's make a network of the keywords to see which keywords commonly occur together in the same datasets.
 
 
 ```r
 keyword_counts <- nasa_keyword %>% 
-  pairwise_count(keyword, id, sort = TRUE)
+  pairwise_count(keyword, id, sort = TRUE, upper = FALSE)
 
 keyword_counts
 ```
 
 ```
-## # A tibble: 26,780 × 3
-##            item1         item2     n
-##            <chr>         <chr> <dbl>
-## 1   OCEAN OPTICS        OCEANS  7324
-## 2         OCEANS  OCEAN OPTICS  7324
-## 3     ATMOSPHERE EARTH SCIENCE  7318
-## 4  EARTH SCIENCE    ATMOSPHERE  7318
-## 5    OCEAN COLOR        OCEANS  7270
-## 6    OCEAN COLOR  OCEAN OPTICS  7270
-## 7         OCEANS   OCEAN COLOR  7270
-## 8   OCEAN OPTICS   OCEAN COLOR  7270
-## 9      COMPLETED       PROJECT  6450
-## 10       PROJECT     COMPLETED  6450
-## # ... with 26,770 more rows
+## # A tibble: 13,390 × 3
+##            item1                   item2     n
+##            <chr>                   <chr> <dbl>
+## 1         OCEANS            OCEAN OPTICS  7324
+## 2  EARTH SCIENCE              ATMOSPHERE  7318
+## 3         OCEANS             OCEAN COLOR  7270
+## 4   OCEAN OPTICS             OCEAN COLOR  7270
+## 5        PROJECT               COMPLETED  6450
+## 6  EARTH SCIENCE ATMOSPHERIC WATER VAPOR  3142
+## 7     ATMOSPHERE ATMOSPHERIC WATER VAPOR  3142
+## 8  EARTH SCIENCE                  OCEANS  2762
+## 9  EARTH SCIENCE            LAND SURFACE  2718
+## 10 EARTH SCIENCE               BIOSPHERE  2448
+## # ... with 13,380 more rows
 ```
 
 ```r
@@ -458,36 +425,38 @@ keyword_counts %>%
 
 <img src="09-nasa-metadata_files/figure-html/plot_counts-1.png" width="864" />
 
-These are the most commonly co-occurring words, but also just the most common keywords in general. To more meaningfully examine which keywords are likely to appear together instead of separately, we need to find the correlation among the keywords as described in [Chapter 5](#ngrams).
+We definitely see clustering here, and strong connections between keywords like *OCEANS*, *OCEAN OPTICS*, and *OCEAN COLOR*, or *PROJECT* and *COMPLETED*. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in [Chapter 5](#ngrams). This looks for which keywords that are more likely to occur together than with other keywords in a description field.
 
 
 ```r
 keyword_cors <- nasa_keyword %>% 
   group_by(keyword) %>%
   filter(n() >= 50) %>%
-  pairwise_cor(keyword, id, sort = TRUE)
+  pairwise_cor(keyword, id, sort = TRUE, upper = FALSE)
 
 keyword_cors
 ```
 
 ```
-## # A tibble: 15,750 × 3
-##         item1      item2 correlation
-##         <chr>      <chr>       <dbl>
-## 1     SHARING  KNOWLEDGE   1.0000000
-## 2   KNOWLEDGE    SHARING   1.0000000
-## 3        AMES   DASHLINK   1.0000000
-## 4    DASHLINK       AMES   1.0000000
-## 5  EXPEDITION   SCHEDULE   1.0000000
-## 6    SCHEDULE EXPEDITION   1.0000000
-## 7      MODELS TURBULENCE   0.9971871
-## 8  TURBULENCE     MODELS   0.9971871
-## 9   KNOWLEDGE      APPEL   0.9967945
-## 10    SHARING      APPEL   0.9967945
-## # ... with 15,740 more rows
+## # A tibble: 7,875 × 3
+##                  item1       item2 correlation
+##                  <chr>       <chr>       <dbl>
+## 1            KNOWLEDGE     SHARING   1.0000000
+## 2             DASHLINK        AMES   1.0000000
+## 3             SCHEDULE  EXPEDITION   1.0000000
+## 4           TURBULENCE      MODELS   0.9971871
+## 5                APPEL   KNOWLEDGE   0.9967945
+## 6                APPEL     SHARING   0.9967945
+## 7         OCEAN OPTICS OCEAN COLOR   0.9952123
+## 8  ATMOSPHERIC SCIENCE       CLOUD   0.9938681
+## 9               LAUNCH    SCHEDULE   0.9837078
+## 10              LAUNCH  EXPEDITION   0.9837078
+## # ... with 7,865 more rows
 ```
 
-Notice that these keywords at the top of this sorted data frame have correlation coefficients equal to 1; they always occur together. This means these are redundant keywords and it may not make sense to continue to use both of these sets of pairs. Let's visualize the network of keyword correlations, just as we did for keyword co-occurences.
+Notice that these keywords at the top of this sorted data frame have correlation coefficients equal to 1; they always occur together. This means these are redundant keywords and it may not make sense to continue to use both of these sets of pairs. 
+
+Let's visualize the network of keyword correlations, just as we did for keyword co-occurences.
 
 
 ```r
@@ -505,7 +474,7 @@ keyword_cors %>%
 
 <img src="09-nasa-metadata_files/figure-html/plot_cors-1.png" width="1152" />
 
-This network looks much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keyword pairs occur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted from the `graph_from_data_frame()` function above.
+This network appears much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keyword pairs occur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted from the `graph_from_data_frame()` function above.
 
 ## Calculating tf-idf for the description fields
 
