@@ -107,11 +107,11 @@ nasa_desc %>%
 ## # A tibble: 5 × 1
 ##                                                                                                    desc
 ##                                                                                                   <chr>
-## 1  This dataset consists of VHS tapes which record the forward and nadir views from the NASA DC-8 aircr
-## 2 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
-## 3  The Coastal Zone Color Scanner Experiment (CZCS) was the first instrument devoted to the measurement
-## 4 The SeaWiFS instrument was launched by Orbital Sciences Corporation on the OrbView-2\n(a.k.a. SeaStar
-## 5  Lynntech proposes to develop and demonstrate the ability of a compact, light-weight, and automated u
+## 1                                          Contains meteorological measurement data collected by TE-21.
+## 2  U.S. Population Grids (Summary File 1), 2000: Alabama, Louisiana, Mississippi and Texas, Alpha Versi
+## 3 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+## 4  ABSTRACT: This data set contains global, spatially explicit (1 km2 grid cells) and temporally explic
+## 5  This paper proposes the experiments and setups for studying diagnosis and prognosis of electrolytic
 ```
 
 Here we see the first part of several selected description fields from the metadata.
@@ -689,20 +689,20 @@ tidy_lda
 ```
 
 ```
-## # A tibble: 861,792 × 3
+## # A tibble: 861,624 × 3
 ##    topic  term          beta
 ##    <int> <chr>         <dbl>
-## 1      1  suit  1.504577e-62
-## 2      2  suit  3.453300e-63
-## 3      3  suit 6.482644e-100
-## 4      4  suit  2.237356e-84
-## 5      5  suit 5.824520e-112
-## 6      6  suit  1.253670e-72
-## 7      7  suit  1.327232e-03
-## 8      8  suit 3.334593e-124
-## 9      9  suit  3.649836e-09
-## 10    10  suit  4.879224e-21
-## # ... with 861,782 more rows
+## 1      1  suit 1.003981e-121
+## 2      2  suit 2.630614e-145
+## 3      3  suit  1.916240e-79
+## 4      4  suit  6.715725e-45
+## 5      5  suit  1.738334e-85
+## 6      6  suit  7.692116e-84
+## 7      7  suit  3.283851e-04
+## 8      8  suit  3.738586e-20
+## 9      9  suit  4.846953e-15
+## 10    10  suit  4.765471e-10
+## # ... with 861,614 more rows
 ```
 
 The column $\beta$ tells us the probability of that term being generated from that topic for that document. It is the probability of that term (word) belonging to that topic. Notice that some of the values for $\beta$ are very, very low, and some are not so low.
@@ -724,16 +724,16 @@ top_terms
 ## # A tibble: 240 × 3
 ##    topic        term       beta
 ##    <int>       <chr>      <dbl>
-## 1      1        data 0.03849671
-## 2      1         sea 0.02500301
-## 3      1     surface 0.02457409
-## 4      1         sst 0.02081033
-## 5      1 temperature 0.01701900
-## 6      1       level 0.01654994
-## 7      1       avhrr 0.01221112
-## 8      1     version 0.01176028
-## 9      1     product 0.01103262
-## 10     1          ir 0.01056180
+## 1      1        data 0.04488960
+## 2      1        soil 0.03676198
+## 3      1    moisture 0.02954555
+## 4      1        amsr 0.02437751
+## 5      1         sst 0.01684001
+## 6      1  validation 0.01322457
+## 7      1 temperature 0.01317075
+## 8      1     surface 0.01290046
+## 9      1    accuracy 0.01225131
+## 10     1         set 0.01155372
 ## # ... with 230 more rows
 ```
 
@@ -767,16 +767,16 @@ lda_gamma
 ## # A tibble: 768,072 × 3
 ##                    document topic        gamma
 ##                       <chr> <int>        <dbl>
-## 1  55942a8ec63a7fe59b4986ef     1 6.282939e-06
-## 2  56cf5b00a759fdadc44e564a     1 1.123270e-05
-## 3  55942a89c63a7fe59b4982d9     1 3.587508e-05
-## 4  56cf5b00a759fdadc44e55cd     1 2.195722e-05
-## 5  55942a89c63a7fe59b4982c6     1 6.461393e-05
-## 6  55942a86c63a7fe59b498077     1 5.539564e-05
-## 7  56cf5b00a759fdadc44e56f8     1 4.607134e-05
-## 8  55942a8bc63a7fe59b4984b5     1 4.211972e-05
-## 9  55942a6ec63a7fe59b496bf7     1 4.098247e-05
-## 10 55942a8ec63a7fe59b4986f6     1 2.813661e-05
+## 1  55942a8ec63a7fe59b4986ef     1 6.453820e-06
+## 2  56cf5b00a759fdadc44e564a     1 1.158393e-05
+## 3  55942a89c63a7fe59b4982d9     1 4.917441e-02
+## 4  56cf5b00a759fdadc44e55cd     1 2.249043e-05
+## 5  55942a89c63a7fe59b4982c6     1 6.609442e-05
+## 6  55942a86c63a7fe59b498077     1 5.666520e-05
+## 7  56cf5b00a759fdadc44e56f8     1 4.752082e-05
+## 8  55942a8bc63a7fe59b4984b5     1 4.308534e-05
+## 9  55942a6ec63a7fe59b496bf7     1 4.408626e-05
+## 10 55942a8ec63a7fe59b4986f6     1 2.878188e-05
 ## # ... with 768,062 more rows
 ```
 
@@ -812,16 +812,16 @@ lda_gamma
 ## # A tibble: 3,037,671 × 4
 ##                    document topic        gamma                     keyword
 ##                       <chr> <int>        <dbl>                       <chr>
-## 1  55942a8ec63a7fe59b4986ef     1 6.282939e-06        JOHNSON SPACE CENTER
-## 2  55942a8ec63a7fe59b4986ef     1 6.282939e-06                     PROJECT
-## 3  55942a8ec63a7fe59b4986ef     1 6.282939e-06                   COMPLETED
-## 4  56cf5b00a759fdadc44e564a     1 1.123270e-05                    DASHLINK
-## 5  56cf5b00a759fdadc44e564a     1 1.123270e-05                        AMES
-## 6  56cf5b00a759fdadc44e564a     1 1.123270e-05                        NASA
-## 7  55942a89c63a7fe59b4982d9     1 3.587508e-05 GODDARD SPACE FLIGHT CENTER
-## 8  55942a89c63a7fe59b4982d9     1 3.587508e-05                     PROJECT
-## 9  55942a89c63a7fe59b4982d9     1 3.587508e-05                   COMPLETED
-## 10 56cf5b00a759fdadc44e55cd     1 2.195722e-05                    DASHLINK
+## 1  55942a8ec63a7fe59b4986ef     1 6.453820e-06        JOHNSON SPACE CENTER
+## 2  55942a8ec63a7fe59b4986ef     1 6.453820e-06                     PROJECT
+## 3  55942a8ec63a7fe59b4986ef     1 6.453820e-06                   COMPLETED
+## 4  56cf5b00a759fdadc44e564a     1 1.158393e-05                    DASHLINK
+## 5  56cf5b00a759fdadc44e564a     1 1.158393e-05                        AMES
+## 6  56cf5b00a759fdadc44e564a     1 1.158393e-05                        NASA
+## 7  55942a89c63a7fe59b4982d9     1 4.917441e-02 GODDARD SPACE FLIGHT CENTER
+## 8  55942a89c63a7fe59b4982d9     1 4.917441e-02                     PROJECT
+## 9  55942a89c63a7fe59b4982d9     1 4.917441e-02                   COMPLETED
+## 10 56cf5b00a759fdadc44e55cd     1 2.249043e-05                    DASHLINK
 ## # ... with 3,037,661 more rows
 ```
 
@@ -838,22 +838,22 @@ top_keywords
 ```
 
 ```
-## Source: local data frame [1,198 x 3]
+## Source: local data frame [1,022 x 3]
 ## Groups: topic [24]
 ## 
 ##    topic       keyword     n
 ##    <int>         <chr> <int>
-## 1      5   OCEAN COLOR  4480
-## 2      5  OCEAN OPTICS  4480
-## 3      5        OCEANS  4480
-## 4     16   OCEAN COLOR  1968
-## 5     16  OCEAN OPTICS  1968
-## 6     16        OCEANS  1968
-## 7      1 EARTH SCIENCE  1279
-## 8      1        OCEANS  1277
-## 9      6 EARTH SCIENCE  1057
-## 10     9       PROJECT   905
-## # ... with 1,188 more rows
+## 1     13   OCEAN COLOR  4480
+## 2     13  OCEAN OPTICS  4480
+## 3     13        OCEANS  4480
+## 4     11   OCEAN COLOR  1216
+## 5     11  OCEAN OPTICS  1216
+## 6     11        OCEANS  1216
+## 7      9       PROJECT   926
+## 8     12 EARTH SCIENCE   909
+## 9      9     COMPLETED   834
+## 10    16   OCEAN COLOR   768
+## # ... with 1,012 more rows
 ```
 
 What are the top keywords for each topic?

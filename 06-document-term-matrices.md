@@ -47,7 +47,7 @@ AssociatedPress
 ## Weighting          : term frequency (tf)
 ```
 
-We see that this dataset contains  documents (each of them an AP article) and  terms (words). Notice that this example DTM is 99% sparse.
+We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (words). Notice that this example DTM is 99% sparse.
 
 If we want to analyze this with tidy tools, we need to turn it into a one-token-per-document-per-row data frame first. The broom package [@R-broom] introduced the `tidy` verb, which takes a non-tidy object and turns it into a data frame. The tidytext package implements that method for `DocumentTermClass` objects:
 
