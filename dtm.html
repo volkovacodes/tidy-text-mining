@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2016-12-18">
+<meta name="date" content="2016-12-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -185,13 +185,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="9.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>9.3</b> Calculating tf-idf for the description fields</a><ul>
 <li class="chapter" data-level="9.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>9.3.1</b> What is tf-idf for the description field words?</a></li>
+<li class="chapter" data-level="9.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>9.3.2</b> Connecting description fields to keywords</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>9.4</b> Connecting description fields to keywords</a></li>
-<li class="chapter" data-level="9.5" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>9.5</b> Topic modeling</a><ul>
-<li class="chapter" data-level="9.5.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>9.5.1</b> Casting to a document-term matrix</a></li>
-<li class="chapter" data-level="9.5.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>9.5.2</b> Ready for topic modeling</a></li>
-<li class="chapter" data-level="9.5.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>9.5.3</b> Interpreting the topic model</a></li>
-<li class="chapter" data-level="9.5.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>9.5.4</b> Connecting topic modeling with keywords</a></li>
+<li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>9.4</b> Topic modeling</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>9.4.1</b> Casting to a document-term matrix</a></li>
+<li class="chapter" data-level="9.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>9.4.2</b> Ready for topic modeling</a></li>
+<li class="chapter" data-level="9.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>9.4.3</b> Interpreting the topic model</a></li>
+<li class="chapter" data-level="9.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>9.4.4</b> Connecting topic modeling with keywords</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
@@ -253,7 +253,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## Sparsity           : 99%
 ## Maximal term length: 18
 ## Weighting          : term frequency (tf)</code></pre>
-<p>We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (words). Notice that this example DTM is 99% sparse.</p>
+<p>We see that this dataset contains documents (each of them an AP article) and terms (words). Notice that this example DTM is 99% sparse.</p>
 <p>If we want to analyze this with tidy tools, we need to turn it into a one-token-per-document-per-row data frame first. The broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span> introduced the <code>tidy</code> verb, which takes a non-tidy object and turns it into a data frame. The tidytext package implements that method for <code>DocumentTermClass</code> objects:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidytext)

@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2016-12-18">
+<meta name="date" content="2016-12-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -185,13 +185,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="9.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>9.3</b> Calculating tf-idf for the description fields</a><ul>
 <li class="chapter" data-level="9.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>9.3.1</b> What is tf-idf for the description field words?</a></li>
+<li class="chapter" data-level="9.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>9.3.2</b> Connecting description fields to keywords</a></li>
 </ul></li>
-<li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>9.4</b> Connecting description fields to keywords</a></li>
-<li class="chapter" data-level="9.5" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>9.5</b> Topic modeling</a><ul>
-<li class="chapter" data-level="9.5.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>9.5.1</b> Casting to a document-term matrix</a></li>
-<li class="chapter" data-level="9.5.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>9.5.2</b> Ready for topic modeling</a></li>
-<li class="chapter" data-level="9.5.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>9.5.3</b> Interpreting the topic model</a></li>
-<li class="chapter" data-level="9.5.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>9.5.4</b> Connecting topic modeling with keywords</a></li>
+<li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>9.4</b> Topic modeling</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>9.4.1</b> Casting to a document-term matrix</a></li>
+<li class="chapter" data-level="9.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>9.4.2</b> Ready for topic modeling</a></li>
+<li class="chapter" data-level="9.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>9.4.3</b> Interpreting the topic model</a></li>
+<li class="chapter" data-level="9.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>9.4.4</b> Connecting topic modeling with keywords</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
@@ -595,9 +595,8 @@ keyword_cors %&gt;%
 ## # ... with 1,913,214 more rows, and 1 more variables: tf_idf &lt;dbl&gt;</code></pre>
 <p>These are the most important words in the description fields as measured by tf-idf, meaning they are common but not too common. Notice we have run into an issue here; both <span class="math inline">\(n\)</span> and term frequency are equal to 1 for these terms, meaning that these were description fields that only had a single word in them. If a description field only contains one word, the tf-idf algorithm will think that is a very important word. Depending on our analytic goals, it might be a good idea to throw out all description fields that have very few words.</p>
 </div>
-</div>
-<div id="connecting-description-fields-to-keywords" class="section level2">
-<h2><span class="header-section-number">9.4</span> Connecting description fields to keywords</h2>
+<div id="connecting-description-fields-to-keywords" class="section level3">
+<h3><span class="header-section-number">9.3.2</span> Connecting description fields to keywords</h3>
 <p>We now know which words in the descriptions have high tf-idf, and we also have labels for these descriptions in the keywords. Let’s do a full join of the keyword data frame and the data frame of description words with tf-idf, and then find the highest tf-idf words for a given keyword.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_tf_idf &lt;-<span class="st"> </span><span class="kw">full_join</span>(desc_tf_idf, nasa_keyword, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>)</code></pre></div>
 <p>Let’s plot some of the most important words, as measured by tf-idf, for a few example keywords used on NASA datasets. First, let’s use dplyr operations to filter for the keywords we want to examine and take just the top 15 words for each keyword. Then, let’s plot those words.</p>
@@ -623,11 +622,12 @@ keyword_cors %&gt;%
 <p><img src="09-nasa-metadata_files/figure-html/plot_tf_idf-1.png" width="960" /></p>
 <p>Using tf-idf has allowed us to identify important description words for each of these keywords. Datasets labeled with the keyword <strong>SEISMOLOGY</strong> have words like “earthquake”, “risk”, and “hazard” in their description, while those labeled with <strong>HUMAN HEALTH</strong> have descriptions characterized by words like “wellbeing”, “vulnerability”, and “children.” Most of the combinations of letters that are not English words are certainly acronyms (like OMB for the Office of Management and Budget), and the examples of years and numbers are important for these topics. The tf-idf statistic has identified the kinds of words it is intended to, important words for individual documents within a collection of documents.</p>
 </div>
+</div>
 <div id="topic-modeling" class="section level2">
-<h2><span class="header-section-number">9.5</span> Topic modeling</h2>
+<h2><span class="header-section-number">9.4</span> Topic modeling</h2>
 <p>Using tf-idf as a statistic has already given us insight into the content of NASA description fields, but let’s try an additional approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in <a href="topicmodeling.html#topicmodeling">Chapter 7</a> to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use <a href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">latent Dirichlet allocation (LDA)</a> for our topic modeling; there are other possible approaches for topic modeling.</p>
 <div id="casting-to-a-document-term-matrix" class="section level3">
-<h3><span class="header-section-number">9.5.1</span> Casting to a document-term matrix</h3>
+<h3><span class="header-section-number">9.4.1</span> Casting to a document-term matrix</h3>
 <p>To do the topic modeling as implemented here, we need to make a <code>DocumentTermMatrix</code>, a special kind of matrix from the tm package (of course, this is just a specific implementation of the general concept of a “document-term matrix”). Rows correspond to documents (description texts in our case) and columns correspond to terms (i.e., words); it is a sparse matrix and the values are word counts.</p>
 <p>Let’s clean up the text a bit using stop words to remove some of the nonsense “words” leftover from HTML or other character encoding. We can use <code>bind_rows</code> to add our custom stop words to the list of default stop words from the tidytext package, and then all at once use <code>anti_join</code> to remove them all from our data frame.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_stop_words &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(stop_words, 
@@ -672,7 +672,7 @@ desc_dtm</code></pre></div>
 <p>We see that this dataset contains documents (each of them a NASA description field) and terms (words). Notice that this example document-term matrix is (very close to) 100% sparse. This means that almost all of the entries in this matrix are zero.</p>
 </div>
 <div id="ready-for-topic-modeling" class="section level3">
-<h3><span class="header-section-number">9.5.2</span> Ready for topic modeling</h3>
+<h3><span class="header-section-number">9.4.2</span> Ready for topic modeling</h3>
 <p>Now let’s use the <a href="https://cran.r-project.org/package=topicmodels">topicmodels</a> package to create an LDA model. How many topics will we tell the algorithm to make? This is a question much like in <span class="math inline">\(k\)</span>-means clustering; we don’t really know ahead of time. We tried the following modeling procedure using 8, 16, 24, 32, and 64 topics; we found that at 24 topics, documents are still getting sorted into topics cleanly but going much beyond that caused the distributions of <span class="math inline">\(\gamma\)</span>, the probability that each document belongs in each topic, to look worrisome. We will show more details on this below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(topicmodels)
 
@@ -682,7 +682,7 @@ desc_lda</code></pre></div>
 <p>This is a stochastic algorithm that could have different results depending on where the algorithm starts, so we need to specify a <code>seed</code> for reproducibility.</p>
 </div>
 <div id="interpreting-the-topic-model" class="section level3">
-<h3><span class="header-section-number">9.5.3</span> Interpreting the topic model</h3>
+<h3><span class="header-section-number">9.4.3</span> Interpreting the topic model</h3>
 <p>Now that we have built the model, let’s <code>tidy</code> the results of the model, i.e., construct a tidy data frame that summarizes the results of the model. The tidytext package includes a tidying method for LDA models from the topicmodels package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_lda &lt;-<span class="st"> </span><span class="kw">tidy</span>(desc_lda)
 
@@ -764,7 +764,7 @@ lda_gamma</code></pre></div>
 <p>First notice that the y-axis is plotted on a log scale; otherwise it is difficult to make out any detail in the plot. Next, notice that <span class="math inline">\(\gamma\)</span> runs from 0 to 1 in each panel. Remember that this is the probability that a given document belongs in a given topic. There are many values near zero, which means there are many documents that do not belong in each topic. Also, most of these panels show a higher number of documents near <span class="math inline">\(\gamma = 1\)</span>; these are the documents that <em>do</em> belong in those topics. This plot displays the type of information we used to choose how many topics for our topic modeling procedure. When we tried options higher than 24 (such as 32 or 64), the distributions for <span class="math inline">\(\gamma\)</span> started to look very flat toward <span class="math inline">\(\gamma = 1\)</span>; documents were not getting sorted into topics very well.</p>
 </div>
 <div id="connecting-topic-modeling-with-keywords" class="section level3">
-<h3><span class="header-section-number">9.5.4</span> Connecting topic modeling with keywords</h3>
+<h3><span class="header-section-number">9.4.4</span> Connecting topic modeling with keywords</h3>
 <p>Let’s connect these topic models with the keywords and see what relationships we can find. We can <code>join</code> this dataframe to the human-tagged keywords and discover which keywords are associated with which topic.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lda_gamma &lt;-<span class="st"> </span><span class="kw">full_join</span>(lda_gamma, nasa_keyword, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;document&quot;</span> =<span class="st"> &quot;id&quot;</span>))
 
