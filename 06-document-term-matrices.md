@@ -2,26 +2,30 @@
 
 
 
-So far, we've been analyzing data in a tidy text structure: a data frame with one-token-per-document-per-row. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2. We've demonstrated that many text analyses can be performed using these principles.
+In the previous chapters, we've been analyzing text arranged in the tidy text format: a table with one-token-per-document-per-row, as is constructed by the `unnest_tokens` function. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2. We've demonstrated that many text analyses can be performed using these principles.
 
-But many of the existing tools for natural language processing don't work with this kind of structure. The [CRAN Task View for Natural Language Processing](https://cran.r-project.org/web/views/NaturalLanguageProcessing.html) lists a large selection of packages that take other inputs. One of the most common is the [document-term matrix](https://en.wikipedia.org/wiki/Document-term_matrix), a sparse matrix with one row for each document in a collection and one column for each term or word. The value that goes into the matrix is usually a word count or sometimes tf-idf. These matrices are sparse (they consist mostly of zeroes), so special algorithms and data structures can be used to deal with them that are efficient and fast.
+However, most of the existing R tools for natural language processing, besides the tidytext package, aren't compatible with this format. The [CRAN Task View for Natural Language Processing](https://cran.r-project.org/web/views/NaturalLanguageProcessing.html) lists a large selection of packages that take other inputs. One of the most common formats is the [document-term matrix](https://en.wikipedia.org/wiki/Document-term_matrix), a sparse matrix with one row for each document in a collection and one column for each term or word. The value that goes into the matrix is typically the count of that term in that document, or sometimes the tf-idf (see Chapter 4). These matrices are sparse (they consist mostly of zeroes), so specialized algorithms and data structures can be used to deal with them that are efficient and fast.
 
-The tidytext package can integrate these packages into an analysis while still relying on our tidy tools. The two key verbs are:
+The tidytext package can integrate these important packages into an analysis while still relying on the suite of tidy tools for processing and visualization. The two key verbs are:
 
-* `tidy()`: Constructs a data frame that summarizes a model's statistical findings.
-* `cast_`: Turns a tidy one-term-per-row data frame into a document-term matrix. This includes `cast_sparse()` (sparse Matrix), `cast_dtm()` (`DocumentTermMatrix` objects from tm), and `cast_dfm()` (`dfm` objects from quanteda).
+* `tidy()`: Turns an object, such as a document-term matrix, into a tidy data frame.
+* `cast_`: Turns a tidy one-term-per-row data frame into a document-term matrix. tidytext provides the functions `cast_sparse()` (a sparse matrix from the Matrix package), `cast_dtm()` (`DocumentTermMatrix` objects from tm), and `cast_dfm()` (`dfm` objects from quanteda).
+
+In this chapter, we'll examine some examples of tidying document-term matrices, as well as converting from a tidy format into a sparse matrix.
 
 ## Tidying a document-term matrix
 
-As we have discussed, many existing text mining datasets expect and provide a **document-term matrix**, or DTM. A DTM is a matrix where
+Many existing text mining packages provide and expect **document-term matrix**, or DTM. A DTM is a matrix where
 
 * each row represents one document,
 * each column represents one term, and
-* each value typically contains the number of appearances of that term in that document.
+* each value (usually) contains the number of appearances of that term in that document.
 
 DTMs are usually implemented as sparse matrices, meaning the vast majority of values are 0. These objects can be interacted with as though they were matrices, but are stored in a more efficient format.
 
-One commonly used implementation of DTMs in R is the `DocumentTermMatrix` class in the tm package. For example, consider the corpus of 2246 Associated Press articles from the topicmodels package.
+### Tidying DocumentTermMatrix objects
+
+One commonly used implementation of DTMs in R is the `DocumentTermMatrix` class in the tm package. Many existing text mining datasets are provided in this format. For example, consider the corpus of Associated Press newspaper articles included in the topicmodels package.
 
 
 ```r
@@ -47,9 +51,9 @@ AssociatedPress
 ## Weighting          : term frequency (tf)
 ```
 
-We see that this dataset contains  documents (each of them an AP article) and  terms (words). Notice that this example DTM is 99% sparse.
+We see that this dataset contains  documents (each of them an AP article) and  terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero).
 
-If we want to analyze this with tidy tools, we need to turn it into a one-token-per-document-per-row data frame first. The broom package [@R-broom] introduced the `tidy` verb, which takes a non-tidy object and turns it into a data frame. The tidytext package implements that method for `DocumentTermClass` objects:
+If we wanted to analyze this data with tidy tools, we would first need to turn it into a one-token-per-document-per-row data frame. The broom package [@R-broom] introduced the `tidy` verb, which takes a non-tidy object and turns it into a tidy data frame. The tidytext package implements that method for `DocumentTermMatrix` objects:
 
 
 ```r
@@ -79,7 +83,7 @@ ap_td
 
 Notice that we now have a tidy three-column `tbl_df`, with variables `document`, `term`, and `count`. This tidying operation is similar to the `melt` function from the reshape2 package [@R-reshape2] for non-sparse matrices.
 
-As we've seen in chapters 2-5, this form is convenient for analysis with the dplyr and tidytext packages. For example, you can perform sentiment analysis on these newspaper articles.
+As we've seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles.
 
 
 ```r
@@ -106,7 +110,7 @@ ap_sentiments
 ## # ... with 30,084 more rows
 ```
 
-This could, for example, let us visualize which words from these AP articles most often contributed to positive or negative sentiment:
+This could let us visualize which words from these AP articles most often contributed to positive or negative sentiment:
 
 
 ```r
@@ -115,7 +119,7 @@ library(ggplot2)
 ap_sentiments %>%
   count(sentiment, term, wt = count) %>%
   ungroup() %>%
-  filter(n >= 150) %>%
+  filter(n >= 200) %>%
   mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
   mutate(term = reorder(term, n)) %>%
   ggplot(aes(term, n, fill = sentiment)) +
@@ -126,24 +130,30 @@ ap_sentiments %>%
 
 <img src="06-document-term-matrices_files/figure-html/unnamed-chunk-2-1.png" width="672" />
 
-A tidier is also available for the `dfm` (document-feature matrix) class from the quanteda package [@R-quanteda]. Consider the corpus of presidential inauguration speeches that comes with the quanteda package:
+### Tidying dfm objects
+
+Other text mining packages provide alternative implementations of document-term matrices, such as the `dfm` (document-feature matrix) class from the quanteda package [@R-quanteda]. Consider the corpus of presidential inauguration speeches that comes with the quanteda package:
 
 
 ```r
 library(methods)
 
 data("inaugCorpus", package = "quanteda")
-d <- quanteda::dfm(inaugCorpus)
+inaug_dfm <- quanteda::dfm(inaugCorpus)
 
-d
+inaug_dfm
 ```
 
 ```
 ## Document-feature matrix of: 57 documents, 9,215 features.
 ```
 
+The `tidy` method works on these objects as well, turning them into a one-token-per-document-per-row table:
+
+
 ```r
-tidy(d)
+inaug_td <- tidy(inaug_dfm)
+inaug_td
 ```
 
 ```
@@ -163,79 +173,115 @@ tidy(d)
 ## # ... with 43,709 more rows
 ```
 
-We could find the words most specific to several inaugural speeches using `bind_tf_idf` from chapter 4:
+We may be interested in finding the words most specific to each inaugural speeches, which can be done by calculating the TF-IDF of each term-speech pair using the `bind_tf_idf` function from chapter 4.
 
 
 ```r
-speeches <- c("1861-Lincoln", "1945-Roosevelt",
-              "1961-Kennedy", "2009-Obama")
-
-inaug_tf_idf <- tidy(d) %>%
+inaug_tf_idf <- inaug_td %>%
   bind_tf_idf(term, document, count) %>%
-  arrange(desc(tf_idf)) %>%
-  filter(document %in% speeches)
+  arrange(desc(tf_idf))
 
 inaug_tf_idf
 ```
 
 ```
-## # A tibble: 2,690 × 6
-##          document         term count          tf      idf      tf_idf
-##             <chr>        <chr> <dbl>       <dbl>    <dbl>       <dbl>
-## 1  1945-Roosevelt      learned     5 0.009009009 1.845827 0.016629069
-## 2  1945-Roosevelt        trend     2 0.003603604 3.349904 0.012071726
-## 3  1945-Roosevelt         test     3 0.005405405 2.097141 0.011335898
-## 4    1961-Kennedy        sides     8 0.005865103 1.845827 0.010825963
-## 5  1945-Roosevelt     mistakes     2 0.003603604 2.944439 0.010610591
-## 6  1945-Roosevelt       upward     2 0.003603604 2.656757 0.009573899
-## 7  1945-Roosevelt         gain     2 0.003603604 2.433613 0.008769778
-## 8  1945-Roosevelt   well-being     2 0.003603604 2.251292 0.008112763
-## 9  1945-Roosevelt    faintness     1 0.001801802 4.043051 0.007284777
-## 10 1945-Roosevelt schoolmaster     1 0.001801802 4.043051 0.007284777
-## # ... with 2,680 more rows
+## # A tibble: 43,719 × 6
+##           document        term count          tf      idf     tf_idf
+##              <chr>       <chr> <dbl>       <dbl>    <dbl>      <dbl>
+## 1  1793-Washington      arrive     1 0.007407407 4.043051 0.02994853
+## 2  1793-Washington upbraidings     1 0.007407407 4.043051 0.02994853
+## 3  1793-Washington    violated     1 0.007407407 3.349904 0.02481410
+## 4  1793-Washington   willingly     1 0.007407407 3.349904 0.02481410
+## 5  1793-Washington   incurring     1 0.007407407 3.349904 0.02481410
+## 6  1793-Washington    previous     1 0.007407407 2.944439 0.02181066
+## 7  1793-Washington   knowingly     1 0.007407407 2.944439 0.02181066
+## 8  1793-Washington injunctions     1 0.007407407 2.944439 0.02181066
+## 9  1793-Washington   witnesses     1 0.007407407 2.944439 0.02181066
+## 10 1793-Washington     besides     1 0.007407407 2.656757 0.01967968
+## # ... with 43,709 more rows
 ```
 
+We could then pick four notable inaugural addresses (from Washington, Lincoln, Kennedy, and Obama), and visualize the words most specific to each speech.
+
+
 ```r
+speeches <- c("1793-Washington", "1861-Lincoln",
+              "1961-Kennedy", "2009-Obama")
+
 inaug_tf_idf %>%
+  filter(document %in% speeches) %>%
   group_by(document) %>%
-  top_n(8, tf_idf) %>%
+  top_n(10, tf_idf) %>%
   ungroup() %>%
   mutate(term = reorder(term, tf_idf)) %>%
   ggplot(aes(term, tf_idf, fill = document)) +
-  geom_bar(stat = "identity", alpha = 0.8,show.legend = FALSE) +
+  geom_bar(stat = "identity", alpha = 0.8, show.legend = FALSE) +
   facet_wrap(~ document, scales = "free") +
-  coord_flip()
+  coord_flip() +
+  labs(x = "",
+       y = "TF-IDF")
 ```
 
-<img src="06-document-term-matrices_files/figure-html/presidents-1.png" width="768" />
+<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-4-1.png" width="672" />
 
-## Casting tidy text data into a DocumentTermMatrix
-
-Some existing text mining tools or algorithms work only on sparse document-term matrices. Therefore, tidytext provides `cast_` verbs for converting from a tidy form to these matrices.
-
-For example, we could take the tidied AP dataset and cast it back into a document-term matrix:
+Having a corpus in this format is also useful for visualizations. We could extract the year from each document's name, and compute the total number of words within each year.
 
 
 ```r
-ap_td
+library(tidyr)
+
+year_term_counts <- inaug_td %>%
+  extract(document, "year", "(\\d+)", convert = TRUE) %>%
+  complete(year, term, fill = list(count = 0)) %>%
+  group_by(year) %>%
+  mutate(year_total = sum(count))
+
+year_term_counts
 ```
 
 ```
-## # A tibble: 302,031 × 3
-##    document       term count
-##       <int>      <chr> <dbl>
-## 1         1     adding     1
-## 2         1      adult     2
-## 3         1        ago     1
-## 4         1    alcohol     1
-## 5         1  allegedly     1
-## 6         1      allen     1
-## 7         1 apparently     2
-## 8         1   appeared     1
-## 9         1   arrested     1
-## 10        1    assault     1
-## # ... with 302,021 more rows
+## Source: local data frame [525,255 x 4]
+## Groups: year [57]
+## 
+##     year  term count year_total
+##    <int> <chr> <dbl>      <dbl>
+## 1   1789  14th     1       1430
+## 2   1789  15th     0       1430
+## 3   1789  18th     0       1430
+## 4   1789  19th     0       1430
+## 5   1789 200th     0       1430
+## 6   1789  20th     0       1430
+## 7   1789  21st     0       1430
+## 8   1789  30th     0       1430
+## 9   1789    3d     0       1430
+## 10  1789   4th     0       1430
+## # ... with 525,245 more rows
 ```
+
+This lets us pick several words and visualize how they changed in frequency over time.
+
+
+```r
+year_term_counts %>%
+  filter(term %in% c("god", "america", "foreign", "union")) %>%
+  ggplot(aes(year, count / year_total)) +
+  geom_point() +
+  geom_smooth() +
+  facet_wrap(~ term) +
+  scale_y_continuous(labels = percent_format()) +
+  ylab("% frequency of word in inaugural address")
+```
+
+<img src="06-document-term-matrices_files/figure-html/year_term_counts_plot-1.png" width="672" />
+
+TODO: conclude section
+
+## Casting tidy text data into a matrix
+
+Just as some existing text mining packages provide document-term matrices as sample data or output, some algorithms expect these matrices as input. Therefore, tidytext provides `cast_` verbs for converting from a tidy form to these matrices.
+
+For example, we could take the tidied AP dataset and cast it back into a document-term matrix:
+
 
 ```r
 ap_td %>%
@@ -501,4 +547,4 @@ inaug_freq %>%
   ylab("Frequency of word in speech")
 ```
 
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-6-1.png" width="768" />
+<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-8-1.png" width="768" />
