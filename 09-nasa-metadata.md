@@ -105,13 +105,13 @@ nasa_desc %>%
 
 ```
 ## # A tibble: 5 × 1
-##                                                                                                    desc
-##                                                                                                   <chr>
-## 1                                          Contains meteorological measurement data collected by TE-21.
-## 2  U.S. Population Grids (Summary File 1), 2000: Alabama, Louisiana, Mississippi and Texas, Alpha Versi
-## 3 MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
-## 4  ABSTRACT: This data set contains global, spatially explicit (1 km2 grid cells) and temporally explic
-## 5  This paper proposes the experiments and setups for studying diagnosis and prognosis of electrolytic
+##                                                                                                   desc
+##                                                                                                  <chr>
+## 1 This data product contains TOMS/Earth Probe Total Column Ozone Monthly L3 Global 1x1.25 deg Lat/Lon 
+## 2 Future detectors and arrays for visible, IR, and submillimeter imaging and spectroscopy require much
+## 3 The Tropical Rainfall Measuring Mission (TRMM) is a joint U.S.-Japan   satellite mission to monitor 
+## 4 AERONET (AErosol RObotic NETwork) is an optical ground-based aerosol monitoring network and data arc
+## 5 Precise satellite orbits derived from analysis of Doppler Orbitography by Radiopositioning Integrate
 ```
 
 Here we see the first part of several selected description fields from the metadata.

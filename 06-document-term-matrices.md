@@ -51,7 +51,7 @@ AssociatedPress
 ## Weighting          : term frequency (tf)
 ```
 
-We see that this dataset contains  documents (each of them an AP article) and  terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero).
+We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero).
 
 If we wanted to analyze this data with tidy tools, we would first need to turn it into a one-token-per-document-per-row data frame. The broom package [@R-broom] introduced the `tidy` verb, which takes a non-tidy object and turns it into a tidy data frame. The tidytext package implements that method for `DocumentTermMatrix` objects:
 
@@ -222,7 +222,7 @@ inaug_tf_idf %>%
        y = "TF-IDF")
 ```
 
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-3-1.png" width="672" />
 
 Having a corpus in this format is also useful for visualizations. We could extract the year from each document's name, and compute the total number of words within each year.
 
@@ -268,7 +268,7 @@ year_term_counts %>%
   geom_point() +
   geom_smooth() +
   facet_wrap(~ term) +
-  scale_y_continuous(labels = percent_format()) +
+  scale_y_continuous(labels = scales::percent_format()) +
   ylab("% frequency of word in inaugural address")
 ```
 
@@ -547,4 +547,4 @@ inaug_freq %>%
   ylab("Frequency of word in speech")
 ```
 
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-8-1.png" width="768" />
+<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-7-1.png" width="768" />
