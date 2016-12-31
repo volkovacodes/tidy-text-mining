@@ -258,7 +258,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## Sparsity           : 99%
 ## Maximal term length: 18
 ## Weighting          : term frequency (tf)</code></pre>
-<p>We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero).</p>
+<p>We see that this dataset contains documents (each of them an AP article) and terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero).</p>
 <p>If we wanted to analyze this data with tidy tools, we would first need to turn it into a one-token-per-document-per-row data frame. The broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span> introduced the <code>tidy</code> verb, which takes a non-tidy object and turns it into a tidy data frame. The tidytext package implements that method for <code>DocumentTermMatrix</code> objects:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidytext)
