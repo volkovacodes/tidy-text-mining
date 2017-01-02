@@ -70,6 +70,80 @@ There are very long tails to the right for these novels (those extremely common 
 
 TODO
 
+
+```r
+freq_by_rank <- book_words %>% 
+  group_by(book) %>% 
+  mutate(rank = row_number(), 
+         `term frequency` = n/total)
+
+freq_by_rank
+```
+
+```
+## Source: local data frame [40,379 x 6]
+## Groups: book [6]
+## 
+##                 book  word     n  total  rank `term frequency`
+##               <fctr> <chr> <int>  <int> <int>            <dbl>
+## 1     Mansfield Park   the  6206 160460     1       0.03867631
+## 2     Mansfield Park    to  5475 160460     2       0.03412065
+## 3     Mansfield Park   and  5438 160460     3       0.03389007
+## 4               Emma    to  5239 160996     1       0.03254118
+## 5               Emma   the  5201 160996     2       0.03230515
+## 6               Emma   and  4896 160996     3       0.03041069
+## 7     Mansfield Park    of  4778 160460     4       0.02977689
+## 8  Pride & Prejudice   the  4331 122204     1       0.03544074
+## 9               Emma    of  4291 160996     4       0.02665284
+## 10 Pride & Prejudice    to  4162 122204     2       0.03405780
+## # ... with 40,369 more rows
+```
+
+
+```r
+freq_by_rank %>% 
+  ggplot(aes(rank, `term frequency`, color = book)) + 
+  geom_line(size = 1.2, alpha = 0.8) + 
+  scale_x_log10() +
+  scale_y_log10()
+```
+
+<img src="04-tf-idf_files/figure-html/zipf-1.png" width="864" />
+
+Notice that this plot is in log-log coordinates.
+
+
+```r
+lower_rank <- freq_by_rank %>% 
+  filter(rank < 500)
+
+lm(log10(`term frequency`) ~ log10(rank), data = lower_rank)
+```
+
+```
+## 
+## Call:
+## lm(formula = log10(`term frequency`) ~ log10(rank), data = lower_rank)
+## 
+## Coefficients:
+## (Intercept)  log10(rank)  
+##     -0.7727      -1.0491
+```
+
+
+
+```r
+freq_by_rank %>% 
+  ggplot(aes(rank, `term frequency`, color = book)) + 
+  geom_abline(intercept = -0.77, slope = -1.05, color = "gray50", linetype = 2) +
+  geom_line(size = 1.2, alpha = 0.8) + 
+  scale_x_log10() +
+  scale_y_log10()
+```
+
+<img src="04-tf-idf_files/figure-html/zipf_fit-1.png" width="864" />
+
+
 ## The `bind_tf_idf` function
 
 The idea of tf-idf is to find the important words for the content of each document by decreasing the weight for commonly used words and increasing the weight for words that are not used very much in a collection or corpus of documents, in this case, the group of Jane Austen's novels as a whole. Calculating tf-idf attempts to find the words that are important (i.e., common) in a text, but not *too* common. Let's do that now.

@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-01-01">
+<meta name="date" content="2017-01-02">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -276,6 +276,53 @@ book_words</code></pre></div>
 <div id="zipfs-law" class="section level2">
 <h2><span class="header-section-number">4.2</span> Zipf’s law</h2>
 <p>TODO</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">freq_by_rank &lt;-<span class="st"> </span>book_words %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">rank =</span> <span class="kw">row_number</span>(), 
+         <span class="st">`</span><span class="dt">term frequency</span><span class="st">`</span> =<span class="st"> </span>n/total)
+
+freq_by_rank</code></pre></div>
+<pre><code>## Source: local data frame [40,379 x 6]
+## Groups: book [6]
+## 
+##                 book  word     n  total  rank `term frequency`
+##               &lt;fctr&gt; &lt;chr&gt; &lt;int&gt;  &lt;int&gt; &lt;int&gt;            &lt;dbl&gt;
+## 1     Mansfield Park   the  6206 160460     1       0.03867631
+## 2     Mansfield Park    to  5475 160460     2       0.03412065
+## 3     Mansfield Park   and  5438 160460     3       0.03389007
+## 4               Emma    to  5239 160996     1       0.03254118
+## 5               Emma   the  5201 160996     2       0.03230515
+## 6               Emma   and  4896 160996     3       0.03041069
+## 7     Mansfield Park    of  4778 160460     4       0.02977689
+## 8  Pride &amp; Prejudice   the  4331 122204     1       0.03544074
+## 9               Emma    of  4291 160996     4       0.02665284
+## 10 Pride &amp; Prejudice    to  4162 122204     2       0.03405780
+## # ... with 40,369 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">freq_by_rank %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(rank, <span class="st">`</span><span class="dt">term frequency</span><span class="st">`</span>, <span class="dt">color =</span> book)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">1.2</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() +
+<span class="st">  </span><span class="kw">scale_y_log10</span>()</code></pre></div>
+<p><img src="04-tf-idf_files/figure-html/zipf-1.png" width="864" /></p>
+<p>Notice that this plot is in log-log coordinates.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lower_rank &lt;-<span class="st"> </span>freq_by_rank %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(rank &lt;<span class="st"> </span><span class="dv">500</span>)
+
+<span class="kw">lm</span>(<span class="kw">log10</span>(<span class="st">`</span><span class="dt">term frequency</span><span class="st">`</span>) ~<span class="st"> </span><span class="kw">log10</span>(rank), <span class="dt">data =</span> lower_rank)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = log10(`term frequency`) ~ log10(rank), data = lower_rank)
+## 
+## Coefficients:
+## (Intercept)  log10(rank)  
+##     -0.7727      -1.0491</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">freq_by_rank %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(rank, <span class="st">`</span><span class="dt">term frequency</span><span class="st">`</span>, <span class="dt">color =</span> book)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> -<span class="fl">0.77</span>, <span class="dt">slope =</span> -<span class="fl">1.05</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) +
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">1.2</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_log10</span>() +
+<span class="st">  </span><span class="kw">scale_y_log10</span>()</code></pre></div>
+<p><img src="04-tf-idf_files/figure-html/zipf_fit-1.png" width="864" /></p>
 </div>
 <div id="the-bind_tf_idf-function" class="section level2">
 <h2><span class="header-section-number">4.3</span> The <code>bind_tf_idf</code> function</h2>
