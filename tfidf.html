@@ -246,7 +246,9 @@ book_words &lt;-<span class="st"> </span><span class="kw">austen_books</span>() 
 total_words &lt;-<span class="st"> </span>book_words %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">summarize</span>(<span class="dt">total =</span> <span class="kw">sum</span>(n))
+
 book_words &lt;-<span class="st"> </span><span class="kw">left_join</span>(book_words, total_words)
+
 book_words</code></pre></div>
 <pre><code>## # A tibble: 40,379 × 4
 ##                 book  word     n  total
@@ -262,7 +264,7 @@ book_words</code></pre></div>
 ## 9               Emma    of  4291 160996
 ## 10 Pride &amp; Prejudice    to  4162 122204
 ## # ... with 40,369 more rows</code></pre>
-<p>The usual suspects are here, “the”, “and”, “to”, and so forth. Let’s look at the distribution of <code>n/total</code> for each novel, the number of times a word appears in a novel divided by the total number of terms (words) in that novel. This is exactly what term frequency is.</p>
+<p>There is one row in this data frame for each word-book combination; <code>n</code> is the number of times that word is used in that book and <code>total</code> is the total words in that book. The usual suspects are here, “the”, “and”, “to”, and so forth. Let’s look at the distribution of <code>n/total</code> for each novel, the number of times a word appears in a novel divided by the total number of terms (words) in that novel. This is exactly what term frequency is.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 <span class="kw">ggplot</span>(book_words, <span class="kw">aes</span>(n/total, <span class="dt">fill =</span> book)) +

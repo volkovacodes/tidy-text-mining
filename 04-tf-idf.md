@@ -28,7 +28,9 @@ book_words <- austen_books() %>%
 total_words <- book_words %>% 
   group_by(book) %>% 
   summarize(total = sum(n))
+
 book_words <- left_join(book_words, total_words)
+
 book_words
 ```
 
@@ -49,7 +51,7 @@ book_words
 ## # ... with 40,369 more rows
 ```
 
-The usual suspects are here, "the", "and", "to", and so forth. Let's look at the distribution of `n/total` for each novel, the number of times a word appears in a novel divided by the total number of terms (words) in that novel. This is exactly what term frequency is.
+There is one row in this data frame for each word-book combination; `n` is the number of times that word is used in that book and `total` is the total words in that book. The usual suspects are here, "the", "and", "to", and so forth. Let's look at the distribution of `n/total` for each novel, the number of times a word appears in a novel divided by the total number of terms (words) in that novel. This is exactly what term frequency is.
 
 
 ```r
