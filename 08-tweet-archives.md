@@ -384,7 +384,7 @@ words_by_time %>%
 
 <img src="08-tweet-archives_files/figure-html/unnamed-chunk-6-1.png" width="768" />
 
-All the significant slopes for Julia are negative. This means she has not tweeted at a higher rate using any specific words, but instead using a variety of different words; her tweets earlier in the year contained these words at higher rates. Words she uses when publicizing a new blog post like the #rstats hashtag and "post" have gone down in frequency, and she has tweeted less about reading.
+All the significant slopes for Julia are negative. This means she has not tweeted at a higher rate using any specific words, but instead using a variety of different words; her tweets earlier in the year contained the words shown in this plot at higher rates. Words she uses when publicizing a new blog post like the #rstats hashtag and "post" have gone down in frequency, and she has tweeted less about reading.
 
 ## Favorites and retweets
 
