@@ -234,26 +234,26 @@ words_by_time <- tidy_tweets %>%
   mutate(word_total = sum(n)) %>%
   ungroup() %>%
   rename(count = n) %>%
-  filter(word_total > 10)
+  filter(word_total > 30)
 
 words_by_time
 ```
 
 ```
-## # A tibble: 3,603 × 6
-##    time_floor person     word count time_total word_total
-##        <dttm>  <chr>    <chr> <int>      <int>      <int>
-## 1  2016-01-01  David  #rstats     2        307        324
-## 2  2016-01-01  David    agree     1        307         15
-## 3  2016-01-01  David       ah     1        307         30
-## 4  2016-01-01  David approach     1        307         14
-## 5  2016-01-01  David  article     1        307         18
-## 6  2016-01-01  David      bad     1        307         33
-## 7  2016-01-01  David     base     2        307         28
-## 8  2016-01-01  David      bit     2        307         45
-## 9  2016-01-01  David    black     1        307         15
-## 10 2016-01-01  David     blog     1        307         60
-## # ... with 3,593 more rows
+## # A tibble: 970 × 6
+##    time_floor person    word count time_total word_total
+##        <dttm>  <chr>   <chr> <int>      <int>      <int>
+## 1  2016-01-01  David #rstats     2        307        324
+## 2  2016-01-01  David     bad     1        307         33
+## 3  2016-01-01  David     bit     2        307         45
+## 4  2016-01-01  David    blog     1        307         60
+## 5  2016-01-01  David   broom     2        307         41
+## 6  2016-01-01  David    call     2        307         31
+## 7  2016-01-01  David   check     1        307         42
+## 8  2016-01-01  David    code     3        307         49
+## 9  2016-01-01  David    data     2        307        276
+## 10 2016-01-01  David     day     2        307         65
+## # ... with 960 more rows
 ```
 
 Each row in this dataframe corresponds to one person using one word in a given time bin. The `count` column tells us how many times that person used that word in that time bin, the `time_total` column tells us how many words that person used during that time bin, and the `word_total` column tells us how many times that person used that word over the whole year. This is the data set we can use for modeling. 
@@ -269,20 +269,20 @@ nested_data
 ```
 
 ```
-## # A tibble: 626 × 3
-##    person     word              data
-##     <chr>    <chr>            <list>
-## 1   David  #rstats <tibble [12 × 4]>
-## 2   David    agree  <tibble [9 × 4]>
-## 3   David       ah  <tibble [7 × 4]>
-## 4   David approach  <tibble [8 × 4]>
-## 5   David  article  <tibble [6 × 4]>
-## 6   David      bad  <tibble [9 × 4]>
-## 7   David     base  <tibble [9 × 4]>
-## 8   David      bit <tibble [10 × 4]>
-## 9   David    black  <tibble [3 × 4]>
-## 10  David     blog <tibble [12 × 4]>
-## # ... with 616 more rows
+## # A tibble: 112 × 3
+##    person    word              data
+##     <chr>   <chr>            <list>
+## 1   David #rstats <tibble [12 × 4]>
+## 2   David     bad  <tibble [9 × 4]>
+## 3   David     bit <tibble [10 × 4]>
+## 4   David    blog <tibble [12 × 4]>
+## 5   David   broom <tibble [10 × 4]>
+## 6   David    call  <tibble [9 × 4]>
+## 7   David   check <tibble [12 × 4]>
+## 8   David    code <tibble [10 × 4]>
+## 9   David    data <tibble [12 × 4]>
+## 10  David     day  <tibble [8 × 4]>
+## # ... with 102 more rows
 ```
 
 This data frame has one row for each person-word combination; the `data` column is a list column that contains data frames, one for each combination of person and word. Let's use `map` from the purrr library to apply our modeling procedure to each of those little data frames inside our big data frame. This is count data so let’s use `glm` with `family = "binomial"` for modeling. We can think about this modeling procedure answering a question like, "Was a given word mentioned in a given time bin? Yes or no? How does the count of word mentions depend on time?"
@@ -299,20 +299,20 @@ nested_models
 ```
 
 ```
-## # A tibble: 626 × 4
-##    person     word              data    models
-##     <chr>    <chr>            <list>    <list>
-## 1   David  #rstats <tibble [12 × 4]> <S3: glm>
-## 2   David    agree  <tibble [9 × 4]> <S3: glm>
-## 3   David       ah  <tibble [7 × 4]> <S3: glm>
-## 4   David approach  <tibble [8 × 4]> <S3: glm>
-## 5   David  article  <tibble [6 × 4]> <S3: glm>
-## 6   David      bad  <tibble [9 × 4]> <S3: glm>
-## 7   David     base  <tibble [9 × 4]> <S3: glm>
-## 8   David      bit <tibble [10 × 4]> <S3: glm>
-## 9   David    black  <tibble [3 × 4]> <S3: glm>
-## 10  David     blog <tibble [12 × 4]> <S3: glm>
-## # ... with 616 more rows
+## # A tibble: 112 × 4
+##    person    word              data    models
+##     <chr>   <chr>            <list>    <list>
+## 1   David #rstats <tibble [12 × 4]> <S3: glm>
+## 2   David     bad  <tibble [9 × 4]> <S3: glm>
+## 3   David     bit <tibble [10 × 4]> <S3: glm>
+## 4   David    blog <tibble [12 × 4]> <S3: glm>
+## 5   David   broom <tibble [10 × 4]> <S3: glm>
+## 6   David    call  <tibble [9 × 4]> <S3: glm>
+## 7   David   check <tibble [12 × 4]> <S3: glm>
+## 8   David    code <tibble [10 × 4]> <S3: glm>
+## 9   David    data <tibble [12 × 4]> <S3: glm>
+## 10  David     day  <tibble [8 × 4]> <S3: glm>
+## # ... with 102 more rows
 ```
 
 Now notice that we have a new column for the modeling results; it is another list column and contains `glm` objects. The next step is to use `map` and `tidy` from the broom package to pull out the slopes for each of these models and find the important ones. We are comparing many slopes here and some of them are not statistically significant, so let's apply an adjustment to the p-values for multiple comparisons.
@@ -324,7 +324,7 @@ library(broom)
 slopes <- nested_models %>%
   unnest(map(models, tidy)) %>%
   filter(term == "time_floor") %>%
-  mutate(adjusted.p.value = p.adjust(p.value, "BH"))
+  mutate(adjusted.p.value = p.adjust(p.value))
 ```
 
 Now let's find the most important slopes. Which words have changed in frequency at a moderately significant level in our tweets?
@@ -338,17 +338,15 @@ top_slopes
 ```
 
 ```
-## # A tibble: 8 × 8
+## # A tibble: 6 × 8
 ##   person      word       term      estimate    std.error statistic      p.value adjusted.p.value
 ##    <chr>     <chr>      <chr>         <dbl>        <dbl>     <dbl>        <dbl>            <dbl>
-## 1  David      base time_floor -9.488145e-08 2.639677e-08 -3.594434 3.250970e-04     3.245551e-02
-## 2  David   ggplot2 time_floor -8.262540e-08 1.969448e-08 -4.195359 2.724397e-05     8.159570e-03
-## 3  Julia   #rstats time_floor -4.496395e-08 1.119780e-08 -4.015427 5.933815e-05     1.184785e-02
-## 4  Julia      post time_floor -4.818545e-08 1.454440e-08 -3.312990 9.230419e-04     7.898602e-02
-## 5  Julia      read time_floor -9.327168e-08 2.542485e-08 -3.668524 2.439548e-04     2.950037e-02
-## 6  David  overflow time_floor  7.246835e-08 2.231653e-08  3.247294 1.165079e-03     8.723529e-02
-## 7  David     stack time_floor  8.041202e-08 2.193375e-08  3.666132 2.462468e-04     2.950037e-02
-## 8  David #user2016 time_floor -8.175896e-07 1.550152e-07 -5.274253 1.332976e-07     7.984525e-05
+## 1  David   ggplot2 time_floor -8.262540e-08 1.969448e-08 -4.195359 2.724397e-05     2.996837e-03
+## 2  Julia   #rstats time_floor -4.496395e-08 1.119780e-08 -4.015427 5.933815e-05     6.467858e-03
+## 3  Julia      post time_floor -4.818545e-08 1.454440e-08 -3.312990 9.230419e-04     9.784245e-02
+## 4  Julia      read time_floor -9.327168e-08 2.542485e-08 -3.668524 2.439548e-04     2.634712e-02
+## 5  David     stack time_floor  8.041202e-08 2.193375e-08  3.666132 2.462468e-04     2.634841e-02
+## 6  David #user2016 time_floor -8.175896e-07 1.550152e-07 -5.274253 1.332976e-07     1.479603e-05
 ```
 
 To visualize our results, we can plot these words' use for both David and Julia over this year of tweets.
@@ -366,7 +364,7 @@ words_by_time %>%
 
 <img src="08-tweet-archives_files/figure-html/unnamed-chunk-5-1.png" width="768" />
 
-David tweeted a lot about the UseR conference while he was there and then quickly stopped. He has tweeted more about Stack Overflow toward the end of the year and less about base graphics and ggplot2 as the year has progressed. (That's probably healthy.)
+David tweeted a lot about the UseR conference while he was there and then quickly stopped. He has tweeted more about Stack Overflow toward the end of the year and less about ggplot2 as the year has progressed.
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Me: I&#39;m so sick of data science wars. <a href="https://twitter.com/hashtag/rstats?src=hash">#rstats</a> vs Python, frequentist vs Bayesian...<br><br>Them: base vs ggplot2...<br><br>Me: WHY WHICH SIDE ARE YOU ON</p>&mdash; David Robinson (@drob) <a href="https://twitter.com/drob/status/712639593703542785">March 23, 2016</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -384,7 +382,7 @@ words_by_time %>%
 
 <img src="08-tweet-archives_files/figure-html/unnamed-chunk-6-1.png" width="768" />
 
-All the significant slopes for Julia are negative. This means she has not tweeted at a higher rate using any specific words, but instead using a variety of different words; her tweets earlier in the year contained the words shown in this plot at higher rates. Words she uses when publicizing a new blog post like the #rstats hashtag and "post" have gone down in frequency, and she has tweeted less about reading.
+All the significant slopes for Julia are negative. This means she has not tweeted at a higher rate using any specific words, but instead using a variety of different words; her tweets earlier in the year contained the words shown in this plot at higher proportions. Words she uses when publicizing a new blog post like the #rstats hashtag and "post" have gone down in frequency, and she has tweeted less about reading.
 
 ## Favorites and retweets
 
