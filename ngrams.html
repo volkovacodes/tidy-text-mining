@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-01-08">
+<meta name="date" content="2017-01-17">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -142,7 +142,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>4.3</b> The <code>bind_tf_idf</code> function</a></li>
 <li class="chapter" data-level="4.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>4.4</b> A corpus of physics texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Working with combinations of words using n-grams and widyr</a><ul>
+<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Relationships between words</a><ul>
 <li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
 <li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
@@ -168,6 +168,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.2</b> Latent Dirichlet allocation with the topicmodels package</a></li>
 <li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.3</b> Per-document classification</a></li>
 <li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.4</b> By word assignments: <code>augment</code></a></li>
+<li class="chapter" data-level="7.5" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.5</b> Alternative LDA implementations</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
 <li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
@@ -226,13 +227,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="ngrams" class="section level1">
-<h1><span class="header-section-number">5</span> Working with combinations of words using n-grams and widyr</h1>
-<p>So far we’ve considered words as individual units, and connected them to documents or sentiments. However, many interesting text analyses are based on the relationships between words, whether examining words commonly used in proximity to each other or within the same documents.</p>
-<p>Here, we’ll explore some of the tools tidytext offers for determining relationships between words in your text corpus. We’ll also introduce the widyr package, which is useful for calculating pairwise correlations and distances within a tidy format.</p>
+<h1><span class="header-section-number">5</span> Relationships between words</h1>
+<p>So far we’ve considered words as individual units, and connected them to documents or sentiments to perform our analyses. However, many interesting text analyses are based on the relationships between words, whether examining words commonly used in proximity to each other or that tend to occur within the same documents.</p>
+<p>In this chapter, we’ll explore some of the tools that tidytext offers for determining relationships between words in your text dataset. This includes the <code>token = &quot;ngrams&quot;</code> argument, which tokenizes by pairs of adjacent words rather than by individual words. We’ll also introduce two new packages: <a href="https://github.com/thomasp85/ggraph">ggraph</a>, which extends ggplot2 to construct network plots, nd <a href="https://github.com/dgrtwo/widyr">widyr</a> package, which calculates pairwise correlations and distances within a tidy data frame.</p>
 <div id="tokenizing-by-n-gram" class="section level2">
 <h2><span class="header-section-number">5.1</span> Tokenizing by n-gram</h2>
-<p>We’ve been using the <code>unnest_tokens</code> function to tokenize by word, or sometimes by sentence or paragraph. But we can also tokenize into consecutive sequences of words, called <strong>n-grams</strong>.</p>
-<p>We do this by adding the <code>token = &quot;ngrams&quot;</code> option to <code>unnest_tokens()</code>, as well as the <code>n</code> argument. When we set <code>n</code> to 2, we are examining pairs of two words, often called <code>bigrams</code>:</p>
+<p>We’ve been using the <code>unnest_tokens</code> function to tokenize by word, or sometimes by sentence or paragraph, which is useful . But we can also use the function to tokenize into consecutive sequences of words, called <strong>n-grams</strong>. By seeing how often word X is followed by word Y, we can then build a model of the relationships between them.</p>
+<p>We do this by adding the <code>token = &quot;ngrams&quot;</code> option to <code>unnest_tokens()</code>, and setting <code>n</code> to the number of words we wish to capture in each n-gram. When we set <code>n</code> to 2, we are examining pairs of two consecutive words, often called “bigrams”:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidytext)
 <span class="kw">library</span>(janeaustenr)
@@ -255,10 +256,10 @@ austen_bigrams</code></pre></div>
 ## 9  Sense &amp; Sensibility           1 the
 ## 10 Sense &amp; Sensibility      the family
 ## # ... with 725,038 more rows</code></pre>
-<p>This data structure is still a variation of the tidy text format. It is structured as one-row-per-token, but now each token represents a bigram. Notice that these bigrams are overlapping: “sense and” is one token, while “and sensibility” is another.</p>
+<p>This data structure is still a variation of the tidy text format. It is structured as one-row-per-token (with extra metadata, such as <code>book</code>, still preserved), but each token now represents a bigram. Notice that these bigrams overlap: “sense and” is one token, while “and sensibility” is another.</p>
 <div id="counting-and-filtering-n-grams" class="section level3">
 <h3><span class="header-section-number">5.1.1</span> Counting and filtering n-grams</h3>
-<p>Our usual tidy tools apply equally well to n-gram analysis. We can examine the most common bigrams using <code>count</code>:</p>
+<p>Our usual tidy tools apply equally well to n-gram analysis. We can examine the most common bigrams using dplyr’s <code>count()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">austen_bigrams %&gt;%
 <span class="st">  </span><span class="kw">count</span>(bigram, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## # A tibble: 211,237 × 2
@@ -275,7 +276,7 @@ austen_bigrams</code></pre></div>
 ## 9   she was  1377
 ## 10 had been  1299
 ## # ... with 211,227 more rows</code></pre>
-<p>As expected, a lot of them are pairs of common (relatively uninteresting) words. This is a useful time to use tidyr’s <code>separate()</code>, which splits a column into multiple based on a delimiter. This lets us separate it into two columns, “word1” and “word2”, which we can remove stop-words from individually:</p>
+<p>As one might expect, a lot of the most common bigrams are pairs of common (uninteresting) words, such as <code>of the</code> and <code>to be</code>: what we call “stop-words” (see Chapter @ref{#tidytext}). This is a useful time to use tidyr’s <code>separate()</code>, which splits a column into multiple based on a delimiter. This lets us separate it into two columns, “word1” and “word2”, at which we can remove cases where either is a stop-word .</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
 bigrams_separated &lt;-<span class="st"> </span>austen_bigrams %&gt;%
@@ -285,23 +286,8 @@ bigrams_filtered &lt;-<span class="st"> </span>bigrams_separated %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(!word1 %in%<span class="st"> </span>stop_words$word) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(!word2 %in%<span class="st"> </span>stop_words$word)
 
-bigrams_filtered</code></pre></div>
-<pre><code>## # A tibble: 44,784 × 3
-##                   book       word1        word2
-##                 &lt;fctr&gt;       &lt;chr&gt;        &lt;chr&gt;
-## 1  Sense &amp; Sensibility        jane       austen
-## 2  Sense &amp; Sensibility      austen         1811
-## 3  Sense &amp; Sensibility        1811      chapter
-## 4  Sense &amp; Sensibility     chapter            1
-## 5  Sense &amp; Sensibility     norland         park
-## 6  Sense &amp; Sensibility surrounding acquaintance
-## 7  Sense &amp; Sensibility        late        owner
-## 8  Sense &amp; Sensibility    advanced          age
-## 9  Sense &amp; Sensibility    constant    companion
-## 10 Sense &amp; Sensibility    happened          ten
-## # ... with 44,774 more rows</code></pre>
-<p>We can now count the most common pairs of words:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigrams_filtered %&gt;%
+<span class="co"># New bigram counts:</span>
+bigrams_filtered %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## Source: local data frame [33,421 x 3]
 ## Groups: word1 [6,711]
@@ -320,7 +306,7 @@ bigrams_filtered</code></pre></div>
 ## 10 colonel   brandon   108
 ## # ... with 33,411 more rows</code></pre>
 <p>We can see that names (whether first and last or with a salutation) are the most common pairs in Jane Austen books.</p>
-<p>We may want to work with the recombined words. tidyr’s <code>unite()</code> function is the inverse of <code>separate()</code>, and lets us recombine the columns into one.</p>
+<p>In other analyses, we may want to work with the recombined words. tidyr’s <code>unite()</code> function is the inverse of <code>separate()</code>, and lets us recombine the columns into one.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigrams_united &lt;-<span class="st"> </span>bigrams_filtered %&gt;%
 <span class="st">  </span><span class="kw">unite</span>(bigram, word1, word2, <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)
 
@@ -339,7 +325,7 @@ bigrams_united</code></pre></div>
 ## 9  Sense &amp; Sensibility       constant companion
 ## 10 Sense &amp; Sensibility             happened ten
 ## # ... with 44,774 more rows</code></pre>
-<p>You could also easily work with trigrams (sequences of 3 words) by setting <code>n = 3</code>:</p>
+<p>We may also be interested in the most common tri-grams, sequences of 3 words. We can find this by setting <code>n = 3</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">austen_books</span>() %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(trigram, text, <span class="dt">token =</span> <span class="st">&quot;ngrams&quot;</span>, <span class="dt">n =</span> <span class="dv">3</span>) %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(trigram, <span class="kw">c</span>(<span class="st">&quot;word1&quot;</span>, <span class="st">&quot;word2&quot;</span>, <span class="st">&quot;word3&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>) %&gt;%
@@ -366,7 +352,27 @@ bigrams_united</code></pre></div>
 </div>
 <div id="analyzing-bigrams" class="section level3">
 <h3><span class="header-section-number">5.1.2</span> Analyzing bigrams</h3>
-<p>A bigram can be treated as a term in a document in the same way that we treated individual words. For example, we can look at tf-idf of bigrams:</p>
+<p>This one-row-per-bigram format is helpful for exploratory analyses of the text. As a simple example, we might be interested in the most common “streets” mentioned in each book:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigrams_filtered %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(word2 ==<span class="st"> &quot;street&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(book, word1, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## Source: local data frame [34 x 3]
+## Groups: book [6]
+## 
+##                   book       word1     n
+##                 &lt;fctr&gt;       &lt;chr&gt; &lt;int&gt;
+## 1  Sense &amp; Sensibility    berkeley    16
+## 2  Sense &amp; Sensibility      harley    16
+## 3     Northanger Abbey    pulteney    14
+## 4     Northanger Abbey      milsom    11
+## 5       Mansfield Park     wimpole    10
+## 6    Pride &amp; Prejudice gracechurch     9
+## 7  Sense &amp; Sensibility     conduit     6
+## 8  Sense &amp; Sensibility        bond     5
+## 9           Persuasion      milsom     5
+## 10          Persuasion      rivers     4
+## # ... with 24 more rows</code></pre>
+<p>A bigram can also be treated as a term in a document in the same way that we treated individual words. For example, we can look at the TF-IDF (Chapter @ref{#tf_idf}) of bigrams across Austen novels.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigram_tf_idf &lt;-<span class="st"> </span>bigrams_united %&gt;%
 <span class="st">  </span><span class="kw">count</span>(book, bigram) %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(bigram, book, n) %&gt;%
@@ -389,13 +395,15 @@ bigram_tf_idf</code></pre></div>
 ## 9                 Emma   frank churchill   132 0.01385972 1.791759 0.02483329
 ## 10   Pride &amp; Prejudice    lady catherine   100 0.01380453 1.791759 0.02473439
 ## # ... with 36,207 more rows</code></pre>
-<p>This can be visualized within each book, just as we did for words:</p>
+<p>These TF-IDF values can be visualized within each book, just as we did for words.</p>
 <p><img src="05-word-combinations_files/figure-html/bigram_tf_idf_plot-1.png" width="864" /></p>
-<p>Much as we discovered in <a href="tfidf.html#tfidf">Chapter 4</a>, the units that distinguish each Austen book are almost exclusively names.</p>
+<p>Much as we discovered in <a href="tfidf.html#tfidf">Chapter 4</a>, the units that distinguish each Austen book are almost exclusively names. We also notice some pairings of a common verb and a name, such as “replied elizabeth” in Pride &amp; Prejudice, or “cried emma” in Emma.</p>
+<p>There are advantages and disadvantages to examining the TF-IDF of bigrams rather than individual words. Pairs of consecutive words might capture structure that isn’t present when one is just counting single words, and may provide context that makes tokens more understandable (for example, “pulteney street”, in Northanger Abbey, is more informative than “pulteney”). However, the per-bigram counts are also <em>sparser</em>: a typical two-word pair is rarer than either of its component words. Thus, bigrams can be especially useful when you have a very large text dataset.</p>
 </div>
 <div id="using-bigrams-to-provide-context-in-sentiment-analysis" class="section level3">
 <h3><span class="header-section-number">5.1.3</span> Using bigrams to provide context in sentiment analysis</h3>
-<p>Our sentiment analysis approch in <a href="sentiment.html#sentiment">Chapter 3</a> simply counted the appearance of positive or negative words, according to a reference lexicon. One of the problems with this approach is that a word’s context can matter nearly as much as its presence. For example, the words “happy” and “like” will be counted as positive, even in a sentence like “I’m not <strong>happy</strong> and I don’t <strong>like</strong> it!”</p>
+<p>Our sentiment analysis approch in Chapter \ref{3](#sentiment) simply counted the appearance of positive or negative words, according to a reference lexicon. One of the problems with this approach is that a word’s context can matter nearly as much as its presence. For example, the words “happy” and “like” will be counted as positive, even in a sentence like “I’m not <strong>happy</strong> and I don’t <strong>like</strong> it!”</p>
+<p>Now that we have the data organized into bigrams, it’s easy to tell how often words are preceded by a word like “not”:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigrams_separated %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word1 ==<span class="st"> &quot;not&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
@@ -416,7 +424,7 @@ bigram_tf_idf</code></pre></div>
 ## 10   not    in   118
 ## # ... with 1,236 more rows</code></pre>
 <p>By performing sentiment analysis on the bigram data, we can examine how often sentiment-associated words are preceded by “not” or other negating words. We could use this to ignore or even reverse their contribution to the sentiment score.</p>
-<p>Let’s use the AFINN lexicon for sentiment analysis, which gives a numeric sentiment score for each word:</p>
+<p>Let’s use the AFINN lexicon for sentiment analysis, which you may recall gives a numeric sentiment score for each word:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AFINN &lt;-<span class="st"> </span><span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>)
 
 AFINN</code></pre></div>
@@ -456,6 +464,7 @@ not_words</code></pre></div>
 ## 9  pretend    -1    18
 ## 10   worth     2    17
 ## # ... with 235 more rows</code></pre>
+<p>For example, the most common sentiment-associated word to follow “not” was “like”, which would normally have a (positive) sentiment score of 2.</p>
 <p>It’s worth asking which words contributed the most in the “wrong” direction. To compute that, we can multiply their score by the number of times they appear (so that a word with a sentiment score of +3 occurring 10 times has as much impact as a word with a sentiment score of +1 occurring 30 times).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">not_words %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> n *<span class="st"> </span>score) %&gt;%
@@ -464,12 +473,12 @@ not_words</code></pre></div>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word2 =</span> <span class="kw">reorder</span>(word2, contribution)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word2, n *<span class="st"> </span>score, <span class="dt">fill =</span> n *<span class="st"> </span>score &gt;<span class="st"> </span><span class="dv">0</span>)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
-<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Words preceded by </span><span class="ch">\&quot;</span><span class="st">not</span><span class="ch">\&quot;</span><span class="st">&quot;</span>) +
-<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Words preceded by </span><span class="ch">\&quot;</span><span class="st">not</span><span class="ch">\&quot;</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * number of occurrences&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="05-word-combinations_files/figure-html/not_words_plot-1.png" width="768" /></p>
 <p>The bigrams “not like” and “not help” were overwhelmingly the largest causes of misidentification, making the text seem much more positive than it is. But we can see phrases like “not afraid” and “not fail” sometimes suggest text is more negative than it is.</p>
-<p>“Not” isn’t the only word that provides context. We could make a vector of words that we suspect are used in negation, and use the same joining and counting approach to examine all of them at once.</p>
+<p>“Not” isn’t the only term that provides some context for the following word. We could pick four common words (or more) that negate the following, and use the same joining and counting approach to examine all of them at once.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negation_words &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;not&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;never&quot;</span>, <span class="st">&quot;without&quot;</span>)
 
 negated_words &lt;-<span class="st"> </span>bigrams_separated %&gt;%
@@ -493,18 +502,16 @@ negated_words</code></pre></div>
 ## 9     no  harm    -2    22
 ## 10   not sorry    -1    21
 ## # ... with 521 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">## TODO: make the ordering vary depending on each facet
-## (not easy to fix)
-
-negated_words %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negated_words %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> n *<span class="st"> </span>score) %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word2 =</span> <span class="kw">reorder</span>(word2, contribution)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word2 =</span> <span class="kw">reorder</span>(<span class="kw">paste</span>(word2, word1, <span class="dt">sep =</span> <span class="st">&quot;__&quot;</span>), contribution)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(word1) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, <span class="kw">abs</span>(contribution)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word2, contribution, <span class="dt">fill =</span> n *<span class="st"> </span>score &gt;<span class="st"> </span><span class="dv">0</span>)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>word1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
-<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Words preceded by negation&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> function(x) <span class="kw">gsub</span>(<span class="st">&quot;__.+$&quot;</span>, <span class="st">&quot;&quot;</span>, x)) +
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Words preceded by negation term&quot;</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <p><img src="05-word-combinations_files/figure-html/negated_words_plot-1.png" width="864" /></p>

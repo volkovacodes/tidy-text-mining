@@ -189,9 +189,12 @@ ggplot(janeaustensentiment, aes(index, sentiment, fill = book)) +
   facet_wrap(~book, ncol = 2, scales = "free_x")
 ```
 
-<img src="03-sentiment-analysis_files/figure-html/sentimentplot-1.png" width="864" />
+<div class="figure">
+<img src="03-sentiment-analysis_files/figure-html/sentimentplot-1.png" alt="Sentiment through the narratives of Jane Austen's novels" width="864" />
+<p class="caption">(\#fig:sentimentplot)Sentiment through the narratives of Jane Austen's novels</p>
+</div>
 
-We can see here how the plot of each novel changes toward more positive or negative sentiment over the trajectory of the story.
+We can see in Figure \@ref(fig:sentimentplot) how the plot of each novel changes toward more positive or negative sentiment over the trajectory of the story.
 
 ## Comparing the three sentiment dictionaries
 
@@ -247,6 +250,8 @@ bing_and_nrc <- bind_rows(pride_prejudice %>%
 
 We now have an estimate of the net sentiment (positive - negative) in each chunk of the novel text for each sentiment lexicon. Let's bind them together and plot them.
 
+(ref:comparecap) Comparing three sentiment lexicons using *Pride and Prejudice*
+
 
 ```r
 bind_rows(afinn, 
@@ -256,7 +261,10 @@ bind_rows(afinn,
   facet_wrap(~method, ncol = 1, scales = "free_y")
 ```
 
-<img src="03-sentiment-analysis_files/figure-html/compareplot-1.png" width="864" />
+<div class="figure">
+<img src="03-sentiment-analysis_files/figure-html/compareplot-1.png" alt="(ref:comparecap) " width="864" />
+<p class="caption">(\#fig:compareplot)(ref:comparecap) </p>
+</div>
 
 The three different lexicons for calculating sentiment give results that are different in an absolute sense but have similar relative trajectories through the novel. We see similar dips and peaks in sentiment at about the same places in the novel, but the absolute values are significantly different. The AFINN lexicon
 gives the largest absolute values, with high positive values. The lexicon from Bing et al. has lower absolute values and seems to label larger blocks of contiguous positive or negative text. The NRC results are shifted higher relative to the other two, labeling the text more positively, but detects similar relative changes in the text. We find similar differences between the methods when looking at other novels; the NRC sentiment is high, the AFINN sentiment has more variance, the Bing et al. sentiment appears to find longer stretches of similar text, but all three agree roughly on the overall trends in the sentiment through a narrative arc.
@@ -341,7 +349,10 @@ bing_word_counts %>%
   coord_flip()
 ```
 
-<img src="03-sentiment-analysis_files/figure-html/pipetoplot-1.png" width="768" />
+<div class="figure">
+<img src="03-sentiment-analysis_files/figure-html/pipetoplot-1.png" alt="Words that contribute to positive and negative sentiment in Jane Austen's novels" width="768" />
+<p class="caption">(\#fig:pipetoplot)Words that contribute to positive and negative sentiment in Jane Austen's novels</p>
+</div>
 
 This lets us spot an anomaly in the sentiment analysis; the word "miss" is coded as negative but it is used as a title for young, unmarried women in Jane Austen's works. If it were appropriate for our purposes, we could easily add "miss" to a custom stop-words list using `bind_rows`.
 
@@ -361,7 +372,10 @@ tidy_books %>%
   with(wordcloud(word, n, max.words = 100))
 ```
 
-<img src="03-sentiment-analysis_files/figure-html/firstwordcloud-1.png" width="576" />
+<div class="figure">
+<img src="03-sentiment-analysis_files/figure-html/firstwordcloud-1.png" alt="The most common words in Jane Austen's novels" width="576" />
+<p class="caption">(\#fig:firstwordcloud)The most common words in Jane Austen's novels</p>
+</div>
 
 In other functions, such as `comparison.cloud`, you may need to turn the data frame into a matrix with reshape2's `acast`. Let's do the sentiment analysis to tag positive and negative words using an inner join, then find the most common positive and negative words. Until the step where we need to send the data to `comparison.cloud`, this can all be done with joins, piping, and dplyr because our data is in tidy format.
 
@@ -377,9 +391,12 @@ tidy_books %>%
                    max.words = 100)
 ```
 
-<img src="03-sentiment-analysis_files/figure-html/wordcloud-1.png" width="480" />
+<div class="figure">
+<img src="03-sentiment-analysis_files/figure-html/wordcloud-1.png" alt="Most common positive and negative words in Jane Austen's novels" width="480" />
+<p class="caption">(\#fig:wordcloud)Most common positive and negative words in Jane Austen's novels</p>
+</div>
 
-The size of a word's text in this wordcloud is in proportion to its frequency within its sentiment. We can use this visualization to see the most important positive and negative words, but the sizes of the words are not comparable across sentiments.
+The size of a word's text in Figure \@ref(fig:wordcloud) is in proportion to its frequency within its sentiment. We can use this visualization to see the most important positive and negative words, but the sizes of the words are not comparable across sentiments.
 
 ## Looking at units beyond just words
 

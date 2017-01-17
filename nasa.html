@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-01-08">
+<meta name="date" content="2017-01-17">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -142,7 +142,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>4.3</b> The <code>bind_tf_idf</code> function</a></li>
 <li class="chapter" data-level="4.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>4.4</b> A corpus of physics texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Working with combinations of words using n-grams and widyr</a><ul>
+<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Relationships between words</a><ul>
 <li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
 <li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
@@ -168,6 +168,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.2</b> Latent Dirichlet allocation with the topicmodels package</a></li>
 <li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.3</b> Per-document classification</a></li>
 <li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.4</b> By word assignments: <code>augment</code></a></li>
+<li class="chapter" data-level="7.5" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.5</b> Alternative LDA implementations</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
 <li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
@@ -282,13 +283,13 @@ nasa_desc %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(desc) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">5</span>)</code></pre></div>
 <pre><code>## # A tibble: 5 × 1
-##                                                                                                   desc
-##                                                                                                  &lt;chr&gt;
-## 1 This data product contains TOMS/Earth Probe Total Column Ozone Monthly L3 Global 1x1.25 deg Lat/Lon 
-## 2 Future detectors and arrays for visible, IR, and submillimeter imaging and spectroscopy require much
-## 3 The Tropical Rainfall Measuring Mission (TRMM) is a joint U.S.-Japan   satellite mission to monitor 
-## 4 AERONET (AErosol RObotic NETwork) is an optical ground-based aerosol monitoring network and data arc
-## 5 Precise satellite orbits derived from analysis of Doppler Orbitography by Radiopositioning Integrate</code></pre>
+##                                                                                                    desc
+##                                                                                                   &lt;chr&gt;
+## 1 A WiMAX networked UAV Telemetry System (WNUTS) is designed for\nnet-centric remote sensing and launch
+## 2  ML3DZMBRO is the EOS Aura Microwave Limb Sounder (MLS) daily zonal mean product for bromine monoxide
+## 3  This Level 2 data collection contains derived precipitable column water vapor amounts, during daytim
+## 4  To address the NASA GSFC need for significant improvements in wide bandgap materials and detectors f
+## 5  This data set includes brightness temperature data measured over the Sea of Japan, the Western Pacif</code></pre>
 <p>Here we see the first part of several selected description fields from the metadata.</p>
 <p>Now we can build the tidy data frame for the keywords. For this one, we need to use <code>unnest</code> from tidyr, because they are in a list-column.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)

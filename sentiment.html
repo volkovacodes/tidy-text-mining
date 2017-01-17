@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-01-08">
+<meta name="date" content="2017-01-17">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -142,7 +142,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>4.3</b> The <code>bind_tf_idf</code> function</a></li>
 <li class="chapter" data-level="4.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>4.4</b> A corpus of physics texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Working with combinations of words using n-grams and widyr</a><ul>
+<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Relationships between words</a><ul>
 <li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
 <li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
@@ -168,6 +168,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.2</b> Latent Dirichlet allocation with the topicmodels package</a></li>
 <li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.3</b> Per-document classification</a></li>
 <li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.4</b> By word assignments: <code>augment</code></a></li>
+<li class="chapter" data-level="7.5" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.5</b> Alternative LDA implementations</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
 <li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
@@ -357,8 +358,13 @@ janeaustensentiment &lt;-<span class="st"> </span>tidy_books %&gt;%
 <span class="kw">ggplot</span>(janeaustensentiment, <span class="kw">aes</span>(index, sentiment, <span class="dt">fill =</span> book)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free_x&quot;</span>)</code></pre></div>
-<p><img src="03-sentiment-analysis_files/figure-html/sentimentplot-1.png" width="864" /></p>
-<p>We can see here how the plot of each novel changes toward more positive or negative sentiment over the trajectory of the story.</p>
+<div class="figure"><span id="fig:sentimentplot"></span>
+<img src="03-sentiment-analysis_files/figure-html/sentimentplot-1.png" alt="Sentiment through the narratives of Jane Austen's novels" width="864" />
+<p class="caption">
+Figure 3.1: Sentiment through the narratives of Jane Austen’s novels
+</p>
+</div>
+<p>We can see in Figure <a href="sentiment.html#fig:sentimentplot">3.1</a> how the plot of each novel changes toward more positive or negative sentiment over the trajectory of the story.</p>
 </div>
 <div id="comparing-the-three-sentiment-dictionaries" class="section level2">
 <h2><span class="header-section-number">3.3</span> Comparing the three sentiment dictionaries</h2>
@@ -400,12 +406,18 @@ bing_and_nrc &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(pri
 <span class="st">  </span><span class="kw">spread</span>(sentiment, n, <span class="dt">fill =</span> <span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentiment =</span> positive -<span class="st"> </span>negative)</code></pre></div>
 <p>We now have an estimate of the net sentiment (positive - negative) in each chunk of the novel text for each sentiment lexicon. Let’s bind them together and plot them.</p>
+
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_rows</span>(afinn, 
           bing_and_nrc) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(index, sentiment, <span class="dt">fill =</span> method)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~method, <span class="dt">ncol =</span> <span class="dv">1</span>, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>)</code></pre></div>
-<p><img src="03-sentiment-analysis_files/figure-html/compareplot-1.png" width="864" /></p>
+<div class="figure"><span id="fig:compareplot"></span>
+<img src="03-sentiment-analysis_files/figure-html/compareplot-1.png" alt="Comparing three sentiment lexicons using Pride and Prejudice " width="864" />
+<p class="caption">
+Figure 3.2: Comparing three sentiment lexicons using <em>Pride and Prejudice</em>
+</p>
+</div>
 <p>The three different lexicons for calculating sentiment give results that are different in an absolute sense but have similar relative trajectories through the novel. We see similar dips and peaks in sentiment at about the same places in the novel, but the absolute values are significantly different. The AFINN lexicon gives the largest absolute values, with high positive values. The lexicon from Bing et al. has lower absolute values and seems to label larger blocks of contiguous positive or negative text. The NRC results are shifted higher relative to the other two, labeling the text more positively, but detects similar relative changes in the text. We find similar differences between the methods when looking at other novels; the NRC sentiment is high, the AFINN sentiment has more variance, the Bing et al. sentiment appears to find longer stretches of similar text, but all three agree roughly on the overall trends in the sentiment through a narrative arc.</p>
 <p>Why is, for example, the result for the NRC lexicon biased so high in sentiment compared to the Bing et al. result? Let’s look briefly at how many positive and negative words are in these lexicons.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_sentiments</span>(<span class="st">&quot;nrc&quot;</span>) %&gt;%<span class="st"> </span>
@@ -460,7 +472,12 @@ bing_word_counts</code></pre></div>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Contribution to sentiment&quot;</span>,
        <span class="dt">x =</span> <span class="ot">NULL</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="03-sentiment-analysis_files/figure-html/pipetoplot-1.png" width="768" /></p>
+<div class="figure"><span id="fig:pipetoplot"></span>
+<img src="03-sentiment-analysis_files/figure-html/pipetoplot-1.png" alt="Words that contribute to positive and negative sentiment in Jane Austen's novels" width="768" />
+<p class="caption">
+Figure 3.3: Words that contribute to positive and negative sentiment in Jane Austen’s novels
+</p>
+</div>
 <p>This lets us spot an anomaly in the sentiment analysis; the word “miss” is coded as negative but it is used as a title for young, unmarried women in Jane Austen’s works. If it were appropriate for our purposes, we could easily add “miss” to a custom stop-words list using <code>bind_rows</code>.</p>
 </div>
 <div id="wordclouds" class="section level2">
@@ -473,7 +490,12 @@ tidy_books %&gt;%
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word) %&gt;%
 <span class="st">  </span><span class="kw">with</span>(<span class="kw">wordcloud</span>(word, n, <span class="dt">max.words =</span> <span class="dv">100</span>))</code></pre></div>
-<p><img src="03-sentiment-analysis_files/figure-html/firstwordcloud-1.png" width="576" /></p>
+<div class="figure"><span id="fig:firstwordcloud"></span>
+<img src="03-sentiment-analysis_files/figure-html/firstwordcloud-1.png" alt="The most common words in Jane Austen's novels" width="576" />
+<p class="caption">
+Figure 3.4: The most common words in Jane Austen’s novels
+</p>
+</div>
 <p>In other functions, such as <code>comparison.cloud</code>, you may need to turn the data frame into a matrix with reshape2’s <code>acast</code>. Let’s do the sentiment analysis to tag positive and negative words using an inner join, then find the most common positive and negative words. Until the step where we need to send the data to <code>comparison.cloud</code>, this can all be done with joins, piping, and dplyr because our data is in tidy format.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(reshape2)
 
@@ -483,8 +505,13 @@ tidy_books %&gt;%
 <span class="st">  </span><span class="kw">acast</span>(word ~<span class="st"> </span>sentiment, <span class="dt">value.var =</span> <span class="st">&quot;n&quot;</span>, <span class="dt">fill =</span> <span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">comparison.cloud</span>(<span class="dt">colors =</span> <span class="kw">c</span>(<span class="st">&quot;#F8766D&quot;</span>, <span class="st">&quot;#00BFC4&quot;</span>),
                    <span class="dt">max.words =</span> <span class="dv">100</span>)</code></pre></div>
-<p><img src="03-sentiment-analysis_files/figure-html/wordcloud-1.png" width="480" /></p>
-<p>The size of a word’s text in this wordcloud is in proportion to its frequency within its sentiment. We can use this visualization to see the most important positive and negative words, but the sizes of the words are not comparable across sentiments.</p>
+<div class="figure"><span id="fig:wordcloud"></span>
+<img src="03-sentiment-analysis_files/figure-html/wordcloud-1.png" alt="Most common positive and negative words in Jane Austen's novels" width="480" />
+<p class="caption">
+Figure 3.5: Most common positive and negative words in Jane Austen’s novels
+</p>
+</div>
+<p>The size of a word’s text in Figure <a href="sentiment.html#fig:wordcloud">3.5</a> is in proportion to its frequency within its sentiment. We can use this visualization to see the most important positive and negative words, but the sizes of the words are not comparable across sentiments.</p>
 </div>
 <div id="looking-at-units-beyond-just-words" class="section level2">
 <h2><span class="header-section-number">3.6</span> Looking at units beyond just words</h2>

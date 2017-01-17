@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-01-08">
+<meta name="date" content="2017-01-17">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -142,7 +142,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>4.3</b> The <code>bind_tf_idf</code> function</a></li>
 <li class="chapter" data-level="4.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>4.4</b> A corpus of physics texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Working with combinations of words using n-grams and widyr</a><ul>
+<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Relationships between words</a><ul>
 <li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
 <li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
@@ -168,6 +168,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.2</b> Latent Dirichlet allocation with the topicmodels package</a></li>
 <li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.3</b> Per-document classification</a></li>
 <li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.4</b> By word assignments: <code>augment</code></a></li>
+<li class="chapter" data-level="7.5" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.5</b> Alternative LDA implementations</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
 <li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
@@ -238,8 +239,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><em>Twenty Thousand Leagues Under the Sea</em> by Jules Verne</li>
 <li><em>Pride and Prejudice</em> by Jane Austen</li>
 </ul>
-<p>This vandal has torn the books into individual chapters, and left them in one large pile. How can we restore these disorganized chapters to their original books? We’ll use topic modeling to discover how chapters are distinguished into distinct topics.</p>
-<p>We’ll retrieve these four books using the gutenbergr package:</p>
+<p>This vandal has torn the books into individual chapters, and left them in one large pile. How can we restore these disorganized chapters to their original books? This is a challenging problem since the individual chapters are <strong>unlabeled</strong>: we don’t know what words might distinguish them into groups. We’ll thus use topic modeling to discover how chapters cluster into distinct topics, each of them representing one of the words.</p>
+<p>We’ll retrieve the text of these four books using the gutenbergr package:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 
 titles &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Twenty Thousand Leagues under the Sea&quot;</span>, <span class="st">&quot;The War of the Worlds&quot;</span>,
@@ -248,29 +249,32 @@ titles &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">
 
 books &lt;-<span class="st"> </span><span class="kw">gutenberg_works</span>(title %in%<span class="st"> </span>titles) %&gt;%
 <span class="st">  </span><span class="kw">gutenberg_download</span>(<span class="dt">meta_fields =</span> <span class="st">&quot;title&quot;</span>)</code></pre></div>
-<p>As pre-processing, we divide these into chapters, use tidytext’s <code>unnest_tokens</code> to separate them into words, then remove <code>stop_words</code>. We’re treating every chapter as a separate “document”, each with a name like <code>Great Expectations_1</code> or <code>Pride and Prejudice_11</code>.</p>
+<p>As pre-processing, we divide these into chapters, use tidytext’s <code>unnest_tokens</code> to separate them into words, then remove <code>stop_words</code>, similar to the analyses we’ve done in Chapter @ref{sentiment}. We’re treating every chapter as a separate “document”, each with a name like <code>Great Expectations_1</code> or <code>Pride and Prejudice_11</code>. (In practice, each document might be one newspaper article, or one blog post).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 <span class="kw">library</span>(stringr)
 <span class="kw">library</span>(tidyr)
 
+<span class="co"># Divide into documents, each representing one chapter</span>
 by_chapter &lt;-<span class="st"> </span>books %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(title) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">chapter =</span> <span class="kw">cumsum</span>(<span class="kw">str_detect</span>(text, <span class="kw">regex</span>(<span class="st">&quot;^chapter &quot;</span>, <span class="dt">ignore_case =</span> <span class="ot">TRUE</span>)))) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(chapter &gt;<span class="st"> </span><span class="dv">0</span>)
+<span class="st">  </span><span class="kw">filter</span>(chapter &gt;<span class="st"> </span><span class="dv">0</span>) %&gt;%
+<span class="st">  </span><span class="kw">unite</span>(document, title, chapter)
 
+<span class="co"># Split into words</span>
 by_chapter_word &lt;-<span class="st"> </span>by_chapter %&gt;%
-<span class="st">  </span><span class="kw">unite</span>(title_chapter, title, chapter) %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text)
 
+<span class="co"># Find document-word counts</span>
 word_counts &lt;-<span class="st"> </span>by_chapter_word %&gt;%
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words) %&gt;%
-<span class="st">  </span><span class="kw">count</span>(title_chapter, word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(document, word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()
 
 word_counts</code></pre></div>
 <pre><code>## # A tibble: 104,721 × 3
-##               title_chapter    word     n
+##                    document    word     n
 ##                       &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;
 ## 1     Great Expectations_57     joe    88
 ## 2      Great Expectations_7     joe    70
@@ -283,12 +287,13 @@ word_counts</code></pre></div>
 ## 9     Great Expectations_18     joe    50
 ## 10 The War of the Worlds_16 brother    50
 ## # ... with 104,711 more rows</code></pre>
+<p>word_counts</p>
 </div>
 <div id="latent-dirichlet-allocation-with-the-topicmodels-package" class="section level2">
 <h2><span class="header-section-number">7.2</span> Latent Dirichlet allocation with the topicmodels package</h2>
-<p>Right now this data frame is in a tidy form, with one-term-per-document-per-row. However, the topicmodels package requires a <code>DocumentTermMatrix</code> (from the tm package). As described in <a href="dtm.html#dtm">Chapter 6</a>, we can cast a one-token-per-row table into a <code>DocumentTermMatrix</code> with tidytext’s <code>cast_dtm</code>:</p>
+<p>Right now this data frame is in a tidy form, with one-term-per-document-per-row. However, the topicmodels package requires a <code>DocumentTermMatrix</code> (from the tm package). As described in Chapter @ref{#dtm}, we can cast a one-token-per-row table into a <code>DocumentTermMatrix</code> with tidytext’s <code>cast_dtm</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_dtm &lt;-<span class="st"> </span>word_counts %&gt;%
-<span class="st">  </span><span class="kw">cast_dtm</span>(title_chapter, word, n)
+<span class="st">  </span><span class="kw">cast_dtm</span>(document, word, n)
 
 chapters_dtm</code></pre></div>
 <pre><code>## &lt;&lt;DocumentTermMatrix (documents: 193, terms: 18215)&gt;&gt;
@@ -296,16 +301,20 @@ chapters_dtm</code></pre></div>
 ## Sparsity           : 97%
 ## Maximal term length: 19
 ## Weighting          : term frequency (tf)</code></pre>
-<p>Now we are ready to use the <a href="https://cran.r-project.org/package=topicmodels">topicmodels</a> package to create a four topic LDA model.</p>
+<p>We’re now ready ready to use the <a href="https://cran.r-project.org/package=topicmodels">topicmodels</a> package, specifically the <code>LDA</code> function, to create a four topic Latent Dirichlet Allocation model. (In this case we know there are four topics because there are four books: in other problems we may need to try a few different values of <code>k</code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(topicmodels)
+
+<span class="co"># setting a seed so that the output is predictable</span>
 chapters_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(chapters_dtm, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">seed =</span> <span class="dv">1234</span>))
 chapters_lda</code></pre></div>
 <pre><code>## A LDA_VEM topic model with 4 topics.</code></pre>
-<p>(In this case we know there are four topics because there are four books; in practice we may need to try a few different values of <code>k</code>).</p>
-<p>Now tidytext gives us the option of <em>returning</em> to a tidy analysis, using the <code>tidy</code> and <code>augment</code> verbs borrowed from the <a href="https://github.com/dgrtwo/broom">broom package</a>. In particular, we start with the <code>tidy</code> verb.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
-
-chapters_lda_td &lt;-<span class="st"> </span>tidytext:::<span class="kw">tidy.LDA</span>(chapters_lda)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(chapters_lda)</code></pre></div>
+<pre><code>## [1] &quot;LDA_VEM&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;topicmodels&quot;</code></pre>
+<p>This produces an LDA model of class <code>LDA_VEM</code>, containing the</p>
+<p>The tidytext package now gives us the option of <em>returning</em> to a tidy analysis, using the <code>tidy</code> and <code>augment</code> verbs borrowed from the <a href="https://github.com/dgrtwo/broom">broom package</a>. Note the similarity with the tidying functions in Chapter @ref{#casting}: each . In particular, we start with the <code>tidy</code> verb.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda_td &lt;-<span class="st"> </span><span class="kw">tidy</span>(chapters_lda)
 chapters_lda_td</code></pre></div>
 <pre><code>## # A tibble: 72,860 × 3
 ##    topic    term         beta
@@ -559,12 +568,43 @@ wrong_words</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_counts %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word ==<span class="st"> &quot;flopson&quot;</span>)</code></pre></div>
 <pre><code>## # A tibble: 3 × 3
-##           title_chapter    word     n
+##                document    word     n
 ##                   &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;
 ## 1 Great Expectations_22 flopson    10
 ## 2 Great Expectations_23 flopson     7
 ## 3 Great Expectations_33 flopson     1</code></pre>
 <p>The algorithm is stochastic and iterative, and it can accidentally land on a topic that spans multiple books.</p>
+</div>
+<div id="alternative-lda-implementations" class="section level2">
+<h2><span class="header-section-number">7.5</span> Alternative LDA implementations</h2>
+<p>The <code>LDA</code> function in the topicmodels package is only one implementation of . For example, the <a href="https://cran.r-project.org/package=mallet">mallet</a> package implements a wrapper around the <a href="http://mallet.cs.umass.edu/">MALLET</a></p>
+<p>The inputs and outputs of the tidying functions are almost identical to the tidiers described in this rest of this chapter. In particular, they take</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mallet)
+
+collapsed &lt;-<span class="st"> </span>by_chapter_word %&gt;%
+<span class="st">  </span><span class="kw">anti_join</span>(stop_words, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">str_replace</span>(word, <span class="st">&quot;&#39;&quot;</span>, <span class="st">&quot;&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(document) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">text =</span> <span class="kw">paste</span>(word, <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>))
+
+<span class="co"># The mallet package requires a file of stopwords</span>
+<span class="co"># Since we&#39;ve already filtered them, we can give it an empty file</span>
+<span class="kw">file.create</span>(empty_file &lt;-<span class="st"> </span><span class="kw">tempfile</span>())
+docs &lt;-<span class="st"> </span><span class="kw">mallet.import</span>(collapsed$document, collapsed$text, empty_file)
+
+mallet_model &lt;-<span class="st"> </span><span class="kw">MalletLDA</span>(<span class="dt">num.topics =</span> <span class="dv">4</span>)
+mallet_model$<span class="kw">loadDocuments</span>(docs)
+mallet_model$<span class="kw">train</span>(<span class="dv">200</span>)
+
+<span class="co"># word-topic pairs</span>
+<span class="kw">tidy</span>(mallet_model)
+
+<span class="co"># document-topic pairs</span>
+<span class="kw">tidy</span>(mallet_model, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
+
+<span class="co"># column needs to be named &quot;term&quot; for &quot;augment&quot;</span>
+word_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_counts, <span class="dt">term =</span> word)
+<span class="kw">augment</span>(mallet_model, word_counts)</code></pre></div>
 
 </div>
 </div>

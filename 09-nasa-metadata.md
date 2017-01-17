@@ -105,13 +105,13 @@ nasa_desc %>%
 
 ```
 ## # A tibble: 5 × 1
-##                                                                                                   desc
-##                                                                                                  <chr>
-## 1 This data product contains TOMS/Earth Probe Total Column Ozone Monthly L3 Global 1x1.25 deg Lat/Lon 
-## 2 Future detectors and arrays for visible, IR, and submillimeter imaging and spectroscopy require much
-## 3 The Tropical Rainfall Measuring Mission (TRMM) is a joint U.S.-Japan   satellite mission to monitor 
-## 4 AERONET (AErosol RObotic NETwork) is an optical ground-based aerosol monitoring network and data arc
-## 5 Precise satellite orbits derived from analysis of Doppler Orbitography by Radiopositioning Integrate
+##                                                                                                    desc
+##                                                                                                   <chr>
+## 1 A WiMAX networked UAV Telemetry System (WNUTS) is designed for\nnet-centric remote sensing and launch
+## 2  ML3DZMBRO is the EOS Aura Microwave Limb Sounder (MLS) daily zonal mean product for bromine monoxide
+## 3  This Level 2 data collection contains derived precipitable column water vapor amounts, during daytim
+## 4  To address the NASA GSFC need for significant improvements in wide bandgap materials and detectors f
+## 5  This data set includes brightness temperature data measured over the Sea of Japan, the Western Pacif
 ```
 
 Here we see the first part of several selected description fields from the metadata.

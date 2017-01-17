@@ -145,7 +145,7 @@ inaug_dfm
 ```
 
 ```
-## Document-feature matrix of: 57 documents, 9,215 features.
+## Document-feature matrix of: 57 documents, 9,174 features (91.6% sparse).
 ```
 
 The `tidy` method works on these objects as well, turning them into a one-token-per-document-per-row table:
@@ -157,20 +157,20 @@ inaug_td
 ```
 
 ```
-## # A tibble: 43,719 × 3
-##           document            term count
-##              <chr>           <chr> <dbl>
-## 1  1789-Washington fellow-citizens     1
-## 2       1797-Adams fellow-citizens     3
-## 3   1801-Jefferson fellow-citizens     2
-## 4     1809-Madison fellow-citizens     1
-## 5     1813-Madison fellow-citizens     1
-## 6      1817-Monroe fellow-citizens     5
-## 7      1821-Monroe fellow-citizens     1
-## 8    1841-Harrison fellow-citizens    11
-## 9        1845-Polk fellow-citizens     1
-## 10     1849-Taylor fellow-citizens     1
-## # ... with 43,709 more rows
+## # A tibble: 44,178 × 3
+##           document   term count
+##              <chr>  <chr> <dbl>
+## 1  1789-Washington fellow     3
+## 2  1793-Washington fellow     1
+## 3       1797-Adams fellow     3
+## 4   1801-Jefferson fellow     7
+## 5   1805-Jefferson fellow     8
+## 6     1809-Madison fellow     1
+## 7     1813-Madison fellow     1
+## 8      1817-Monroe fellow     6
+## 9      1821-Monroe fellow    10
+## 10      1825-Adams fellow     3
+## # ... with 44,168 more rows
 ```
 
 We may be interested in finding the words most specific to each inaugural speeches, which can be done by calculating the TF-IDF of each term-speech pair using the `bind_tf_idf` function from chapter 4.
@@ -185,20 +185,20 @@ inaug_tf_idf
 ```
 
 ```
-## # A tibble: 43,719 × 6
+## # A tibble: 44,178 × 6
 ##           document        term count          tf      idf     tf_idf
 ##              <chr>       <chr> <dbl>       <dbl>    <dbl>      <dbl>
-## 1  1793-Washington      arrive     1 0.007407407 4.043051 0.02994853
-## 2  1793-Washington upbraidings     1 0.007407407 4.043051 0.02994853
-## 3  1793-Washington    violated     1 0.007407407 3.349904 0.02481410
-## 4  1793-Washington   willingly     1 0.007407407 3.349904 0.02481410
-## 5  1793-Washington   incurring     1 0.007407407 3.349904 0.02481410
-## 6  1793-Washington    previous     1 0.007407407 2.944439 0.02181066
-## 7  1793-Washington   knowingly     1 0.007407407 2.944439 0.02181066
-## 8  1793-Washington injunctions     1 0.007407407 2.944439 0.02181066
-## 9  1793-Washington   witnesses     1 0.007407407 2.944439 0.02181066
-## 10 1793-Washington     besides     1 0.007407407 2.656757 0.01967968
-## # ... with 43,709 more rows
+## 1  1793-Washington      arrive     1 0.006802721 4.043051 0.02750375
+## 2  1793-Washington upbraidings     1 0.006802721 4.043051 0.02750375
+## 3  1793-Washington    violated     1 0.006802721 3.349904 0.02278846
+## 4  1793-Washington   willingly     1 0.006802721 3.349904 0.02278846
+## 5  1793-Washington   incurring     1 0.006802721 3.349904 0.02278846
+## 6  1793-Washington    previous     1 0.006802721 2.944439 0.02003020
+## 7  1793-Washington   knowingly     1 0.006802721 2.944439 0.02003020
+## 8  1793-Washington injunctions     1 0.006802721 2.944439 0.02003020
+## 9  1793-Washington   witnesses     1 0.006802721 2.944439 0.02003020
+## 10 1793-Washington     besides     1 0.006802721 2.656757 0.01807318
+## # ... with 44,168 more rows
 ```
 
 We could then pick four notable inaugural addresses (from Washington, Lincoln, Kennedy, and Obama), and visualize the words most specific to each speech.
@@ -240,22 +240,22 @@ year_term_counts
 ```
 
 ```
-## Source: local data frame [525,255 x 4]
+## Source: local data frame [522,918 x 4]
 ## Groups: year [57]
 ## 
 ##     year  term count year_total
 ##    <int> <chr> <dbl>      <dbl>
-## 1   1789  14th     1       1430
-## 2   1789  15th     0       1430
-## 3   1789  18th     0       1430
-## 4   1789  19th     0       1430
-## 5   1789 200th     0       1430
-## 6   1789  20th     0       1430
-## 7   1789  21st     0       1430
-## 8   1789  30th     0       1430
-## 9   1789    3d     0       1430
-## 10  1789   4th     0       1430
-## # ... with 525,245 more rows
+## 1   1789     -     3       1540
+## 2   1789     ,    70       1540
+## 3   1789     ;     8       1540
+## 4   1789     :     1       1540
+## 5   1789     !     0       1540
+## 6   1789     ?     0       1540
+## 7   1789     .    23       1540
+## 8   1789     '     0       1540
+## 9   1789     "     2       1540
+## 10  1789     (     1       1540
+## # ... with 522,908 more rows
 ```
 
 This lets us pick several words and visualize how they changed in frequency over time.
@@ -320,7 +320,7 @@ ap_td %>%
 ```
 
 ```
-## Document-feature matrix of: 10,473 documents, 2,246 features.
+## Document-feature matrix of: 10,473 documents, 2,246 features (98.7% sparse).
 ```
 
 Some tools simply require a sparse matrix:
