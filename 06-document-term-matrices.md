@@ -555,7 +555,7 @@ The top terms for each are visualized in Figure \ref{fig:stocktfidf}. As we'd ex
 <p class="caption">(\#fig:stocktfidf)The 8 words with the highest TF-IDF in recent articles specific to each company.</p>
 </div>
 
-If we were interested in using recent news to analyze the market and make investment decisions, we'd likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter \ref{most-positive-negative}. For example, we could examine this within the AFINN lexicon.
+If we were interested in using recent news to analyze the market and make investment decisions, we'd likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter \ref{most-positive-negative}. For example, we could examine this within the AFINN lexicon (Figure \ref{fig:stockafinn}).
 
 
 ```r
@@ -573,8 +573,8 @@ stock_tokens %>%
 ```
 
 <div class="figure">
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-8-1.png" alt="N" width="672" />
-<p class="caption">(\#fig:unnamed-chunk-8)N</p>
+<img src="06-document-term-matrices_files/figure-html/stockafinn-1.png" alt="The words with the largest contribution to sentiment scores in recent financial articles, according to the AFINN dictionary. The 'contribution' is the product of the word and the sentiment score." width="672" />
+<p class="caption">(\#fig:stockafinn)The words with the largest contribution to sentiment scores in recent financial articles, according to the AFINN dictionary. The 'contribution' is the product of the word and the sentiment score.</p>
 </div>
 
 In the context of these financial articles, there are a few big red flags here. The words "share" and "shares" are counted as positive verbs by the AFINN lexicon ("Alice will **share** her cake with Bob"), but they're actually neutral nouns ("The stock price was $X per **share**") that could just as easily be in a positive sentence as a negative one. The word "fool" is even more deceptive: it refers to Motley Fool, a financial services company. In short, we can see that the AFINN sentiment lexicon is entirely unsuited to the context of financial data (as are the NRC and Bing).
@@ -595,12 +595,13 @@ stock_tokens %>%
   ggplot(aes(word, n)) +
   geom_col() +
   coord_flip() +
-  facet_wrap(~ sentiment, scales = "free")
+  facet_wrap(~ sentiment, scales = "free") +
+  ylab("Frequency of this word in the recent financial articles")
 ```
 
 <div class="figure">
-<img src="06-document-term-matrices_files/figure-html/stockloughransentiments-1.png" alt="The most " width="672" />
-<p class="caption">(\#fig:stockloughransentiments)The most </p>
+<img src="06-document-term-matrices_files/figure-html/stockloughransentiments-1.png" alt="The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon" width="672" />
+<p class="caption">(\#fig:stockloughransentiments)The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon</p>
 </div>
 
 These assignments (Figure \ref{fig:stockloughransentiments}) of words to sentiments look more reasonable: common positive words include "strong" and "better", but not "shares" or "growth", while negative words include "volatility" but not "fool". The other sentiments look reasonable as well: the most common "uncertainty" terms include "could" and "may".

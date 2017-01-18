@@ -602,7 +602,7 @@ stock_tf_idf &lt;-<span class="st"> </span>stock_tokens %&gt;%
 Figure 6.4: The 8 words with the highest TF-IDF in recent articles specific to each company.
 </p>
 </div>
-<p>If we were interested in using recent news to analyze the market and make investment decisions, we’d likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter . For example, we could examine this within the AFINN lexicon.</p>
+<p>If we were interested in using recent news to analyze the market and make investment decisions, we’d likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter . For example, we could examine this within the AFINN lexicon (Figure ).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
@@ -614,10 +614,10 @@ Figure 6.4: The 8 words with the highest TF-IDF in recent articles specific to e
 <span class="st">  </span><span class="kw">geom_col</span>() +
 <span class="st">  </span><span class="kw">coord_flip</span>() +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Frequency of word * AFINN score&quot;</span>)</code></pre></div>
-<div class="figure"><span id="fig:unnamed-chunk-8"></span>
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-8-1.png" alt="N" width="672" />
+<div class="figure"><span id="fig:stockafinn"></span>
+<img src="06-document-term-matrices_files/figure-html/stockafinn-1.png" alt="The words with the largest contribution to sentiment scores in recent financial articles, according to the AFINN dictionary. The 'contribution' is the product of the word and the sentiment score." width="672" />
 <p class="caption">
-Figure 6.5: N
+Figure 6.5: The words with the largest contribution to sentiment scores in recent financial articles, according to the AFINN dictionary. The ‘contribution’ is the product of the word and the sentiment score.
 </p>
 </div>
 <p>In the context of these financial articles, there are a few big red flags here. The words “share” and “shares” are counted as positive verbs by the AFINN lexicon (“Alice will <strong>share</strong> her cake with Bob”), but they’re actually neutral nouns (“The stock price was $X per <strong>share</strong>”) that could just as easily be in a positive sentence as a negative one. The word “fool” is even more deceptive: it refers to Motley Fool, a financial services company. In short, we can see that the AFINN sentiment lexicon is entirely unsuited to the context of financial data (as are the NRC and Bing).</p>
@@ -633,11 +633,12 @@ Figure 6.5: N
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, n)) +
 <span class="st">  </span><span class="kw">geom_col</span>() +
 <span class="st">  </span><span class="kw">coord_flip</span>() +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>sentiment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>sentiment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Frequency of this word in the recent financial articles&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:stockloughransentiments"></span>
-<img src="06-document-term-matrices_files/figure-html/stockloughransentiments-1.png" alt="The most " width="672" />
+<img src="06-document-term-matrices_files/figure-html/stockloughransentiments-1.png" alt="The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon" width="672" />
 <p class="caption">
-Figure 6.6: The most
+Figure 6.6: The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon
 </p>
 </div>
 <p>These assignments (Figure ) of words to sentiments look more reasonable: common positive words include “strong” and “better”, but not “shares” or “growth”, while negative words include “volatility” but not “fool”. The other sentiments look reasonable as well: the most common “uncertainty” terms include “could” and “may”.</p>
