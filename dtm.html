@@ -155,13 +155,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.2.2</b> Pairwise correlation</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>6</b> Tidying and casting document-term matrices</a><ul>
+<li class="chapter" data-level="6" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>6</b> Tidying and casting document-term matrices and corpus objects</a><ul>
 <li class="chapter" data-level="6.1" data-path="dtm.html"><a href="dtm.html#tidying-a-document-term-matrix"><i class="fa fa-check"></i><b>6.1</b> Tidying a document-term matrix</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>6.1.1</b> Tidying DocumentTermMatrix objects</a></li>
 <li class="chapter" data-level="6.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>6.1.2</b> Tidying dfm objects</a></li>
 </ul></li>
 <li class="chapter" data-level="6.2" data-path="dtm.html"><a href="dtm.html#casting-tidy-text-data-into-a-matrix"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a matrix</a></li>
-<li class="chapter" data-level="6.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a></li>
+<li class="chapter" data-level="6.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="dtm.html"><a href="dtm.html#example-financial-article-data"><i class="fa fa-check"></i><b>6.3.1</b> Example: financial article data</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic modeling</a><ul>
 <li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#the-great-library-heist"><i class="fa fa-check"></i><b>7.1</b> The great library heist</a></li>
@@ -227,40 +229,41 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="dtm" class="section level1">
-<h1><span class="header-section-number">6</span> Tidying and casting document-term matrices</h1>
-<p>In the previous chapters, we’ve been analyzing text arranged in the tidy text format: a table with one-token-per-document-per-row, as is constructed by the <code>unnest_tokens</code> function. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2. We’ve demonstrated that many text analyses can be performed using these principles.</p>
-<p>However, most of the existing R tools for natural language processing, besides the tidytext package, aren’t compatible with this format. The <a href="https://cran.r-project.org/web/views/NaturalLanguageProcessing.html">CRAN Task View for Natural Language Processing</a> lists a large selection of packages that take other inputs. One of the most common formats is the <a href="https://en.wikipedia.org/wiki/Document-term_matrix">document-term matrix</a>, a sparse matrix with one row for each document in a collection and one column for each term or word. The value that goes into the matrix is typically the count of that term in that document, or sometimes the tf-idf (see Chapter 4). These matrices are sparse (they consist mostly of zeroes), so specialized algorithms and data structures can be used to deal with them that are efficient and fast.</p>
-<p>The tidytext package can integrate these important packages into an analysis while still relying on the suite of tidy tools for processing and visualization. The two key verbs are:</p>
-<ul>
-<li><code>tidy()</code>: Turns an object, such as a document-term matrix, into a tidy data frame.</li>
-<li><code>cast_</code>: Turns a tidy one-term-per-row data frame into a document-term matrix. tidytext provides the functions <code>cast_sparse()</code> (a sparse matrix from the Matrix package), <code>cast_dtm()</code> (<code>DocumentTermMatrix</code> objects from tm), and <code>cast_dfm()</code> (<code>dfm</code> objects from quanteda).</li>
-</ul>
-<p>In this chapter, we’ll examine some examples of tidying document-term matrices, as well as converting from a tidy format into a sparse matrix.</p>
+<h1><span class="header-section-number">6</span> Tidying and casting document-term matrices and corpus objects</h1>
+<p>In the previous chapters, we’ve been analyzing text arranged in the tidy text format: a table with one-token-per-document-per-row, such as is constructed by the <code>unnest_tokens</code> function. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2 to explore and visualize text data. We’ve demonstrated that many informative text analyses can be performed using these tools.</p>
+<p>However, most of the existing R tools for natural language processing, besides the tidytext package, aren’t compatible with this format. The <a href="https://cran.r-project.org/web/views/NaturalLanguageProcessing.html">CRAN Task View for Natural Language Processing</a> lists a large selection of packages that take other structures of input and provide non-tidy outputs. These package are very useful in text mining applications, and many existing text datasets are structured according to these formats.</p>
+<p>Computer scientist Hal Abelson has observed that “No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system.” In that spirit, this chapter will discuss the “glue” that connects the tidy text format with other important packages and data structures, allowing you to rely on both existing text mining packages and the suite of tidy tools to perform your analysis. In particular, we’ll examine the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix.</p>
 <div id="tidying-a-document-term-matrix" class="section level2">
 <h2><span class="header-section-number">6.1</span> Tidying a document-term matrix</h2>
-<p>Many existing text mining packages provide and expect <strong>document-term matrix</strong>, or DTM. A DTM is a matrix where</p>
+<p>One of the most common structures that text mining packages work with is the <a href="https://en.wikipedia.org/wiki/Document-term_matrix">document-term matrix</a> (or DTM). This is a matrix where:</p>
 <ul>
-<li>each row represents one document,</li>
+<li>each row represents one document (such as a book or article),</li>
 <li>each column represents one term, and</li>
-<li>each value (usually) contains the number of appearances of that term in that document.</li>
+<li>each value (typically) contains the number of appearances of that term in that document.</li>
 </ul>
-<p>DTMs are usually implemented as sparse matrices, meaning the vast majority of values are 0. These objects can be interacted with as though they were matrices, but are stored in a more efficient format.</p>
+<p>DTMs are usually implemented as sparse matrices, meaning the vast majority of values are 0. These objects can be treated as though they were matrices (for example, accessing particular rows and columns), but are stored in a more efficient format. We’ll discuss several implementations of these matrices in this chapter.</p>
+<p>DTMs are not tidy and cannot be used directly with tidy tools, just as tidy data frames cannot be given to text mining packages. Thus, the tidytext package provides two verbs that convert between the two types of formats.</p>
+<ul>
+<li><code>tidy</code> turns a document-term matrix into a tidy data frame. This verb comes from the broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>, which provides tidiers for many statistical models and objects.</li>
+<li><code>cast</code> turns a tidy one-term-per-row data frame into a matrix. tidytext provides three variations of this verb, each converting to a different type of matrix: <code>cast_sparse()</code> (converting to a sparse matrix from the Matrix package), <code>cast_dtm()</code> (converting to a <code>DocumentTermMatrix</code> object from tm), and <code>cast_dfm()</code> (converting to a <code>dfm</code> object from quanteda).</li>
+</ul>
 <div id="tidying-documenttermmatrix-objects" class="section level3">
 <h3><span class="header-section-number">6.1.1</span> Tidying DocumentTermMatrix objects</h3>
-<p>One commonly used implementation of DTMs in R is the <code>DocumentTermMatrix</code> class in the tm package. Many existing text mining datasets are provided in this format. For example, consider the corpus of Associated Press newspaper articles included in the topicmodels package.</p>
+<p>Perhaps the most widely used implementation of DTMs in R is the <code>DocumentTermMatrix</code> class in the tm package. Many available text mining datasets are provided in this format. For example, consider the corpus of Associated Press newspaper articles included in the topicmodels package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tm)
 
 <span class="kw">data</span>(<span class="st">&quot;AssociatedPress&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;topicmodels&quot;</span>)
-<span class="kw">class</span>(AssociatedPress)</code></pre></div>
-<pre><code>## [1] &quot;DocumentTermMatrix&quot;    &quot;simple_triplet_matrix&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AssociatedPress</code></pre></div>
+AssociatedPress</code></pre></div>
 <pre><code>## &lt;&lt;DocumentTermMatrix (documents: 2246, terms: 10473)&gt;&gt;
 ## Non-/sparse entries: 302031/23220327
 ## Sparsity           : 99%
 ## Maximal term length: 18
 ## Weighting          : term frequency (tf)</code></pre>
-<p>We see that this dataset contains documents (each of them an AP article) and terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero).</p>
-<p>If we wanted to analyze this data with tidy tools, we would first need to turn it into a one-token-per-document-per-row data frame. The broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span> introduced the <code>tidy</code> verb, which takes a non-tidy object and turns it into a tidy data frame. The tidytext package implements that method for <code>DocumentTermMatrix</code> objects:</p>
+<p>We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the <code>Terms()</code> function:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">terms &lt;-<span class="st"> </span><span class="kw">Terms</span>(AssociatedPress)
+<span class="kw">head</span>(terms)</code></pre></div>
+<pre><code>## [1] &quot;aaron&quot;      &quot;abandon&quot;    &quot;abandoned&quot;  &quot;abandoning&quot; &quot;abbott&quot;     &quot;abboud&quot;</code></pre>
+<p>If we wanted to analyze this data with tidy tools, we would first need to turn it into a data frame with one-token-per-document-per-row. The broom package introduced the <code>tidy</code> verb, which takes a non-tidy object and turns it into a tidy data frame. The tidytext package implements that method for <code>DocumentTermMatrix</code> objects:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidytext)
 
@@ -280,8 +283,8 @@ ap_td</code></pre></div>
 ## 9         1   arrested     1
 ## 10        1    assault     1
 ## # ... with 302,021 more rows</code></pre>
-<p>Notice that we now have a tidy three-column <code>tbl_df</code>, with variables <code>document</code>, <code>term</code>, and <code>count</code>. This tidying operation is similar to the <code>melt</code> function from the reshape2 package <span class="citation">(Wickham <a href="#ref-R-reshape2">2007</a>)</span> for non-sparse matrices.</p>
-<p>As we’ve seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles.</p>
+<p>Notice that we now have a tidy three-column <code>tbl_df</code>, with variables <code>document</code>, <code>term</code>, and <code>count</code>. This tidying operation is similar to the <code>melt</code> function from the reshape2 package <span class="citation">(Wickham <a href="#ref-R-reshape2">2007</a>)</span> for non-sparse matrices. Notice that only the non-zero values are included: document 1 includes terms such as “adding” and “adult”, but not “aaron” or “abandon”, and thus the tidied version has no rows where <code>count</code> is zero.</p>
+<p>As we’ve seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles with the approach described in Chapter .</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_sentiments &lt;-<span class="st"> </span>ap_td %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>), <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">term =</span> <span class="st">&quot;word&quot;</span>))
 
@@ -300,7 +303,7 @@ ap_sentiments</code></pre></div>
 ## 9         1   liked     1  positive
 ## 10        1 miracle     1  positive
 ## # ... with 30,084 more rows</code></pre>
-<p>This could let us visualize which words from these AP articles most often contributed to positive or negative sentiment:</p>
+<p>This would let us visualize which words from the AP articles most often contributed to positive or negative sentiment, seen in Figure . We can see that the most common positive words include “like”, “work”, “support”, and “good”, while the most negative words include “killed”, “death”, and “vice”. (The inclusion of “vice” as a negative term is probably a mistake on the algorithm’s part, since it likely usually refers to “vice president”).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 ap_sentiments %&gt;%
@@ -313,19 +316,23 @@ ap_sentiments %&gt;%
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Contribution to sentiment&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="06-document-term-matrices_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div class="figure"><span id="fig:apsentiments"></span>
+<img src="06-document-term-matrices_files/figure-html/apsentiments-1.png" alt="Words from AP articles with the greatest contribution to positive or negative sentiments, computed as the product of the word's AFINN sentiment score and its frequency." width="672" />
+<p class="caption">
+Figure 6.1: Words from AP articles with the greatest contribution to positive or negative sentiments, computed as the product of the word’s AFINN sentiment score and its frequency.
+</p>
+</div>
 </div>
 <div id="tidying-dfm-objects" class="section level3">
 <h3><span class="header-section-number">6.1.2</span> Tidying dfm objects</h3>
-<p>Other text mining packages provide alternative implementations of document-term matrices, such as the <code>dfm</code> (document-feature matrix) class from the quanteda package <span class="citation">(Benoit and Nulty <a href="#ref-R-quanteda">2016</a>)</span>. Consider the corpus of presidential inauguration speeches that comes with the quanteda package:</p>
+<p>Other text mining packages provide alternative implementations of document-term matrices, such as the <code>dfm</code> (document-feature matrix) class from the quanteda package <span class="citation">(Benoit and Nulty <a href="#ref-R-quanteda">2016</a>)</span>. For example, the quanteda package comes with a corpus of presidential inauguration speeches, which can be converted to a <code>dfm</code> using the appropriate function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(methods)
 
 <span class="kw">data</span>(<span class="st">&quot;inaugCorpus&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;quanteda&quot;</span>)
-inaug_dfm &lt;-<span class="st"> </span>quanteda::<span class="kw">dfm</span>(inaugCorpus)
-
-inaug_dfm</code></pre></div>
+inaug_dfm &lt;-<span class="st"> </span>quanteda::<span class="kw">dfm</span>(inaugCorpus)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inaug_dfm</code></pre></div>
 <pre><code>## Document-feature matrix of: 57 documents, 9,174 features (91.6% sparse).</code></pre>
-<p>The <code>tidy</code> method works on these objects as well, turning them into a one-token-per-document-per-row table:</p>
+<p>The <code>tidy</code> method works on these document-feature matrices as well, turning them into a one-token-per-document-per-row table:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inaug_td &lt;-<span class="st"> </span><span class="kw">tidy</span>(inaug_dfm)
 inaug_td</code></pre></div>
 <pre><code>## # A tibble: 44,178 × 3
@@ -342,7 +349,7 @@ inaug_td</code></pre></div>
 ## 9      1821-Monroe fellow    10
 ## 10      1825-Adams fellow     3
 ## # ... with 44,168 more rows</code></pre>
-<p>We may be interested in finding the words most specific to each inaugural speeches, which can be done by calculating the TF-IDF of each term-speech pair using the <code>bind_tf_idf</code> function from chapter 4.</p>
+<p>We may be interested in finding the words most specific to each inaugural speeches. This could be quantified by calculating the TF-IDF of each term-speech pair using the <code>bind_tf_idf</code> function, as described in Chapter .</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inaug_tf_idf &lt;-<span class="st"> </span>inaug_td %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(term, document, count) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf))
@@ -362,66 +369,43 @@ inaug_tf_idf</code></pre></div>
 ## 9  1793-Washington   witnesses     1 0.006802721 2.944439 0.02003020
 ## 10 1793-Washington     besides     1 0.006802721 2.656757 0.01807318
 ## # ... with 44,168 more rows</code></pre>
-<p>We could then pick four notable inaugural addresses (from Washington, Lincoln, Kennedy, and Obama), and visualize the words most specific to each speech.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">speeches &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;1793-Washington&quot;</span>, <span class="st">&quot;1861-Lincoln&quot;</span>,
-              <span class="st">&quot;1961-Kennedy&quot;</span>, <span class="st">&quot;2009-Obama&quot;</span>)
-
-inaug_tf_idf %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(document %in%<span class="st"> </span>speeches) %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(document) %&gt;%
-<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, tf_idf) %&gt;%
-<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">term =</span> <span class="kw">reorder</span>(term, tf_idf)) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(term, tf_idf, <span class="dt">fill =</span> document)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>document, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
-<span class="st">  </span><span class="kw">coord_flip</span>() +
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;TF-IDF&quot;</span>)</code></pre></div>
-<p><img src="06-document-term-matrices_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-<p>Having a corpus in this format is also useful for visualizations. We could extract the year from each document’s name, and compute the total number of words within each year.</p>
+<p>We could use this data to pick four notable inaugural addresses (from Presidents Lincoln, Roosevelt, Kennedy, and Obama), and visualize the words most specific to each speech, as shown in Figure .</p>
+<div class="figure"><span id="fig:presidentspeeches"></span>
+<img src="06-document-term-matrices_files/figure-html/presidentspeeches-1.png" alt="The terms with the highest TF-IDF from each of four selected inaugural addresses." width="672" />
+<p class="caption">
+Figure 6.2: The terms with the highest TF-IDF from each of four selected inaugural addresses.
+</p>
+</div>
+<p>As another example of a visualization possible with tidy data, we could extract the year from each document’s name, and compute the total number of words within each year.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
 year_term_counts &lt;-<span class="st"> </span>inaug_td %&gt;%
 <span class="st">  </span><span class="kw">extract</span>(document, <span class="st">&quot;year&quot;</span>, <span class="st">&quot;(</span><span class="ch">\\</span><span class="st">d+)&quot;</span>, <span class="dt">convert =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">complete</span>(year, term, <span class="dt">fill =</span> <span class="kw">list</span>(<span class="dt">count =</span> <span class="dv">0</span>)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(year) %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year_total =</span> <span class="kw">sum</span>(count))
-
-year_term_counts</code></pre></div>
-<pre><code>## Source: local data frame [522,918 x 4]
-## Groups: year [57]
-## 
-##     year  term count year_total
-##    &lt;int&gt; &lt;chr&gt; &lt;dbl&gt;      &lt;dbl&gt;
-## 1   1789     -     3       1540
-## 2   1789     ,    70       1540
-## 3   1789     ;     8       1540
-## 4   1789     :     1       1540
-## 5   1789     !     0       1540
-## 6   1789     ?     0       1540
-## 7   1789     .    23       1540
-## 8   1789     &#39;     0       1540
-## 9   1789     &quot;     2       1540
-## 10  1789     (     1       1540
-## # ... with 522,908 more rows</code></pre>
-<p>This lets us pick several words and visualize how they changed in frequency over time.</p>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year_total =</span> <span class="kw">sum</span>(count))</code></pre></div>
+<p>This lets us pick several words and visualize how they changed in frequency over time, as shown in . We can see that over time, American presidents became less likely to refer to the country as the “Union” and more likely to refer to “America”. They also became less likely to talk about the “constitution” and foreign&quot; countries, and more likely to mention “freedom” and “God”.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">year_term_counts %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(term %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;god&quot;</span>, <span class="st">&quot;america&quot;</span>, <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;union&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(term %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;god&quot;</span>, <span class="st">&quot;america&quot;</span>, <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;union&quot;</span>, <span class="st">&quot;constitution&quot;</span>, <span class="st">&quot;freedom&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year, count /<span class="st"> </span>year_total)) +
 <span class="st">  </span><span class="kw">geom_point</span>() +
 <span class="st">  </span><span class="kw">geom_smooth</span>() +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>term) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>term, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales::<span class="kw">percent_format</span>()) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;% frequency of word in inaugural address&quot;</span>)</code></pre></div>
-<p><img src="06-document-term-matrices_files/figure-html/year_term_counts_plot-1.png" width="672" /></p>
-<p>TODO: conclude section</p>
+<div class="figure"><span id="fig:yearterm"></span>
+<img src="06-document-term-matrices_files/figure-html/yearterm-1.png" alt="Changes in word frequency over time within Presidential inaugural addresses, for four selected terms." width="672" />
+<p class="caption">
+Figure 6.3: Changes in word frequency over time within Presidential inaugural addresses, for four selected terms.
+</p>
+</div>
+<p>These examples show how you can use tidytext, and the related suite of tidy tools, to analyze sources even if their origin was not in a tidy format.</p>
 </div>
 </div>
 <div id="casting-tidy-text-data-into-a-matrix" class="section level2">
 <h2><span class="header-section-number">6.2</span> Casting tidy text data into a matrix</h2>
-<p>Just as some existing text mining packages provide document-term matrices as sample data or output, some algorithms expect these matrices as input. Therefore, tidytext provides <code>cast_</code> verbs for converting from a tidy form to these matrices.</p>
-<p>For example, we could take the tidied AP dataset and cast it back into a document-term matrix:</p>
+<p>Just as some existing text mining packages provide document-term matrices as sample data or output, some algorithms expect such matrices as input. Therefore, tidytext provides <code>cast_</code> verbs for converting from a tidy form to these matrices.</p>
+<p>For example, we could take the tidied AP dataset and cast it back into a document-term matrix using the <code>cast_dtm</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_td %&gt;%
 <span class="st">  </span><span class="kw">cast_dtm</span>(document, term, count)</code></pre></div>
 <pre><code>## &lt;&lt;DocumentTermMatrix (documents: 2246, terms: 10473)&gt;&gt;
@@ -429,17 +413,8 @@ year_term_counts</code></pre></div>
 ## Sparsity           : 99%
 ## Maximal term length: 18
 ## Weighting          : term frequency (tf)</code></pre>
-<p>Similarly, we could cast it into a Term-Document Matrix with <code>cast_tdm</code>, or quanteda’s dfm with <code>cast_dfm</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># cast into a Term-Document Matrix</span>
-ap_td %&gt;%
-<span class="st">  </span><span class="kw">cast_tdm</span>(term, document, count)</code></pre></div>
-<pre><code>## &lt;&lt;TermDocumentMatrix (terms: 10473, documents: 2246)&gt;&gt;
-## Non-/sparse entries: 302031/23220327
-## Sparsity           : 99%
-## Maximal term length: 18
-## Weighting          : term frequency (tf)</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># cast into quanteda&#39;s dfm</span>
-ap_td %&gt;%
+<p>Similarly, we could cast the table into a <code>dfm</code> object from quanteda’s dfm with <code>cast_dfm</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_td %&gt;%
 <span class="st">  </span><span class="kw">cast_dfm</span>(term, document, count)</code></pre></div>
 <pre><code>## Document-feature matrix of: 10,473 documents, 2,246 features (98.7% sparse).</code></pre>
 <p>Some tools simply require a sparse matrix:</p>
@@ -455,154 +430,218 @@ m &lt;-<span class="st"> </span>ap_td %&gt;%
 ## [1] &quot;Matrix&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(m)</code></pre></div>
 <pre><code>## [1]  2246 10473</code></pre>
-<p>This casting process allows for easy reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications.</p>
+<p>This kind of conversion could easily be done from any of the tidy text structures we’ve used so far in this book. For example, we could create a DTM of Jane Austen’s books in just a few lines of code.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(janeaustenr)
+
+austen_dtm &lt;-<span class="st"> </span><span class="kw">austen_books</span>() %&gt;%
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(book, word) %&gt;%
+<span class="st">  </span><span class="kw">cast_dtm</span>(book, word, n)
+
+austen_dtm</code></pre></div>
+<pre><code>## &lt;&lt;DocumentTermMatrix (documents: 6, terms: 14520)&gt;&gt;
+## Non-/sparse entries: 40379/46741
+## Sparsity           : 54%
+## Maximal term length: 19
+## Weighting          : term frequency (tf)</code></pre>
+<p>This casting process allows for reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications. In Chapter , we’ll examine some examples where a tidy-text dataset has to be converted into a DocumentTermMatrix for processing.</p>
 </div>
 <div id="tidying-corpus-objects-with-metadata" class="section level2">
 <h2><span class="header-section-number">6.3</span> Tidying corpus objects with metadata</h2>
-<p>You can also tidy Corpus objects from the tm package. For example, consider a Corpus containing 20 documents:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reut21578 &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;texts&quot;</span>, <span class="st">&quot;crude&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;tm&quot;</span>)
-reuters &lt;-<span class="st"> </span><span class="kw">VCorpus</span>(<span class="kw">DirSource</span>(reut21578),
-                   <span class="dt">readerControl =</span> <span class="kw">list</span>(<span class="dt">reader =</span> readReut21578XMLasPlain))
-
-reuters</code></pre></div>
+<p>Some data structures are designed to store document collections <em>before</em> tokenization, most often as variations on a “corpus” object. One common example is <code>Corpus</code> objects from the tm package. For example, the tm package comes with text containing 20 :</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;acq&quot;</span>)
+acq</code></pre></div>
 <pre><code>## &lt;&lt;VCorpus&gt;&gt;
 ## Metadata:  corpus specific: 0, document level (indexed): 0
-## Content:  documents: 20</code></pre>
-<p>The <code>tidy</code> verb creates a table with one row per document:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">reuters_td &lt;-<span class="st"> </span><span class="kw">tidy</span>(reuters)
-reuters_td</code></pre></div>
-<pre><code>## # A tibble: 20 × 17
-##                        author       datetimestamp description
-##                         &lt;chr&gt;              &lt;dttm&gt;       &lt;chr&gt;
-## 1                        &lt;NA&gt; 1987-02-26 17:00:56            
-## 2  BY TED D&#39;AFFLISIO, Reuters 1987-02-26 17:34:11            
-## 3                        &lt;NA&gt; 1987-02-26 18:18:00            
-## 4                        &lt;NA&gt; 1987-02-26 18:21:01            
-## 5                        &lt;NA&gt; 1987-02-26 19:00:57            
-## 6                        &lt;NA&gt; 1987-03-01 03:25:46            
-## 7    By Jeremy Clift, Reuters 1987-03-01 03:39:14            
-## 8                        &lt;NA&gt; 1987-03-01 05:27:27            
-## 9                        &lt;NA&gt; 1987-03-01 08:22:30            
-## 10                       &lt;NA&gt; 1987-03-01 18:31:44            
-## 11                       &lt;NA&gt; 1987-03-02 01:05:49            
-## 12                       &lt;NA&gt; 1987-03-02 07:39:23            
-## 13                       &lt;NA&gt; 1987-03-02 07:43:22            
-## 14                       &lt;NA&gt; 1987-03-02 07:43:41            
-## 15                       &lt;NA&gt; 1987-03-02 08:25:42            
-## 16                       &lt;NA&gt; 1987-03-02 11:20:05            
-## 17                       &lt;NA&gt; 1987-03-02 11:28:26            
-## 18                       &lt;NA&gt; 1987-03-02 12:13:46            
-## 19 By BERNICE NAPACH, Reuters 1987-03-02 14:38:34            
-## 20                       &lt;NA&gt; 1987-03-02 14:49:06            
-##                                              heading    id language            origin
-##                                                &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;             &lt;chr&gt;
-## 1           DIAMOND SHAMROCK (DIA) CUTS CRUDE PRICES   127       en Reuters-21578 XML
-## 2    OPEC MAY HAVE TO MEET TO FIRM PRICES - ANALYSTS   144       en Reuters-21578 XML
-## 3          TEXACO CANADA &lt;TXC&gt; LOWERS CRUDE POSTINGS   191       en Reuters-21578 XML
-## 4          MARATHON PETROLEUM REDUCES CRUDE POSTINGS   194       en Reuters-21578 XML
-## 5          HOUSTON OIL &lt;HO&gt; RESERVES STUDY COMPLETED   211       en Reuters-21578 XML
-## 6      KUWAIT SAYS NO PLANS FOR EMERGENCY OPEC TALKS   236       en Reuters-21578 XML
-## 7  INDONESIA SEEN AT CROSSROADS OVER ECONOMIC CHANGE   237       en Reuters-21578 XML
-## 8              SAUDI RIYAL DEPOSIT RATES REMAIN FIRM   242       en Reuters-21578 XML
-## 9            QATAR UNVEILS BUDGET FOR FISCAL 1987/88   246       en Reuters-21578 XML
-## 10   SAUDI ARABIA REITERATES COMMITMENT TO OPEC PACT   248       en Reuters-21578 XML
-## 11    SAUDI FEBRUARY CRUDE OUTPUT PUT AT 3.5 MLN BPD   273       en Reuters-21578 XML
-## 12 GULF ARAB DEPUTY OIL MINISTERS TO MEET IN BAHRAIN   349       en Reuters-21578 XML
-## 13 SAUDI ARABIA REITERATES COMMITMENT TO OPEC ACCORD   352       en Reuters-21578 XML
-## 14  KUWAIT MINISTER SAYS NO EMERGENCY OPEC TALKS SET   353       en Reuters-21578 XML
-## 15          PHILADELPHIA PORT CLOSED BY TANKER CRASH   368       en Reuters-21578 XML
-## 16     STUDY GROUP URGES INCREASED U.S. OIL RESERVES   489       en Reuters-21578 XML
-## 17     STUDY GROUP URGES INCREASED U.S. OIL RESERVES   502       en Reuters-21578 XML
-## 18    UNOCAL &lt;UCL&gt; UNIT CUTS CRUDE OIL POSTED PRICES   543       en Reuters-21578 XML
-## 19      NYMEX WILL EXPAND OFF-HOUR TRADING APRIL ONE   704       en Reuters-21578 XML
-## 20     ARGENTINE OIL PRODUCTION DOWN IN JANUARY 1987   708       en Reuters-21578 XML
-## # ... with 10 more variables: topics &lt;chr&gt;, lewissplit &lt;chr&gt;, cgisplit &lt;chr&gt;, oldid &lt;chr&gt;,
-## #   topics_cat &lt;list&gt;, places &lt;list&gt;, people &lt;chr&gt;, orgs &lt;chr&gt;, exchanges &lt;chr&gt;, text &lt;chr&gt;</code></pre>
-<p>Another variation of a corpus object is <code>corpus</code> from the quanteda package:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(quanteda)
-
-<span class="kw">data</span>(<span class="st">&quot;inaugCorpus&quot;</span>)
-
-inaugCorpus</code></pre></div>
-<pre><code>## Corpus consisting of 57 documents and 3 docvars.</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inaug_td &lt;-<span class="st"> </span><span class="kw">tidy</span>(inaugCorpus)
-inaug_td</code></pre></div>
-<pre><code>## # A tibble: 57 × 4
-##                                                                                                                                                        text
-## *                                                                                                                                                     &lt;chr&gt;
-## 1  Fellow-Citizens of the Senate and of the House of Representatives:\n\nAmong the vicissitudes incident to life no event could have filled me with greater
-## 2    Fellow citizens, I am again called upon by the voice of my country to execute the functions of its Chief Magistrate. When the occasion proper for it s
-## 3    When it was first perceived, in early times, that no middle course for America remained between unlimited submission to a foreign legislature and a to
-## 4  Friends and Fellow Citizens:\n\nCalled upon to undertake the duties of the first executive office of our country, I avail myself of the presence of that
-## 5    Proceeding, fellow citizens, to that qualification which the Constitution requires before my entrance on the charge again conferred on me, it is my du
-## 6    Unwilling to depart from examples of the most revered authority, I avail myself of the occasion now presented to express the profound impression made 
-## 7    About to add the solemnity of an oath to the obligations imposed by a second call to the station in which my country heretofore placed me, I find in t
-## 8    I should be destitute of feeling if I was not deeply affected by the strong proof which my fellow-citizens have given me of their confidence in callin
-## 9    Fellow citizens, I shall not attempt to describe the grateful emotions which the new and very distinguished proof of the confidence of my fellow citiz
-## 10   In compliance with an usage coeval with the existence of our Federal Constitution, and sanctioned by the example of my predecessors in the career upon
-## # ... with 47 more rows, and 3 more variables: Year &lt;int&gt;, President &lt;chr&gt;, FirstName &lt;chr&gt;</code></pre>
-<p>This lets us work with tidy tools like <code>unnest_tokens</code> to analyze the text alongside the metadata.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inaug_words &lt;-<span class="st"> </span>inaug_td %&gt;%
+## Content:  documents: 50</code></pre>
+<p>The <code>tidy</code> verb creates a table with one row per document, which then lends itself to tokenization and processing.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">acq_td &lt;-<span class="st"> </span><span class="kw">tidy</span>(acq)
+acq_td</code></pre></div>
+<pre><code>## # A tibble: 50 × 16
+##                       author       datetimestamp description
+##                        &lt;chr&gt;              &lt;dttm&gt;       &lt;chr&gt;
+## 1                       &lt;NA&gt; 1987-02-26 15:18:06            
+## 2                       &lt;NA&gt; 1987-02-26 15:19:15            
+## 3                       &lt;NA&gt; 1987-02-26 15:49:56            
+## 4  By Cal Mankowski, Reuters 1987-02-26 15:51:17            
+## 5                       &lt;NA&gt; 1987-02-26 16:08:33            
+## 6                       &lt;NA&gt; 1987-02-26 16:32:37            
+## 7      By Patti Domm, Reuter 1987-02-26 16:43:13            
+## 8                       &lt;NA&gt; 1987-02-26 16:59:25            
+## 9                       &lt;NA&gt; 1987-02-26 17:01:28            
+## 10                      &lt;NA&gt; 1987-02-26 17:08:27            
+##                                             heading    id language            origin topics
+##                                               &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;             &lt;chr&gt;  &lt;chr&gt;
+## 1   COMPUTER TERMINAL SYSTEMS &lt;CPML&gt; COMPLETES SALE    10       en Reuters-21578 XML    YES
+## 2    OHIO MATTRESS &lt;OMT&gt; MAY HAVE LOWER 1ST QTR NET    12       en Reuters-21578 XML    YES
+## 3     MCLEAN&#39;S &lt;MII&gt; U.S. LINES SETS ASSET TRANSFER    44       en Reuters-21578 XML    YES
+## 4    CHEMLAWN &lt;CHEM&gt; RISES ON HOPES FOR HIGHER BIDS    45       en Reuters-21578 XML    YES
+## 5    &lt;COFAB INC&gt; BUYS GULFEX FOR UNDISCLOSED AMOUNT    68       en Reuters-21578 XML    YES
+## 6          INVESTMENT FIRMS CUT CYCLOPS &lt;CYL&gt; STAKE    96       en Reuters-21578 XML    YES
+## 7  AMERICAN EXPRESS &lt;AXP&gt; SEEN IN POSSIBLE SPINNOFF   110       en Reuters-21578 XML    YES
+## 8   HONG KONG FIRM UPS WRATHER&lt;WCO&gt; STAKE TO 11 PCT   125       en Reuters-21578 XML    YES
+## 9               LIEBERT CORP &lt;LIEB&gt; APPROVES MERGER   128       en Reuters-21578 XML    YES
+## 10     GULF APPLIED TECHNOLOGIES &lt;GATS&gt; SELLS UNITS   134       en Reuters-21578 XML    YES
+## # ... with 40 more rows, and 8 more variables: lewissplit &lt;chr&gt;, cgisplit &lt;chr&gt;, oldid &lt;chr&gt;,
+## #   places &lt;list&gt;, people &lt;lgl&gt;, orgs &lt;lgl&gt;, exchanges &lt;lgl&gt;, text &lt;chr&gt;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">acq_td %&gt;%
+<span class="st">  </span><span class="kw">select</span>(-places) %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
-<span class="st">  </span><span class="kw">anti_join</span>(stop_words)
+<span class="st">  </span><span class="kw">anti_join</span>(stop_words) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>## # A tibble: 1,566 × 2
+##        word     n
+##       &lt;chr&gt; &lt;int&gt;
+## 1      dlrs   100
+## 2       pct    70
+## 3       mln    65
+## 4   company    63
+## 5    shares    52
+## 6    reuter    50
+## 7     stock    46
+## 8     offer    34
+## 9     share    34
+## 10 american    28
+## # ... with 1,556 more rows</code></pre>
+<p>TODO: This intro to corpus needs a bit more.</p>
+<div id="example-financial-article-data" class="section level3">
+<h3><span class="header-section-number">6.3.1</span> Example: financial article data</h3>
+<p>The value of tidiers for the <code>Corpus</code> object is that it is a common output format for many packages that ingest text data. One such package is <a href="https://cran.r-project.org/package=tm.plugin.webmining">tm.plugin.webmining</a>, which connects to online feeds to retrieve news articles based on a keyword. For example, performing <code>WebCorpus(GoogleFinanceSource(&quot;NASDAQ:MSFT&quot;)))</code> allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.</p>
+<p>Here we’ll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix. (These examples use the results in January 2017, when this chapter was written, but you’ll certainly find different results if you ran it for yourself).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tm.plugin.webmining)
+<span class="kw">library</span>(purrr)
 
-inaug_words</code></pre></div>
-<pre><code>## # A tibble: 49,621 × 4
-##     Year President FirstName         word
-##    &lt;int&gt;     &lt;chr&gt;     &lt;chr&gt;        &lt;chr&gt;
-## 1   2013     Obama    Barack        waves
-## 2   2013     Obama    Barack     realizes
-## 3   2013     Obama    Barack philadelphia
-## 4   2013     Obama    Barack          400
-## 5   2013     Obama    Barack           40
-## 6   2013     Obama    Barack   absolutism
-## 7   2013     Obama    Barack      contour
-## 8   2013     Obama    Barack      newtown
-## 9   2013     Obama    Barack        lanes
-## 10  2013     Obama    Barack   appalachia
-## # ... with 49,611 more rows</code></pre>
-<p>We could then, for example, see how the appearance of a word changes over time:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
+company &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Microsoft&quot;</span>, <span class="st">&quot;Apple&quot;</span>, <span class="st">&quot;Google&quot;</span>, <span class="st">&quot;Amazon&quot;</span>, <span class="st">&quot;Facebook&quot;</span>,
+             <span class="st">&quot;Twitter&quot;</span>, <span class="st">&quot;IBM&quot;</span>, <span class="st">&quot;Yahoo&quot;</span>, <span class="st">&quot;Netflix&quot;</span>)
+symbol &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;MSFT&quot;</span>, <span class="st">&quot;AAPL&quot;</span>, <span class="st">&quot;GOOG&quot;</span>, <span class="st">&quot;AMZN&quot;</span>, <span class="st">&quot;FB&quot;</span>, <span class="st">&quot;TWTR&quot;</span>, <span class="st">&quot;IBM&quot;</span>, <span class="st">&quot;YHOO&quot;</span>, <span class="st">&quot;NFLX&quot;</span>)
 
-inaug_freq &lt;-<span class="st"> </span>inaug_words %&gt;%
-<span class="st">  </span><span class="kw">count</span>(Year, word) %&gt;%
+download_articles &lt;-<span class="st"> </span>function(symbol) {
+  <span class="kw">WebCorpus</span>(<span class="kw">GoogleFinanceSource</span>(<span class="kw">paste0</span>(<span class="st">&quot;NASDAQ:&quot;</span>, symbol)))
+}
+
+stock_articles &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">company =</span> company,
+                             <span class="dt">symbol =</span> symbol) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">corpus =</span> <span class="kw">map</span>(symbol, download_articles))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_articles</code></pre></div>
+<pre><code>## # A tibble: 9 × 3
+##     company symbol          corpus
+##       &lt;chr&gt;  &lt;chr&gt;          &lt;list&gt;
+## 1 Microsoft   MSFT &lt;S3: WebCorpus&gt;
+## 2     Apple   AAPL &lt;S3: WebCorpus&gt;
+## 3    Google   GOOG &lt;S3: WebCorpus&gt;
+## 4    Amazon   AMZN &lt;S3: WebCorpus&gt;
+## 5  Facebook     FB &lt;S3: WebCorpus&gt;
+## 6   Twitter   TWTR &lt;S3: WebCorpus&gt;
+## 7       IBM    IBM &lt;S3: WebCorpus&gt;
+## 8     Yahoo   YHOO &lt;S3: WebCorpus&gt;
+## 9   Netflix   NFLX &lt;S3: WebCorpus&gt;</code></pre>
+<p>Each of the items in the <code>corpus</code> column is a <code>WebCorpus</code> object, which is a special case of a corpus like <code>acq</code>. We can thus turn each into a data frame using the <code>tidy</code> function, then tokenize the <code>text</code> column of the individual articles using <code>unnest_tokens</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_tokens &lt;-<span class="st"> </span>stock_articles %&gt;%
+<span class="st">  </span><span class="kw">unnest</span>(<span class="kw">map</span>(corpus, tidy)) %&gt;%
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(company, datetimestamp, word, id)
+
+stock_tokens</code></pre></div>
+<pre><code>## # A tibble: 105,057 × 4
+##      company       datetimestamp        word                                            id
+##        &lt;chr&gt;              &lt;dttm&gt;       &lt;chr&gt;                                         &lt;chr&gt;
+## 1  Microsoft 2017-01-17 12:07:24   microsoft tag:finance.google.com,cluster:52779347599411
+## 2  Microsoft 2017-01-17 12:07:24 corporation tag:finance.google.com,cluster:52779347599411
+## 3  Microsoft 2017-01-17 12:07:24        data tag:finance.google.com,cluster:52779347599411
+## 4  Microsoft 2017-01-17 12:07:24     privacy tag:finance.google.com,cluster:52779347599411
+## 5  Microsoft 2017-01-17 12:07:24       could tag:finance.google.com,cluster:52779347599411
+## 6  Microsoft 2017-01-17 12:07:24        send tag:finance.google.com,cluster:52779347599411
+## 7  Microsoft 2017-01-17 12:07:24        msft tag:finance.google.com,cluster:52779347599411
+## 8  Microsoft 2017-01-17 12:07:24       stock tag:finance.google.com,cluster:52779347599411
+## 9  Microsoft 2017-01-17 12:07:24     soaring tag:finance.google.com,cluster:52779347599411
+## 10 Microsoft 2017-01-17 12:07:24          by tag:finance.google.com,cluster:52779347599411
+## # ... with 105,047 more rows</code></pre>
+<p>What words were most specific to each stock symbol? We could determine this using TF-IDF.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
+
+stock_tf_idf &lt;-<span class="st"> </span>stock_tokens %&gt;%
+<span class="st">  </span><span class="kw">count</span>(company, word) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(!<span class="kw">str_detect</span>(word, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">bind_tf_idf</span>(word, company, n) %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(-tf_idf)</code></pre></div>
+<p>The top terms for each are visualized in Figure . As we’d expect the company’s name and is typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).</p>
+<div class="figure"><span id="fig:stocktfidf"></span>
+<img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest TF-IDF within each company." width="768" />
+<p class="caption">
+Figure 6.4: The 8 words with the highest TF-IDF within each company.
+</p>
+</div>
+<p>If we were interested in using recent news to analyze the market and make investment decisions, we’d likely want to use sentiment analysis to determine. Before we run sentiment analysis, we should look at what words would contribute the most to positive and negative sentiments. For example, we could perform this with the AFINN lexicon.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_tokens %&gt;%
+<span class="st">  </span><span class="kw">anti_join</span>(stop_words, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">contribution =</span> <span class="kw">sum</span>(n *<span class="st"> </span>score)) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">12</span>, <span class="kw">abs</span>(contribution)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, contribution)) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, contribution)) +
+<span class="st">  </span><span class="kw">geom_col</span>() +
+<span class="st">  </span><span class="kw">coord_flip</span>() +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Frequency of word * AFINN score&quot;</span>)</code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-8"></span>
+<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-8-1.png" alt="N" width="672" />
+<p class="caption">
+Figure 6.5: N
+</p>
+</div>
+<p>In the context of these financial articles, there are a few big red flags here. The words “share” and “shares” are counted as positive verbs by the AFINN lexicon (“Alice <strong>shares</strong> her cake with Bob”), but they’re actually neutral nouns (“The stock price was $X per share”) that could just as easily be in a positive sentence as a negative one. The word “fool” is even more deceptive: it appears in Motley Fool, a financial news company. In short, we can see that the AFINN sentiment lexicon is entirely unsuited to the context of financial data (as are the NRC and Bing).</p>
+<p>Instead, we introduce another sentiment lexicon: the Loughran and McDonald dictionary of financial sentiment terms [TODO: cite]. This dictionary was defined based on analyses of financial reports, and specifically avoids words like “share” and “fool”, as well as subtler terms like “liability” and “risk” that may not have a negative meaning in a financial context.</p>
+<p>The Loughran data divides words into six sentiments: “positive”, “negative”, “litigious”, “uncertain”, “constraining”, and “superfluous”. We could start by examining the most common words belonging to each sentiment within this text dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_tokens %&gt;%
+<span class="st">  </span><span class="kw">count</span>(word) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;loughran&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(sentiment) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">5</span>, n) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
-<span class="st">  </span><span class="kw">complete</span>(Year, word, <span class="dt">fill =</span> <span class="kw">list</span>(<span class="dt">n =</span> <span class="dv">0</span>)) %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(Year) %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year_total =</span> <span class="kw">sum</span>(n),
-         <span class="dt">percent =</span> n /<span class="st"> </span>year_total) %&gt;%
-<span class="st">  </span><span class="kw">ungroup</span>()
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, n)) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, n)) +
+<span class="st">  </span><span class="kw">geom_col</span>() +
+<span class="st">  </span><span class="kw">coord_flip</span>() +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>sentiment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
+<p><img src="06-document-term-matrices_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>These assignments of words to sentiments look more reasonable: common positive words include “strong” and “better”, but not “shares” or “growth”, while negative words include “volatility” but not “fool”.</p>
+<p>Now that we know we can trust the sentiment dictionary, our typical methods for sentiment analysis apply, and we can count the number of uses of each sentiment-associated word in each corpus.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_sentiment_count &lt;-<span class="st"> </span>stock_tokens %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;loughran&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(sentiment, company) %&gt;%
+<span class="st">  </span><span class="kw">spread</span>(sentiment, n, <span class="dt">fill =</span> <span class="dv">0</span>)
 
-inaug_freq %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(word ==<span class="st"> &quot;america&quot;</span>)</code></pre></div>
-<pre><code>## # A tibble: 57 × 5
-##     Year    word     n year_total     percent
-##    &lt;int&gt;   &lt;chr&gt; &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;
-## 1   1789 america     0        529 0.000000000
-## 2   1793 america     1         51 0.019607843
-## 3   1797 america     5        863 0.005793743
-## 4   1801 america     0        634 0.000000000
-## 5   1805 america     0        796 0.000000000
-## 6   1809 america     0        436 0.000000000
-## 7   1813 america     0        456 0.000000000
-## 8   1817 america     0       1197 0.000000000
-## 9   1821 america     2       1578 0.001267427
-## 10  1825 america     0       1153 0.000000000
-## # ... with 47 more rows</code></pre>
-<p>For instance, we could display the top 6 terms that have changed in frequency over time.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
+stock_sentiment_count</code></pre></div>
+<pre><code>## # A tibble: 9 × 7
+##     company constraining litigious negative positive superfluous uncertainty
+## *     &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1    Amazon            7         8       84      144           3          70
+## 2     Apple            9        11      161      156           2         132
+## 3  Facebook            4        32      128      150           4          81
+## 4    Google            7         8       60      103           0          58
+## 5       IBM            8        22      147      148           0         104
+## 6 Microsoft            6        19       92      129           3         116
+## 7   Netflix            4         7      111      162           0         106
+## 8   Twitter            4        12      157       79           1          75
+## 9     Yahoo            3        28      130       74           0          71</code></pre>
+<p>It might be interesting to examine which company has the most news with “litigious” or “uncertain” terms. But the simplest measure, much as it was for most analysis in Chapter , is to see whether the news is more positive or negative. As a general quantitative measure of sentiment, we’ll use “(positive - negative) / (positive + negative)” (Figure ).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_sentiment_count %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">score =</span> (positive -<span class="st"> </span>negative) /<span class="st"> </span>(positive +<span class="st"> </span>negative)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">company =</span> <span class="kw">reorder</span>(company, score)) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(company, score, <span class="dt">fill =</span> score &gt;<span class="st"> </span><span class="dv">0</span>)) +
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">coord_flip</span>() +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Company&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Positivity score among 20 recent news articles&quot;</span>)</code></pre></div>
+<div class="figure"><span id="fig:stockpositivity"></span>
+<img src="06-document-term-matrices_files/figure-html/stockpositivity-1.png" alt="'Positivity' of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company." width="672" />
+<p class="caption">
+Figure 6.6: ‘Positivity’ of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company.
+</p>
+</div>
+<p>Based on this analysis, we’d say that in January 2017 most of the coverage of Yahoo and Twitter was strongly negative, while coverage of Google and Amazon was the most positive. A glance at current financial headlines suggest that it’s on the right track. If you were interested in further analysis, you could use one of R’s many quantitative finance packages to compare these articles to recent stock prices and other metrics.</p>
 
-inaug_freq %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(word %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;americans&quot;</span>, <span class="st">&quot;century&quot;</span>, <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;god&quot;</span>,
-                     <span class="st">&quot;union&quot;</span>, <span class="st">&quot;constitution&quot;</span>)) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(Year, percent)) +
-<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>) +
-<span class="st">  </span><span class="kw">geom_smooth</span>() +
-<span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>word, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> <span class="kw">percent_format</span>()) +
-<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Frequency of word in speech&quot;</span>)</code></pre></div>
-<p><img src="06-document-term-matrices_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
-
+</div>
 </div>
 </div>
 <h3> References</h3>

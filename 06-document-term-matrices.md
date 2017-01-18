@@ -1,45 +1,37 @@
-# Tidying and casting document-term matrices {#dtm}
+# Tidying and casting document-term matrices and corpus objects {#dtm}
 
 
 
-In the previous chapters, we've been analyzing text arranged in the tidy text format: a table with one-token-per-document-per-row, as is constructed by the `unnest_tokens` function. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2. We've demonstrated that many text analyses can be performed using these principles.
+In the previous chapters, we've been analyzing text arranged in the tidy text format: a table with one-token-per-document-per-row, such as is constructed by the `unnest_tokens` function. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2 to explore and visualize text data. We've demonstrated that many informative text analyses can be performed using these tools.
 
-However, most of the existing R tools for natural language processing, besides the tidytext package, aren't compatible with this format. The [CRAN Task View for Natural Language Processing](https://cran.r-project.org/web/views/NaturalLanguageProcessing.html) lists a large selection of packages that take other inputs. One of the most common formats is the [document-term matrix](https://en.wikipedia.org/wiki/Document-term_matrix), a sparse matrix with one row for each document in a collection and one column for each term or word. The value that goes into the matrix is typically the count of that term in that document, or sometimes the tf-idf (see Chapter 4). These matrices are sparse (they consist mostly of zeroes), so specialized algorithms and data structures can be used to deal with them that are efficient and fast.
+However, most of the existing R tools for natural language processing, besides the tidytext package, aren't compatible with this format. The [CRAN Task View for Natural Language Processing](https://cran.r-project.org/web/views/NaturalLanguageProcessing.html) lists a large selection of packages that take other structures of input and provide non-tidy outputs. These package are very useful in text mining applications, and many existing text datasets are structured according to these formats.
 
-The tidytext package can integrate these important packages into an analysis while still relying on the suite of tidy tools for processing and visualization. The two key verbs are:
-
-* `tidy()`: Turns an object, such as a document-term matrix, into a tidy data frame.
-* `cast_`: Turns a tidy one-term-per-row data frame into a document-term matrix. tidytext provides the functions `cast_sparse()` (a sparse matrix from the Matrix package), `cast_dtm()` (`DocumentTermMatrix` objects from tm), and `cast_dfm()` (`dfm` objects from quanteda).
-
-In this chapter, we'll examine some examples of tidying document-term matrices, as well as converting from a tidy format into a sparse matrix.
+Computer scientist Hal Abelson has observed that "No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system." In that spirit, this chapter will discuss the "glue" that connects the tidy text format with other important packages and data structures, allowing you to rely on both existing text mining packages and the suite of tidy tools to perform your analysis. In particular, we'll examine the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix.
 
 ## Tidying a document-term matrix
 
-Many existing text mining packages provide and expect **document-term matrix**, or DTM. A DTM is a matrix where
+One of the most common structures that text mining packages work with is the [document-term matrix](https://en.wikipedia.org/wiki/Document-term_matrix) (or DTM). This is a matrix where:
 
-* each row represents one document,
+* each row represents one document (such as a book or article),
 * each column represents one term, and
-* each value (usually) contains the number of appearances of that term in that document.
+* each value (typically) contains the number of appearances of that term in that document.
 
-DTMs are usually implemented as sparse matrices, meaning the vast majority of values are 0. These objects can be interacted with as though they were matrices, but are stored in a more efficient format.
+DTMs are usually implemented as sparse matrices, meaning the vast majority of values are 0. These objects can be treated as though they were matrices (for example, accessing particular rows and columns), but are stored in a more efficient format. We'll discuss several implementations of these matrices in this chapter.
+
+DTMs are not tidy and cannot be used directly with tidy tools, just as tidy data frames cannot be given to text mining packages. Thus, the tidytext package provides two verbs that convert between the two types of formats.
+
+* `tidy` turns a document-term matrix into a tidy data frame. This verb comes from the broom package [@R-broom], which provides tidiers for many statistical models and objects.
+* `cast` turns a tidy one-term-per-row data frame into a matrix. tidytext provides three variations of this verb, each converting to a different type of matrix: `cast_sparse()` (converting to a sparse matrix from the Matrix package), `cast_dtm()` (converting to a `DocumentTermMatrix` object from tm), and `cast_dfm()` (converting to a `dfm` object from quanteda).
 
 ### Tidying DocumentTermMatrix objects
 
-One commonly used implementation of DTMs in R is the `DocumentTermMatrix` class in the tm package. Many existing text mining datasets are provided in this format. For example, consider the corpus of Associated Press newspaper articles included in the topicmodels package.
+Perhaps the most widely used implementation of DTMs in R is the `DocumentTermMatrix` class in the tm package. Many available text mining datasets are provided in this format. For example, consider the corpus of Associated Press newspaper articles included in the topicmodels package.
 
 
 ```r
 library(tm)
 
 data("AssociatedPress", package = "topicmodels")
-class(AssociatedPress)
-```
-
-```
-## [1] "DocumentTermMatrix"    "simple_triplet_matrix"
-```
-
-```r
 AssociatedPress
 ```
 
@@ -51,9 +43,19 @@ AssociatedPress
 ## Weighting          : term frequency (tf)
 ```
 
-We see that this dataset contains  documents (each of them an AP article) and  terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero).
+We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the `Terms()` function:
 
-If we wanted to analyze this data with tidy tools, we would first need to turn it into a one-token-per-document-per-row data frame. The broom package [@R-broom] introduced the `tidy` verb, which takes a non-tidy object and turns it into a tidy data frame. The tidytext package implements that method for `DocumentTermMatrix` objects:
+
+```r
+terms <- Terms(AssociatedPress)
+head(terms)
+```
+
+```
+## [1] "aaron"      "abandon"    "abandoned"  "abandoning" "abbott"     "abboud"
+```
+
+If we wanted to analyze this data with tidy tools, we would first need to turn it into a data frame with one-token-per-document-per-row. The broom package introduced the `tidy` verb, which takes a non-tidy object and turns it into a tidy data frame. The tidytext package implements that method for `DocumentTermMatrix` objects:
 
 
 ```r
@@ -81,9 +83,9 @@ ap_td
 ## # ... with 302,021 more rows
 ```
 
-Notice that we now have a tidy three-column `tbl_df`, with variables `document`, `term`, and `count`. This tidying operation is similar to the `melt` function from the reshape2 package [@R-reshape2] for non-sparse matrices.
+Notice that we now have a tidy three-column `tbl_df`, with variables `document`, `term`, and `count`. This tidying operation is similar to the `melt` function from the reshape2 package [@R-reshape2] for non-sparse matrices. Notice that only the non-zero values are included: document 1 includes terms such as "adding" and "adult", but not "aaron" or "abandon", and thus the tidied version has no rows where `count` is zero.
 
-As we've seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles.
+As we've seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles with the approach described in Chapter \ref{sentiment}.
 
 
 ```r
@@ -110,7 +112,7 @@ ap_sentiments
 ## # ... with 30,084 more rows
 ```
 
-This could let us visualize which words from these AP articles most often contributed to positive or negative sentiment:
+This would let us visualize which words from the AP articles most often contributed to positive or negative sentiment, seen in Figure \ref{fig:apsentiments}. We can see that the most common positive words include "like", "work", "support", and "good", while the most negative words include "killed", "death", and "vice". (The inclusion of "vice" as a negative term is probably a mistake on the algorithm's part, since it likely usually refers to "vice president").
 
 
 ```r
@@ -128,11 +130,14 @@ ap_sentiments %>%
   coord_flip()
 ```
 
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+<div class="figure">
+<img src="06-document-term-matrices_files/figure-html/apsentiments-1.png" alt="Words from AP articles with the greatest contribution to positive or negative sentiments, computed as the product of the word's AFINN sentiment score and its frequency." width="672" />
+<p class="caption">(\#fig:apsentiments)Words from AP articles with the greatest contribution to positive or negative sentiments, computed as the product of the word's AFINN sentiment score and its frequency.</p>
+</div>
 
 ### Tidying dfm objects
 
-Other text mining packages provide alternative implementations of document-term matrices, such as the `dfm` (document-feature matrix) class from the quanteda package [@R-quanteda]. Consider the corpus of presidential inauguration speeches that comes with the quanteda package:
+Other text mining packages provide alternative implementations of document-term matrices, such as the `dfm` (document-feature matrix) class from the quanteda package [@R-quanteda]. For example, the quanteda package comes with a corpus of presidential inauguration speeches, which can be converted to a `dfm` using the appropriate function.
 
 
 ```r
@@ -140,7 +145,10 @@ library(methods)
 
 data("inaugCorpus", package = "quanteda")
 inaug_dfm <- quanteda::dfm(inaugCorpus)
+```
 
+
+```r
 inaug_dfm
 ```
 
@@ -148,7 +156,7 @@ inaug_dfm
 ## Document-feature matrix of: 57 documents, 9,174 features (91.6% sparse).
 ```
 
-The `tidy` method works on these objects as well, turning them into a one-token-per-document-per-row table:
+The `tidy` method works on these document-feature matrices as well, turning them into a one-token-per-document-per-row table:
 
 
 ```r
@@ -173,7 +181,7 @@ inaug_td
 ## # ... with 44,168 more rows
 ```
 
-We may be interested in finding the words most specific to each inaugural speeches, which can be done by calculating the TF-IDF of each term-speech pair using the `bind_tf_idf` function from chapter 4.
+We may be interested in finding the words most specific to each inaugural speeches. This could be quantified by calculating the TF-IDF of each term-speech pair using the `bind_tf_idf` function, as described in Chapter \ref{tfidf}.
 
 
 ```r
@@ -201,30 +209,14 @@ inaug_tf_idf
 ## # ... with 44,168 more rows
 ```
 
-We could then pick four notable inaugural addresses (from Washington, Lincoln, Kennedy, and Obama), and visualize the words most specific to each speech.
+We could use this data to pick four notable inaugural addresses (from Presidents Lincoln, Roosevelt, Kennedy, and Obama), and visualize the words most specific to each speech, as shown in Figure \ref{fig:presidentspeeches}.
 
+<div class="figure">
+<img src="06-document-term-matrices_files/figure-html/presidentspeeches-1.png" alt="The terms with the highest TF-IDF from each of four selected inaugural addresses." width="672" />
+<p class="caption">(\#fig:presidentspeeches)The terms with the highest TF-IDF from each of four selected inaugural addresses.</p>
+</div>
 
-```r
-speeches <- c("1793-Washington", "1861-Lincoln",
-              "1961-Kennedy", "2009-Obama")
-
-inaug_tf_idf %>%
-  filter(document %in% speeches) %>%
-  group_by(document) %>%
-  top_n(10, tf_idf) %>%
-  ungroup() %>%
-  mutate(term = reorder(term, tf_idf)) %>%
-  ggplot(aes(term, tf_idf, fill = document)) +
-  geom_bar(stat = "identity", alpha = 0.8, show.legend = FALSE) +
-  facet_wrap(~ document, scales = "free") +
-  coord_flip() +
-  labs(x = "",
-       y = "TF-IDF")
-```
-
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-3-1.png" width="672" />
-
-Having a corpus in this format is also useful for visualizations. We could extract the year from each document's name, and compute the total number of words within each year.
+As another example of a visualization possible with tidy data, we could extract the year from each document's name, and compute the total number of words within each year.
 
 
 ```r
@@ -235,52 +227,34 @@ year_term_counts <- inaug_td %>%
   complete(year, term, fill = list(count = 0)) %>%
   group_by(year) %>%
   mutate(year_total = sum(count))
-
-year_term_counts
 ```
 
-```
-## Source: local data frame [522,918 x 4]
-## Groups: year [57]
-## 
-##     year  term count year_total
-##    <int> <chr> <dbl>      <dbl>
-## 1   1789     -     3       1540
-## 2   1789     ,    70       1540
-## 3   1789     ;     8       1540
-## 4   1789     :     1       1540
-## 5   1789     !     0       1540
-## 6   1789     ?     0       1540
-## 7   1789     .    23       1540
-## 8   1789     '     0       1540
-## 9   1789     "     2       1540
-## 10  1789     (     1       1540
-## # ... with 522,908 more rows
-```
-
-This lets us pick several words and visualize how they changed in frequency over time.
+This lets us pick several words and visualize how they changed in frequency over time, as shown in \ref{fig:yearterm}. We can see that over time, American presidents became less likely to refer to the country as the "Union" and more likely to refer to "America". They also became less likely to talk about the "constitution" and foreign" countries, and more likely to mention "freedom" and "God".
 
 
 ```r
 year_term_counts %>%
-  filter(term %in% c("god", "america", "foreign", "union")) %>%
+  filter(term %in% c("god", "america", "foreign", "union", "constitution", "freedom")) %>%
   ggplot(aes(year, count / year_total)) +
   geom_point() +
   geom_smooth() +
-  facet_wrap(~ term) +
+  facet_wrap(~ term, scales = "free_y") +
   scale_y_continuous(labels = scales::percent_format()) +
   ylab("% frequency of word in inaugural address")
 ```
 
-<img src="06-document-term-matrices_files/figure-html/year_term_counts_plot-1.png" width="672" />
+<div class="figure">
+<img src="06-document-term-matrices_files/figure-html/yearterm-1.png" alt="Changes in word frequency over time within Presidential inaugural addresses, for four selected terms." width="672" />
+<p class="caption">(\#fig:yearterm)Changes in word frequency over time within Presidential inaugural addresses, for four selected terms.</p>
+</div>
 
-TODO: conclude section
+These examples show how you can use tidytext, and the related suite of tidy tools, to analyze sources even if their origin was not in a tidy format.
 
 ## Casting tidy text data into a matrix
 
-Just as some existing text mining packages provide document-term matrices as sample data or output, some algorithms expect these matrices as input. Therefore, tidytext provides `cast_` verbs for converting from a tidy form to these matrices.
+Just as some existing text mining packages provide document-term matrices as sample data or output, some algorithms expect such matrices as input. Therefore, tidytext provides `cast_` verbs for converting from a tidy form to these matrices.
 
-For example, we could take the tidied AP dataset and cast it back into a document-term matrix:
+For example, we could take the tidied AP dataset and cast it back into a document-term matrix using the `cast_dtm` function.
 
 
 ```r
@@ -296,25 +270,10 @@ ap_td %>%
 ## Weighting          : term frequency (tf)
 ```
 
-Similarly, we could cast it into a Term-Document Matrix with `cast_tdm`, or quanteda's dfm with `cast_dfm`:
+Similarly, we could cast the table into a `dfm` object from quanteda's dfm with `cast_dfm`.
 
 
 ```r
-# cast into a Term-Document Matrix
-ap_td %>%
-  cast_tdm(term, document, count)
-```
-
-```
-## <<TermDocumentMatrix (terms: 10473, documents: 2246)>>
-## Non-/sparse entries: 302031/23220327
-## Sparsity           : 99%
-## Maximal term length: 18
-## Weighting          : term frequency (tf)
-```
-
-```r
-# cast into quanteda's dfm
 ap_td %>%
   cast_dfm(term, document, count)
 ```
@@ -350,201 +309,297 @@ dim(m)
 ## [1]  2246 10473
 ```
 
-This casting process allows for easy reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications.
-
-## Tidying corpus objects with metadata
-
-You can also tidy Corpus objects from the tm package. For example, consider a Corpus containing 20 documents:
+This kind of conversion could easily be done from any of the tidy text structures we've used so far in this book. For example, we could create a DTM of Jane Austen's books in just a few lines of code.
 
 
 ```r
-reut21578 <- system.file("texts", "crude", package = "tm")
-reuters <- VCorpus(DirSource(reut21578),
-                   readerControl = list(reader = readReut21578XMLasPlain))
+library(janeaustenr)
 
-reuters
+austen_dtm <- austen_books() %>%
+  unnest_tokens(word, text) %>%
+  count(book, word) %>%
+  cast_dtm(book, word, n)
+
+austen_dtm
+```
+
+```
+## <<DocumentTermMatrix (documents: 6, terms: 14520)>>
+## Non-/sparse entries: 40379/46741
+## Sparsity           : 54%
+## Maximal term length: 19
+## Weighting          : term frequency (tf)
+```
+
+This casting process allows for reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications. In Chapter \ref{topicmodeling}, we'll examine some examples where a tidy-text dataset has to be converted into a DocumentTermMatrix for processing.
+
+## Tidying corpus objects with metadata
+
+Some data structures are designed to store document collections *before* tokenization, most often as variations on a "corpus" object. One common example is `Corpus` objects from the tm package. For example, the tm package comes with text containing 20 :
+
+
+```r
+data("acq")
+acq
 ```
 
 ```
 ## <<VCorpus>>
 ## Metadata:  corpus specific: 0, document level (indexed): 0
-## Content:  documents: 20
+## Content:  documents: 50
 ```
 
-The `tidy` verb creates a table with one row per document:
+The `tidy` verb creates a table with one row per document, which then lends itself to tokenization and processing.
 
 
 ```r
-reuters_td <- tidy(reuters)
-reuters_td
+acq_td <- tidy(acq)
+acq_td
 ```
 
 ```
-## # A tibble: 20 × 17
-##                        author       datetimestamp description
-##                         <chr>              <dttm>       <chr>
-## 1                        <NA> 1987-02-26 17:00:56            
-## 2  BY TED D'AFFLISIO, Reuters 1987-02-26 17:34:11            
-## 3                        <NA> 1987-02-26 18:18:00            
-## 4                        <NA> 1987-02-26 18:21:01            
-## 5                        <NA> 1987-02-26 19:00:57            
-## 6                        <NA> 1987-03-01 03:25:46            
-## 7    By Jeremy Clift, Reuters 1987-03-01 03:39:14            
-## 8                        <NA> 1987-03-01 05:27:27            
-## 9                        <NA> 1987-03-01 08:22:30            
-## 10                       <NA> 1987-03-01 18:31:44            
-## 11                       <NA> 1987-03-02 01:05:49            
-## 12                       <NA> 1987-03-02 07:39:23            
-## 13                       <NA> 1987-03-02 07:43:22            
-## 14                       <NA> 1987-03-02 07:43:41            
-## 15                       <NA> 1987-03-02 08:25:42            
-## 16                       <NA> 1987-03-02 11:20:05            
-## 17                       <NA> 1987-03-02 11:28:26            
-## 18                       <NA> 1987-03-02 12:13:46            
-## 19 By BERNICE NAPACH, Reuters 1987-03-02 14:38:34            
-## 20                       <NA> 1987-03-02 14:49:06            
-##                                              heading    id language            origin
-##                                                <chr> <chr>    <chr>             <chr>
-## 1           DIAMOND SHAMROCK (DIA) CUTS CRUDE PRICES   127       en Reuters-21578 XML
-## 2    OPEC MAY HAVE TO MEET TO FIRM PRICES - ANALYSTS   144       en Reuters-21578 XML
-## 3          TEXACO CANADA <TXC> LOWERS CRUDE POSTINGS   191       en Reuters-21578 XML
-## 4          MARATHON PETROLEUM REDUCES CRUDE POSTINGS   194       en Reuters-21578 XML
-## 5          HOUSTON OIL <HO> RESERVES STUDY COMPLETED   211       en Reuters-21578 XML
-## 6      KUWAIT SAYS NO PLANS FOR EMERGENCY OPEC TALKS   236       en Reuters-21578 XML
-## 7  INDONESIA SEEN AT CROSSROADS OVER ECONOMIC CHANGE   237       en Reuters-21578 XML
-## 8              SAUDI RIYAL DEPOSIT RATES REMAIN FIRM   242       en Reuters-21578 XML
-## 9            QATAR UNVEILS BUDGET FOR FISCAL 1987/88   246       en Reuters-21578 XML
-## 10   SAUDI ARABIA REITERATES COMMITMENT TO OPEC PACT   248       en Reuters-21578 XML
-## 11    SAUDI FEBRUARY CRUDE OUTPUT PUT AT 3.5 MLN BPD   273       en Reuters-21578 XML
-## 12 GULF ARAB DEPUTY OIL MINISTERS TO MEET IN BAHRAIN   349       en Reuters-21578 XML
-## 13 SAUDI ARABIA REITERATES COMMITMENT TO OPEC ACCORD   352       en Reuters-21578 XML
-## 14  KUWAIT MINISTER SAYS NO EMERGENCY OPEC TALKS SET   353       en Reuters-21578 XML
-## 15          PHILADELPHIA PORT CLOSED BY TANKER CRASH   368       en Reuters-21578 XML
-## 16     STUDY GROUP URGES INCREASED U.S. OIL RESERVES   489       en Reuters-21578 XML
-## 17     STUDY GROUP URGES INCREASED U.S. OIL RESERVES   502       en Reuters-21578 XML
-## 18    UNOCAL <UCL> UNIT CUTS CRUDE OIL POSTED PRICES   543       en Reuters-21578 XML
-## 19      NYMEX WILL EXPAND OFF-HOUR TRADING APRIL ONE   704       en Reuters-21578 XML
-## 20     ARGENTINE OIL PRODUCTION DOWN IN JANUARY 1987   708       en Reuters-21578 XML
-## # ... with 10 more variables: topics <chr>, lewissplit <chr>, cgisplit <chr>, oldid <chr>,
-## #   topics_cat <list>, places <list>, people <chr>, orgs <chr>, exchanges <chr>, text <chr>
-```
-
-Another variation of a corpus object is `corpus` from the quanteda package:
-
-
-```r
-library(quanteda)
-
-data("inaugCorpus")
-
-inaugCorpus
-```
-
-```
-## Corpus consisting of 57 documents and 3 docvars.
+## # A tibble: 50 × 16
+##                       author       datetimestamp description
+##                        <chr>              <dttm>       <chr>
+## 1                       <NA> 1987-02-26 15:18:06            
+## 2                       <NA> 1987-02-26 15:19:15            
+## 3                       <NA> 1987-02-26 15:49:56            
+## 4  By Cal Mankowski, Reuters 1987-02-26 15:51:17            
+## 5                       <NA> 1987-02-26 16:08:33            
+## 6                       <NA> 1987-02-26 16:32:37            
+## 7      By Patti Domm, Reuter 1987-02-26 16:43:13            
+## 8                       <NA> 1987-02-26 16:59:25            
+## 9                       <NA> 1987-02-26 17:01:28            
+## 10                      <NA> 1987-02-26 17:08:27            
+##                                             heading    id language            origin topics
+##                                               <chr> <chr>    <chr>             <chr>  <chr>
+## 1   COMPUTER TERMINAL SYSTEMS <CPML> COMPLETES SALE    10       en Reuters-21578 XML    YES
+## 2    OHIO MATTRESS <OMT> MAY HAVE LOWER 1ST QTR NET    12       en Reuters-21578 XML    YES
+## 3     MCLEAN'S <MII> U.S. LINES SETS ASSET TRANSFER    44       en Reuters-21578 XML    YES
+## 4    CHEMLAWN <CHEM> RISES ON HOPES FOR HIGHER BIDS    45       en Reuters-21578 XML    YES
+## 5    <COFAB INC> BUYS GULFEX FOR UNDISCLOSED AMOUNT    68       en Reuters-21578 XML    YES
+## 6          INVESTMENT FIRMS CUT CYCLOPS <CYL> STAKE    96       en Reuters-21578 XML    YES
+## 7  AMERICAN EXPRESS <AXP> SEEN IN POSSIBLE SPINNOFF   110       en Reuters-21578 XML    YES
+## 8   HONG KONG FIRM UPS WRATHER<WCO> STAKE TO 11 PCT   125       en Reuters-21578 XML    YES
+## 9               LIEBERT CORP <LIEB> APPROVES MERGER   128       en Reuters-21578 XML    YES
+## 10     GULF APPLIED TECHNOLOGIES <GATS> SELLS UNITS   134       en Reuters-21578 XML    YES
+## # ... with 40 more rows, and 8 more variables: lewissplit <chr>, cgisplit <chr>, oldid <chr>,
+## #   places <list>, people <lgl>, orgs <lgl>, exchanges <lgl>, text <chr>
 ```
 
 ```r
-inaug_td <- tidy(inaugCorpus)
-inaug_td
-```
-
-```
-## # A tibble: 57 × 4
-##                                                                                                                                                        text
-## *                                                                                                                                                     <chr>
-## 1  Fellow-Citizens of the Senate and of the House of Representatives:\n\nAmong the vicissitudes incident to life no event could have filled me with greater
-## 2    Fellow citizens, I am again called upon by the voice of my country to execute the functions of its Chief Magistrate. When the occasion proper for it s
-## 3    When it was first perceived, in early times, that no middle course for America remained between unlimited submission to a foreign legislature and a to
-## 4  Friends and Fellow Citizens:\n\nCalled upon to undertake the duties of the first executive office of our country, I avail myself of the presence of that
-## 5    Proceeding, fellow citizens, to that qualification which the Constitution requires before my entrance on the charge again conferred on me, it is my du
-## 6    Unwilling to depart from examples of the most revered authority, I avail myself of the occasion now presented to express the profound impression made 
-## 7    About to add the solemnity of an oath to the obligations imposed by a second call to the station in which my country heretofore placed me, I find in t
-## 8    I should be destitute of feeling if I was not deeply affected by the strong proof which my fellow-citizens have given me of their confidence in callin
-## 9    Fellow citizens, I shall not attempt to describe the grateful emotions which the new and very distinguished proof of the confidence of my fellow citiz
-## 10   In compliance with an usage coeval with the existence of our Federal Constitution, and sanctioned by the example of my predecessors in the career upon
-## # ... with 47 more rows, and 3 more variables: Year <int>, President <chr>, FirstName <chr>
-```
-
-This lets us work with tidy tools like `unnest_tokens` to analyze the text alongside the metadata.
-
-
-```r
-inaug_words <- inaug_td %>%
+acq_td %>%
+  select(-places) %>%
   unnest_tokens(word, text) %>%
-  anti_join(stop_words)
-
-inaug_words
+  anti_join(stop_words) %>%
+  count(word, sort = TRUE)
 ```
 
 ```
-## # A tibble: 49,621 × 4
-##     Year President FirstName         word
-##    <int>     <chr>     <chr>        <chr>
-## 1   2013     Obama    Barack        waves
-## 2   2013     Obama    Barack     realizes
-## 3   2013     Obama    Barack philadelphia
-## 4   2013     Obama    Barack          400
-## 5   2013     Obama    Barack           40
-## 6   2013     Obama    Barack   absolutism
-## 7   2013     Obama    Barack      contour
-## 8   2013     Obama    Barack      newtown
-## 9   2013     Obama    Barack        lanes
-## 10  2013     Obama    Barack   appalachia
-## # ... with 49,611 more rows
+## # A tibble: 1,566 × 2
+##        word     n
+##       <chr> <int>
+## 1      dlrs   100
+## 2       pct    70
+## 3       mln    65
+## 4   company    63
+## 5    shares    52
+## 6    reuter    50
+## 7     stock    46
+## 8     offer    34
+## 9     share    34
+## 10 american    28
+## # ... with 1,556 more rows
 ```
 
-We could then, for example, see how the appearance of a word changes over time:
+TODO: This intro to corpus needs a bit more.
+
+### Example: financial article data
+
+The value of tidiers for the `Corpus` object is that it is a common output format for many packages that ingest text data. One such package is [tm.plugin.webmining](https://cran.r-project.org/package=tm.plugin.webmining), which connects to online feeds to retrieve news articles based on a keyword. For example, performing `WebCorpus(GoogleFinanceSource("NASDAQ:MSFT")))` allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.
+
+Here we'll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix. (These examples use the results in January 2017, when this chapter was written, but you'll certainly find different results if you ran it for yourself).
 
 
 ```r
-library(tidyr)
+library(tm.plugin.webmining)
+library(purrr)
 
-inaug_freq <- inaug_words %>%
-  count(Year, word) %>%
+company <- c("Microsoft", "Apple", "Google", "Amazon", "Facebook",
+             "Twitter", "IBM", "Yahoo", "Netflix")
+symbol <- c("MSFT", "AAPL", "GOOG", "AMZN", "FB", "TWTR", "IBM", "YHOO", "NFLX")
+
+download_articles <- function(symbol) {
+  WebCorpus(GoogleFinanceSource(paste0("NASDAQ:", symbol)))
+}
+
+stock_articles <- data_frame(company = company,
+                             symbol = symbol) %>%
+  mutate(corpus = map(symbol, download_articles))
+```
+
+
+
+
+```r
+stock_articles
+```
+
+```
+## # A tibble: 9 × 3
+##     company symbol          corpus
+##       <chr>  <chr>          <list>
+## 1 Microsoft   MSFT <S3: WebCorpus>
+## 2     Apple   AAPL <S3: WebCorpus>
+## 3    Google   GOOG <S3: WebCorpus>
+## 4    Amazon   AMZN <S3: WebCorpus>
+## 5  Facebook     FB <S3: WebCorpus>
+## 6   Twitter   TWTR <S3: WebCorpus>
+## 7       IBM    IBM <S3: WebCorpus>
+## 8     Yahoo   YHOO <S3: WebCorpus>
+## 9   Netflix   NFLX <S3: WebCorpus>
+```
+
+Each of the items in the `corpus` column is a `WebCorpus` object, which is a special case of a corpus like `acq`. We can thus turn each into a data frame using the `tidy` function, then tokenize the `text` column of the individual articles using `unnest_tokens`.
+
+
+```r
+stock_tokens <- stock_articles %>%
+  unnest(map(corpus, tidy)) %>%
+  unnest_tokens(word, text) %>%
+  select(company, datetimestamp, word, id)
+
+stock_tokens
+```
+
+```
+## # A tibble: 105,057 × 4
+##      company       datetimestamp        word                                            id
+##        <chr>              <dttm>       <chr>                                         <chr>
+## 1  Microsoft 2017-01-17 12:07:24   microsoft tag:finance.google.com,cluster:52779347599411
+## 2  Microsoft 2017-01-17 12:07:24 corporation tag:finance.google.com,cluster:52779347599411
+## 3  Microsoft 2017-01-17 12:07:24        data tag:finance.google.com,cluster:52779347599411
+## 4  Microsoft 2017-01-17 12:07:24     privacy tag:finance.google.com,cluster:52779347599411
+## 5  Microsoft 2017-01-17 12:07:24       could tag:finance.google.com,cluster:52779347599411
+## 6  Microsoft 2017-01-17 12:07:24        send tag:finance.google.com,cluster:52779347599411
+## 7  Microsoft 2017-01-17 12:07:24        msft tag:finance.google.com,cluster:52779347599411
+## 8  Microsoft 2017-01-17 12:07:24       stock tag:finance.google.com,cluster:52779347599411
+## 9  Microsoft 2017-01-17 12:07:24     soaring tag:finance.google.com,cluster:52779347599411
+## 10 Microsoft 2017-01-17 12:07:24          by tag:finance.google.com,cluster:52779347599411
+## # ... with 105,047 more rows
+```
+
+What words were most specific to each stock symbol? We could determine this using TF-IDF.
+
+
+```r
+library(stringr)
+
+stock_tf_idf <- stock_tokens %>%
+  count(company, word) %>%
+  filter(!str_detect(word, "\\d+")) %>%
+  bind_tf_idf(word, company, n) %>%
+  arrange(-tf_idf)
+```
+
+The top terms for each are visualized in Figure \ref{fig:stocktfidf}. As we'd expect the company's name and is typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).
+
+<div class="figure">
+<img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest TF-IDF within each company." width="768" />
+<p class="caption">(\#fig:stocktfidf)The 8 words with the highest TF-IDF within each company.</p>
+</div>
+
+If we were interested in using recent news to analyze the market and make investment decisions, we'd likely want to use sentiment analysis to determine. Before we run sentiment analysis, we should look at what words would contribute the most to positive and negative sentiments. For example, we could perform this with the AFINN lexicon.
+
+
+```r
+stock_tokens %>%
+  anti_join(stop_words, by = "word") %>%
+  count(word, id, sort = TRUE) %>%
+  inner_join(get_sentiments("afinn"), by = "word") %>%
+  summarize(contribution = sum(n * score)) %>%
+  top_n(12, abs(contribution)) %>%
+  mutate(word = reorder(word, contribution)) %>%
+  ggplot(aes(word, contribution)) +
+  geom_col() +
+  coord_flip() +
+  labs(y = "Frequency of word * AFINN score")
+```
+
+<div class="figure">
+<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-8-1.png" alt="N" width="672" />
+<p class="caption">(\#fig:unnamed-chunk-8)N</p>
+</div>
+
+In the context of these financial articles, there are a few big red flags here. The words "share" and "shares" are counted as positive verbs by the AFINN lexicon ("Alice **shares** her cake with Bob"), but they're actually neutral nouns ("The stock price was $X per share") that could just as easily be in a positive sentence as a negative one. The word "fool" is even more deceptive: it appears in Motley Fool, a financial news company. In short, we can see that the AFINN sentiment lexicon is entirely unsuited to the context of financial data (as are the NRC and Bing).
+
+Instead, we introduce another sentiment lexicon: the Loughran and McDonald dictionary of financial sentiment terms [TODO: cite]. This dictionary was defined based on analyses of financial reports, and specifically avoids words like "share" and "fool", as well as subtler terms like "liability" and "risk" that may not have a negative meaning in a financial context.
+
+The Loughran data divides words into six sentiments: "positive", "negative", "litigious", "uncertain", "constraining", and "superfluous". We could start by examining the most common words belonging to each sentiment within this text dataset:
+
+
+```r
+stock_tokens %>%
+  count(word) %>%
+  inner_join(get_sentiments("loughran"), by = "word") %>%
+  group_by(sentiment) %>%
+  top_n(5, n) %>%
   ungroup() %>%
-  complete(Year, word, fill = list(n = 0)) %>%
-  group_by(Year) %>%
-  mutate(year_total = sum(n),
-         percent = n / year_total) %>%
-  ungroup()
-
-inaug_freq %>%
-  filter(word == "america")
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n)) +
+  geom_col() +
+  coord_flip() +
+  facet_wrap(~ sentiment, scales = "free")
 ```
 
-```
-## # A tibble: 57 × 5
-##     Year    word     n year_total     percent
-##    <int>   <chr> <dbl>      <dbl>       <dbl>
-## 1   1789 america     0        529 0.000000000
-## 2   1793 america     1         51 0.019607843
-## 3   1797 america     5        863 0.005793743
-## 4   1801 america     0        634 0.000000000
-## 5   1805 america     0        796 0.000000000
-## 6   1809 america     0        436 0.000000000
-## 7   1813 america     0        456 0.000000000
-## 8   1817 america     0       1197 0.000000000
-## 9   1821 america     2       1578 0.001267427
-## 10  1825 america     0       1153 0.000000000
-## # ... with 47 more rows
-```
+<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
-For instance, we could display the top 6 terms that have changed in frequency over time.
+These assignments of words to sentiments look more reasonable: common positive words include "strong" and "better", but not "shares" or "growth", while negative words include "volatility" but not "fool".
+
+Now that we know we can trust the sentiment dictionary, our typical methods for sentiment analysis apply, and we can count the number of uses of each sentiment-associated word in each corpus.
 
 
 ```r
-library(scales)
+stock_sentiment_count <- stock_tokens %>%
+  inner_join(get_sentiments("loughran"), by = "word") %>%
+  count(sentiment, company) %>%
+  spread(sentiment, n, fill = 0)
 
-inaug_freq %>%
-  filter(word %in% c("americans", "century", "foreign", "god",
-                     "union", "constitution")) %>%
-  ggplot(aes(Year, percent)) +
-  geom_point(alpha = 0.8) +
-  geom_smooth() +
-  facet_wrap(~ word, scales = "free_y") +
-  scale_y_continuous(labels = percent_format()) +
-  ylab("Frequency of word in speech")
+stock_sentiment_count
 ```
 
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-7-1.png" width="768" />
+```
+## # A tibble: 9 × 7
+##     company constraining litigious negative positive superfluous uncertainty
+## *     <chr>        <dbl>     <dbl>    <dbl>    <dbl>       <dbl>       <dbl>
+## 1    Amazon            7         8       84      144           3          70
+## 2     Apple            9        11      161      156           2         132
+## 3  Facebook            4        32      128      150           4          81
+## 4    Google            7         8       60      103           0          58
+## 5       IBM            8        22      147      148           0         104
+## 6 Microsoft            6        19       92      129           3         116
+## 7   Netflix            4         7      111      162           0         106
+## 8   Twitter            4        12      157       79           1          75
+## 9     Yahoo            3        28      130       74           0          71
+```
+
+It might be interesting to examine which company has the most news with "litigious" or "uncertain" terms. But the simplest measure, much as it was for most analysis in Chapter \ref{sentiments}, is to see whether the news is more positive or negative. As a general quantitative measure of sentiment, we'll use "(positive - negative) / (positive + negative)" (Figure \ref{fig:stockpositivity}).
+
+
+```r
+stock_sentiment_count %>%
+  mutate(score = (positive - negative) / (positive + negative)) %>%
+  mutate(company = reorder(company, score)) %>%
+  ggplot(aes(company, score, fill = score > 0)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(x = "Company",
+       y = "Positivity score among 20 recent news articles")
+```
+
+<div class="figure">
+<img src="06-document-term-matrices_files/figure-html/stockpositivity-1.png" alt="'Positivity' of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company." width="672" />
+<p class="caption">(\#fig:stockpositivity)'Positivity' of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company.</p>
+</div>
+
+Based on this analysis, we'd say that in January 2017 most of the coverage of Yahoo and Twitter was strongly negative, while coverage of Google and Amazon was the most positive. A glance at current financial headlines suggest that it's on the right track. If you were interested in further analysis, you could use one of R's many quantitative finance packages to compare these articles to recent stock prices and other metrics.
