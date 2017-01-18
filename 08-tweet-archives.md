@@ -2,7 +2,7 @@
 
 
 
-One type of text that has risen to attention in recent years is text shared online via Twitter. In fact, several of the sentiment lexicons used in this book (and commonly used in general) were designed for use with and validated on tweets. Both of the authors of this book are on Twitter and are fairly regular users of it so in this case study, let's compare the entire Twitter archives of [Julia](https://twitter.com/juliasilge) and [David](https://twitter.com/drob).
+One type of text that gets plenty of attention is text shared online via Twitter. In fact, several of the sentiment lexicons used in this book (and commonly used in general) were designed for use with and validated on tweets. Both of the authors of this book are on Twitter and are fairly regular users of it so in this case study, let's compare the entire Twitter archives of [Julia](https://twitter.com/juliasilge) and [David](https://twitter.com/drob).
 
 ## Getting the data and distribution of tweets
 
@@ -88,7 +88,7 @@ frequency
 ## # ... with 20,726 more rows
 ```
 
-This is a nice, tidy data frame but we would actually like to plot those frequencies on the x- and y-axes of a plot, so we will need to use `spread` from tidyr make a differently shaped dataframe.
+This is a nice and tidy data frame but we would actually like to plot those frequencies on the x- and y-axes of a plot, so we will need to use `spread` from tidyr make a differently shaped dataframe.
 
 
 ```r
@@ -371,14 +371,16 @@ words_by_time %>%
 ```
 
 <div class="figure">
-<img src="08-tweet-archives_files/figure-html/top_dave-1.png" alt="Trending words in David's tweets" width="768" />
-<p class="caption">(\#fig:top_dave)Trending words in David's tweets</p>
+<img src="08-tweet-archives_files/figure-html/topdave-1.png" alt="Trending words in David's tweets" width="768" />
+<p class="caption">(\#fig:topdave)Trending words in David's tweets</p>
 </div>
 
 David tweeted a lot about the UseR conference while he was there and then quickly stopped. He has tweeted more about Stack Overflow toward the end of the year and less about ggplot2 as the year has progressed.
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Me: I&#39;m so sick of data science wars. <a href="https://twitter.com/hashtag/rstats?src=hash">#rstats</a> vs Python, frequentist vs Bayesian...<br><br>Them: base vs ggplot2...<br><br>Me: WHY WHICH SIDE ARE YOU ON</p>&mdash; David Robinson (@drob) <a href="https://twitter.com/drob/status/712639593703542785">March 23, 2016</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+Now let's plot words that have changed frequency in Julia's tweets.
 
 
 ```r
@@ -391,15 +393,15 @@ words_by_time %>%
 ```
 
 <div class="figure">
-<img src="08-tweet-archives_files/figure-html/top_julia-1.png" alt="Trending words in Julia's tweets" width="768" />
-<p class="caption">(\#fig:top_julia)Trending words in Julia's tweets</p>
+<img src="08-tweet-archives_files/figure-html/topjulia-1.png" alt="Trending words in Julia's tweets" width="768" />
+<p class="caption">(\#fig:topjulia)Trending words in Julia's tweets</p>
 </div>
 
 All the significant slopes for Julia are negative. This means she has not tweeted at a higher rate using any specific words, but instead using a variety of different words; her tweets earlier in the year contained the words shown in this plot at higher proportions. Words she uses when publicizing a new blog post like the #rstats hashtag and "post" have gone down in frequency, and she has tweeted less about reading.
 
 ## Favorites and retweets
 
-Another important characteristic of tweets is how many times they are favorited or retweeted. Let's explore which words are more likely to be retweeted or favorited for Julia's and David's tweets. When a user downloads their own Twitter archive, favorites and retweets are not included, so we constructed another dataset of the author's tweets that includes this information. We accessed our own tweets via the Twitter API and downloaded about 3200 tweets for each person. In both cases, that is about the last 18 months worth of Twitter activity. This corresponds to a period of increasing activity and increasing numbers of followers for both of us.
+Another important characteristic of tweets is how many times they are favorited or retweeted. Let's explore which words are more likely to be retweeted or favorited for Julia's and David's tweets. When a user downloads their own Twitter archive, favorites and retweets are not included, so we constructed another dataset of the authors' tweets that includes this information. We accessed our own tweets via the Twitter API and downloaded about 3200 tweets for each person. In both cases, that is about the last 18 months worth of Twitter activity. This corresponds to a period of increasing activity and increasing numbers of followers for both of us.
 
 
 ```r
@@ -412,12 +414,12 @@ tweets <- bind_rows(tweets_julia %>%
   mutate(created_at = ymd_hms(created_at))
 ```
 
-Now that we have this second, smaller set of only recent tweets, let's use `unnest_tokens` to transform these tweets to a tidy data set. (Let's again remove any retweets from this data set so we only look at tweets that David and Julia have posted directly.)
+Now that we have this second, smaller set of only recent tweets, let's use `unnest_tokens` to transform these tweets to a tidy data set. Let's remove all retweets and replies from this data set so we only look at regular tweets that David and Julia have posted directly.
 
 
 ```r
 tidy_tweets <- tweets %>% 
-  filter(!str_detect(text, "^RT")) %>%
+  filter(!str_detect(text, "^(RT|@)")) %>%
   mutate(text = str_replace_all(text, "https://t.co/[A-Za-z\\d]+|http://[A-Za-z\\d]+|&amp;|&lt;|&gt;|RT|https", "")) %>%
   unnest_tokens(word, text, token = "regex", pattern = reg) %>%
   anti_join(stop_words)
@@ -426,20 +428,20 @@ tidy_tweets
 ```
 
 ```
-## # A tibble: 30,725 × 7
-##              id          created_at             source retweets favorites person        word
-##           <dbl>              <dttm>              <chr>    <int>     <int>  <chr>       <chr>
-## 1  8.043967e+17 2016-12-01 18:48:07 Twitter Web Client        4         6  David         j's
-## 2  8.043611e+17 2016-12-01 16:26:39 Twitter Web Client        8        12  David   bangalore
-## 3  8.043611e+17 2016-12-01 16:26:39 Twitter Web Client        8        12  David      london
-## 4  8.043435e+17 2016-12-01 15:16:48 Twitter for iPhone        0         1  David @rodneyfort
-## 5  8.043120e+17 2016-12-01 13:11:37 Twitter for iPhone        0         1  Julia         sho
-## 6  8.040632e+17 2016-11-30 20:43:03 Twitter Web Client        0         2  David       arbor
-## 7  8.040632e+17 2016-11-30 20:43:03 Twitter Web Client        0         2  David       arbor
-## 8  8.040632e+17 2016-11-30 20:43:03 Twitter Web Client        0         2  David         ann
-## 9  8.040632e+17 2016-11-30 20:43:03 Twitter Web Client        0         2  David         ann
-## 10 8.040582e+17 2016-11-30 20:23:14 Twitter Web Client       30        41  David          sf
-## # ... with 30,715 more rows
+## # A tibble: 11,078 × 7
+##              id          created_at             source retweets favorites person       word
+##           <dbl>              <dttm>              <chr>    <int>     <int>  <chr>      <chr>
+## 1  8.044026e+17 2016-12-01 19:11:43 Twitter Web Client        1        15  David      worry
+## 2  8.043967e+17 2016-12-01 18:48:07 Twitter Web Client        4         6  David        j's
+## 3  8.043611e+17 2016-12-01 16:26:39 Twitter Web Client        8        12  David  bangalore
+## 4  8.043611e+17 2016-12-01 16:26:39 Twitter Web Client        8        12  David     london
+## 5  8.043611e+17 2016-12-01 16:26:39 Twitter Web Client        8        12  David developers
+## 6  8.041571e+17 2016-12-01 02:56:10 Twitter Web Client        0        11  Julia management
+## 7  8.041571e+17 2016-12-01 02:56:10 Twitter Web Client        0        11  Julia      julie
+## 8  8.040582e+17 2016-11-30 20:23:14 Twitter Web Client       30        41  David         sf
+## 9  8.040324e+17 2016-11-30 18:40:27 Twitter Web Client        0        17  Julia     zipped
+## 10 8.040324e+17 2016-11-30 18:40:27 Twitter Web Client        0        17  Julia         gb
+## # ... with 11,068 more rows
 ```
 
 To start with, let's look at retweets. Let's find the total number of retweets for each person.
@@ -459,11 +461,11 @@ totals
 ## # A tibble: 2 × 2
 ##   person total_rts
 ##    <chr>     <int>
-## 1  David    111863
-## 2  Julia     12906
+## 1  David    110171
+## 2  Julia     12701
 ```
 
-Now let's find the median number of retweets for each word and person; we probably want to count each tweet/word combination only once, so we will use `group_by` and `summarise` twice, one right after the other. Next, we can join this to the data frame of retweet totals.
+Now let's find the median number of retweets for each word and person. We probably want to count each tweet/word combination only once, so we will use `group_by` and `summarise` twice, one right after the other. In the second `summarise` statement, we can also count the number of times each word was used ever and keep that in `uses`. Next, we can join this to the data frame of retweet totals. Let's `filter` to only keep words mentioned at least 5 times.
 
 
 ```r
@@ -471,69 +473,58 @@ word_by_rts <- tidy_tweets %>%
   group_by(id, word, person) %>% 
   summarise(rts = first(retweets)) %>% 
   group_by(person, word) %>% 
-  summarise(retweets = median(rts)) %>%
+  summarise(retweets = median(rts), uses = n()) %>%
   left_join(totals) %>%
   filter(retweets != 0) %>%
   ungroup()
 
 word_by_rts %>% 
+  filter(uses >= 5) %>%
   arrange(desc(retweets))
 ```
 
 ```
-## # A tibble: 2,422 × 4
-##    person         word retweets total_rts
-##     <chr>        <chr>    <dbl>     <int>
-## 1   David      angrier   1757.0    111863
-## 2   David     confirms    878.5    111863
-## 3   David       writes    878.5    111863
-## 4   David        voted    611.0    111863
-## 5   David       county    534.0    111863
-## 6   David      teacher    390.5    111863
-## 7   David      command    344.0    111863
-## 8   David       revert    344.0    111863
-## 9   David  dimensional    320.5    111863
-## 10  David eigenvectors    320.5    111863
-## # ... with 2,412 more rows
+## # A tibble: 178 × 5
+##    person          word retweets  uses total_rts
+##     <chr>         <chr>    <dbl> <int>     <int>
+## 1   David     animation     85.0     5    110171
+## 2   David      download     52.0     5    110171
+## 3   David         start     51.0     7    110171
+## 4   Julia      tidytext     50.0     7     12701
+## 5   David     gganimate     45.0     8    110171
+## 6   David   introducing     45.0     6    110171
+## 7   David understanding     37.0     6    110171
+## 8   David             0     35.0     7    110171
+## 9   David         error     34.5     8    110171
+## 10  David      bayesian     34.0     7    110171
+## # ... with 168 more rows
 ```
 
-At the top of this sorted data frame, we see David's tweet about [his blog post on Donald Trump's own tweets](http://varianceexplained.org/r/trump-tweets/) that went viral. A search tells us that this is the only time David has ever used the word "angrier" in his tweets, so that word has an extremely high median retweet rate.
-
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">New post: Analysis of Trump tweets confirms he writes only the angrier Android half <a href="https://t.co/HRr4yj30hx">https://t.co/HRr4yj30hx</a> <a href="https://twitter.com/hashtag/rstats?src=hash">#rstats</a> <a href="https://t.co/cmwdNeYSE7">pic.twitter.com/cmwdNeYSE7</a></p>&mdash; David Robinson (@drob) <a href="https://twitter.com/drob/status/763048283531055104">August 9, 2016</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-Now we can plot the words that have contributed the most to each of our retweets.
+At the top of this sorted data frame, we see tweets from Julia and David about packages that they work on, like [gutenbergr](https://cran.r-project.org/package=gutenbergr), [gganimate](https://github.com/dgrtwo/gganimate), and [tidytext](https://cran.r-project.org/package=tidytext). Let's plot the words that have the highest median retweets for each of our accounts.
 
 
 ```r
 word_by_rts %>%
-  mutate(ratio = retweets / total_rts) %>%  
+  filter(uses >= 5) %>%
   group_by(person) %>%
-  top_n(10, ratio) %>%
-  arrange(ratio) %>%
+  top_n(10, retweets) %>%
+  arrange(retweets) %>%
   mutate(word = factor(word, unique(word))) %>%
   ungroup() %>%
-  ggplot(aes(word, ratio, fill = person)) +
+  ggplot(aes(word, retweets, fill = person)) +
   geom_bar(stat = "identity", alpha = 0.8, show.legend = FALSE) +
   facet_wrap(~ person, scales = "free", ncol = 2) +
   coord_flip() +
-  scale_y_continuous(labels = percent_format()) +
   labs(x = NULL, 
-       y = "proportion of total RTs due to each word")
+       y = "Median # of retweets for tweets containing each word")
 ```
 
 <div class="figure">
-<img src="08-tweet-archives_files/figure-html/plot_rts-1.png" alt="Words with highest median retweets" width="960" />
-<p class="caption">(\#fig:plot_rts)Words with highest median retweets</p>
+<img src="08-tweet-archives_files/figure-html/plotrts-1.png" alt="Words with highest median retweets" width="960" />
+<p class="caption">(\#fig:plotrts)Words with highest median retweets</p>
 </div>
 
-We see more words from David's tweet about his Trump blog post, and words from Julia making announcements about blog posts and new package releases. These are some pretty good tweets; we can see why people retweeted them.
-
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">NEW POST: Mapping ghost sightings in Kentucky using Leaflet 👻👻👻 <a href="https://twitter.com/hashtag/rstats?src=hash">#rstats</a> <a href="https://t.co/rRFTSsaKWQ">https://t.co/rRFTSsaKWQ</a> <a href="https://t.co/codPf3gy6O">pic.twitter.com/codPf3gy6O</a></p>&mdash; Julia Silge (@juliasilge) <a href="https://twitter.com/juliasilge/status/761667180148641793">August 5, 2016</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Me: Git makes it easy to revert your local changes<br><br>Them: Great! So what command do I use?<br><br>Me: I said it was easy not that I knew how</p>&mdash; David Robinson (@drob) <a href="https://twitter.com/drob/status/770706647585095680">August 30, 2016</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+We see lots of word about R packages, including tidytext, a package about which you are reading right now! The "0" for David comes from tweets where he mentions version numbers of packages, like ["broom 0.4.0"](https://twitter.com/drob/status/671430703234576384) or similar.
 
 We can follow a similar procedure to see which words led to more favorites. Are they different than the words that lead to more retweets?
 
@@ -549,36 +540,34 @@ word_by_favs <- tidy_tweets %>%
   group_by(id, word, person) %>% 
   summarise(favs = first(favorites)) %>% 
   group_by(person, word) %>% 
-  summarise(favorites = median(favs)) %>%
+  summarise(favorites = median(favs), uses = n()) %>%
   left_join(totals) %>%
   filter(favorites != 0) %>%
   ungroup()
 ```
 
+We have built the dataframes we need. Now let's make our visualization.
+
 
 ```r
 word_by_favs %>%
-  mutate(ratio = favorites / total_favs) %>%  
+  filter(uses >= 5) %>%
   group_by(person) %>%
-  top_n(10, ratio) %>%
-  arrange(ratio) %>%
+  top_n(10, favorites) %>%
+  arrange(favorites) %>%
   mutate(word = factor(word, unique(word))) %>%
   ungroup() %>%
-  ggplot(aes(word, ratio, fill = person)) +
+  ggplot(aes(word, favorites, fill = person)) +
   geom_bar(stat = "identity", alpha = 0.8, show.legend = FALSE) +
   facet_wrap(~ person, scales = "free", ncol = 2) +
   coord_flip() +
-  scale_y_continuous(labels = percent_format()) +
   labs(x = NULL, 
-       y = "proportion of total favorites due to each word")
+       y = "Median # of favorites for tweets containing each word")
 ```
 
 <div class="figure">
-<img src="08-tweet-archives_files/figure-html/plot_favs-1.png" alt="Words with highest median favorites" width="960" />
-<p class="caption">(\#fig:plot_favs)Words with highest median favorites</p>
+<img src="08-tweet-archives_files/figure-html/plotfavs-1.png" alt="Words with highest median favorites" width="960" />
+<p class="caption">(\#fig:plotfavs)Words with highest median favorites</p>
 </div>
 
-We see some minor differences between Figures \@ref(fig:plot_rts) and \@ref(fig:plot_favs), especially near the bottom of the top 10 list, but these are largely the same words as for favorites. In general, the same words that lead to retweets lead to favorites. There are some exceptions, though.
-
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">🎶 I am writing a Shiny app for my joooooooob 🎶🎶 I am living the dreeeeeeeeeam... 🎶🎶 <a href="https://twitter.com/hashtag/rstats?src=hash">#rstats</a></p>&mdash; Julia Silge (@juliasilge) <a href="https://twitter.com/juliasilge/status/732645241610600448">May 17, 2016</a></blockquote>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+We see some minor differences between Figures \@ref(fig:plotrts) and \@ref(fig:plotfavs), especially near the bottom of the top 10 list, but these are largely the same words as for retweets. In general, the same words that lead to retweets lead to favorites. A prominent word for Julia in both plots is the hashtag for the NASA Datanauts program that she has participated in; read on to [Chapter 9](#nasa) to learn more about NASA data and what we can learn from text analysis of NASA datasets.
