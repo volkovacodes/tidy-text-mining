@@ -27,7 +27,10 @@ ggplot(tweets, aes(x = timestamp, fill = person)) +
   geom_histogram(alpha = 0.5, position = "identity", bins = 20)
 ```
 
-<img src="08-tweet-archives_files/figure-html/setup-1.png" width="768" />
+<div class="figure">
+<img src="08-tweet-archives_files/figure-html/setup-1.png" alt="All tweets from our accounts" width="768" />
+<p class="caption">(\#fig:setup)All tweets from our accounts</p>
+</div>
 
 David and Julia tweet at about the same rate currently and joined Twitter about a year apart from each other, but there were about 5 years where David was not active on Twitter and Julia was. In total, Julia has about 4 times as many tweets as David.
 
@@ -130,10 +133,13 @@ ggplot(frequency, aes(Julia, David)) +
   geom_abline(color = "red")
 ```
 
-<img src="08-tweet-archives_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+<div class="figure">
+<img src="08-tweet-archives_files/figure-html/spreadplot-1.png" alt="Comparing the frequency of words used by Julia and David" width="672" />
+<p class="caption">(\#fig:spreadplot)Comparing the frequency of words used by Julia and David</p>
+</div>
 
 
-Words near the red line in this plot are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Words, hashtags, and usernames that appear in this plot are ones that we have both used at least once in tweets.
+Words near the red line in Figure \@ref(fig:spreadplot) are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Words, hashtags, and usernames that appear in this plot are ones that we have both used at least once in tweets.
 
 This may not even need to be pointed out, but David and Julia have used their Twitter accounts rather differently over the course of the past several years. David has used his Twitter account almost exclusively for professional purposes since he became more active, while Julia used it for entirely personal purposes until late 2015 and still uses it more personally than David. We see these differences immediately in this plot exploring word frequencies, and they will continue to be obvious in the rest of this chapter. 
 
@@ -211,7 +217,10 @@ word_ratios %>%
   scale_fill_discrete(name = "", labels = c("David", "Julia"))
 ```
 
-<img src="08-tweet-archives_files/figure-html/plotratios-1.png" width="672" />
+<div class="figure">
+<img src="08-tweet-archives_files/figure-html/plotratios-1.png" alt="Comparing the odds ratios of words from our accounts" width="672" />
+<p class="caption">(\#fig:plotratios)Comparing the odds ratios of words from our accounts</p>
+</div>
 
 So David has tweeted about specific conferences he has gone to, genes, Stack Overflow, and matrices while Julia tweeted about Utah, physics, Census data, Christmas, and her family.
 
@@ -358,11 +367,13 @@ words_by_time %>%
   filter(person == "David") %>%
   ggplot(aes(time_floor, count/time_total, color = word)) +
   geom_line(alpha = 0.8, size = 1.3) +
-  labs(x = NULL, y = "Word frequency",
-       title = "Trending words in David's tweets")
+  labs(x = NULL, y = "Word frequency")
 ```
 
-<img src="08-tweet-archives_files/figure-html/unnamed-chunk-5-1.png" width="768" />
+<div class="figure">
+<img src="08-tweet-archives_files/figure-html/top_dave-1.png" alt="Trending words in David's tweets" width="768" />
+<p class="caption">(\#fig:top_dave)Trending words in David's tweets</p>
+</div>
 
 David tweeted a lot about the UseR conference while he was there and then quickly stopped. He has tweeted more about Stack Overflow toward the end of the year and less about ggplot2 as the year has progressed.
 
@@ -376,11 +387,13 @@ words_by_time %>%
   filter(person == "Julia") %>%
   ggplot(aes(time_floor, count/time_total, color = word)) +
   geom_line(alpha = 0.8, size = 1.3) +
-  labs(x = NULL, y = "Word frequency",
-       title = "Trending words in Julia's tweets")
+  labs(x = NULL, y = "Word frequency")
 ```
 
-<img src="08-tweet-archives_files/figure-html/unnamed-chunk-6-1.png" width="768" />
+<div class="figure">
+<img src="08-tweet-archives_files/figure-html/top_julia-1.png" alt="Trending words in Julia's tweets" width="768" />
+<p class="caption">(\#fig:top_julia)Trending words in Julia's tweets</p>
+</div>
 
 All the significant slopes for Julia are negative. This means she has not tweeted at a higher rate using any specific words, but instead using a variety of different words; her tweets earlier in the year contained the words shown in this plot at higher proportions. Words she uses when publicizing a new blog post like the #rstats hashtag and "post" have gone down in frequency, and she has tweeted less about reading.
 
@@ -506,11 +519,13 @@ word_by_rts %>%
   coord_flip() +
   scale_y_continuous(labels = percent_format()) +
   labs(x = NULL, 
-       y = "proportion of total RTs due to each word",
-       title = "Words with highest median retweets")
+       y = "proportion of total RTs due to each word")
 ```
 
-<img src="08-tweet-archives_files/figure-html/unnamed-chunk-7-1.png" width="960" />
+<div class="figure">
+<img src="08-tweet-archives_files/figure-html/plot_rts-1.png" alt="Words with highest median retweets" width="960" />
+<p class="caption">(\#fig:plot_rts)Words with highest median retweets</p>
+</div>
 
 We see more words from David's tweet about his Trump blog post, and words from Julia making announcements about blog posts and new package releases. These are some pretty good tweets; we can see why people retweeted them.
 
@@ -555,13 +570,15 @@ word_by_favs %>%
   coord_flip() +
   scale_y_continuous(labels = percent_format()) +
   labs(x = NULL, 
-       y = "proportion of total favorites due to each word",
-       title = "Words with highest median favorites")
+       y = "proportion of total favorites due to each word")
 ```
 
-<img src="08-tweet-archives_files/figure-html/unnamed-chunk-8-1.png" width="960" />
+<div class="figure">
+<img src="08-tweet-archives_files/figure-html/plot_favs-1.png" alt="Words with highest median favorites" width="960" />
+<p class="caption">(\#fig:plot_favs)Words with highest median favorites</p>
+</div>
 
-We see some minor differences, especially near the bottom of the top 10 list, but these are largely the same words as for favorites. In general, the same words that lead to retweets lead to favorites. There are some exceptions, though.
+We see some minor differences between Figures \@ref(fig:plot_rts) and \@ref(fig:plot_favs), especially near the bottom of the top 10 list, but these are largely the same words as for favorites. In general, the same words that lead to retweets lead to favorites. There are some exceptions, though.
 
 <blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">🎶 I am writing a Shiny app for my joooooooob 🎶🎶 I am living the dreeeeeeeeeam... 🎶🎶 <a href="https://twitter.com/hashtag/rstats?src=hash">#rstats</a></p>&mdash; Julia Silge (@juliasilge) <a href="https://twitter.com/juliasilge/status/732645241610600448">May 17, 2016</a></blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
