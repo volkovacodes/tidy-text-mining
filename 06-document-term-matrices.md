@@ -43,7 +43,7 @@ AssociatedPress
 ## Weighting          : term frequency (tf)
 ```
 
-We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the `Terms()` function:
+We see that this dataset contains  documents (each of them an AP article) and  terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the `Terms()` function:
 
 
 ```r
@@ -335,7 +335,9 @@ This casting process allows for reading, filtering, and processing to be done us
 
 ## Tidying corpus objects with metadata
 
-Some data structures are designed to store document collections *before* tokenization, most often as variations on a "corpus" object. One common example is `Corpus` objects from the tm package. For example, the tm package comes with text containing 20 :
+Some data structures are designed to store document collections *before* tokenization, often called a "corpus". One common example is `Corpus` objects from the tm package. These store text alongside **metadata**, which may include an ID, date/time, title, or language for each document.
+
+For example, the tm package comes with the `acq` corpus, containing 50 articles from the news service Reuters.
 
 
 ```r
@@ -349,7 +351,20 @@ acq
 ## Content:  documents: 50
 ```
 
-The `tidy` verb creates a table with one row per document, which then lends itself to tokenization and processing.
+```r
+# first document
+acq[[1]]
+```
+
+```
+## <<PlainTextDocument>>
+## Metadata:  15
+## Content:  chars: 1287
+```
+
+A corpus object is structured like a list, with each item containing both text and metadata (see the tm documentation for more on working with Corpus documents). This is a flexible storage method for documents, but doesn't lend itself to processing with tidy tools.
+
+We can thus use the `tidy()` method to construct a table with one row per document, including the metadata (such as `id` and `datetimestamp`) as columns alongside the `text`.
 
 
 ```r
@@ -387,11 +402,17 @@ acq_td
 ## #   places <list>, people <lgl>, orgs <lgl>, exchanges <lgl>, text <chr>
 ```
 
+This can then be used with `unnest_tokens()` to, for example, find the most common words across the 50 Reuters articles, or the ones most specific to each article.
+
+
 ```r
-acq_td %>%
+acq_tokens <- acq_td %>%
   select(-places) %>%
   unnest_tokens(word, text) %>%
-  anti_join(stop_words) %>%
+  anti_join(stop_words, by = "word")
+
+# most common words
+acq_tokens %>%
   count(word, sort = TRUE)
 ```
 
@@ -412,13 +433,38 @@ acq_td %>%
 ## # ... with 1,556 more rows
 ```
 
-TODO: This intro to corpus needs a bit more.
+```r
+# TF-IDF
+acq_tokens %>%
+  count(id, word) %>%
+  bind_tf_idf(word, id, n) %>%
+  arrange(desc(tf_idf))
+```
 
-### Example: financial article data
+```
+## Source: local data frame [2,853 x 6]
+## Groups: id [50]
+## 
+##       id     word     n         tf      idf    tf_idf
+##    <chr>    <chr> <int>      <dbl>    <dbl>     <dbl>
+## 1    186   groupe     2 0.13333333 3.912023 0.5216031
+## 2    128  liebert     3 0.13043478 3.912023 0.5102639
+## 3    474  esselte     5 0.10869565 3.912023 0.4252199
+## 4    371  burdett     6 0.10344828 3.912023 0.4046920
+## 5    442 hazleton     4 0.10256410 3.912023 0.4012331
+## 6    199  circuit     5 0.10204082 3.912023 0.3991860
+## 7    162 suffield     2 0.10000000 3.912023 0.3912023
+## 8    498     west     3 0.10000000 3.912023 0.3912023
+## 9    441      rmj     8 0.12121212 3.218876 0.3901668
+## 10   467  nursery     3 0.09677419 3.912023 0.3785829
+## # ... with 2,843 more rows
+```
 
-The value of tidiers for the `Corpus` object is that it is a common output format for many packages that ingest text data. One such package is [tm.plugin.webmining](https://cran.r-project.org/package=tm.plugin.webmining), which connects to online feeds to retrieve news articles based on a keyword. For example, performing `WebCorpus(GoogleFinanceSource("NASDAQ:MSFT")))` allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.
+### Example: mining financial articles
 
-Here we'll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix. (These examples use the results in January 2017, when this chapter was written, but you'll certainly find different results if you ran it for yourself).
+`Corpus` objects are a common output format for data import packages, which means the `tidy()` function gives us access to a wide variety of text data. One example is [tm.plugin.webmining](https://cran.r-project.org/package=tm.plugin.webmining), which connects to online feeds to retrieve news articles based on a keyword. For instance, performing `WebCorpus(GoogleFinanceSource("NASDAQ:MSFT")))` allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.
+
+Here we'll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix. (These results were downloaded in January 2017, when this chapter was written, but you'll certainly find different results if you ran it for yourself).
 
 
 ```r
@@ -460,20 +506,20 @@ stock_articles
 ## 9   Netflix   NFLX <S3: WebCorpus>
 ```
 
-Each of the items in the `corpus` column is a `WebCorpus` object, which is a special case of a corpus like `acq`. We can thus turn each into a data frame using the `tidy` function, then tokenize the `text` column of the individual articles using `unnest_tokens`.
+Each of the items in the `corpus` list column is a `WebCorpus` object, which is a special case of a corpus like `acq`. We can thus turn each into a data frame using the `tidy()` function, unnest it with tidyr's `unnest()`, then tokenize the `text` column of the individual articles using `unnest_tokens`.
 
 
 ```r
 stock_tokens <- stock_articles %>%
   unnest(map(corpus, tidy)) %>%
   unnest_tokens(word, text) %>%
-  select(company, datetimestamp, word, id)
+  select(company, datetimestamp, word, id, heading)
 
 stock_tokens
 ```
 
 ```
-## # A tibble: 105,057 × 4
+## # A tibble: 105,057 × 5
 ##      company       datetimestamp        word                                            id
 ##        <chr>              <dttm>       <chr>                                         <chr>
 ## 1  Microsoft 2017-01-17 12:07:24   microsoft tag:finance.google.com,cluster:52779347599411
@@ -486,10 +532,10 @@ stock_tokens
 ## 8  Microsoft 2017-01-17 12:07:24       stock tag:finance.google.com,cluster:52779347599411
 ## 9  Microsoft 2017-01-17 12:07:24     soaring tag:finance.google.com,cluster:52779347599411
 ## 10 Microsoft 2017-01-17 12:07:24          by tag:finance.google.com,cluster:52779347599411
-## # ... with 105,047 more rows
+## # ... with 105,047 more rows, and 1 more variables: heading <chr>
 ```
 
-What words were most specific to each stock symbol? We could determine this using TF-IDF.
+Here we see the some of each article's metadata alongside the words used. We could use TF-IDF to determine which words were most specific to each stock symbol.
 
 
 ```r
@@ -505,11 +551,11 @@ stock_tf_idf <- stock_tokens %>%
 The top terms for each are visualized in Figure \ref{fig:stocktfidf}. As we'd expect the company's name and is typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).
 
 <div class="figure">
-<img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest TF-IDF within each company." width="768" />
-<p class="caption">(\#fig:stocktfidf)The 8 words with the highest TF-IDF within each company.</p>
+<img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest TF-IDF in recent articles specific to each company." width="768" />
+<p class="caption">(\#fig:stocktfidf)The 8 words with the highest TF-IDF in recent articles specific to each company.</p>
 </div>
 
-If we were interested in using recent news to analyze the market and make investment decisions, we'd likely want to use sentiment analysis to determine. Before we run sentiment analysis, we should look at what words would contribute the most to positive and negative sentiments. For example, we could perform this with the AFINN lexicon.
+If we were interested in using recent news to analyze the market and make investment decisions, we'd likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter \ref{most-positive-negative}. For example, we could examine this within the AFINN lexicon.
 
 
 ```r
@@ -531,11 +577,11 @@ stock_tokens %>%
 <p class="caption">(\#fig:unnamed-chunk-8)N</p>
 </div>
 
-In the context of these financial articles, there are a few big red flags here. The words "share" and "shares" are counted as positive verbs by the AFINN lexicon ("Alice **shares** her cake with Bob"), but they're actually neutral nouns ("The stock price was $X per share") that could just as easily be in a positive sentence as a negative one. The word "fool" is even more deceptive: it appears in Motley Fool, a financial news company. In short, we can see that the AFINN sentiment lexicon is entirely unsuited to the context of financial data (as are the NRC and Bing).
+In the context of these financial articles, there are a few big red flags here. The words "share" and "shares" are counted as positive verbs by the AFINN lexicon ("Alice will **share** her cake with Bob"), but they're actually neutral nouns ("The stock price was $X per **share**") that could just as easily be in a positive sentence as a negative one. The word "fool" is even more deceptive: it refers to Motley Fool, a financial services company. In short, we can see that the AFINN sentiment lexicon is entirely unsuited to the context of financial data (as are the NRC and Bing).
 
-Instead, we introduce another sentiment lexicon: the Loughran and McDonald dictionary of financial sentiment terms [TODO: cite]. This dictionary was defined based on analyses of financial reports, and specifically avoids words like "share" and "fool", as well as subtler terms like "liability" and "risk" that may not have a negative meaning in a financial context.
+Instead, we introduce another sentiment lexicon: the Loughran and McDonald dictionary of financial sentiment terms [@loughran2011liability]. This dictionary was developed based on analyses of financial reports, and intentionally avoids words like "share" and "fool", as well as subtler terms like "liability" and "risk" that may not have a negative meaning in a financial context.
 
-The Loughran data divides words into six sentiments: "positive", "negative", "litigious", "uncertain", "constraining", and "superfluous". We could start by examining the most common words belonging to each sentiment within this text dataset:
+The Loughran data divides words into six sentiments: "positive", "negative", "litigious", "uncertain", "constraining", and "superfluous". We could start by examining the most common words belonging to each sentiment within this text dataset.
 
 
 ```r
@@ -552,11 +598,14 @@ stock_tokens %>%
   facet_wrap(~ sentiment, scales = "free")
 ```
 
-<img src="06-document-term-matrices_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<div class="figure">
+<img src="06-document-term-matrices_files/figure-html/stockloughransentiments-1.png" alt="The most " width="672" />
+<p class="caption">(\#fig:stockloughransentiments)The most </p>
+</div>
 
-These assignments of words to sentiments look more reasonable: common positive words include "strong" and "better", but not "shares" or "growth", while negative words include "volatility" but not "fool".
+These assignments (Figure \ref{fig:stockloughransentiments}) of words to sentiments look more reasonable: common positive words include "strong" and "better", but not "shares" or "growth", while negative words include "volatility" but not "fool". The other sentiments look reasonable as well: the most common "uncertainty" terms include "could" and "may".
 
-Now that we know we can trust the sentiment dictionary, our typical methods for sentiment analysis apply, and we can count the number of uses of each sentiment-associated word in each corpus.
+Now that we know we can trust the dictionary to approximate the articles' sentiments, we can use our typical methods for counting the number of uses of each sentiment-associated word in each corpus.
 
 
 ```r
