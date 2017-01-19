@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-01-18">
+<meta name="date" content="2017-01-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -537,7 +537,7 @@ acq_tokens %&gt;%
 ## # ... with 2,843 more rows</code></pre>
 <div id="example-mining-financial-articles" class="section level3">
 <h3><span class="header-section-number">6.3.1</span> Example: mining financial articles</h3>
-<p><code>Corpus</code> objects are a common output format for data import packages, which means the <code>tidy()</code> function gives us access to a wide variety of text data. One example is <a href="https://cran.r-project.org/package=tm.plugin.webmining">tm.plugin.webmining</a>, which connects to online feeds to retrieve news articles based on a keyword. For instance, performing <code>WebCorpus(GoogleFinanceSource(&quot;NASDAQ:MSFT&quot;)))</code> allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.</p>
+<p><code>Corpus</code> objects are a common output format for data ingesting packages, which means the <code>tidy()</code> function gives us access to a wide variety of text data. One example is <a href="https://cran.r-project.org/package=tm.plugin.webmining">tm.plugin.webmining</a>, which connects to online feeds to retrieve news articles based on a keyword. For instance, performing <code>WebCorpus(GoogleFinanceSource(&quot;NASDAQ:MSFT&quot;)))</code> allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.</p>
 <p>Here we’ll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix. (These results were downloaded in January 2017, when this chapter was written, but you’ll certainly find different results if you ran it for yourself).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tm.plugin.webmining)
 <span class="kw">library</span>(purrr)

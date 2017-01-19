@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-01-18">
+<meta name="date" content="2017-01-19">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -231,10 +231,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="ngrams" class="section level1">
 <h1><span class="header-section-number">5</span> Relationships between words</h1>
 <p>So far we’ve considered words as individual units, and considered their relationships to sentiments or to documents. However, many interesting text analyses are based on the relationships between words, whether examining which words tend to follow others immediately, or that tend to co-occur within the same documents.</p>
-<p>In this chapter, we’ll explore some of the methods tidytext offers for calculating and visualizing relationships between words in your text dataset. This includes the <code>token = &quot;ngrams&quot;</code> argument, which tokenizes by pairs of adjacent words rather than by individual words. We’ll also introduce two new packages: <a href="https://github.com/thomasp85/ggraph">ggraph</a>, which extends ggplot2 to construct network plots, nd <a href="https://github.com/dgrtwo/widyr">widyr</a> package, which calculates pairwise correlations and distances within a tidy data frame. Together these expand our toolbox for exploring text within the tidy data framework.</p>
+<p>In this chapter, we’ll explore some of the methods tidytext offers for calculating and visualizing relationships between words in your text dataset. This includes the <code>token = &quot;ngrams&quot;</code> argument, which tokenizes by pairs of adjacent words rather than by individual ones. We’ll also introduce two new packages: <a href="https://github.com/thomasp85/ggraph">ggraph</a>, which extends ggplot2 to construct network plots, and <a href="https://github.com/dgrtwo/widyr">widyr</a>, which calculates pairwise correlations and distances within a tidy data frame. Together these expand our toolbox for exploring text within the tidy data framework.</p>
 <div id="tokenizing-by-n-gram" class="section level2">
 <h2><span class="header-section-number">5.1</span> Tokenizing by n-gram</h2>
-<p>We’ve been using the <code>unnest_tokens</code> function to tokenize by word, or sometimes by sentence or paragraph, which is useful . But we can also use the function to tokenize into consecutive sequences of words, called <strong>n-grams</strong>. By seeing how often word X is followed by word Y, we can then build a model of the relationships between them.</p>
+<p>We’ve been using the <code>unnest_tokens</code> function to tokenize by word, or sometimes by sentence or paragraph, which is useful for the kinds of sentiment and frequency analyses we’ve been doing so far. But we can also use the function to tokenize into consecutive sequences of words, called <strong>n-grams</strong>. By seeing how often word X is followed by word Y, we can then build a model of the relationships between them.</p>
 <p>We do this by adding the <code>token = &quot;ngrams&quot;</code> option to <code>unnest_tokens()</code>, and setting <code>n</code> to the number of words we wish to capture in each n-gram. When we set <code>n</code> to 2, we are examining pairs of two consecutive words, often called “bigrams”:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidytext)
@@ -278,7 +278,7 @@ austen_bigrams</code></pre></div>
 ## 9   she was  1377
 ## 10 had been  1299
 ## # ... with 211,227 more rows</code></pre>
-<p>As one might expect, a lot of the most common bigrams are pairs of common (uninteresting) words, such as <code>of the</code> and <code>to be</code>: what we call “stop-words” (see Chapter 2). This is a useful time to use tidyr’s <code>separate()</code>, which splits a column into multiple based on a delimiter. This lets us separate it into two columns, “word1” and “word2”, at which we can remove cases where either is a stop-word .</p>
+<p>As one might expect, a lot of the most common bigrams are pairs of common (uninteresting) words, such as <code>of the</code> and <code>to be</code>: what we call “stop-words” (see Chapter ). This is a useful time to use tidyr’s <code>separate()</code>, which splits a column into multiple based on a delimiter. This lets us separate it into two columns, “word1” and “word2”, at which we can remove cases where either is a stop-word.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
 bigrams_separated &lt;-<span class="st"> </span>austen_bigrams %&gt;%
@@ -310,7 +310,7 @@ bigram_counts</code></pre></div>
 ## 10 colonel   brandon   108
 ## # ... with 33,411 more rows</code></pre>
 <p>We can see that names (whether first and last or with a salutation) are the most common pairs in Jane Austen books.</p>
-<p>In other analyses, we may want to work with the recombined words. tidyr’s <code>unite()</code> function is the inverse of <code>separate()</code>, and lets us recombine the columns into one.</p>
+<p>In other analyses, we may want to work with the recombined words. tidyr’s <code>unite()</code> function is the inverse of <code>separate()</code>, and lets us recombine the columns into one. Thus, “separate/filter/count/unite” let us find the most common bigrams not containing stop-words.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigrams_united &lt;-<span class="st"> </span>bigrams_filtered %&gt;%
 <span class="st">  </span><span class="kw">unite</span>(bigram, word1, word2, <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)
 
@@ -376,7 +376,7 @@ bigrams_united</code></pre></div>
 ## 9           Persuasion      milsom     5
 ## 10          Persuasion      rivers     4
 ## # ... with 24 more rows</code></pre>
-<p>A bigram can also be treated as a term in a document in the same way that we treated individual words. For example, we can look at the TF-IDF (Chapter 4) of bigrams across Austen novels.</p>
+<p>A bigram can also be treated as a term in a document in the same way that we treated individual words. For example, we can look at the TF-IDF (Chapter 4) of bigrams across Austen novels. These TF-IDF values can be visualized within each book, just as we did for words (Figure ).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigram_tf_idf &lt;-<span class="st"> </span>bigrams_united %&gt;%
 <span class="st">  </span><span class="kw">count</span>(book, bigram) %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(bigram, book, n) %&gt;%
@@ -399,14 +399,18 @@ bigram_tf_idf</code></pre></div>
 ## 9                 Emma   frank churchill   132 0.01385972 1.791759 0.02483329
 ## 10   Pride &amp; Prejudice    lady catherine   100 0.01380453 1.791759 0.02473439
 ## # ... with 36,207 more rows</code></pre>
-<p>These TF-IDF values can be visualized within each book, just as we did for words.</p>
-<p><img src="05-word-combinations_files/figure-html/bigram_tf_idf_plot-1.png" width="864" /></p>
-<p>Much as we discovered in <a href="tfidf.html#tfidf">Chapter 4</a>, the units that distinguish each Austen book are almost exclusively names. We also notice some pairings of a common verb and a name, such as “replied elizabeth” in Pride &amp; Prejudice, or “cried emma” in Emma.</p>
+<div class="figure"><span id="fig:bigramtfidf"></span>
+<img src="05-word-combinations_files/figure-html/bigramtfidf-1.png" alt="The 12 bigrams with the highest TF-IDF from each Jane Austen novel." width="864" />
+<p class="caption">
+Figure 5.1: The 12 bigrams with the highest TF-IDF from each Jane Austen novel.
+</p>
+</div>
+<p>Much as we discovered in Chapter , the units that distinguish each Austen book are almost exclusively names. We also notice some pairings of a common verb and a name, such as “replied elizabeth” in Pride &amp; Prejudice, or “cried emma” in Emma.</p>
 <p>There are advantages and disadvantages to examining the TF-IDF of bigrams rather than individual words. Pairs of consecutive words might capture structure that isn’t present when one is just counting single words, and may provide context that makes tokens more understandable (for example, “pulteney street”, in Northanger Abbey, is more informative than “pulteney”). However, the per-bigram counts are also <em>sparser</em>: a typical two-word pair is rarer than either of its component words. Thus, bigrams can be especially useful when you have a very large text dataset.</p>
 </div>
 <div id="using-bigrams-to-provide-context-in-sentiment-analysis" class="section level3">
 <h3><span class="header-section-number">5.1.3</span> Using bigrams to provide context in sentiment analysis</h3>
-<p>Our sentiment analysis approch in <a href="sentiment">Chapter 3</a> simply counted the appearance of positive or negative words, according to a reference lexicon. One of the problems with this approach is that a word’s context can matter nearly as much as its presence. For example, the words “happy” and “like” will be counted as positive, even in a sentence like “I’m not <strong>happy</strong> and I don’t <strong>like</strong> it!”</p>
+<p>Our sentiment analysis approch in Chapter  simply counted the appearance of positive or negative words, according to a reference lexicon. One of the problems with this approach is that a word’s context can matter nearly as much as its presence. For example, the words “happy” and “like” will be counted as positive, even in a sentence like “I’m not <strong>happy</strong> and I don’t <strong>like</strong> it!”</p>
 <p>Now that we have the data organized into bigrams, it’s easy to tell how often words are preceded by a word like “not”:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigrams_separated %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word1 ==<span class="st"> &quot;not&quot;</span>) %&gt;%
@@ -469,7 +473,7 @@ not_words</code></pre></div>
 ## 10   worth     2    17
 ## # ... with 235 more rows</code></pre>
 <p>For example, the most common sentiment-associated word to follow “not” was “like”, which would normally have a (positive) score of 2.</p>
-<p>It’s worth asking which words contributed the most in the “wrong” direction. To compute that, we can multiply their score by the number of times they appear (so that a word with a score of +3 occurring 10 times has as much impact as a word with a sentiment score of +1 occurring 30 times).</p>
+<p>It’s worth asking which words contributed the most in the “wrong” direction. To compute that, we can multiply their score by the number of times they appear (so that a word with a score of +3 occurring 10 times has as much impact as a word with a sentiment score of +1 occurring 30 times). We visualize the result with a bar plot (Figure ).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">not_words %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> n *<span class="st"> </span>score) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(<span class="kw">abs</span>(contribution))) %&gt;%
@@ -480,35 +484,28 @@ not_words</code></pre></div>
 <span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Words preceded by </span><span class="ch">\&quot;</span><span class="st">not</span><span class="ch">\&quot;</span><span class="st">&quot;</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * number of occurrences&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/not_words_plot-1.png" width="768" /></p>
+<div class="figure"><span id="fig:notwordsplot"></span>
+<img src="05-word-combinations_files/figure-html/notwordsplot-1.png" alt="The 20 words followed by 'not' that had the greatest contribution to sentiment scores, in either a positive or negative direction." width="768" />
+<p class="caption">
+Figure 5.2: The 20 words followed by ‘not’ that had the greatest contribution to sentiment scores, in either a positive or negative direction.
+</p>
+</div>
 <p>The bigrams “not like” and “not help” were overwhelmingly the largest causes of misidentification, making the text seem much more positive than it is. But we can see phrases like “not afraid” and “not fail” sometimes suggest text is more negative than it is.</p>
-<p>“Not” isn’t the only term that provides some context for the following word. We could pick four common words (or more) that negate the following, and use the same joining and counting approach to examine all of them at once.</p>
+<p>“Not” isn’t the only term that provides some context for the following word. We could pick four common words (or more) that negate the subsequent term, and use the same joining and counting approach to examine all of them at once.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negation_words &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;not&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;never&quot;</span>, <span class="st">&quot;without&quot;</span>)
 
 negated_words &lt;-<span class="st"> </span>bigrams_separated %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word1 %in%<span class="st"> </span>negation_words) %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">word2 =</span> <span class="st">&quot;word&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word1, word2, score, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
-<span class="st">  </span><span class="kw">ungroup</span>()
-
-negated_words</code></pre></div>
-<pre><code>## # A tibble: 531 × 4
-##    word1 word2 score     n
-##    &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;int&gt;
-## 1     no doubt    -1   102
-## 2    not  like     2    99
-## 3    not  help     2    82
-## 4     no    no    -1    60
-## 5    not  want     1    45
-## 6    not  wish     1    39
-## 7    not allow     1    36
-## 8    not  care     2    23
-## 9     no  harm    -2    22
-## 10   not sorry    -1    21
-## # ... with 521 more rows</code></pre>
-<p>We could then visualize what the most common words to follow each particular negation are.</p>
-<p><img src="05-word-combinations_files/figure-html/negated_words_plot-1.png" width="864" /></p>
-<p>These are just a few examples of how finding consecutive words can give context to text mining methods.</p>
+<span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
+<p>We could then visualize what the most common words to follow each particular negation are (Figure ). While “not like” and “not help” are still the two most common examples, we can also see pairings such as “no great” and “never loved.” These are just a few examples of how finding consecutive words can give context to text mining methods.</p>
+<div class="figure"><span id="fig:negatedwords"></span>
+<img src="05-word-combinations_files/figure-html/negatedwords-1.png" alt="The most common positive or negative words to follow negations such as 'never', 'no', 'not', and 'without'" width="864" />
+<p class="caption">
+Figure 5.3: The most common positive or negative words to follow negations such as ‘never’, ‘no’, ‘not’, and ‘without’
+</p>
+</div>
 </div>
 <div id="visualizing-a-network-of-bigrams-with-igraph" class="section level3">
 <h3><span class="header-section-number">5.1.4</span> Visualizing a network of bigrams with igraph</h3>
@@ -516,9 +513,9 @@ negated_words</code></pre></div>
 <ul>
 <li><strong>from</strong>: the node an edge is coming from</li>
 <li><strong>to</strong>: the node an edge is going towards</li>
-<li><strong>weight</strong> A numeric value associated with each edge</li>
+<li><strong>weight</strong>: A numeric value associated with each edge</li>
 </ul>
-<p>The <a href="http://igraph.org/">igraph</a> package has many powerful functions for manipulating and analyzing networks. The most typical way to create an igraph object from tidy data is the <code>graph_from_data_frame()</code> function.</p>
+<p>The <a href="http://igraph.org/">igraph</a> package has many powerful functions for manipulating and analyzing networks. One way to create an igraph object from tidy data is the <code>graph_from_data_frame()</code> function, which takes a data frame that starts with “from”, “to”, and “node”, columns, in that order.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(igraph)
 
 <span class="co"># original counts</span>
@@ -558,17 +555,22 @@ bigram_graph</code></pre></div>
 ## [29] dr      -&gt;grant      miss    -&gt;bertram    sir     -&gt;thomas&#39;s   ten     -&gt;minutes   
 ## + ... omitted several edges</code></pre>
 <p>igraph has plotting functions built in, but they’re not what the package is designed to do, so many other packages have developed visualization methods for graph objects. We recommend the <a href="https://github.com/thomasp85/ggraph">ggraph package</a>, because it implements these visualizations in terms of the grammar of graphics, which we are already familiar with from ggplot2.</p>
-<p>We can convert an igraph object into a ggraph with the <code>ggraph</code> function, after which we add layers to it, much like layers are added in ggplot2. For example, here we add nodes, edges, and text to construct the basics of a graph:</p>
+<p>We can convert an igraph object into a ggraph with the <code>ggraph</code> function, after which we add layers to it, much like layers are added in ggplot2. For example, for a basic graph we need to add three layers: nodes, edges, and text</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggraph)
-<span class="kw">set.seed</span>(<span class="dv">2016</span>)
+<span class="kw">set.seed</span>(<span class="dv">2017</span>)
 
 <span class="kw">ggraph</span>(bigram_graph, <span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
 <span class="st">  </span><span class="kw">geom_edge_link</span>() +
 <span class="st">  </span><span class="kw">geom_node_point</span>() +
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/bigram_ggraph_austen-1.png" width="960" /></p>
-<p>We now see more details of the text structure. For example, we see that salutations such as “miss”, “lady”, “sir”, “and”colonel&quot; form common centers of nodes, which are often followed by names. We also see pairs or triplets along the outside that form common short phrases (“half hour”, “thousand pounds”, or “short time/pause”).</p>
-<p>As a few polishing operations:</p>
+<div class="figure"><span id="fig:bigramgraph"></span>
+<img src="05-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word." width="960" />
+<p class="caption">
+Figure 5.4: Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word.
+</p>
+</div>
+<p>In Figure , we can visualize some details of the text structure. For example, we see that salutations such as “miss”, “lady”, “sir”, “and”colonel&quot; form common centers of nodes, which are often followed by names. We also see pairs or triplets along the outside that form common short phrases (“half hour”, “thousand pounds”, or “short time/pause”).</p>
+<p>We conclude with a few polishing operations to make a better looking graph (Figure ):</p>
 <ul>
 <li>We add the <code>edge_alpha</code> aesthetic to the link layer to make links transparent based on how common or rare the bigram is</li>
 <li>We add directionality with an arrow, constructed using <code>grid::arrow()</code></li>
@@ -584,7 +586,12 @@ a &lt;-<span class="st"> </span>grid::<span class="kw">arrow</span>(<span class=
 <span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/bigram_ggraph_austen2-1.png" width="960" /></p>
+<div class="figure"><span id="fig:bigramggraphausten2"></span>
+<img src="05-word-combinations_files/figure-html/bigramggraphausten2-1.png" alt="Common bigrams in Pride and Prejudice, with some polishing." width="960" />
+<p class="caption">
+Figure 5.5: Common bigrams in Pride and Prejudice, with some polishing.
+</p>
+</div>
 <p>It may take a some experimentation with ggraph to get your networks into a presentable format like this, but the network structure is useful and flexible way to visualize relational tidy data.</p>
 <p>Note that this is a visualization of a <strong>Markov chain</strong>, a common model in text processing. In a Markov chain, each choice of word depends only on the previous word. In this case, a random generator following this model might spit out “dear”, then “sir”, then “william/walter/thomas/thomas’s”, by following each word to the most common words that follow it. To make the visualization interpretable, we chose to show only the most common word to word connections, but one could imagine an enormous graph representing all connections that occur in the text.</p>
 </div>
@@ -627,19 +634,27 @@ kjv_bigrams %&gt;%
          !<span class="kw">str_detect</span>(word1, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d&quot;</span>),
          !<span class="kw">str_detect</span>(word2, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">visualize_bigrams</span>()</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/kjv_bigrams-1.png" width="672" /></p>
-<p>This lays out a common “blueprint” of language within the Bible, particularly focused around “thy” and “thou” (which in fairness could be considered stopwords!) You can use the gutenbergr package and this code to visualize bigrams in other classic books you’re interested in.</p>
+<div class="figure"><span id="fig:kjvbigrams"></span>
+<img src="05-word-combinations_files/figure-html/kjvbigrams-1.png" alt="Directed graph of common bigrams in the King James Bible, showing those that occurred more than 40 times." width="672" />
+<p class="caption">
+Figure 5.6: Directed graph of common bigrams in the King James Bible, showing those that occurred more than 40 times.
+</p>
+</div>
+<p>Figure  thus lays out a common “blueprint” of language within the Bible, particularly focused around “thy” and “thou” (which could probably be considered stopwords!) You can use the gutenbergr package and these <code>count_bigrams</code>/<code>visualize_bigrams</code> functions to visualize bigrams in other classic books you’re interested in.</p>
 </div>
 </div>
 <div id="counting-and-correlating-pairs-of-words-with-the-widyr-package" class="section level2">
 <h2><span class="header-section-number">5.2</span> Counting and correlating pairs of words with the widyr package</h2>
 <p>Tokenizing by n-gram is a useful way to explore pairs of adjacent words. However, we may also be interested in words that tend to co-occur within particular documents or particular chapters, even if they don’t occur next to each other.</p>
 <p>Tidy data is a useful structure for comparing between variables or grouping by rows, but it can be challenging to compare between rows: for example, to count the number of times that two words appear within the same document, or to see how correlated they are. Most operations for finding pairwise counts or correlations need to turn the data into a wide matrix first.</p>
-<p>We’ll examine some of the ways tidy text can be turned into a wide matrix in Chapter 6, but in this case it isn’t necessary. the <a href="https://github.com/dgrtwo/widyr">widyr</a> package makes operations such as computing counts and correlations easy, by simplifying the pattern of “widen data, perform an operation, then re-tidy data.” We’ll focus on a set of functions that make pairwise comparisons between groups of observations (for example, between documents, or sections of text).</p>
-<div class="figure">
-<img src="images/widyr.jpg" alt="The philosophy behind the widyr package, which can operations such as counting and correlating on pairs of values in a tidy dataset." />
-<p class="caption">The philosophy behind the widyr package, which can operations such as counting and correlating on pairs of values in a tidy dataset.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;images/widyr.jpg&quot;</span>)</code></pre></div>
+<div class="figure"><span id="fig:widyr"></span>
+<img src="images/widyr.jpg" alt="The philosophy behind the widyr package, which can perform operations such as counting and correlating on pairs of values in a tidy dataset. The widyr package first 'casts' a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result."  />
+<p class="caption">
+Figure 5.7: The philosophy behind the widyr package, which can perform operations such as counting and correlating on pairs of values in a tidy dataset. The widyr package first ‘casts’ a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result.
+</p>
 </div>
+<p>We’ll examine some of the ways tidy text can be turned into a wide matrix in Chapter 6, but in this case it isn’t necessary. The <a href="https://github.com/dgrtwo/widyr">widyr</a> package makes operations such as computing counts and correlations easy, by simplifying the pattern of “widen data, perform an operation, then re-tidy data” (Figure ). We’ll focus on a set of functions that make pairwise comparisons between groups of observations (for example, between documents, or sections of text).</p>
 <div id="counting-and-correlating-among-sections" class="section level3">
 <h3><span class="header-section-number">5.2.1</span> Counting and correlating among sections</h3>
 <p>Consider the book “Pride and Prejudice” divided into 10-line sections, as we did for sentiment analysis in Chapter 3. We may be interested in what words tend to appear within the same section.</p>
@@ -772,7 +787,7 @@ word_cors</code></pre></div>
 ## 9    forster   colonel   0.6220950
 ## 10   colonel   forster   0.6220950
 ## # ... with 154,832 more rows</code></pre>
-<p>For instance, we could find the words most correlated with a word like “pounds” using a <code>filter</code> operation.</p>
+<p>This output format is helpful for exploration. For example, we could find the words most correlated with a word like “pounds” using a <code>filter</code> operation.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_cors %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(item1 ==<span class="st"> &quot;pounds&quot;</span>)</code></pre></div>
 <pre><code>## # A tibble: 393 × 3
@@ -789,7 +804,7 @@ word_cors</code></pre></div>
 ## 9  pounds    estate  0.08896876
 ## 10 pounds     ready  0.08597038
 ## # ... with 383 more rows</code></pre>
-<p>This would let us examine the most-correlated words with any selection of words. For example, we could pick four words and visualize the words most associated with them.</p>
+<p>This would let us examine the most-correlated words with any selection of words. For example, we could pick four words and visualize the words most associated with them (Figure ).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_cors %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(item1 %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elizabeth&quot;</span>, <span class="st">&quot;pounds&quot;</span>, <span class="st">&quot;married&quot;</span>, <span class="st">&quot;pride&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(item1) %&gt;%
@@ -799,8 +814,13 @@ word_cors</code></pre></div>
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>item1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
-<p>Just as we used ggraph to visualize bigrams, we can use it to visualize the correlations and clusters of words that were found by the widyr package.</p>
+<div class="figure"><span id="fig:wordcors"></span>
+<img src="05-word-combinations_files/figure-html/wordcors-1.png" alt="Words from Pride and Prejudice that were most correlated with 'elizabeth', 'pounds', 'married', and 'pride'." width="768" />
+<p class="caption">
+Figure 5.8: Words from Pride and Prejudice that were most correlated with ‘elizabeth’, ‘pounds’, ‘married’, and ‘pride’.
+</p>
+</div>
+<p>Just as we used ggraph to visualize bigrams, we can use it to visualize the correlations and clusters of words that were found by the widyr package (Figure ).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2016</span>)
 
 word_cors %&gt;%
@@ -811,8 +831,13 @@ word_cors %&gt;%
 <span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
-<p><img src="05-word-combinations_files/figure-html/word_cors_network-1.png" width="768" /></p>
-<p>Note that unlike the bigram analysis, the relationships here are symmetric, rather than directional (there are no arrows). We can also see that while pairings of names and titles that dominated bigram pairings are common, such as “colonel/fitzwilliam”, we can also see pairings of words that appear close to each other, such as “walk” and “park”, or “dance” and “ball”.</p>
+<div class="figure"><span id="fig:wordcorsnetwork"></span>
+<img src="05-word-combinations_files/figure-html/wordcorsnetwork-1.png" alt="Pairs of words in Pride and Prejudice that show at least a .15 correlation of appearing within the same 10-line section." width="768" />
+<p class="caption">
+Figure 5.9: Pairs of words in Pride and Prejudice that show at least a .15 correlation of appearing within the same 10-line section.
+</p>
+</div>
+<p>Note that unlike the bigram analysis, the relationships here are symmetrical, rather than directional (there are no arrows). We can also see that while pairings of names and titles that dominated bigram pairings are common, such as “colonel/fitzwilliam”, we can also see pairings of words that appear close to each other, such as “walk” and “park”, or “dance” and “ball”.</p>
 <p>These network visualizations are a flexible tool for exploring relationships, and will play an important role in the case studies in later chapters.</p>
 
 </div>
