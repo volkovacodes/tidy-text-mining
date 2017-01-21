@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-01-20">
+<meta name="date" content="2017-01-21">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -346,7 +346,9 @@ tidy_books %&gt;%
 ## 10    kind    82
 ## # ... with 293 more rows</code></pre>
 <p>We see many positive, happy words about hope, friendship, and love here.</p>
-<p>Or instead we could examine how sentiment changes during each novel. We can do this with just a handful of lines that are mostly dplyr functions. First, we find a sentiment score for each word using the Bing lexicon and <code>inner_join</code>. Next, we count up how many positive and negative words there are in defined sections of each book. We define an <code>index</code> here to keep track of where we are in the narrative; this index (using integer division) counts up sections of 100 lines of text. Small sections of text may not have enough words in them to get a good estimate of sentiment while really large sections can wash out narrative structure. For these books, using 100 lines works well, but this can vary depending on individual texts, how long the lines were to start with, etc. We then use a <code>spread</code> operation so that we have negative and positive sentiment in separate columns, and lastly calculate a net sentiment (positive - negative).</p>
+<p>Or instead we could examine how sentiment changes during each novel. We can do this with just a handful of lines that are mostly dplyr functions. First, we find a sentiment score for each word using the Bing lexicon and <code>inner_join</code>.</p>
+<p>Next, we count up how many positive and negative words there are in defined sections of each book. We define an <code>index</code> here to keep track of where we are in the narrative; this index (using integer division) counts up sections of 100 lines of text. The <code>%/%</code> operator does integer division (<code>x %/% y</code> is equivalent to <code>floor(x/y)</code>) so the index keeps track of which 100-line section of text we are counting up negative and positive sentiment in. Small sections of text may not have enough words in them to get a good estimate of sentiment while really large sections can wash out narrative structure. For these books, using 100 lines works well, but this can vary depending on individual texts, how long the lines were to start with, etc.</p>
+<p>We then use a <code>spread</code> operation so that we have negative and positive sentiment in separate columns, and lastly calculate a net sentiment (positive - negative).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
 janeaustensentiment &lt;-<span class="st"> </span>tidy_books %&gt;%
@@ -390,6 +392,7 @@ pride_prejudice</code></pre></div>
 ## 10 Pride &amp; Prejudice         10       1        is
 ## # ... with 122,194 more rows</code></pre>
 <p>Now, we can use <code>inner_join</code> to calculate the sentiment in different ways. Remember from above that the AFINN lexicon measures sentiment with a numeric score between -5 and 5, while the other two lexicons categorize words in a binary fashion, either positive or negative. To find a sentiment score in chunks of text throughout the novel, we will need to use a different pattern for the AFINN lexicon than for the other two.</p>
+<p>Let’s again use integer division (<code>%/%</code>) to define larger sections of text that span multiple lines, and we can use the same pattern with <code>count</code>, <code>spread</code>, and <code>mutate</code> to find the net sentiment in each of these sections of text.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">afinn &lt;-<span class="st"> </span>pride_prejudice %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>)) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(<span class="dt">index =</span> linenumber %/%<span class="st"> </span><span class="dv">80</span>) %&gt;%<span class="st"> </span>
