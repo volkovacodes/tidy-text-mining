@@ -236,7 +236,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>We can use tidy data principles, as described in <a href="tidytext.html#tidytext">Chapter 2</a>, to approach tf-idf analysis and use consistent, effective tools to quantify how important various terms are in a document that is part of a collection.</p>
 <div id="term-frequency-in-jane-austens-novels" class="section level2">
 <h2><span class="header-section-number">4.1</span> Term frequency in Jane Austen’s novels</h2>
-<p>Let’s start by looking at the published novels of Jane Austen and examine first term frequency, then tf-idf. We can start just by using dplyr verbs such as <code>group_by</code> and <code>join</code>. What are the most commonly used words in Jane Austen’s novels? (Let’s also calculate the total words in each novel here, for later use.)</p>
+<p>Let’s start by looking at the published novels of Jane Austen and examine first term frequency, then tf-idf. We can start just by using dplyr verbs such as <code>group_by()</code> and <code>join()</code>. What are the most commonly used words in Jane Austen’s novels? (Let’s also calculate the total words in each novel here, for later use.)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(janeaustenr)
 <span class="kw">library</span>(tidytext)
@@ -267,20 +267,24 @@ book_words</code></pre></div>
 ## 9               Emma    of  4291 160996
 ## 10 Pride &amp; Prejudice    to  4162 122204
 ## # ... with 40,369 more rows</code></pre>
-<p>There is one row in this data frame for each word-book combination; <code>n</code> is the number of times that word is used in that book and <code>total</code> is the total words in that book. The usual suspects are here, “the”, “and”, “to”, and so forth. Let’s look at the distribution of <code>n/total</code> for each novel, the number of times a word appears in a novel divided by the total number of terms (words) in that novel. This is exactly what term frequency is.</p>
+<p>There is one row in this <code>book_words</code> data frame for each word-book combination; <code>n</code> is the number of times that word is used in that book and <code>total</code> is the total words in that book. The usual suspects are here with the highest <code>n</code>, “the”, “and”, “to”, and so forth. Let’s look at the distribution of <code>n/total</code> for each novel, the number of times a word appears in a novel divided by the total number of terms (words) in that novel. This is exactly what term frequency is.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 <span class="kw">ggplot</span>(book_words, <span class="kw">aes</span>(n/total, <span class="dt">fill =</span> book)) +
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">xlim</span>(<span class="ot">NA</span>, <span class="fl">0.0009</span>) +
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Term Frequency Distribution in Jane Austen&#39;s Novels&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>)</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/plot_tf-1.png" width="864" /></p>
+<div class="figure"><span id="fig:plottf"></span>
+<img src="04-tf-idf_files/figure-html/plottf-1.png" alt="Term Frequency Distribution in Jane Austen's Novels" width="864" />
+<p class="caption">
+Figure 4.1: Term Frequency Distribution in Jane Austen’s Novels
+</p>
+</div>
 <p>There are very long tails to the right for these novels (those extremely common words!) that we have not shown in these plots. These plots exhibit similar distributions for all the novels, with many words that occur rarely and fewer words that occur frequently.</p>
 </div>
 <div id="zipfs-law" class="section level2">
 <h2><span class="header-section-number">4.2</span> Zipf’s law</h2>
-<p>TODO</p>
+<p>Distributions like those shown in Figure <a href="tfidf.html#fig:plottf">4.1</a> are typical in language. In fact, they are so common in any given corpus of natural language (like a book, or a lot of text from a website, or spoken words) that the relationship between the frequency that a word is used and its rank has been the subject of study; a classic version of this relationship is called Zipf’s law, after George Zipf, a 20th century American linguist. Zipf’s law states that the frequency of a word is inversely proportional to its rank. Since we have the data frame we used to plot term frequency, we can examine Zipf’s law for Jane Austen’s novels with just a few lines of dplyr functions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">freq_by_rank &lt;-<span class="st"> </span>book_words %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">rank =</span> <span class="kw">row_number</span>(), 
@@ -303,31 +307,46 @@ freq_by_rank</code></pre></div>
 ## 9               Emma    of  4291 160996     4       0.02665284
 ## 10 Pride &amp; Prejudice    to  4162 122204     2       0.03405780
 ## # ... with 40,369 more rows</code></pre>
+<p>The <code>rank</code> column here tells us the rank of each word within the frequency table; the table was already ordered by <code>n</code> so we could use <code>row_number()</code> to find the rank. Then, we can calculate the term frequency in the same way we did before. Zipf’s law is often visualized by plotting rank on the x-axis and term frequency on the y-axis, on a logarithmic scale. Plotting this way, an inversely proportional relationship will have a constant, negative slope.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">freq_by_rank %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(rank, <span class="st">`</span><span class="dt">term frequency</span><span class="st">`</span>, <span class="dt">color =</span> book)) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">1.2</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">scale_x_log10</span>() +
 <span class="st">  </span><span class="kw">scale_y_log10</span>()</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/zipf-1.png" width="864" /></p>
-<p>Notice that this plot is in log-log coordinates.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lower_rank &lt;-<span class="st"> </span>freq_by_rank %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(rank &lt;<span class="st"> </span><span class="dv">500</span>)
+<div class="figure"><span id="fig:zipf"></span>
+<img src="04-tf-idf_files/figure-html/zipf-1.png" alt="Zipf's law for Jane Austen's novels" width="672" />
+<p class="caption">
+Figure 4.2: Zipf’s law for Jane Austen’s novels
+</p>
+</div>
+<p>Notice that this plot is in log-log coordinates. We see that all six of Jane Austen’s novels are similar to each other, and that the relationship between rank and frequency does have negative slope. It is not constant, though; perhaps we could view this as a broken <a href="https://en.wikipedia.org/wiki/Power_law">power law</a>. Let’s see what the exponent of the power law is for the middle section of the rank range.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rank_subset &lt;-<span class="st"> </span>freq_by_rank %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(rank &lt;<span class="st"> </span><span class="dv">500</span>,
+         rank &gt;<span class="st"> </span><span class="dv">10</span>)
 
-<span class="kw">lm</span>(<span class="kw">log10</span>(<span class="st">`</span><span class="dt">term frequency</span><span class="st">`</span>) ~<span class="st"> </span><span class="kw">log10</span>(rank), <span class="dt">data =</span> lower_rank)</code></pre></div>
+<span class="kw">lm</span>(<span class="kw">log10</span>(<span class="st">`</span><span class="dt">term frequency</span><span class="st">`</span>) ~<span class="st"> </span><span class="kw">log10</span>(rank), <span class="dt">data =</span> rank_subset)</code></pre></div>
 <pre><code>## 
 ## Call:
-## lm(formula = log10(`term frequency`) ~ log10(rank), data = lower_rank)
+## lm(formula = log10(`term frequency`) ~ log10(rank), data = rank_subset)
 ## 
 ## Coefficients:
 ## (Intercept)  log10(rank)  
-##     -0.7727      -1.0491</code></pre>
+##     -0.6225      -1.1125</code></pre>
+<p>Classic versions of Zipf’s law have</p>
+<p><span class="math display">\[\text{frequency} \propto \frac{1}{\text{rank}}\]</span> and we have gotten a slope close to -1 here. Let’s plot this fitted power law with the data to see how it looks.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">freq_by_rank %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(rank, <span class="st">`</span><span class="dt">term frequency</span><span class="st">`</span>, <span class="dt">color =</span> book)) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> -<span class="fl">0.77</span>, <span class="dt">slope =</span> -<span class="fl">1.05</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) +
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> -<span class="fl">0.62</span>, <span class="dt">slope =</span> -<span class="fl">1.1</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) +
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">1.2</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">scale_x_log10</span>() +
 <span class="st">  </span><span class="kw">scale_y_log10</span>()</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/zipf_fit-1.png" width="864" /></p>
+<div class="figure"><span id="fig:zipffit"></span>
+<img src="04-tf-idf_files/figure-html/zipffit-1.png" alt="Fitting an exponent for Zipf's law with Jane Austen's novels" width="672" />
+<p class="caption">
+Figure 4.3: Fitting an exponent for Zipf’s law with Jane Austen’s novels
+</p>
+</div>
+<p>We have found a result close to the classic version of Zipf’s law for the corpus of Jane Austen’s novels. The deviations we see here at high rank are not uncommon for many kinds of language; a corpus of language often contains fewer rare words than predicted by the power law. The deviations at low rank are more unusual. Jane Austen uses a lower percentage of the most common words than many collections of language. This kind of analysis could be extended to compare authors or to compare any other collections of text, and it can be implemented simply using tidy data principles.</p>
 </div>
 <div id="the-bind_tf_idf-function" class="section level2">
 <h2><span class="header-section-number">4.3</span> The <code>bind_tf_idf</code> function</h2>
@@ -349,7 +368,8 @@ book_words</code></pre></div>
 ## 9               Emma    of  4291 160996 0.02665284     0      0
 ## 10 Pride &amp; Prejudice    to  4162 122204 0.03405780     0      0
 ## # ... with 40,369 more rows</code></pre>
-<p>Notice that idf and thus tf-idf are zero for these extremely common words. These are all words that appear in all six of Jane Austen’s novels, so the idf term (which will then be the natural log of 1) is zero. The inverse document frequency (and thus tf-idf) is very low (near zero) for words that occur in many of the documents in a collection; this is how this approach decreases the weight for common words. The inverse document frequency will be a higher number for words that occur in fewer of the documents in the collection. Let’s look at terms with high tf-idf in Jane Austen’s works.</p>
+<p>Notice that idf and thus tf-idf are zero for these extremely common words. These are all words that appear in all six of Jane Austen’s novels, so the idf term (which will then be the natural log of 1) is zero. The inverse document frequency (and thus tf-idf) is very low (near zero) for words that occur in many of the documents in a collection; this is how this approach decreases the weight for common words. The inverse document frequency will be a higher number for words that occur in fewer of the documents in the collection.</p>
+<p>Let’s look at terms with high tf-idf in Jane Austen’s works.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">book_words %&gt;%
 <span class="st">  </span><span class="kw">select</span>(-total) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf))</code></pre></div>
@@ -367,17 +387,21 @@ book_words</code></pre></div>
 ## 9    Pride &amp; Prejudice    bennet   294 0.002405813 1.791759 0.004310639
 ## 10          Persuasion wentworth   191 0.002283132 1.791759 0.004090824
 ## # ... with 40,369 more rows</code></pre>
-<p>Here we see all proper nouns, names that are in fact important in these novels. None of them occur in all of novels, and they are important, characteristic words for each text. Some of the values for idf are the same for different terms because there are 6 documents in this corpus and we are seeing the numerical value for <span class="math inline">\(\ln(6/1)\)</span>, <span class="math inline">\(\ln(6/2)\)</span>, etc. Let’s look at a visualization for these high tf-idf words.</p>
+<p>Here we see all proper nouns, names that are in fact important in these novels. None of them occur in all of novels, and they are important, characteristic words for each text within the corpus of Jane Austen’s novels. Some of the values for idf are the same for different terms because there are 6 documents in this corpus and we are seeing the numerical value for <span class="math inline">\(\ln(6/1)\)</span>, <span class="math inline">\(\ln(6/2)\)</span>, etc. Let’s look at a visualization for these high tf-idf words.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_austen &lt;-<span class="st"> </span>book_words %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">unique</span>(word))))
 
 <span class="kw">ggplot</span>(plot_austen[<span class="dv">1</span>:<span class="dv">20</span>,], <span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> book)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Jane Austen&#39;s Novels&quot;</span>,
-       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/plot_austen-1.png" width="864" /></p>
+<div class="figure"><span id="fig:plotausten"></span>
+<img src="04-tf-idf_files/figure-html/plotausten-1.png" alt="Highest tf-idf words in Jane Austen's Novels" width="864" />
+<p class="caption">
+Figure 4.4: Highest tf-idf words in Jane Austen’s Novels
+</p>
+</div>
 <p>Let’s look at the novels individually.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_austen &lt;-<span class="st"> </span>plot_austen %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span>
@@ -386,11 +410,15 @@ book_words</code></pre></div>
 
 <span class="kw">ggplot</span>(plot_austen, <span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> book)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Jane Austen&#39;s Novels&quot;</span>,
-       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/plot_separate-1.png" width="864" /></p>
+<div class="figure"><span id="fig:plotseparate"></span>
+<img src="04-tf-idf_files/figure-html/plotseparate-1.png" alt="Highest tf-idf words in each of Jane Austen's Novels" width="864" />
+<p class="caption">
+Figure 4.5: Highest tf-idf words in each of Jane Austen’s Novels
+</p>
+</div>
 <p>Still all proper nouns! These words are, as measured by tf-idf, the most important to each novel and most readers would likely agree.</p>
 </div>
 <div id="a-corpus-of-physics-texts" class="section level2">
@@ -400,6 +428,7 @@ book_words</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gutenbergr)
 physics &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>(<span class="kw">c</span>(<span class="dv">37729</span>, <span class="dv">14725</span>, <span class="dv">13476</span>, <span class="dv">5001</span>), 
                               <span class="dt">meta_fields =</span> <span class="st">&quot;author&quot;</span>)</code></pre></div>
+<p>Now that we have the texts, let’s use <code>unnest_tokens()</code> and <code>count()</code> to find out how many times each word was used in each text.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">physics_words &lt;-<span class="st"> </span>physics %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(author, word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
@@ -420,7 +449,7 @@ physics_words</code></pre></div>
 ## 9  Huygens, Christiaan    to  1207
 ## 10       Tesla, Nikola     a  1176
 ## # ... with 12,582 more rows</code></pre>
-<p>Here we see just the raw counts, and of course these documents are all different lengths. Let’s go ahead and calculate tf-idf.</p>
+<p>Here we see just the raw counts; we need to remember that these documents are all different lengths. Let’s go ahead and calculate tf-idf.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">physics_words &lt;-<span class="st"> </span>physics_words %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(word, author, n) 
 
@@ -434,10 +463,14 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 
 <span class="kw">ggplot</span>(plot_physics[<span class="dv">1</span>:<span class="dv">20</span>,], <span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> author)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
-       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/plot_physics-1.png" width="864" /></p>
+<div class="figure"><span id="fig:plotphysics"></span>
+<img src="04-tf-idf_files/figure-html/plotphysics-1.png" alt="Highest tf-idf words in classic physics corpus" width="864" />
+<p class="caption">
+Figure 4.6: Highest tf-idf words in classic physics corpus
+</p>
+</div>
 <p>Nice! Let’s look at each text individually.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_physics &lt;-<span class="st"> </span>plot_physics %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(author) %&gt;%<span class="st"> </span>
@@ -446,11 +479,15 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 
 <span class="kw">ggplot</span>(plot_physics, <span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> author)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
-       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/physics_separate-1.png" width="768" /></p>
+<div class="figure"><span id="fig:physicsseparate"></span>
+<img src="04-tf-idf_files/figure-html/physicsseparate-1.png" alt="Highest tf-idf words in each physics texts" width="768" />
+<p class="caption">
+Figure 4.7: Highest tf-idf words in each physics texts
+</p>
+</div>
 <p>Very interesting indeed. One thing we see here is “gif” in the Einstein text?!</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;eq</span><span class="ch">\\</span><span class="st">.&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>:<span class="dv">10</span>]</code></pre></div>
 <pre><code>##  [1] &quot;                         eq. 1: file eq01.gif&quot;                  
@@ -463,14 +500,14 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 ##  [8] &quot;direction of its length with a velocity v is eq. 06 of a metre.&quot;
 ##  [9] &quot;velocity v=c we should have eq. 06a ,&quot;                          
 ## [10] &quot;the rod as judged from K1 would have been eq. 06 ;&quot;</code></pre>
-<p>Some cleaning up of the text might be in order. “K1” is the name of a coordinate system for Einstein:</p>
+<p>Some cleaning up of the text is in order. “K1” is the name of a coordinate system for Einstein:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;K1&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>]</code></pre></div>
 <pre><code>## [1] &quot;to a second co-ordinate system K1 provided that the latter is&quot;</code></pre>
-<p>Maybe it makes sense to keep this one. Also notice that in this line we have “co-ordinate”, which explains why there are separate “co” and “ordinate” items in the high tf-idf words for the Einstein text.</p>
+<p>Maybe it makes sense to keep this one. Also notice that in this line we have “co-ordinate”, which explains why there are separate “co” and “ordinate” items in the high tf-idf words for the Einstein text; the <code>unnest_tokens()</code> function separates around punctuation.</p>
 <p>“AB”, “RC”, and so forth are names of rays, circles, angles, and so forth for Huygens.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">grep</span>(<span class="st">&quot;AK&quot;</span>, physics$text, <span class="dt">value =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span>]</code></pre></div>
 <pre><code>## [1] &quot;Now let us assume that the ray has come from A to C along AK, KC; the&quot;</code></pre>
-<p>Let’s remove some of these less meaningful words to make a better, more meaningful plot. Notice that we make a custom list of stop words and use <code>anti_join</code> to remove them.</p>
+<p>Let’s remove some of these less meaningful words to make a better, more meaningful plot. Notice that we make a custom list of stop words and use <code>anti_join()</code> to remove them; this is a flexible approach that can be used in many situations. We will need to go back a few steps since we are removing words from the tidy data frame.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mystopwords &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;eq&quot;</span>, <span class="st">&quot;co&quot;</span>, <span class="st">&quot;rc&quot;</span>, <span class="st">&quot;ac&quot;</span>, <span class="st">&quot;ak&quot;</span>, <span class="st">&quot;bn&quot;</span>, 
                                    <span class="st">&quot;fig&quot;</span>, <span class="st">&quot;file&quot;</span>, <span class="st">&quot;cg&quot;</span>, <span class="st">&quot;cb&quot;</span>, <span class="st">&quot;cm&quot;</span>))
 physics_words &lt;-<span class="st"> </span><span class="kw">anti_join</span>(physics_words, mystopwords, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>)
@@ -487,11 +524,15 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 
 <span class="kw">ggplot</span>(plot_physics, <span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> author)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in Classic Physics Texts&quot;</span>,
-       <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="04-tf-idf_files/figure-html/mystopwords-1.png" width="768" /></p>
+<div class="figure"><span id="fig:mystopwords"></span>
+<img src="04-tf-idf_files/figure-html/mystopwords-1.png" alt="Highest tf-idf words in classic physics texts" width="768" />
+<p class="caption">
+Figure 4.8: Highest tf-idf words in classic physics texts
+</p>
+</div>
 <p>We don’t hear enough about ramparts or things being ethereal in physics today.</p>
 
 </div>
