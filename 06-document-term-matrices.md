@@ -143,8 +143,8 @@ Other text mining packages provide alternative implementations of document-term 
 ```r
 library(methods)
 
-data("inaugCorpus", package = "quanteda")
-inaug_dfm <- quanteda::dfm(inaugCorpus)
+data("data_corpus_inaugural", package = "quanteda")
+inaug_dfm <- quanteda::dfm(data_corpus_inaugural)
 ```
 
 

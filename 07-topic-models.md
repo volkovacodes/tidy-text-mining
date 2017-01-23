@@ -112,6 +112,8 @@ As an alternative, we could consider the terms that had the *greatest difference
 
 
 ```r
+library(tidyr)
+
 beta_spread <- ap_lda_td %>%
   mutate(topic = paste0("topic", topic)) %>%
   spread(topic, beta) %>%
@@ -714,13 +716,11 @@ word_counts %>%
 
 The algorithm is stochastic and iterative, and it can accidentally land on a topic that spans multiple books.
 
-## Alternative LDA implementations
+### Alternative LDA implementations
 
-TODO: this section is not complete.
+The `LDA` function in the topicmodels package is only one implementation of the latent Dirichlet allocation algorithm. For example, the [mallet](https://cran.r-project.org/package=mallet) package implements a wrapper around the [MALLET](http://mallet.cs.umass.edu/) Java package for text classification tools, and the tidytext package provides tidiers for this model output as well.
 
-The `LDA` function in the topicmodels package is only one implementation of the latent Dirichlet allocation algorithm. For example, the [mallet](https://cran.r-project.org/package=mallet) package implements a wrapper around the [MALLET](http://mallet.cs.umass.edu/) package for text classification tools.
-
-The way an algorithm is run with this algorithm is very different from LDA: it takes non-tokenized documents and performs the tokenization itself, and requires a separate file of stopwords.
+The mallet package takes a somewhat different approach to the input format. For instance, it takes non-tokenized documents and performs the tokenization itself, and requires a separate file of stopwords. This means we have to collapse the text into one string for each document before perfomring LDA.
 
 
 
@@ -735,8 +735,6 @@ collapsed <- by_chapter_word %>%
   group_by(document) %>%
   summarize(text = paste(word, collapse = " "))
 
-# The mallet package requires a file of stopwords
-# Since we've already filtered them, we can give it an empty file
 file.create(empty_file <- tempfile())
 docs <- mallet.import(collapsed$document, collapsed$text, empty_file)
 
@@ -745,7 +743,7 @@ mallet_model$loadDocuments(docs)
 mallet_model$train(100)
 ```
 
-Once the model is created, however, are almost identical to the tidiers described in this rest of this chapter.
+Once the model is created, however, we can use the `tidy()` and `augment()` functions described in the rest of the chapter in an almost identical way. This includes extracting the probabilities of words within each topic or topics within each document.
 
 
 ```r
@@ -757,16 +755,16 @@ tidy(mallet_model)
 ## # A tibble: 71,064 × 3
 ##    topic    term         beta
 ##    <int>   <chr>        <dbl>
-## 1      1 limping 2.761847e-07
-## 2      2 limping 1.107103e-04
-## 3      3 limping 1.852309e-07
-## 4      4 limping 3.454630e-07
-## 5      1  pirate 2.761847e-07
-## 6      2  pirate 1.107103e-04
-## 7      3  pirate 1.852309e-07
-## 8      4  pirate 3.454630e-07
-## 9      1  gibbet 8.313158e-05
-## 10     2  gibbet 2.760855e-07
+## 1      1 limping 2.401441e-07
+## 2      2 limping 2.525402e-07
+## 3      3 limping 1.169722e-04
+## 4      4 limping 2.509999e-07
+## 5      1  pirate 9.629779e-05
+## 6      2  pirate 2.525402e-07
+## 7      3  pirate 2.917012e-07
+## 8      4  pirate 2.509999e-07
+## 9      1  gibbet 7.228338e-05
+## 10     2  gibbet 2.525402e-07
 ## # ... with 71,054 more rows
 ```
 
@@ -779,16 +777,16 @@ tidy(mallet_model, matrix = "gamma")
 ## # A tibble: 772 × 3
 ##                 document topic     gamma
 ##                    <chr> <int>     <dbl>
-## 1   Great Expectations_1     1 0.3959413
-## 2  Great Expectations_10     1 0.2715783
-## 3  Great Expectations_11     1 0.4302147
-## 4  Great Expectations_12     1 0.3161451
-## 5  Great Expectations_13     1 0.3373596
-## 6  Great Expectations_14     1 0.2469262
-## 7  Great Expectations_15     1 0.3470206
-## 8  Great Expectations_16     1 0.2863790
-## 9  Great Expectations_17     1 0.3216292
-## 10 Great Expectations_18     1 0.3005751
+## 1   Great Expectations_1     1 0.6014680
+## 2  Great Expectations_10     1 0.6414920
+## 3  Great Expectations_11     1 0.5946319
+## 4  Great Expectations_12     1 0.6034851
+## 5  Great Expectations_13     1 0.6115169
+## 6  Great Expectations_14     1 0.5051230
+## 7  Great Expectations_15     1 0.6266234
+## 8  Great Expectations_16     1 0.4978849
+## 9  Great Expectations_17     1 0.5912921
+## 10 Great Expectations_18     1 0.6185724
 ## # ... with 762 more rows
 ```
 
@@ -802,15 +800,17 @@ augment(mallet_model, term_counts)
 ## # A tibble: 104,721 × 4
 ##                    document    term     n .topic
 ##                       <chr>   <chr> <int>  <int>
-## 1     Great Expectations_57     joe    88      2
-## 2      Great Expectations_7     joe    70      2
-## 3     Great Expectations_17   biddy    63      3
-## 4     Great Expectations_27     joe    58      3
+## 1     Great Expectations_57     joe    88      1
+## 2      Great Expectations_7     joe    70      1
+## 3     Great Expectations_17   biddy    63      1
+## 4     Great Expectations_27     joe    58      1
 ## 5     Great Expectations_38 estella    58      1
-## 6      Great Expectations_2     joe    56      2
-## 7     Great Expectations_23  pocket    53      3
-## 8     Great Expectations_15     joe    50      2
-## 9     Great Expectations_18     joe    50      2
-## 10 The War of the Worlds_16 brother    50      2
+## 6      Great Expectations_2     joe    56      1
+## 7     Great Expectations_23  pocket    53      1
+## 8     Great Expectations_15     joe    50      1
+## 9     Great Expectations_18     joe    50      1
+## 10 The War of the Worlds_16 brother    50      4
 ## # ... with 104,711 more rows
 ```
+
+We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration: the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.
