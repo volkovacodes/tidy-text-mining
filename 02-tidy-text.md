@@ -51,7 +51,7 @@ text_df
 
 Notice that this data frame isn't yet compatible with tidy tools. We can't filter out words or count which occur most frequently, since each row is made up of multiple combined words. We need to convert this so that it has **one-token-per-document-per-row**. A token, in this context, is a meaningful unit of text that we are interested in using for further analysis. Tokenization is the process of breaking up text into individual tokens, and it is most commonly done at the level of single words. Within our tidy text framework, we will both break the text into individual tokens *and* transform it to a tidy data structure.
 
-To do this, we use tidytext's `unnest_tokens` function.
+To do this, we use tidytext's `unnest_tokens()` function.
 
 
 ```r
@@ -78,11 +78,11 @@ text_df %>%
 ## # ... with 10 more rows
 ```
 
-We've now split each row so that there is one token (word) in each row of the new data frame; the default tokenization in `unnest_tokens` is for single words, as shown here. Also notice:
+We've now split each row so that there is one token (word) in each row of the new data frame; the default tokenization in `unnest_tokens()` is for single words, as shown here. Also notice:
 
 * Other columns, such as the line number each word came from, are retained.
 * Punctuation has been stripped.
-* By default, `unnest_tokens` converts the tokens to lowercase, which makes them easier to compare or combine with other datasets. (Use the `to_lower = FALSE` argument to turn off this behavior).
+* By default, `unnest_tokens()` converts the tokens to lowercase, which makes them easier to compare or combine with other datasets. (Use the `to_lower = FALSE` argument to turn off this behavior).
 
 Having the text data in this format lets us manipulate, process, and visualize the text using the standard set of tidy tools, namely dplyr, tidyr, ggplot2, and broom.
 
@@ -123,7 +123,7 @@ original_books
 ## # ... with 73,412 more rows
 ```
 
-To work with this as a tidy dataset, we need to restructure it in the **one-token-per-row** format. The `unnest_tokens` function is a way to convert a dataframe with a text column to be one-token-per-row.
+To work with this as a tidy dataset, we need to restructure it in the **one-token-per-row** format. The `unnest_tokens()` function is a way to convert a data frame with a text column to be one-token-per-row.
 
 
 ```r
@@ -151,9 +151,9 @@ tidy_books
 ## # ... with 725,044 more rows
 ```
 
-This function uses the [tokenizers package](https://github.com/ropensci/tokenizers) [@R-tokenizers] to separate each line of text in the original data frame into tokens. The default tokenizing is for words, but other options include characters, n-grams, sentences, lines, paragraphs, or separation around a regex pattern.
+This function uses the [tokenizers](https://github.com/ropensci/tokenizers) package [@R-tokenizers] to separate each line of text in the original data frame into tokens. The default tokenizing is for words, but other options include characters, n-grams, sentences, lines, paragraphs, or separation around a regex pattern.
 
-Now that the data is in one-word-per-row format, we can manipulate it with tidy tools like dplyr. We can remove stop words (kept in the tidytext dataset `stop_words`) with an `anti_join`.
+Now that the data is in one-word-per-row format, we can manipulate it with tidy tools like dplyr. We can remove stop words (kept in the tidytext dataset `stop_words`) with an `anti_join()`.
 
 
 ```r
@@ -163,7 +163,7 @@ tidy_books <- tidy_books %>%
   anti_join(stop_words)
 ```
 
-We can also use `count` to find the most common words in all the books as a whole.
+We can also use `count()` to find the most common words in all the books as a whole.
 
 
 ```r
@@ -324,7 +324,7 @@ frequency <- tidy_both %>%
   ungroup()
 ```
 
-We use `str_extract` here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words but we don't want to count "\_any\_" separately from "any". Now let's plot.
+We use `str_extract()` here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words but we don't want to count "\_any\_" separately from "any". Now let's plot.
 
 
 ```r

@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-01-21">
+<meta name="date" content="2017-01-23">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -166,13 +166,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic modeling</a><ul>
-<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#the-great-library-heist"><i class="fa fa-check"></i><b>7.1</b> The great library heist</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.1.1</b> Latent Dirichlet allocation with the topicmodels package</a></li>
-<li class="chapter" data-level="7.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#tidying-an-lda-model"><i class="fa fa-check"></i><b>7.1.2</b> Tidying an LDA model</a></li>
+<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>7.1</b> Latent Dirichlet allocation</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>7.1.1</b> Word-topic probabilities</a></li>
+<li class="chapter" data-level="7.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>7.1.2</b> Document-topic probabilities</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.2</b> Per-document classification</a></li>
-<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.3</b> By word assignments: <code>augment</code></a></li>
-<li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.4</b> Alternative LDA implementations</a></li>
+<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#example-the-great-library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>7.2.1</b> LDA on chapters</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.3</b> Per-document classification</a></li>
+<li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.4</b> By word assignments: <code>augment</code></a></li>
+<li class="chapter" data-level="7.5" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.5</b> Alternative LDA implementations</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
 <li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
@@ -263,7 +266,7 @@ text_df</code></pre></div>
 ## 3     3 The Carriage held but just Ourselves -
 ## 4     4                        and Immortality</code></pre>
 <p>Notice that this data frame isn’t yet compatible with tidy tools. We can’t filter out words or count which occur most frequently, since each row is made up of multiple combined words. We need to convert this so that it has <strong>one-token-per-document-per-row</strong>. A token, in this context, is a meaningful unit of text that we are interested in using for further analysis. Tokenization is the process of breaking up text into individual tokens, and it is most commonly done at the level of single words. Within our tidy text framework, we will both break the text into individual tokens <em>and</em> transform it to a tidy data structure.</p>
-<p>To do this, we use tidytext’s <code>unnest_tokens</code> function.</p>
+<p>To do this, we use tidytext’s <code>unnest_tokens()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
 text_df %&gt;%
@@ -282,11 +285,11 @@ text_df %&gt;%
 ## 9      2  kindly
 ## 10     2 stopped
 ## # ... with 10 more rows</code></pre>
-<p>We’ve now split each row so that there is one token (word) in each row of the new data frame; the default tokenization in <code>unnest_tokens</code> is for single words, as shown here. Also notice:</p>
+<p>We’ve now split each row so that there is one token (word) in each row of the new data frame; the default tokenization in <code>unnest_tokens()</code> is for single words, as shown here. Also notice:</p>
 <ul>
 <li>Other columns, such as the line number each word came from, are retained.</li>
 <li>Punctuation has been stripped.</li>
-<li>By default, <code>unnest_tokens</code> converts the tokens to lowercase, which makes them easier to compare or combine with other datasets. (Use the <code>to_lower = FALSE</code> argument to turn off this behavior).</li>
+<li>By default, <code>unnest_tokens()</code> converts the tokens to lowercase, which makes them easier to compare or combine with other datasets. (Use the <code>to_lower = FALSE</code> argument to turn off this behavior).</li>
 </ul>
 <p>Having the text data in this format lets us manipulate, process, and visualize the text using the standard set of tidy tools, namely dplyr, tidyr, ggplot2, and broom.</p>
 </div>
@@ -319,7 +322,7 @@ original_books</code></pre></div>
 ## 9                        Sense &amp; Sensibility          9       0
 ## 10             CHAPTER 1 Sense &amp; Sensibility         10       1
 ## # ... with 73,412 more rows</code></pre>
-<p>To work with this as a tidy dataset, we need to restructure it in the <strong>one-token-per-row</strong> format. The <code>unnest_tokens</code> function is a way to convert a dataframe with a text column to be one-token-per-row.</p>
+<p>To work with this as a tidy dataset, we need to restructure it in the <strong>one-token-per-row</strong> format. The <code>unnest_tokens()</code> function is a way to convert a data frame with a text column to be one-token-per-row.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 tidy_books &lt;-<span class="st"> </span>original_books %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text)
@@ -339,13 +342,13 @@ tidy_books</code></pre></div>
 ## 9  Sense &amp; Sensibility         10       1           1
 ## 10 Sense &amp; Sensibility         13       1         the
 ## # ... with 725,044 more rows</code></pre>
-<p>This function uses the <a href="https://github.com/ropensci/tokenizers">tokenizers package</a> <span class="citation">(Mullen <a href="#ref-R-tokenizers">2016</a>)</span> to separate each line of text in the original data frame into tokens. The default tokenizing is for words, but other options include characters, n-grams, sentences, lines, paragraphs, or separation around a regex pattern.</p>
-<p>Now that the data is in one-word-per-row format, we can manipulate it with tidy tools like dplyr. We can remove stop words (kept in the tidytext dataset <code>stop_words</code>) with an <code>anti_join</code>.</p>
+<p>This function uses the <a href="https://github.com/ropensci/tokenizers">tokenizers</a> package <span class="citation">(Mullen <a href="#ref-R-tokenizers">2016</a>)</span> to separate each line of text in the original data frame into tokens. The default tokenizing is for words, but other options include characters, n-grams, sentences, lines, paragraphs, or separation around a regex pattern.</p>
+<p>Now that the data is in one-word-per-row format, we can manipulate it with tidy tools like dplyr. We can remove stop words (kept in the tidytext dataset <code>stop_words</code>) with an <code>anti_join()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(stop_words)
 
 tidy_books &lt;-<span class="st"> </span>tidy_books %&gt;%
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words)</code></pre></div>
-<p>We can also use <code>count</code> to find the most common words in all the books as a whole.</p>
+<p>We can also use <code>count()</code> to find the most common words in all the books as a whole.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_books %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) </code></pre></div>
 <pre><code>## # A tibble: 13,914 × 2
@@ -450,7 +453,7 @@ frequency &lt;-<span class="st"> </span>tidy_both %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">other =</span> n /<span class="st"> </span><span class="kw">sum</span>(n)) %&gt;%
 <span class="st">  </span><span class="kw">left_join</span>(austen_percent) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
-<p>We use <code>str_extract</code> here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words but we don’t want to count “_any_” separately from “any”. Now let’s plot.</p>
+<p>We use <code>str_extract()</code> here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words but we don’t want to count “_any_” separately from “any”. Now let’s plot.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
 
 <span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(<span class="dt">x =</span> other, <span class="dt">y =</span> austen, <span class="dt">color =</span> <span class="kw">abs</span>(austen -<span class="st"> </span>other))) +

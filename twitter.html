@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-01-21">
+<meta name="date" content="2017-01-23">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -166,13 +166,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic modeling</a><ul>
-<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#the-great-library-heist"><i class="fa fa-check"></i><b>7.1</b> The great library heist</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation-with-the-topicmodels-package"><i class="fa fa-check"></i><b>7.1.1</b> Latent Dirichlet allocation with the topicmodels package</a></li>
-<li class="chapter" data-level="7.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#tidying-an-lda-model"><i class="fa fa-check"></i><b>7.1.2</b> Tidying an LDA model</a></li>
+<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>7.1</b> Latent Dirichlet allocation</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>7.1.1</b> Word-topic probabilities</a></li>
+<li class="chapter" data-level="7.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>7.1.2</b> Document-topic probabilities</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.2</b> Per-document classification</a></li>
-<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.3</b> By word assignments: <code>augment</code></a></li>
-<li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.4</b> Alternative LDA implementations</a></li>
+<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#example-the-great-library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>7.2.1</b> LDA on chapters</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.3</b> Per-document classification</a></li>
+<li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.4</b> By word assignments: <code>augment</code></a></li>
+<li class="chapter" data-level="7.5" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.5</b> Alternative LDA implementations</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
 <li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
@@ -261,8 +264,8 @@ Figure 8.1: All tweets from our accounts
 </div>
 <div id="word-frequencies-1" class="section level2">
 <h2><span class="header-section-number">8.2</span> Word frequencies</h2>
-<p>Let’s use <code>unnest_tokens</code> to make a tidy dataframe of all the words in our tweets, and remove the common English stop words. There are certain conventions in how people use text on Twitter, so we will do a bit more work with our text here than, for example, we did with the narrative text from Project Gutenberg.</p>
-<p>First, we will remove tweets from this dataset that are retweets so that we only have tweets that we wrote ourselves. Next, the <code>mutate</code> line removes links and cleans out some characters that we don’t want like ampersands and such. In the call to <code>unnest_tokens</code>, we unnest using a regex pattern, instead of just looking for single unigrams (words). This regex pattern is very useful for dealing with Twitter text; it retains hashtags and mentions of usernames with the <code>@</code> symbol. Because we have kept these types of symbols in the text, we can’t use a simple <code>anti_join</code> to remove stop words. Instead, we can take the approach shown in the <code>filter</code> line that uses <code>str_detect</code> from the stringr library.</p>
+<p>Let’s use <code>unnest_tokens()</code> to make a tidy data frame of all the words in our tweets, and remove the common English stop words. There are certain conventions in how people use text on Twitter, so we will do a bit more work with our text here than, for example, we did with the narrative text from Project Gutenberg.</p>
+<p>First, we will remove tweets from this dataset that are retweets so that we only have tweets that we wrote ourselves. Next, the <code>mutate()</code> line removes links and cleans out some characters that we don’t want like ampersands and such. In the call to <code>unnest_tokens()</code>, we unnest using a regex pattern, instead of just looking for single unigrams (words). This regex pattern is very useful for dealing with Twitter text; it retains hashtags and mentions of usernames with the <code>@</code> symbol. Because we have kept these types of symbols in the text, we can’t use a simple <code>anti_join()</code> to remove stop words. Instead, we can take the approach shown in the <code>filter()</code> line that uses <code>str_detect()</code> from the stringr library.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 <span class="kw">library</span>(stringr)
 
@@ -273,7 +276,7 @@ tidy_tweets &lt;-<span class="st"> </span>tweets %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text, <span class="dt">token =</span> <span class="st">&quot;regex&quot;</span>, <span class="dt">pattern =</span> reg) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(!word %in%<span class="st"> </span>stop_words$word,
          <span class="kw">str_detect</span>(word, <span class="st">&quot;[a-z]&quot;</span>))</code></pre></div>
-<p>Now we can calculate word frequencies for each person. First, we group by person and count how many times each person used each word. Then we use <code>left_join</code> to add a column of the total number of words used by each person. (This is higher for Julia than David since she has more tweets than David.) Finally, we calculate a frequency for each person and word.</p>
+<p>Now we can calculate word frequencies for each person. First, we group by person and count how many times each person used each word. Then we use <code>left_join()</code> to add a column of the total number of words used by each person. (This is higher for Julia than David since she has more tweets than David.) Finally, we calculate a frequency for each person and word.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">frequency &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(person) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%<span class="st"> </span>
@@ -299,7 +302,7 @@ frequency</code></pre></div>
 ## 9   Julia          house   289 74572 0.003875449
 ## 10  Julia        morning   278 74572 0.003727941
 ## # ... with 20,726 more rows</code></pre>
-<p>This is a nice and tidy data frame but we would actually like to plot those frequencies on the x- and y-axes of a plot, so we will need to use <code>spread</code> from tidyr make a differently shaped dataframe.</p>
+<p>This is a nice and tidy data frame but we would actually like to plot those frequencies on the x- and y-axes of a plot, so we will need to use <code>spread()</code> from tidyr make a differently shaped data frame.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
 frequency &lt;-<span class="st"> </span>frequency %&gt;%<span class="st"> </span>
@@ -322,7 +325,7 @@ frequency</code></pre></div>
 ## 9        @ognyanova 4.960071e-05 1.340986e-05
 ## 10       @rbloggers 4.960071e-05 1.340986e-05
 ## # ... with 17,630 more rows</code></pre>
-<p>Now this is ready for us to plot. Let’s use <code>geom_jitter</code> so that we don’t see the discreteness at the low end of frequency as much.</p>
+<p>Now this is ready for us to plot. Let’s use <code>geom_jitter()</code> so that we don’t see the discreteness at the low end of frequency as much.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
 
 <span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(Julia, David)) +
@@ -346,7 +349,7 @@ Figure 8.2: Comparing the frequency of words used by Julia and David
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_tweets &lt;-<span class="st"> </span>tidy_tweets %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(timestamp &gt;=<span class="st"> </span><span class="kw">as.Date</span>(<span class="st">&quot;2016-01-01&quot;</span>),
          timestamp &lt;<span class="st"> </span><span class="kw">as.Date</span>(<span class="st">&quot;2017-01-01&quot;</span>))</code></pre></div>
-<p>Next, let’s use <code>str_detect</code> to remove Twitter usernames from the <code>word</code> column, because otherwise, the results here are dominated only by people who Julia or David know and the other does not. After removing these, we count how many times each person uses each word and keep only the words used more than 10 times. After a <code>spread</code> operation, we can calculate the log odds ratio for each word, using</p>
+<p>Next, let’s use <code>str_detect()</code> to remove Twitter usernames from the <code>word</code> column, because otherwise, the results here are dominated only by people who Julia or David know and the other does not. After removing these, we count how many times each person uses each word and keep only the words used more than 10 times. After a <code>spread()</code> operation, we can calculate the log odds ratio for each word, using</p>
 <p><span class="math display">\[\text{log odds ratio} = \ln{\left(\frac{\left[\frac{n+1}{\text{total}+1}\right]_\text{David}}{\left[\frac{n+1}{\text{total}+1}\right]_\text{Julia}}\right)}\]</span></p>
 <p>where <span class="math inline">\(n\)</span> is the number of times the word in question is used by each person and the total indicates the total words for each person.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_ratios &lt;-<span class="st"> </span>tidy_tweets %&gt;%
@@ -397,8 +400,8 @@ Figure 8.3: Comparing the odds ratios of words from our accounts
 </div>
 <div id="changes-in-word-use" class="section level2">
 <h2><span class="header-section-number">8.4</span> Changes in word use</h2>
-<p>The section above looked at overall word use, but now let’s ask a different question. Which words’ frequencies have changed the fastest in our Twitter feeds? Or to state this another way, which words have we tweeted about at a higher or lower rate as time has passed? To do this, we will define a new time variable in the dataframe that defines which unit of time each tweet was posted in. We can use <code>floor_date()</code> from lubridate to do this, with a unit of our choosing; using 1 month seems to work well for this year of tweets from both of us.</p>
-<p>After we have the time bins defined, we count how many times each of us used each word in each time bin. After that, we add columns to the dataframe for the total number of words used in each time bin by each person and the total number of times each word was used by each person. We can then <code>filter</code> to only keep words used at least some minimum number of times (30, in this case).</p>
+<p>The section above looked at overall word use, but now let’s ask a different question. Which words’ frequencies have changed the fastest in our Twitter feeds? Or to state this another way, which words have we tweeted about at a higher or lower rate as time has passed? To do this, we will define a new time variable in the data frame that defines which unit of time each tweet was posted in. We can use <code>floor_date()</code> from lubridate to do this, with a unit of our choosing; using 1 month seems to work well for this year of tweets from both of us.</p>
+<p>After we have the time bins defined, we count how many times each of us used each word in each time bin. After that, we add columns to the data frame for the total number of words used in each time bin by each person and the total number of times each word was used by each person. We can then <code>filter()</code> to only keep words used at least some minimum number of times (30, in this case).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">words_by_time &lt;-<span class="st"> </span>tidy_tweets %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(!<span class="kw">str_detect</span>(word, <span class="st">&quot;^@&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time_floor =</span> <span class="kw">floor_date</span>(timestamp, <span class="dt">unit =</span> <span class="st">&quot;1 month&quot;</span>)) %&gt;%
@@ -427,8 +430,8 @@ words_by_time</code></pre></div>
 ## 9  2016-01-01  David    data     2        307        276
 ## 10 2016-01-01  David     day     2        307         65
 ## # ... with 960 more rows</code></pre>
-<p>Each row in this dataframe corresponds to one person using one word in a given time bin. The <code>count</code> column tells us how many times that person used that word in that time bin, the <code>time_total</code> column tells us how many words that person used during that time bin, and the <code>word_total</code> column tells us how many times that person used that word over the whole year. This is the data set we can use for modeling.</p>
-<p>We can use <code>nest</code> from tidyr to make a data frame with a list column that contains little miniature data frames for each word. Let’s do that now and take a look at the resulting structure.</p>
+<p>Each row in this data frame corresponds to one person using one word in a given time bin. The <code>count</code> column tells us how many times that person used that word in that time bin, the <code>time_total</code> column tells us how many words that person used during that time bin, and the <code>word_total</code> column tells us how many times that person used that word over the whole year. This is the data set we can use for modeling.</p>
+<p>We can use <code>nest()</code> from tidyr to make a data frame with a list column that contains little miniature data frames for each word. Let’s do that now and take a look at the resulting structure.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nested_data &lt;-<span class="st"> </span>words_by_time %&gt;%
 <span class="st">  </span><span class="kw">nest</span>(-word, -person) 
 
@@ -447,7 +450,7 @@ nested_data</code></pre></div>
 ## 9   David    data &lt;tibble [12 × 4]&gt;
 ## 10  David     day  &lt;tibble [8 × 4]&gt;
 ## # ... with 102 more rows</code></pre>
-<p>This data frame has one row for each person-word combination; the <code>data</code> column is a list column that contains data frames, one for each combination of person and word. Let’s use <code>map</code> from the purrr library to apply our modeling procedure to each of those little data frames inside our big data frame. This is count data so let’s use <code>glm</code> with <code>family = &quot;binomial&quot;</code> for modeling. We can think about this modeling procedure answering a question like, “Was a given word mentioned in a given time bin? Yes or no? How does the count of word mentions depend on time?”</p>
+<p>This data frame has one row for each person-word combination; the <code>data</code> column is a list column that contains data frames, one for each combination of person and word. Let’s use <code>map()</code> from the purrr library to apply our modeling procedure to each of those little data frames inside our big data frame. This is count data so let’s use <code>glm()</code> with <code>family = &quot;binomial&quot;</code> for modeling. We can think about this modeling procedure answering a question like, “Was a given word mentioned in a given time bin? Yes or no? How does the count of word mentions depend on time?”</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)
 
 nested_models &lt;-<span class="st"> </span>nested_data %&gt;%
@@ -469,7 +472,7 @@ nested_models</code></pre></div>
 ## 9   David    data &lt;tibble [12 × 4]&gt; &lt;S3: glm&gt;
 ## 10  David     day  &lt;tibble [8 × 4]&gt; &lt;S3: glm&gt;
 ## # ... with 102 more rows</code></pre>
-<p>Now notice that we have a new column for the modeling results; it is another list column and contains <code>glm</code> objects. The next step is to use <code>map</code> and <code>tidy</code> from the broom package to pull out the slopes for each of these models and find the important ones. We are comparing many slopes here and some of them are not statistically significant, so let’s apply an adjustment to the p-values for multiple comparisons.</p>
+<p>Now notice that we have a new column for the modeling results; it is another list column and contains <code>glm</code> objects. The next step is to use <code>map()</code> and <code>tidy()</code> from the broom package to pull out the slopes for each of these models and find the important ones. We are comparing many slopes here and some of them are not statistically significant, so let’s apply an adjustment to the p-values for multiple comparisons.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(broom)
 
 slopes &lt;-<span class="st"> </span>nested_models %&gt;%
@@ -536,7 +539,7 @@ tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_ju
                     tweets_dave %&gt;%<span class="st"> </span>
 <span class="st">                      </span><span class="kw">mutate</span>(<span class="dt">person =</span> <span class="st">&quot;David&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">created_at =</span> <span class="kw">ymd_hms</span>(created_at))</code></pre></div>
-<p>Now that we have this second, smaller set of only recent tweets, let’s use <code>unnest_tokens</code> to transform these tweets to a tidy data set. Let’s remove all retweets and replies from this data set so we only look at regular tweets that David and Julia have posted directly.</p>
+<p>Now that we have this second, smaller set of only recent tweets, let’s use <code>unnest_tokens()</code> to transform these tweets to a tidy data set. Let’s remove all retweets and replies from this data set so we only look at regular tweets that David and Julia have posted directly.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_tweets &lt;-<span class="st"> </span>tweets %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(!<span class="kw">str_detect</span>(text, <span class="st">&quot;^(RT|@)&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">text =</span> <span class="kw">str_replace_all</span>(text, <span class="st">&quot;https://t.co/[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|http://[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|&amp;amp;|&amp;lt;|&amp;gt;|RT|https&quot;</span>, <span class="st">&quot;&quot;</span>)) %&gt;%
@@ -571,7 +574,7 @@ totals</code></pre></div>
 ##    &lt;chr&gt;     &lt;int&gt;
 ## 1  David    110171
 ## 2  Julia     12701</code></pre>
-<p>Now let’s find the median number of retweets for each word and person. We probably want to count each tweet/word combination only once, so we will use <code>group_by</code> and <code>summarise</code> twice, one right after the other. In the second <code>summarise</code> statement, we can also count the number of times each word was used ever and keep that in <code>uses</code>. Next, we can join this to the data frame of retweet totals. Let’s <code>filter</code> to only keep words mentioned at least 5 times.</p>
+<p>Now let’s find the median number of retweets for each word and person. We probably want to count each tweet/word combination only once, so we will use <code>group_by()</code> and <code>summarise()</code> twice, one right after the other. In the second <code>summarise()</code> statement, we can also count the number of times each word was used ever and keep that in <code>uses</code>. Next, we can join this to the data frame of retweet totals. Let’s <code>filter()</code> to only keep words mentioned at least 5 times.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_by_rts &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(id, word, person) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">rts =</span> <span class="kw">first</span>(retweets)) %&gt;%<span class="st"> </span>
@@ -634,7 +637,7 @@ word_by_favs &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> <
 <span class="st">  </span><span class="kw">left_join</span>(totals) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(favorites !=<span class="st"> </span><span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
-<p>We have built the dataframes we need. Now let’s make our visualization.</p>
+<p>We have built the data frames we need. Now let’s make our visualization.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_by_favs %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(uses &gt;=<span class="st"> </span><span class="dv">5</span>) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(person) %&gt;%
