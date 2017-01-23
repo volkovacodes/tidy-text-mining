@@ -289,7 +289,7 @@ Figure 4.1: Term Frequency Distribution in Jane Austen’s Novels
 </div>
 <div id="zipfs-law" class="section level2">
 <h2><span class="header-section-number">4.2</span> Zipf’s law</h2>
-<p>Distributions like those shown in Figure <a href="tfidf.html#fig:plottf">4.1</a> are typical in language. In fact, they are so common in any given corpus of natural language (like a book, or a lot of text from a website, or spoken words) that the relationship between the frequency that a word is used and its rank has been the subject of study; a classic version of this relationship is called Zipf’s law, after George Zipf, a 20th century American linguist. Zipf’s law states that the frequency of a word is inversely proportional to its rank. Since we have the data frame we used to plot term frequency, we can examine Zipf’s law for Jane Austen’s novels with just a few lines of dplyr functions.</p>
+<p>Distributions like those shown in Figure <a href="tfidf.html#fig:plottf">4.1</a> are typical in language. In fact, those types of long-tailed distributions are so common in any given corpus of natural language (like a book, or a lot of text from a website, or spoken words) that the relationship between the frequency that a word is used and its rank has been the subject of study; a classic version of this relationship is called Zipf’s law, after George Zipf, a 20th century American linguist. Zipf’s law states that the frequency of a word is inversely proportional to its rank. Since we have the data frame we used to plot term frequency, we can examine Zipf’s law for Jane Austen’s novels with just a few lines of dplyr functions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">freq_by_rank &lt;-<span class="st"> </span>book_words %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">rank =</span> <span class="kw">row_number</span>(), 
@@ -312,7 +312,7 @@ freq_by_rank</code></pre></div>
 ## 9               Emma    of  4291 160996     4       0.02665284
 ## 10 Pride &amp; Prejudice    to  4162 122204     2       0.03405780
 ## # ... with 40,369 more rows</code></pre>
-<p>The <code>rank</code> column here tells us the rank of each word within the frequency table; the table was already ordered by <code>n</code> so we could use <code>row_number()</code> to find the rank. Then, we can calculate the term frequency in the same way we did before. Zipf’s law is often visualized by plotting rank on the x-axis and term frequency on the y-axis, on a logarithmic scale. Plotting this way, an inversely proportional relationship will have a constant, negative slope.</p>
+<p>The <code>rank</code> column here tells us the rank of each word within the frequency table; the table was already ordered by <code>n</code> so we could use <code>row_number()</code> to find the rank. Then, we can calculate the term frequency in the same way we did before. Zipf’s law is often visualized by plotting rank on the x-axis and term frequency on the y-axis, on logarithmic scales. Plotting this way, an inversely proportional relationship will have a constant, negative slope.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">freq_by_rank %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(rank, <span class="st">`</span><span class="dt">term frequency</span><span class="st">`</span>, <span class="dt">color =</span> book)) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">1.2</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +<span class="st"> </span>
@@ -324,7 +324,7 @@ freq_by_rank</code></pre></div>
 Figure 4.2: Zipf’s law for Jane Austen’s novels
 </p>
 </div>
-<p>Notice that this plot is in log-log coordinates. We see that all six of Jane Austen’s novels are similar to each other, and that the relationship between rank and frequency does have negative slope. It is not constant, though; perhaps we could view this as a broken <a href="https://en.wikipedia.org/wiki/Power_law">power law</a>. Let’s see what the exponent of the power law is for the middle section of the rank range.</p>
+<p>Notice that this plot is in log-log coordinates. We see that all six of Jane Austen’s novels are similar to each other, and that the relationship between rank and frequency does have negative slope. It is not quite constant, though; perhaps we could view this as a broken <a href="https://en.wikipedia.org/wiki/Power_law">power law</a> with, say, three sections. Let’s see what the exponent of the power law is for the middle section of the rank range.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">rank_subset &lt;-<span class="st"> </span>freq_by_rank %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(rank &lt;<span class="st"> </span><span class="dv">500</span>,
          rank &gt;<span class="st"> </span><span class="dv">10</span>)
@@ -338,7 +338,7 @@ Figure 4.2: Zipf’s law for Jane Austen’s novels
 ## (Intercept)  log10(rank)  
 ##     -0.6225      -1.1125</code></pre>
 <p>Classic versions of Zipf’s law have</p>
-<p><span class="math display">\[\text{frequency} \propto \frac{1}{\text{rank}}\]</span> and we have gotten a slope close to -1 here. Let’s plot this fitted power law with the data to see how it looks.</p>
+<p><span class="math display">\[\text{frequency} \propto \frac{1}{\text{rank}}\]</span> and we have in fact gotten a slope close to -1 here. Let’s plot this fitted power law with the data to see how it looks.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">freq_by_rank %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(rank, <span class="st">`</span><span class="dt">term frequency</span><span class="st">`</span>, <span class="dt">color =</span> book)) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> -<span class="fl">0.62</span>, <span class="dt">slope =</span> -<span class="fl">1.1</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) +
@@ -351,7 +351,7 @@ Figure 4.2: Zipf’s law for Jane Austen’s novels
 Figure 4.3: Fitting an exponent for Zipf’s law with Jane Austen’s novels
 </p>
 </div>
-<p>We have found a result close to the classic version of Zipf’s law for the corpus of Jane Austen’s novels. The deviations we see here at high rank are not uncommon for many kinds of language; a corpus of language often contains fewer rare words than predicted by the power law. The deviations at low rank are more unusual. Jane Austen uses a lower percentage of the most common words than many collections of language. This kind of analysis could be extended to compare authors or to compare any other collections of text, and it can be implemented simply using tidy data principles.</p>
+<p>We have found a result close to the classic version of Zipf’s law for the corpus of Jane Austen’s novels. The deviations we see here at high rank are not uncommon for many kinds of language; a corpus of language often contains fewer rare words than predicted by a single power law. The deviations at low rank are more unusual. Jane Austen uses a lower percentage of the most common words than many collections of language. This kind of analysis could be extended to compare authors, or to compare any other collections of text; it can be implemented simply using tidy data principles.</p>
 </div>
 <div id="the-bind_tf_idf-function" class="section level2">
 <h2><span class="header-section-number">4.3</span> The <code>bind_tf_idf</code> function</h2>

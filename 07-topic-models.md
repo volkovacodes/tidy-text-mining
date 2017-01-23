@@ -6,18 +6,18 @@ In text mining, we often have collections of documents, such as blog posts or ne
 
 [Latent Dirichlet allocation](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) is a particularly popular method for fitting a topic model. It treats each document as a mixture of topics, and each topic as a mixture of words. This allows documents to "overlap" each other in terms of content, rather than being separated into discrete groups, in a way that mirrors typical use of natural language.
 
-We can use tidy text principles to approach topic modeling using consistent and effective tools. In particular, we'll be tidying LDA objects from the [topicmodels package](https://cran.r-project.org/package=topicmodels). In this chapter, we'll use the example of clustering chapters from several books, where we can see that a topic model *learns* to tell the difference based on the text content.
+We can use tidy text principles to approach topic modeling using consistent and effective tools. In this chapter, we'll learn to tidy LDA objects from the [topicmodels package](https://cran.r-project.org/package=topicmodels) to examine model results using ggplot2 and dplyr. We'll also explore an example of clustering chapters from several books, where we can see that a topic model "learns" to tell the difference between the four books based on the text content.
 
 ## Latent Dirichlet allocation
 
-Latent Dirichlet allocation is one of the most common algorithms for topic modeling. Without diving into the math behind the model, we can understand it using two principles.
+Latent Dirichlet allocation is one of the most common algorithms for topic modeling. Without diving into the math behind the model, we can understand it as being guided by two principles.
 
-* **Every topic is a mixture of words.** for example, we could imagine a two-topic model of American news, with one topic for "politics" and one for "entertainment." The most common words in the politics topic might be "President", "Congress", and "government", while the entertainment topic may be made up of words such as "movies", "television", and "actor". Importantly, words can be shared between topics- a word like "budget" might appear in both equally.
-* **Every document is a mixture of topics.** for example, in a two-topic model we could say "Document 1 is 90% topic A and 10% topic B, while Document 2 is 30% topic A and 70% topic B."
+* **Every topic is a mixture of words.** For example, we could imagine a two-topic model of American news, with one topic for "politics" and one for "entertainment." The most common words in the politics topic might be "President", "Congress", and "government", while the entertainment topic may be made up of words such as "movies", "television", and "actor". Importantly, words can be shared between topics- a word like "budget" might appear in both equally.
+* **Every document is a mixture of topics.** We imagine that each document may contain words from several topics in particular proportions. For example, in a two-topic model we could say "Document 1 is 90% topic A and 10% topic B, while Document 2 is 30% topic A and 70% topic B."
 
 LDA is a mathematical method for estimating both of these at the same time: finding the mixture of words that is associated with each topic, while also determining the mixture of topics that describes each word. It has a number of existing implementations, and we'll explore one of them.
 
-In Chapter \ref{dtm} we briefly introduced the `AssociatedPress` dataset provided by the topicmodels package, as an example of a DocumentTermMatrix. This is a collection of 2246 news articles from an American news syndication service.
+In Chapter \ref{dtm} we briefly introduced the `AssociatedPress` dataset provided by the topicmodels package, as an example of a DocumentTermMatrix. This is a collection of 2246 news articles from an American news agency, mostly published around 1988.
 
 
 ```r
@@ -35,12 +35,11 @@ AssociatedPress
 ## Weighting          : term frequency (tf)
 ```
 
-We're now ready to use the [topicmodels](https://cran.r-project.org/package=topicmodels) package, specifically the `LDA()` function, to create a four-topic Latent Dirichlet allocation model.
-
-This step fits an LDA model, and returns an object containing the full details of the fit, such as how words are associated with topics and how topics are associated with documents. Fitting the model was the "easy part": the remainder of the analysis will involve exploring and interpreting the model using tidying functions.
+We can then the `LDA()` function from the topicmodels package to create a two-topic Latent Dirichlet allocation model. This function returns an object containing the full details of the fit, such as how words are associated with topics and how topics are associated with documents.
 
 
 ```r
+# set a seed so that the output of the model is predictable
 ap_lda <- LDA(AssociatedPress, k = 2, control = list(seed = 1234))
 ap_lda
 ```
@@ -48,6 +47,8 @@ ap_lda
 ```
 ## A LDA_VEM topic model with 2 topics.
 ```
+
+Fitting the model was the "easy part": the remainder of the analysis will involve exploring and interpreting the model using tidying functions.
 
 ### Word-topic probabilities
 
@@ -80,50 +81,17 @@ ap_lda_td
 
 Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. For example, the term 
 
-We could use dplyr's `top_n()` to find the top 10 terms within each topic:
+We could use dplyr's `top_n()` to find the top 10 terms within each topic.As a tidy data frame, this lends itself well to a ggplot2 visualization (Figure \ref{fig:aptoptermsplot}).
 
 
 ```r
+library(ggplot2)
+
 ap_top_terms <- ap_lda_td %>%
   group_by(topic) %>%
   top_n(10, beta) %>%
   ungroup() %>%
   arrange(topic, -beta)
-
-ap_top_terms
-```
-
-```
-## # A tibble: 20 × 3
-##    topic       term        beta
-##    <int>      <chr>       <dbl>
-## 1      1    percent 0.009806671
-## 2      1    million 0.006837635
-## 3      1        new 0.005942985
-## 4      1       year 0.005750201
-## 5      1    billion 0.004267884
-## 6      1       last 0.003679708
-## 7      1        two 0.003596430
-## 8      1    company 0.003483348
-## 9      1     people 0.003452703
-## 10     1     market 0.003332170
-## 11     2          i 0.007054248
-## 12     2  president 0.004887314
-## 13     2 government 0.004519754
-## 14     2     people 0.004065070
-## 15     2     soviet 0.003716266
-## 16     2        new 0.003698227
-## 17     2       bush 0.003696676
-## 18     2        two 0.003606322
-## 19     2      years 0.003387307
-## 20     2     states 0.003200802
-```
-
-As a tidy data frame, this lends itself well to a ggplot2 visualization (Figure \ref{fig:aptoptermsplot}).
-
-
-```r
-library(ggplot2)
 
 ap_top_terms %>%
   mutate(term = reorder(term, beta)) %>%
@@ -218,7 +186,7 @@ ap_gamma
 ## # ... with 4,482 more rows
 ```
 
-Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the 1 document has only a 24.8% probability of coming from topic 1.
+Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the first document has only a 24.8% probability of coming from topic 1.
 
 We can see that many of these documents were drawn from a mix of the two topics, but that document 6 was drawn almost entirely from topic 2, having a `gamma` of only 5.9\times 10^{-4} from topic 1. To check this answer, we could see what the most common words in that document were.
 
@@ -289,7 +257,7 @@ library(tidytext)
 library(stringr)
 library(tidyr)
 
-# Divide into documents, each representing one chapter
+# divide into documents, each representing one chapter
 by_chapter <- books %>%
   group_by(title) %>%
   mutate(chapter = cumsum(str_detect(text, regex("^chapter ", ignore_case = TRUE)))) %>%
@@ -297,11 +265,11 @@ by_chapter <- books %>%
   filter(chapter > 0) %>%
   unite(document, title, chapter)
 
-# Split into words
+# split into words
 by_chapter_word <- by_chapter %>%
   unnest_tokens(word, text)
 
-# Find document-word counts
+# find document-word counts
 word_counts <- by_chapter_word %>%
   anti_join(stop_words) %>%
   count(document, word, sort = TRUE) %>%
@@ -347,13 +315,12 @@ chapters_dtm
 ## Weighting          : term frequency (tf)
 ```
 
-We can then use the `LDA()` function to create a four-topic model. In this case we know we're looking for four topics because there are four books: in other problems we may need to try a few different values of `k`.
+We can then use the `LDA()` function to create a four-topic model. In this case we know we're looking for four topics because there are four books; in other problems we may need to try a few different values of `k`.
 
 
 ```r
 library(topicmodels)
 
-# setting a seed so that the output is predictable
 chapters_lda <- LDA(chapters_dtm, k = 4, control = list(seed = 1234))
 chapters_lda
 ```
@@ -362,7 +329,7 @@ chapters_lda
 ## A LDA_VEM topic model with 4 topics.
 ```
 
-Much as we did, per-topic-per-word probabilities:
+Much as we did on the Associated Press data, we can examine per-topic-per-word probabilities.
 
 
 ```r
@@ -790,16 +757,16 @@ tidy(mallet_model)
 ## # A tibble: 71,064 × 3
 ##    topic    term         beta
 ##    <int>   <chr>        <dbl>
-## 1      1 limping 1.028557e-04
-## 2      2 limping 2.661935e-07
-## 3      3 limping 2.842632e-07
-## 4      4 limping 2.292019e-07
-## 5      1  pirate 1.028557e-04
-## 6      2  pirate 2.661935e-07
-## 7      3  pirate 2.842632e-07
-## 8      4  pirate 2.292019e-07
-## 9      1  gibbet 2.564980e-07
-## 10     2  gibbet 2.661935e-07
+## 1      1 limping 2.761847e-07
+## 2      2 limping 1.107103e-04
+## 3      3 limping 1.852309e-07
+## 4      4 limping 3.454630e-07
+## 5      1  pirate 2.761847e-07
+## 6      2  pirate 1.107103e-04
+## 7      3  pirate 1.852309e-07
+## 8      4  pirate 3.454630e-07
+## 9      1  gibbet 8.313158e-05
+## 10     2  gibbet 2.760855e-07
 ## # ... with 71,054 more rows
 ```
 
@@ -812,16 +779,16 @@ tidy(mallet_model, matrix = "gamma")
 ## # A tibble: 772 × 3
 ##                 document topic     gamma
 ##                    <chr> <int>     <dbl>
-## 1   Great Expectations_1     1 0.5548359
-## 2  Great Expectations_10     1 0.4639334
-## 3  Great Expectations_11     1 0.5430982
-## 4  Great Expectations_12     1 0.5821479
-## 5  Great Expectations_13     1 0.6081461
-## 6  Great Expectations_14     1 0.4887295
-## 7  Great Expectations_15     1 0.5823147
-## 8  Great Expectations_16     1 0.4488156
-## 9  Great Expectations_17     1 0.5171348
-## 10 Great Expectations_18     1 0.5570027
+## 1   Great Expectations_1     1 0.3959413
+## 2  Great Expectations_10     1 0.2715783
+## 3  Great Expectations_11     1 0.4302147
+## 4  Great Expectations_12     1 0.3161451
+## 5  Great Expectations_13     1 0.3373596
+## 6  Great Expectations_14     1 0.2469262
+## 7  Great Expectations_15     1 0.3470206
+## 8  Great Expectations_16     1 0.2863790
+## 9  Great Expectations_17     1 0.3216292
+## 10 Great Expectations_18     1 0.3005751
 ## # ... with 762 more rows
 ```
 
@@ -835,15 +802,15 @@ augment(mallet_model, term_counts)
 ## # A tibble: 104,721 × 4
 ##                    document    term     n .topic
 ##                       <chr>   <chr> <int>  <int>
-## 1     Great Expectations_57     joe    88      1
-## 2      Great Expectations_7     joe    70      1
-## 3     Great Expectations_17   biddy    63      1
-## 4     Great Expectations_27     joe    58      1
+## 1     Great Expectations_57     joe    88      2
+## 2      Great Expectations_7     joe    70      2
+## 3     Great Expectations_17   biddy    63      3
+## 4     Great Expectations_27     joe    58      3
 ## 5     Great Expectations_38 estella    58      1
-## 6      Great Expectations_2     joe    56      1
-## 7     Great Expectations_23  pocket    53      1
-## 8     Great Expectations_15     joe    50      1
-## 9     Great Expectations_18     joe    50      1
+## 6      Great Expectations_2     joe    56      2
+## 7     Great Expectations_23  pocket    53      3
+## 8     Great Expectations_15     joe    50      2
+## 9     Great Expectations_18     joe    50      2
 ## 10 The War of the Worlds_16 brother    50      2
 ## # ... with 104,711 more rows
 ```
