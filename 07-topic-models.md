@@ -755,16 +755,16 @@ tidy(mallet_model)
 ## # A tibble: 71,064 × 3
 ##    topic    term         beta
 ##    <int>   <chr>        <dbl>
-## 1      1 limping 2.401441e-07
-## 2      2 limping 2.525402e-07
-## 3      3 limping 1.169722e-04
-## 4      4 limping 2.509999e-07
-## 5      1  pirate 9.629779e-05
-## 6      2  pirate 2.525402e-07
-## 7      3  pirate 2.917012e-07
-## 8      4  pirate 2.509999e-07
-## 9      1  gibbet 7.228338e-05
-## 10     2  gibbet 2.525402e-07
+## 1      1 limping 2.451662e-07
+## 2      2 limping 2.724524e-07
+## 3      3 limping 2.624971e-07
+## 4      4 limping 1.008205e-04
+## 5      1  pirate 2.451662e-07
+## 6      2  pirate 2.724524e-07
+## 7      3  pirate 2.624971e-07
+## 8      4  pirate 1.008205e-04
+## 9      1  gibbet 2.451662e-07
+## 10     2  gibbet 2.724524e-07
 ## # ... with 71,054 more rows
 ```
 
@@ -777,16 +777,16 @@ tidy(mallet_model, matrix = "gamma")
 ## # A tibble: 772 × 3
 ##                 document topic     gamma
 ##                    <chr> <int>     <dbl>
-## 1   Great Expectations_1     1 0.6014680
-## 2  Great Expectations_10     1 0.6414920
-## 3  Great Expectations_11     1 0.5946319
-## 4  Great Expectations_12     1 0.6034851
-## 5  Great Expectations_13     1 0.6115169
-## 6  Great Expectations_14     1 0.5051230
-## 7  Great Expectations_15     1 0.6266234
-## 8  Great Expectations_16     1 0.4978849
-## 9  Great Expectations_17     1 0.5912921
-## 10 Great Expectations_18     1 0.6185724
+## 1   Great Expectations_1     1 0.2612263
+## 2  Great Expectations_10     1 0.5527127
+## 3  Great Expectations_11     1 0.4774540
+## 4  Great Expectations_12     1 0.5266714
+## 5  Great Expectations_13     1 0.6890449
+## 6  Great Expectations_14     1 0.4436475
+## 7  Great Expectations_15     1 0.5571047
+## 8  Great Expectations_16     1 0.5097293
+## 9  Great Expectations_17     1 0.6182584
+## 10 Great Expectations_18     1 0.6003045
 ## # ... with 762 more rows
 ```
 
