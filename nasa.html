@@ -209,8 +209,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>10.1</b> Pre-processing</a><ul>
 <li class="chapter" data-level="10.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>10.1.1</b> Pre-processing text</a></li>
 </ul></li>
-<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#analyses"><i class="fa fa-check"></i><b>10.2</b> Analyses</a><ul>
+<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#words-within-newsgroups"><i class="fa fa-check"></i><b>10.2</b> Words within newsgroups</a><ul>
 <li class="chapter" data-level="10.2.1" data-path="usenet.html"><a href="usenet.html#term-frequency-and-inverse-document-frequency-tf-idf"><i class="fa fa-check"></i><b>10.2.1</b> Term frequency and inverse document frequency: tf-idf</a></li>
+<li class="chapter" data-level="10.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>10.2.2</b> Topic modeling</a></li>
 </ul></li>
 <li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a><ul>
 <li class="chapter" data-level="10.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>10.3.1</b> Sentiment analysis by word</a></li>
@@ -557,7 +558,7 @@ keyword_counts %&gt;%
 Figure 9.3: Co-occurrence network in NASA dataset keywords
 </p>
 </div>
-<p>We definitely see clustering here, and strong connections between keywords like <strong>OCEANS</strong>, <strong>OCEAN OPTICS</strong>, and <strong>OCEAN COLOR</strong>, or **PROJECT* and *COMPLETED**. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
+<p>We definitely see clustering here, and strong connections between keywords like <strong>OCEANS</strong>, <strong>OCEAN OPTICS</strong>, and <strong>OCEAN COLOR</strong>, or <strong>PROJECT</strong> and <strong>COMPLETED</strong>. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_cors &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">50</span>) %&gt;%

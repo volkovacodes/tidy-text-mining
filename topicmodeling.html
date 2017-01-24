@@ -209,8 +209,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>10.1</b> Pre-processing</a><ul>
 <li class="chapter" data-level="10.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>10.1.1</b> Pre-processing text</a></li>
 </ul></li>
-<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#analyses"><i class="fa fa-check"></i><b>10.2</b> Analyses</a><ul>
+<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#words-within-newsgroups"><i class="fa fa-check"></i><b>10.2</b> Words within newsgroups</a><ul>
 <li class="chapter" data-level="10.2.1" data-path="usenet.html"><a href="usenet.html#term-frequency-and-inverse-document-frequency-tf-idf"><i class="fa fa-check"></i><b>10.2.1</b> Term frequency and inverse document frequency: tf-idf</a></li>
+<li class="chapter" data-level="10.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>10.2.2</b> Topic modeling</a></li>
 </ul></li>
 <li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a><ul>
 <li class="chapter" data-level="10.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>10.3.1</b> Sentiment analysis by word</a></li>
@@ -772,32 +773,32 @@ mallet_model$<span class="kw">train</span>(<span class="dv">100</span>)</code></
 <pre><code>## # A tibble: 71,064 × 3
 ##    topic    term         beta
 ##    &lt;int&gt;   &lt;chr&gt;        &lt;dbl&gt;
-## 1      1 limping 2.901691e-07
-## 2      2 limping 2.169449e-07
-## 3      3 limping 2.677831e-07
-## 4      4 limping 1.070456e-04
-## 5      1  pirate 2.901691e-07
-## 6      2  pirate 2.169449e-07
-## 7      3  pirate 1.073810e-04
-## 8      4  pirate 2.669467e-07
-## 9      1  gibbet 2.901691e-07
-## 10     2  gibbet 6.530041e-05
+## 1      1 limping 2.434887e-07
+## 2      2 limping 9.738290e-05
+## 3      3 limping 2.974893e-07
+## 4      4 limping 2.531667e-07
+## 5      1  pirate 2.434887e-07
+## 6      2  pirate 9.738290e-05
+## 7      3  pirate 2.974893e-07
+## 8      4  pirate 2.531667e-07
+## 9      1  gibbet 2.434887e-07
+## 10     2  gibbet 7.309789e-05
 ## # ... with 71,054 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># document-topic pairs</span>
 <span class="kw">tidy</span>(mallet_model, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)</code></pre></div>
 <pre><code>## # A tibble: 772 × 3
-##                 document topic      gamma
-##                    &lt;chr&gt; &lt;int&gt;      &lt;dbl&gt;
-## 1   Great Expectations_1     1 0.06260794
-## 2  Great Expectations_10     1 0.02250308
-## 3  Great Expectations_11     1 0.03266871
-## 4  Great Expectations_12     1 0.06009957
-## 5  Great Expectations_13     1 0.02162921
-## 6  Great Expectations_14     1 0.07479508
-## 7  Great Expectations_15     1 0.07734912
-## 8  Great Expectations_16     1 0.05118443
-## 9  Great Expectations_17     1 0.02612360
-## 10 Great Expectations_18     1 0.02655616
+##                 document topic     gamma
+##                    &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;
+## 1   Great Expectations_1     1 0.1126943
+## 2  Great Expectations_10     1 0.1408755
+## 3  Great Expectations_11     1 0.1406442
+## 4  Great Expectations_12     1 0.1426031
+## 5  Great Expectations_13     1 0.1890449
+## 6  Great Expectations_14     1 0.2305328
+## 7  Great Expectations_15     1 0.1583270
+## 8  Great Expectations_16     1 0.1899323
+## 9  Great Expectations_17     1 0.2092697
+## 10 Great Expectations_18     1 0.1848782
 ## # ... with 762 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># column needs to be named &quot;term&quot; for &quot;augment&quot;</span>
 term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_counts, <span class="dt">term =</span> word)
@@ -805,16 +806,16 @@ term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_co
 <pre><code>## # A tibble: 104,721 × 4
 ##                    document    term     n .topic
 ##                       &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;  &lt;int&gt;
-## 1     Great Expectations_57     joe    88      4
-## 2      Great Expectations_7     joe    70      4
-## 3     Great Expectations_17   biddy    63      4
-## 4     Great Expectations_27     joe    58      4
-## 5     Great Expectations_38 estella    58      4
-## 6      Great Expectations_2     joe    56      4
-## 7     Great Expectations_23  pocket    53      4
-## 8     Great Expectations_15     joe    50      4
-## 9     Great Expectations_18     joe    50      4
-## 10 The War of the Worlds_16 brother    50      3
+## 1     Great Expectations_57     joe    88      2
+## 2      Great Expectations_7     joe    70      2
+## 3     Great Expectations_17   biddy    63      2
+## 4     Great Expectations_27     joe    58      2
+## 5     Great Expectations_38 estella    58      2
+## 6      Great Expectations_2     joe    56      2
+## 7     Great Expectations_23  pocket    53      2
+## 8     Great Expectations_15     joe    50      2
+## 9     Great Expectations_18     joe    50      2
+## 10 The War of the Worlds_16 brother    50      4
 ## # ... with 104,711 more rows</code></pre>
 <p>We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration: the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.</p>
 
