@@ -561,7 +561,7 @@ knitr::include_graphics("images/widyr.jpg")
 ```
 
 <div class="figure">
-<img src="images/widyr.jpg" alt="The philosophy behind the widyr package, which can perform operations such as counting and correlating on pairs of values in a tidy dataset. The widyr package first 'casts' a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result."  />
+<img src="images/widyr.jpg" alt="The philosophy behind the widyr package, which can perform operations such as counting and correlating on pairs of values in a tidy dataset. The widyr package first 'casts' a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result." width="90%" />
 <p class="caption">(\#fig:widyr)The philosophy behind the widyr package, which can perform operations such as counting and correlating on pairs of values in a tidy dataset. The widyr package first 'casts' a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result.</p>
 </div>
 
