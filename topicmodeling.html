@@ -772,32 +772,32 @@ mallet_model$<span class="kw">train</span>(<span class="dv">100</span>)</code></
 <pre><code>## # A tibble: 71,064 × 3
 ##    topic    term         beta
 ##    &lt;int&gt;   &lt;chr&gt;        &lt;dbl&gt;
-## 1      1 limping 2.711595e-07
-## 2      2 limping 2.821618e-07
-## 3      3 limping 1.054246e-04
-## 4      4 limping 2.221943e-07
-## 5      1  pirate 2.711595e-07
-## 6      2  pirate 2.821618e-07
-## 7      3  pirate 1.054246e-04
-## 8      4  pirate 2.221943e-07
-## 9      1  gibbet 2.711595e-07
-## 10     2  gibbet 2.821618e-07
+## 1      1 limping 2.901691e-07
+## 2      2 limping 2.169449e-07
+## 3      3 limping 2.677831e-07
+## 4      4 limping 1.070456e-04
+## 5      1  pirate 2.901691e-07
+## 6      2  pirate 2.169449e-07
+## 7      3  pirate 1.073810e-04
+## 8      4  pirate 2.669467e-07
+## 9      1  gibbet 2.901691e-07
+## 10     2  gibbet 6.530041e-05
 ## # ... with 71,054 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># document-topic pairs</span>
 <span class="kw">tidy</span>(mallet_model, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)</code></pre></div>
 <pre><code>## # A tibble: 772 × 3
-##                 document topic     gamma
-##                    &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;
-## 1   Great Expectations_1     1 0.2974957
-## 2  Great Expectations_10     1 0.2358200
-## 3  Great Expectations_11     1 0.2253067
-## 4  Great Expectations_12     1 0.2492888
-## 5  Great Expectations_13     1 0.1654494
-## 6  Great Expectations_14     1 0.3206967
-## 7  Great Expectations_15     1 0.2629870
-## 8  Great Expectations_16     1 0.2525381
-## 9  Great Expectations_17     1 0.2351124
-## 10 Great Expectations_18     1 0.2166779
+##                 document topic      gamma
+##                    &lt;chr&gt; &lt;int&gt;      &lt;dbl&gt;
+## 1   Great Expectations_1     1 0.06260794
+## 2  Great Expectations_10     1 0.02250308
+## 3  Great Expectations_11     1 0.03266871
+## 4  Great Expectations_12     1 0.06009957
+## 5  Great Expectations_13     1 0.02162921
+## 6  Great Expectations_14     1 0.07479508
+## 7  Great Expectations_15     1 0.07734912
+## 8  Great Expectations_16     1 0.05118443
+## 9  Great Expectations_17     1 0.02612360
+## 10 Great Expectations_18     1 0.02655616
 ## # ... with 762 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># column needs to be named &quot;term&quot; for &quot;augment&quot;</span>
 term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_counts, <span class="dt">term =</span> word)
@@ -805,16 +805,16 @@ term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_co
 <pre><code>## # A tibble: 104,721 × 4
 ##                    document    term     n .topic
 ##                       &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;  &lt;int&gt;
-## 1     Great Expectations_57     joe    88      3
-## 2      Great Expectations_7     joe    70      3
-## 3     Great Expectations_17   biddy    63      3
-## 4     Great Expectations_27     joe    58      3
+## 1     Great Expectations_57     joe    88      4
+## 2      Great Expectations_7     joe    70      4
+## 3     Great Expectations_17   biddy    63      4
+## 4     Great Expectations_27     joe    58      4
 ## 5     Great Expectations_38 estella    58      4
-## 6      Great Expectations_2     joe    56      3
-## 7     Great Expectations_23  pocket    53      1
-## 8     Great Expectations_15     joe    50      3
-## 9     Great Expectations_18     joe    50      3
-## 10 The War of the Worlds_16 brother    50      1
+## 6      Great Expectations_2     joe    56      4
+## 7     Great Expectations_23  pocket    53      4
+## 8     Great Expectations_15     joe    50      4
+## 9     Great Expectations_18     joe    50      4
+## 10 The War of the Worlds_16 brother    50      3
 ## # ... with 104,711 more rows</code></pre>
 <p>We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration: the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.</p>
 

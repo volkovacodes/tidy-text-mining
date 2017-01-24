@@ -557,7 +557,7 @@ keyword_counts %&gt;%
 Figure 9.3: Co-occurrence network in NASA dataset keywords
 </p>
 </div>
-<p>We definitely see clustering here, and strong connections between keywords like <strong>OCEANS</strong>, <strong>OCEAN OPTICS</strong>, and <strong>OCEAN COLOR</strong>, or <strong>PROJECT</strong> and <strong>COMPLETED</strong>. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
+<p>We definitely see clustering here, and strong connections between keywords like <strong>OCEANS</strong>, <strong>OCEAN OPTICS</strong>, and <strong>OCEAN COLOR</strong>, or **PROJECT* and *COMPLETED**. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_cors &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">50</span>) %&gt;%
