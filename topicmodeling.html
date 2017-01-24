@@ -170,9 +170,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>7.1.1</b> Word-topic probabilities</a></li>
 <li class="chapter" data-level="7.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>7.1.2</b> Document-topic probabilities</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#example-the-great-library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
+<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
 <li class="chapter" data-level="7.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>7.2.1</b> LDA on chapters</a></li>
-<li class="chapter" data-level="7.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.2.2</b> Per-document classification</a></li>
+<li class="chapter" data-level="7.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>7.2.2</b> Per-document classification</a></li>
 <li class="chapter" data-level="7.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.2.3</b> By word assignments: <code>augment</code></a></li>
 </ul></li>
 <li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.3</b> Alternative LDA implementations</a></li>
@@ -208,8 +208,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>10.1</b> Pre-processing</a><ul>
 <li class="chapter" data-level="10.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>10.1.1</b> Pre-processing text</a></li>
 </ul></li>
-<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#words-within-newsgroups"><i class="fa fa-check"></i><b>10.2</b> Words within newsgroups</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="usenet.html"><a href="usenet.html#term-frequency-and-inverse-document-frequency-tf-idf"><i class="fa fa-check"></i><b>10.2.1</b> Term frequency and inverse document frequency: tf-idf</a></li>
+<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>10.2</b> Words in newsgroups</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>10.2.1</b> Finding tf-idf within newsgroups</a></li>
 <li class="chapter" data-level="10.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>10.2.2</b> Topic modeling</a></li>
 </ul></li>
 <li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a><ul>
@@ -289,7 +289,7 @@ ap_lda_td</code></pre></div>
 ## 9      1     abbott 2.130484e-06
 ## 10     2     abbott 2.968045e-05
 ## # ... with 20,936 more rows</code></pre>
-<p>Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. For example, the term “aaron” has a 1.68691710^{-12} probability of being generated from topic 1, but a 3.895940810^{-5} probability of being generated from topic 2.</p>
+<p>Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. For example, the term “aaron” has a <span class="math inline">\(1.686917\times 10^{-12}\)</span> probability of being generated from topic 1, but a <span class="math inline">\(3.8959408\times 10^{-5}\)</span> probability of being generated from topic 2.</p>
 <p>We could use dplyr’s <code>top_n()</code> to find the 10 terms that are most common within each topic. As a tidy data frame, this lends itself well to a ggplot2 visualization (Figure <a href="topicmodeling.html#fig:aptoptermsplot">7.1</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(dplyr)
@@ -388,7 +388,7 @@ ap_gamma</code></pre></div>
 <p>Based on the most common words, this appears to be an article about the relationship between the American government and Panamanian dictator Manuel Noriega, which means the algorithm was right to place it in topic 2 (as political/national news).</p>
 </div>
 </div>
-<div id="example-the-great-library-heist" class="section level2">
+<div id="library-heist" class="section level2">
 <h2><span class="header-section-number">7.2</span> Example: the great library heist</h2>
 <p>When examining a statistical method, it can be useful to try it on a very simple case where you know the “right answer”. For example, we could collect a set of documents that definitely relate to four separate topics, then perform topic modeling to see whether the algorithm can correctly distinguish the four groups. This lets us double-check that the method is useful, and gain a sense of how and when it can go wrong. We’ll try this with some data from classic literature.</p>
 <p>Suppose a vandal has broken into your study and torn apart four of your books:</p>
@@ -530,7 +530,7 @@ Figure 7.3: The terms that are most common within each topic
 </div>
 <p>These topics are pretty clearly associated with the four books! There’s no question that the topic of “captain”, “nautilus”, “sea”, and “nemo” belongs to <em>Twenty Thousand Leagues Under the Sea</em>, and that “jane”, “darcy”, and “elizabeth” belongs to <em>Pride and Prejudice</em>. We see “pip” and “joe” from <em>Great Expectations</em> and “martians”, “black”, and “night” from <em>The War of the Worlds</em>. We also notice that, in line with LDA being a “fuzzy clustering” method, there can be words in common between multiple topics, such as “miss” in topics 1 and 4, and “time” in topics 3 and 4.</p>
 </div>
-<div id="per-document-classification" class="section level3">
+<div id="per-document" class="section level3">
 <h3><span class="header-section-number">7.2.2</span> Per-document classification</h3>
 <p>Each document in this analysis represented a single chapter. Thus, we may want to know which topics are associated with each document. Can we put the chapters back together in the correct books? We can find this by examining the per-document-per-topic probabilities, <span class="math inline">\(\gamma\)</span> (“gamma”).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda_gamma &lt;-<span class="st"> </span><span class="kw">tidy</span>(chapters_lda, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
@@ -764,54 +764,14 @@ mallet_model$<span class="kw">loadDocuments</span>(docs)
 mallet_model$<span class="kw">train</span>(<span class="dv">100</span>)</code></pre></div>
 <p>Once the model is created, however, we can use the <code>tidy()</code> and <code>augment()</code> functions described in the rest of the chapter in an almost identical way. This includes extracting the probabilities of words within each topic or topics within each document.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># word-topic pairs</span>
-<span class="kw">tidy</span>(mallet_model)</code></pre></div>
-<pre><code>## # A tibble: 71,064 × 3
-##    topic    term         beta
-##    &lt;int&gt;   &lt;chr&gt;        &lt;dbl&gt;
-## 1      1 limping 9.132803e-05
-## 2      2 limping 2.334177e-07
-## 3      3 limping 2.695660e-07
-## 4      4 limping 3.173026e-07
-## 5      1  pirate 9.132803e-05
-## 6      2  pirate 2.334177e-07
-## 7      3  pirate 2.695660e-07
-## 8      4  pirate 3.173026e-07
-## 9      1  gibbet 6.855296e-05
-## 10     2  gibbet 2.334177e-07
-## # ... with 71,054 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># document-topic pairs</span>
-<span class="kw">tidy</span>(mallet_model, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)</code></pre></div>
-<pre><code>## # A tibble: 772 × 3
-##                 document topic     gamma
-##                    &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;
-## 1   Great Expectations_1     1 0.4719344
-## 2  Great Expectations_10     1 0.6291615
-## 3  Great Expectations_11     1 0.5535276
-## 4  Great Expectations_12     1 0.5764580
-## 5  Great Expectations_13     1 0.6283708
-## 6  Great Expectations_14     1 0.4559426
-## 7  Great Expectations_15     1 0.6044691
-## 8  Great Expectations_16     1 0.4928088
-## 9  Great Expectations_17     1 0.6081461
-## 10 Great Expectations_18     1 0.6050406
-## # ... with 762 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># column needs to be named &quot;term&quot; for &quot;augment&quot;</span>
+<span class="kw">tidy</span>(mallet_model)
+
+<span class="co"># document-topic pairs</span>
+<span class="kw">tidy</span>(mallet_model, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
+
+<span class="co"># column needs to be named &quot;term&quot; for &quot;augment&quot;</span>
 term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_counts, <span class="dt">term =</span> word)
 <span class="kw">augment</span>(mallet_model, term_counts)</code></pre></div>
-<pre><code>## # A tibble: 104,721 × 4
-##                    document    term     n .topic
-##                       &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;  &lt;int&gt;
-## 1     Great Expectations_57     joe    88      1
-## 2      Great Expectations_7     joe    70      1
-## 3     Great Expectations_17   biddy    63      1
-## 4     Great Expectations_27     joe    58      1
-## 5     Great Expectations_38 estella    58      1
-## 6      Great Expectations_2     joe    56      1
-## 7     Great Expectations_23  pocket    53      1
-## 8     Great Expectations_15     joe    50      1
-## 9     Great Expectations_18     joe    50      1
-## 10 The War of the Worlds_16 brother    50      3
-## # ... with 104,711 more rows</code></pre>
 <p>We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration; the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.</p>
 
 </div>

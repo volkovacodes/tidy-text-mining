@@ -652,7 +652,7 @@ word_pairs %>%
 ## # ... with 2,920 more rows
 ```
 
-### Pairwise correlation
+### Pairwise correlation {#pairwise-correlation}
 
 Pairs like "Elizabeth" and "Darcy" are the most common co-occurring words, but that's not particularly meaningful since *they're also the most common individual words.* We may instead want to examine **correlation** among words, which indicates how often they appear together relative to how often they appear separately.
 

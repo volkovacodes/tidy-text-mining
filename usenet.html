@@ -170,9 +170,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="7.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>7.1.1</b> Word-topic probabilities</a></li>
 <li class="chapter" data-level="7.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>7.1.2</b> Document-topic probabilities</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#example-the-great-library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
+<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
 <li class="chapter" data-level="7.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>7.2.1</b> LDA on chapters</a></li>
-<li class="chapter" data-level="7.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.2.2</b> Per-document classification</a></li>
+<li class="chapter" data-level="7.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>7.2.2</b> Per-document classification</a></li>
 <li class="chapter" data-level="7.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.2.3</b> By word assignments: <code>augment</code></a></li>
 </ul></li>
 <li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.3</b> Alternative LDA implementations</a></li>
@@ -208,8 +208,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>10.1</b> Pre-processing</a><ul>
 <li class="chapter" data-level="10.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>10.1.1</b> Pre-processing text</a></li>
 </ul></li>
-<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#words-within-newsgroups"><i class="fa fa-check"></i><b>10.2</b> Words within newsgroups</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="usenet.html"><a href="usenet.html#term-frequency-and-inverse-document-frequency-tf-idf"><i class="fa fa-check"></i><b>10.2.1</b> Term frequency and inverse document frequency: tf-idf</a></li>
+<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>10.2</b> Words in newsgroups</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>10.2.1</b> Finding tf-idf within newsgroups</a></li>
 <li class="chapter" data-level="10.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>10.2.2</b> Topic modeling</a></li>
 </ul></li>
 <li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a><ul>
@@ -241,10 +241,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="usenet" class="section level1">
 <h1><span class="header-section-number">10</span> Case study: analyzing usenet text</h1>
-<p>In our final chapter, we’ll use what we’ve learned in this book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this data set include newsgroups for topics like politics, religion, cars, sports, and cryptography, and offer a rich set of text written by a variety of users. This data set is publicly available at <a href="http://qwone.com/~jason/20Newsgroups/" class="uri">http://qwone.com/~jason/20Newsgroups/</a> and has become popular for testing and exercises in text analysis and machine learning.</p>
+<p>In our final chapter, we’ll use what we’ve learned in this book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this dataset include newsgroups for topics like politics, religion, cars, sports, and cryptography, and offer a rich set of text written by many users. This data set is publicly available at <a href="http://qwone.com/~jason/20Newsgroups/" class="uri">http://qwone.com/~jason/20Newsgroups/</a> and has become popular for exercises in text analysis and machine learning.</p>
 <div id="pre-processing" class="section level2">
 <h2><span class="header-section-number">10.1</span> Pre-processing</h2>
-<p>We’ll start by reading in all the messages, which are organized in sub-folders, with one file for each message. Note that this step takes several minutes to read all the documents.</p>
+<p>We’ll start by reading in all the messages, which are organized in sub-folders with one file for each message. We can read in files like these with a combination of <code>read_lines()</code>, <code>map()</code> and <code>unnest()</code>. Note that this step takes several minutes to read all the documents.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidyr)
 <span class="kw">library</span>(purrr)
@@ -252,7 +252,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">training_folder &lt;-<span class="st"> &quot;data/20news-bydate/20news-bydate-train/&quot;</span>
 
 read_folder &lt;-<span class="st"> </span>function(infolder) {
-  <span class="kw">message</span>(infolder)
   <span class="kw">data_frame</span>(<span class="dt">file =</span> <span class="kw">dir</span>(infolder, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)) %&gt;%
 <span class="st">    </span><span class="kw">mutate</span>(<span class="dt">text =</span> <span class="kw">map</span>(file, read_lines)) %&gt;%
 <span class="st">    </span><span class="kw">transmute</span>(<span class="dt">id =</span> <span class="kw">basename</span>(file), text) %&gt;%
@@ -277,7 +276,7 @@ raw_text &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span 
 ## 9  alt.atheism 49960                                                         Lines: 290
 ## 10 alt.atheism 49960                                                                   
 ## # ... with 511,645 more rows</code></pre>
-<p>Notice the <code>id</code> column, which identifies a unique message, and the <code>newsgroup</code> column, which describes which of the 20 newsgroups each message comes from. What newsgroups are included, and how many messages were posted in each (Figure <a href="usenet.html#fig:messagecounts">10.1</a>)?</p>
+<p>Notice the <code>newsgroup</code> column, which describes which of the 20 newsgroups each message comes from, and <code>id</code> column, which identifies a unique message within that newsgroup. What newsgroups are included, and how many messages were posted in each (Figure <a href="usenet.html#fig:messagecounts">10.1</a>)?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 raw_text %&gt;%
@@ -295,8 +294,8 @@ Figure 10.1: Number of messages from each newsgroup
 <p>We can see that Usenet newsgroup names are named hierarchically, starting with a main topic such as “talk”, “sci”, or “rec”, followed by further specifications.</p>
 <div id="pre-processing-text" class="section level3">
 <h3><span class="header-section-number">10.1.1</span> Pre-processing text</h3>
-<p>Most of the datasets we’ve examined in this book were pre-processed, meaning we didn’t have to remove, for example, copyright notices from the Jane Austen novels. Here, each message has some structure and extra text that we don’t want to include in our analysis. For example, every message has a header, containing field such as “from:” or “in_reply_to:” that describe the message. Some also have automated email signatures, which occur after a line like <code>--</code>.</p>
-<p>This kind of pre-processing can be done within the dplyr package, using combination of <code>cumsum()</code> (cumulative sum) and <code>str_detect()</code> from stringr.</p>
+<p>Most of the datasets we’ve examined in this book were pre-processed, meaning we didn’t have to remove, for example, copyright notices from the Jane Austen novels. Here, however, each message has some structure and extra text that we don’t want to include in our analysis. For example, every message has a header, containing field such as “from:” or “in_reply_to:” that describe the message. Some also have automated email signatures, which occur after a line like <code>--</code>.</p>
+<p>This kind of pre-processing can be done within the dplyr package, using a combination of <code>cumsum()</code> (cumulative sum) and <code>str_detect()</code> from stringr.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
 
 <span class="co"># must occur after the first occurrence of an empty line,</span>
@@ -306,23 +305,24 @@ cleaned_text &lt;-<span class="st"> </span>raw_text %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">cumsum</span>(text ==<span class="st"> &quot;&quot;</span>) &gt;<span class="st"> </span><span class="dv">0</span>,
          <span class="kw">cumsum</span>(<span class="kw">str_detect</span>(text, <span class="st">&quot;^--&quot;</span>)) ==<span class="st"> </span><span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
-<p>Many lines also have nested text representing quotes from other users, typically starting with a line like “so-and-so writes…” These can be removed with a few regular expressions. (We also choose to manually remove two messages that contained a large amount of non-text content).</p>
+<p>Many lines also have nested text representing quotes from other users, typically starting with a line like “so-and-so writes…” These can be removed with a few regular expressions. (We also choose to manually remove two messages, <code>9704</code> and <code>9985</code> that contained a large amount of non-text content).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cleaned_text &lt;-<span class="st"> </span>cleaned_text %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(text, <span class="st">&quot;^[^&gt;]+[A-Za-z</span><span class="ch">\\</span><span class="st">d]&quot;</span>) |<span class="st"> </span>text ==<span class="st"> &quot;&quot;</span>,
          !<span class="kw">str_detect</span>(text, <span class="st">&quot;writes(:|</span><span class="ch">\\</span><span class="st">.</span><span class="ch">\\</span><span class="st">.</span><span class="ch">\\</span><span class="st">.)$&quot;</span>),
          !<span class="kw">str_detect</span>(text, <span class="st">&quot;^In article &lt;&quot;</span>),
          !id %in%<span class="st"> </span><span class="kw">c</span>(<span class="dv">9704</span>, <span class="dv">9985</span>))</code></pre></div>
-<p>At that point, we’re ready to use <code>unnest_tokens</code> to split the dataset into tokens, while removing stop-words.</p>
+<p>At that point, we’re ready to use <code>unnest_tokens()</code> to split the dataset into tokens, while removing stop-words.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
 usenet_words &lt;-<span class="st"> </span>cleaned_text %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(word, <span class="st">&quot;[a-z&#39;]$&quot;</span>),
          !word %in%<span class="st"> </span>stop_words$word)</code></pre></div>
+<p>Every raw text dataset will require different steps for data cleaning, which will often involve some trial-and-error and exploration of unusual cases in the dataset. It’s important to notice that this cleaning can be achieved using tidy tools such as dplyr and tidyr.</p>
 </div>
 </div>
-<div id="words-within-newsgroups" class="section level2">
-<h2><span class="header-section-number">10.2</span> Words within newsgroups</h2>
+<div id="words-in-newsgroups" class="section level2">
+<h2><span class="header-section-number">10.2</span> Words in newsgroups</h2>
 <p>Now that we’ve removed the headers, signatures, and formatting, we can start exploring common words. For starters, we could find the most common words in the entire dataset, or within particular newsgroups.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">usenet_words %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
@@ -359,9 +359,9 @@ words_by_newsgroup</code></pre></div>
 ## 9                rec.autos       car   509
 ## 10   talk.politics.mideast armenians   509
 ## # ... with 173,903 more rows</code></pre>
-<div id="term-frequency-and-inverse-document-frequency-tf-idf" class="section level3">
-<h3><span class="header-section-number">10.2.1</span> Term frequency and inverse document frequency: tf-idf</h3>
-<p>We’d expect the newsgroups to differ in terms of topic and content, and therefore for the frequency of words to differ between them. Let’s try quantifying this using the tf-idf metric we learned about in Chapter <a href="tfidf.html#tfidf">4</a>.</p>
+<div id="finding-tf-idf-within-newsgroups" class="section level3">
+<h3><span class="header-section-number">10.2.1</span> Finding tf-idf within newsgroups</h3>
+<p>We’d expect the newsgroups to differ in terms of topic and content, and therefore for the frequency of words to differ between them. Let’s try quantifying this using the tf-idf metric (Chapter <a href="tfidf.html#tfidf">4</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tf_idf &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(word, newsgroup, n) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf))
@@ -400,8 +400,8 @@ tf_idf %&gt;%
 Figure 10.2: The 12 terms with the highest tf-idf within each of the science-related newsgroups
 </p>
 </div>
-<p>We see lots of characteristic words specific to particular newsgroup, such as “wiring” and “circuit” on the sci.electronics topic and “orbit” and “lunar” for the space newsgroup. You could use this same code to explore other topics.</p>
-<p>What newsgroups tended to be similar to each other in text content? We could discover this by</p>
+<p>We see lots of characteristic words specific to particular newsgroup, such as “wiring” and “circuit” on the sci.electronics topic and “orbit” and “lunar” for the space newsgroup. You could use this same code to explore other newsgroups yourself.</p>
+<p>What newsgroups tended to be similar to each other in text content? We could discover this by finding the pairwise correlation of word frequencies within each newsgroup, using the <code>pairwise_cor()</code> function from the widyr package (see Chapter <a href="ngrams.html#pairwise-correlation">5.2.2</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
 
 newsgroup_cors &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
@@ -440,14 +440,14 @@ newsgroup_cors %&gt;%
 Figure 10.3: A network of Usenet groups based on the correlation of word counts between them, including only connections with a correlation greater than .4
 </p>
 </div>
-<p>It looks like there were four main clusters of newsgroups: computers/electronics, politics/religion, motor vehicles, and sports. This certainly makes sense in terms of clustering of topics. We could</p>
+<p>It looks like there were four main clusters of newsgroups: computers/electronics, politics/religion, motor vehicles, and sports. This certainly makes sense in terms of what words and topics we’d expect these newsgroups to in common.</p>
 </div>
 <div id="topic-modeling-1" class="section level3">
 <h3><span class="header-section-number">10.2.2</span> Topic modeling</h3>
-<p>In Chapter <a href="#topicmodels"><strong>??</strong></a>, we used the latent Dirichlet allocation (LDA) algorithm to cluster a set of chapters into the books they originally came from. Could LDA do the same to sort out Usenet messages from different newsgroups?</p>
-<p>Let’s let it divide up the four science-related newsgroups. We first process it into a document-term matrix with <code>cast_dtm</code>, then fit the model with the <code>LDA()</code> function from the topicmodels package.</p>
+<p>In Chapter <a href="#topicmodels"><strong>??</strong></a>, we used the latent Dirichlet allocation (LDA) algorithm to divide a set of chapters into the books they originally came from. Could LDA do the same to sort out Usenet messages that came from different newsgroups?</p>
+<p>Let’s try dividing up messages from the four science-related newsgroups. We first process these into a document-term matrix with <code>cast_dtm()</code> (Chapter <a href="dtm.html#cast-dtm">6.2</a>), then fit the model with the <code>LDA()</code> function from the topicmodels package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># include only words that occur at least 50 times</span>
-word_sci_topics &lt;-<span class="st"> </span>usenet_words %&gt;%
+word_sci_newsgroups &lt;-<span class="st"> </span>usenet_words %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(newsgroup, <span class="st">&quot;^sci&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(word) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word_total =</span> <span class="kw">n</span>()) %&gt;%
@@ -455,21 +455,22 @@ word_sci_topics &lt;-<span class="st"> </span>usenet_words %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word_total &gt;<span class="st"> </span><span class="dv">50</span>)
 
 <span class="co"># convert into a document-term matrix</span>
-sci_dtm &lt;-<span class="st"> </span>word_sci_topics %&gt;%
+<span class="co"># with document names such as sci.crypt_14147</span>
+sci_dtm &lt;-<span class="st"> </span>word_sci_newsgroups %&gt;%
 <span class="st">  </span><span class="kw">unite</span>(document, newsgroup, id) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(document, word) %&gt;%
 <span class="st">  </span><span class="kw">cast_dtm</span>(document, word, n)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(topicmodels)
 sci_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(sci_dtm, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">seed =</span> <span class="dv">2016</span>))</code></pre></div>
-<p>What four topics did it extract, and did they match the four newsgroups? This approach will look familiar from Chapter <a href="#topicmodels"><strong>??</strong></a>: we visualize each topic based on the most frequent terms within it (Figure <a href="usenet.html#fig:usenettopicterms">10.4</a>).</p>
+<p>What four topics did this model extract, and did they match the four newsgroups? This approach will look familiar from Chapter <a href="#topicmodels"><strong>??</strong></a>: we visualize each topic based on the most frequent terms within it (Figure <a href="usenet.html#fig:usenettopicterms">10.4</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sci_lda %&gt;%
 <span class="st">  </span><span class="kw">tidy</span>() %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(topic) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">8</span>, beta) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">term =</span> <span class="kw">reorder</span>(term, beta)) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(term, beta)) +
-<span class="st">  </span><span class="kw">geom_col</span>() +
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(term, beta, <span class="dt">fill =</span> <span class="kw">factor</span>(topic))) +
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:usenettopicterms"></span>
@@ -478,32 +479,27 @@ sci_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(sci_dtm, <span
 Figure 10.4: The top 8 words from each topic fit by LDA on the science-related newsgroups
 </p>
 </div>
-<p>From the top words, we can start to suspect which topics may capture which newsgroups. Topic 1 certainly represents the sci.space newsgroup (thus the most common word being “space”), and topic 2 is likely drawn from cryptography. We can confirm this by seeing how many documents from each newsgroup appeared to be drawn from which topics (Figure <a href="#fig:usenetassignments"><strong>??</strong></a>).</p>
+<p>From the top words, we can start to suspect which topics may capture which newsgroups. Topic 1 certainly represents the sci.space newsgroup (thus the most common word being “space”), and topic 2 is likely drawn from cryptography, with terms such as “key” and “encryption”. Just as we did in Chapter <a href="topicmodeling.html#per-document">7.2.2</a>, we can confirm this by seeing how documents from each newsgroup have higher “gamma” for each topic (Figure <a href="#fig:usenetassignments"><strong>??</strong></a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sci_lda %&gt;%
 <span class="st">  </span><span class="kw">tidy</span>(<span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(document, <span class="kw">c</span>(<span class="st">&quot;newsgroup&quot;</span>, <span class="st">&quot;id&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(newsgroup, id) %&gt;%
-<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">1</span>, gamma) %&gt;%
-<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">newsgroup =</span> <span class="kw">reorder</span>(newsgroup, topic)) %&gt;%
-<span class="st">  </span><span class="kw">count</span>(newsgroup, topic) %&gt;%
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(topic, n)) +
-<span class="st">  </span><span class="kw">geom_col</span>() +
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">newsgroup =</span> <span class="kw">reorder</span>(newsgroup, gamma *<span class="st"> </span>topic)) %&gt;%
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="kw">factor</span>(topic), gamma)) +
+<span class="st">  </span><span class="kw">geom_boxplot</span>() +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>newsgroup) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Topic&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;# of messages where this was the highest % topic&quot;</span>)</code></pre></div>
 <p><img src="10-usenet_files/figure-html/usenetassignments-1.png" width="672" /></p>
 <p>Much as we saw in the literature analysis, topic modeling was able to discover the distinct topics present in the text without needing to consult the labels.</p>
+<p>Notice that the division of Usenet messages wasn’t as clean as the division of book chapters, with a substantial number of messages from each newsgroup getting high values of “gamma” for other topics. This isn’t surprising since many of the messages are short and could overlap in terms of common words (for example, discussions of space travel could include many of the same words as discussions of electronics). This is a realistic example of how LDA might divide documents into rough topics while still allowing a degree of overlap.</p>
 </div>
 </div>
 <div id="sentiment-analysis" class="section level2">
 <h2><span class="header-section-number">10.3</span> Sentiment analysis</h2>
-<p>We can use the sentiment analysis techniques we explored in Chapter <a href="sentiment.html#sentiment">3</a> to examine how positive and negative words occurred in these Usenet posts. Which newsgroups appeared the most positive or negative overall?</p>
+<p>We can use the sentiment analysis techniques we explored in Chapter <a href="sentiment.html#sentiment">3</a> to examine how often positive and negative words occurred in these Usenet posts. Which newsgroups were the most positive or negative overall?</p>
 <p>We’ll focus on the AFINN sentiment lexicon, which provides numeric positivity scores for each word, and visualize it with a bar plot (Figure <a href="usenet.html#fig:newsgroupsentiments">10.5</a>).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">AFINN &lt;-<span class="st"> </span><span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>)
-
-newsgroup_sentiments &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
-<span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newsgroup_sentiments &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(newsgroup) %&gt;%
 <span class="st">  </span><span class="kw">summarize</span>(<span class="dt">score =</span> <span class="kw">sum</span>(score *<span class="st"> </span>n) /<span class="st"> </span><span class="kw">sum</span>(n))
 
@@ -519,12 +515,12 @@ newsgroup_sentiments %&gt;%
 Figure 10.5: Average AFINN score for posts within each newsgroup
 </p>
 </div>
-<p>According to this analysis, the “misc.forsale” newsgroup was the most positive. This was most likely because</p>
+<p>According to this analysis, the “misc.forsale” newsgroup was the most positive. This makes sense, since it likely included many positive adjectives about the products that users wanted to sell!</p>
 <div id="sentiment-analysis-by-word" class="section level3">
 <h3><span class="header-section-number">10.3.1</span> Sentiment analysis by word</h3>
 <p>It’s worth looking deeper to understand <em>why</em> some newsgroups ended up more positive or negative than others. For that, we can examine the total positive and negative contributions of each word.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contributions &lt;-<span class="st"> </span>usenet_words %&gt;%
-<span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(word) %&gt;%
 <span class="st">  </span><span class="kw">summarize</span>(<span class="dt">occurences =</span> <span class="kw">n</span>(),
             <span class="dt">contribution =</span> <span class="kw">sum</span>(score))
@@ -544,7 +540,7 @@ contributions</code></pre></div>
 ## 9    ability        177          354
 ## 10    aboard          8            8
 ## # ... with 1,899 more rows</code></pre>
-<p>Which words had the most effect on sentiment scores (Figure <a href="#usenetcontributions"><strong>??</strong></a>)?</p>
+<p>Which words had the most effect on sentiment scores overall (Figure <a href="#usenetcontributions"><strong>??</strong></a>)?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contributions %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">25</span>, <span class="kw">abs</span>(contribution)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, contribution)) %&gt;%
@@ -558,9 +554,9 @@ Figure 10.6: Words with the greatest contributions to positive/negative sentimen
 </p>
 </div>
 <p>These words look generally reasonable as indicators of each message’s sentiment, but we can spot possible problems with the approach. “True” could just as easily be a part of “not true” or a similar negative expression, and the words “God” and “Jesus” are apparently very common on Usenet but could easily be used in many contexts, positive or negative.</p>
-<p>We may also care about which words contributed the most <em>within each newsgroup</em>, so that we can see which newsgroups might be incorrectly estimated. We can calculate each word’s contribution to each newsgroup’s sentiment scorem and visualize the top few from each (Figure <a href="#fig:newsgroupsentiment"><strong>??</strong></a>).</p>
+<p>We may also care about which words contributed the most <em>within each newsgroup</em>, so that we can see which newsgroups might be incorrectly estimated. We can calculate each word’s contribution to each newsgroup’s sentiment score, and visualize the strongest contributors from a selection of the groups (Figure <a href="#fig:newsgroupsentiment"><strong>??</strong></a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_sentiment_words &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
-<span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> score *<span class="st"> </span>n /<span class="st"> </span><span class="kw">sum</span>(n))
 
 top_sentiment_words</code></pre></div>
@@ -579,13 +575,14 @@ top_sentiment_words</code></pre></div>
 ## 10 soc.religion.christian   true   179     2  0.005628842
 ## # ... with 13,053 more rows</code></pre>
 <p><img src="10-usenet_files/figure-html/newsgroupsentiment-1.png" width="960" /></p>
-<p>We can see here how much sentiment is confounded with topic in this particular approach. An atheism newsgroup is likely to discuss “god” in detail even in a negative context, and we can see that it makes the newsgroup look more positive. Similarly, the negative contribution of the word “gun” to the “talk.politics.guns” group will occur even when the members are discussing guns positively. This helps remind us that sentiment analysis can be confounded by topic, and that we should always examine the influential words before interpreting it too deeply.</p>
+<p>This confirms our hypothesis about the “misc.forsale” newsgroup: most of the sentiment was driven by positive adjectives such as “excellent” and “perfect”. We can also see how much sentiment is confounded with topic. An atheism newsgroup is likely to discuss “god” in detail even in a negative context, and we can see that it makes the newsgroup look more positive. Similarly, the negative contribution of the word “gun” to the “talk.politics.guns” group will occur even when the members are discussing guns positively.</p>
+<p>This helps remind us that sentiment analysis can be confounded by topic, and that we should always examine the influential words before interpreting it too deeply.</p>
 </div>
 <div id="sentiment-analysis-by-message" class="section level3">
 <h3><span class="header-section-number">10.3.2</span> Sentiment analysis by message</h3>
 <p>We can also try finding the most positive and negative individual messages, by grouping and summarizing by <code>id</code> rather than <code>newsgroup</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sentiment_messages &lt;-<span class="st"> </span>usenet_words %&gt;%
-<span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(newsgroup, id) %&gt;%
 <span class="st">  </span><span class="kw">summarize</span>(<span class="dt">sentiment =</span> <span class="kw">mean</span>(score),
             <span class="dt">words =</span> <span class="kw">n</span>()) %&gt;%
@@ -608,13 +605,12 @@ top_sentiment_words</code></pre></div>
 ## 9         rec.sport.hockey  53571  3.000000     5
 ## 10 comp.os.ms-windows.misc   9620  2.857143     7
 ## # ... with 3,544 more rows</code></pre>
-<p>Let’s check this by looking at the most positive message in the whole dataset. We may want to write a short function for printing a message given its ID.</p>
+<p>Let’s check this by looking at the most positive message in the whole dataset. To assist in this we could write a short function for printing a specified message.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">print_message &lt;-<span class="st"> </span>function(group, message_id) {
-  cleaned_text %&gt;%
-<span class="st">    </span><span class="kw">filter</span>(newsgroup ==<span class="st"> </span>group, id ==<span class="st"> </span>message_id) %&gt;%
-<span class="st">    </span><span class="kw">filter</span>(text !=<span class="st"> &quot;&quot;</span>) %&gt;%
-<span class="st">    </span>.$text %&gt;%
-<span class="st">    </span><span class="kw">cat</span>(<span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)
+  result &lt;-<span class="st"> </span>cleaned_text %&gt;%
+<span class="st">    </span><span class="kw">filter</span>(newsgroup ==<span class="st"> </span>group, id ==<span class="st"> </span>message_id, text !=<span class="st"> &quot;&quot;</span>)
+  
+  <span class="kw">cat</span>(result$text, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)
 }
 
 <span class="kw">print_message</span>(<span class="st">&quot;rec.sport.hockey&quot;</span>, <span class="dv">53560</span>)</code></pre></div>
@@ -642,7 +638,7 @@ top_sentiment_words</code></pre></div>
 ## rrmadiso@napier.uwaterloo.ca
 ## PS:  I will send my entries to one of you folks so you know when I say
 ## I won, that I won!!!!!</code></pre>
-<p>It looks like this message was chosen because it uses the word “winner” many, many times! How about the most negative message? Turns out it’s also from the hockey site, but has a very different attitude.</p>
+<p>It looks like this message was chosen because it uses the word “winner” many times. How about the most negative message? Turns out it’s also from the hockey site, but has a very different attitude.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sentiment_messages %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(sentiment)</code></pre></div>
 <pre><code>## # A tibble: 3,554 × 4
@@ -667,7 +663,7 @@ top_sentiment_words</code></pre></div>
 ## the North Stars should be moved because for the past few years they have
 ## just been SHIT. A real team like Toronto would never be moved!!!
 ## Andrew--</code></pre>
-<p>Well, we can confidently say that the sentiment analysis worked.</p>
+<p>Well, we can confidently say that the sentiment analysis worked!</p>
 </div>
 <div id="n-gram-analysis" class="section level3">
 <h3><span class="header-section-number">10.3.3</span> N-gram analysis</h3>
@@ -679,13 +675,13 @@ top_sentiment_words</code></pre></div>
 <span class="st">  </span><span class="kw">count</span>(newsgroup, bigram, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(bigram, <span class="kw">c</span>(<span class="st">&quot;word1&quot;</span>, <span class="st">&quot;word2&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)</code></pre></div>
-<p>We could define a list of six words that we suspect are used in negation, such as “no”, “not”, and “without”, and consider which words most often followed them (Figure <a href="#fig:negatewords"><strong>??</strong></a>).</p>
+<p>We could then define a list of six words that we suspect are used in negation, such as “no”, “not”, and “without”, and visualize the sentiment-associated words that most often followed them (Figure <a href="usenet.html#fig:negatewords">10.7</a>). This shows the words that most often contributed in the “wrong” direction.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negate_words &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;not&quot;</span>, <span class="st">&quot;without&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;can&#39;t&quot;</span>, <span class="st">&quot;don&#39;t&quot;</span>, <span class="st">&quot;won&#39;t&quot;</span>)
 
 usenet_bigram_counts %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word1 %in%<span class="st"> </span>negate_words) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">wt =</span> n, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
-<span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">word2 =</span> <span class="st">&quot;word&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">word2 =</span> <span class="st">&quot;word&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> score *<span class="st"> </span>nn) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, <span class="kw">abs</span>(contribution)) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
@@ -698,32 +694,14 @@ usenet_bigram_counts %&gt;%
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * # of occurrences&quot;</span>) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="10-usenet_files/figure-html/negatewords-1.png" width="768" /></p>
-<p>The words shown are the ones that contributed the most to the sentiment scores in the wrong direction. It looks like the largest sources of misidentifying a word as positive come from “dont want/like/care”, and the most common in the other direction is “no problem”.</p>
-<p>In this analysis of Usenet messages we’ve incorporated almost every method described in this book, ranging from tf-idf to topic modeling, and from sentiment analysis to n-gram tokenization. Throughout the chapter, and indeed through all of our case studies, we’ve been able to rely on a small list of common tools for exploration and visualization. We hope that these examples show much all tidy text analyses have in common with each other, and indeed with all tidy data analyses.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(igraph)
-<span class="kw">library</span>(ggraph)
-
-visualize_bigrams &lt;-<span class="st"> </span>function(bigrams) {
-  <span class="kw">set.seed</span>(<span class="dv">2016</span>)
-  a &lt;-<span class="st"> </span>grid::<span class="kw">arrow</span>(<span class="dt">type =</span> <span class="st">&quot;closed&quot;</span>, <span class="dt">length =</span> <span class="kw">unit</span>(.<span class="dv">15</span>, <span class="st">&quot;inches&quot;</span>))
-  
-  bigrams %&gt;%
-<span class="st">    </span><span class="kw">graph_from_data_frame</span>() %&gt;%
-<span class="st">    </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
-<span class="st">    </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">arrow =</span> a) +
-<span class="st">    </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">    </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
-<span class="st">    </span><span class="kw">theme_void</span>()
-}
-
-usenet_bigram_counts %&gt;%
-<span class="st">  </span><span class="kw">select</span>(word1, word2, n) %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(!word1 %in%<span class="st"> </span>stop_words$word,
-         !word2 %in%<span class="st"> </span>stop_words$word) %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">25</span>) %&gt;%
-<span class="st">  </span><span class="kw">visualize_bigrams</span>()</code></pre></div>
-<p><img src="10-usenet_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<div class="figure"><span id="fig:negatewords"></span>
+<img src="10-usenet_files/figure-html/negatewords-1.png" alt="Words that contributed the most to sentiment when they followed a 'negating' word" width="768" />
+<p class="caption">
+Figure 10.7: Words that contributed the most to sentiment when they followed a ‘negating’ word
+</p>
+</div>
+<p>It looks like the largest sources of misidentifying a word as positive come from “don’t want/like/care”, and the largest source of incorrectly classified negative sentiment is “no problem”.</p>
+<p>In this analysis of Usenet messages we’ve incorporated almost every method for tidy text mining described in this book, ranging from tf-idf to topic modeling and from sentiment analysis to n-gram tokenization. Throughout the chapter, and indeed through all of our case studies, we’ve been able to rely on a small list of common tools for exploration and visualization. We hope that these examples show how much all tidy text analyses have in common with each other, and indeed with all tidy data analyses.</p>
 
 </div>
 </div>
