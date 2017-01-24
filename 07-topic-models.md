@@ -17,7 +17,7 @@ Latent Dirichlet allocation is one of the most common algorithms for topic model
 
 LDA is a mathematical method for estimating both of these at the same time: finding the mixture of words that is associated with each topic, while also determining the mixture of topics that describes each word. It has a number of existing implementations, and we'll explore one of them.
 
-In Chapter \ref{dtm} we briefly introduced the `AssociatedPress` dataset provided by the topicmodels package, as an example of a DocumentTermMatrix. This is a collection of 2246 news articles from an American news agency, mostly published around 1988.
+In Chapter \@ref(dtm) we briefly introduced the `AssociatedPress` dataset provided by the topicmodels package, as an example of a DocumentTermMatrix. This is a collection of 2246 news articles from an American news agency, mostly published around 1988.
 
 
 ```r
@@ -52,7 +52,7 @@ Fitting the model was the "easy part": the remainder of the analysis will involv
 
 ### Word-topic probabilities
 
-In Chapter \ref{dtm} we introduced the `tidy()` method, originally from the [broom package](https://github.com/dgrtwo/broom), for tidying model objects. The tidytext package provides this method for extracting the per-topic-per-word probabilities, called $\beta$ ("beta"), from the model.
+In Chapter \@ref(dtm) we introduced the `tidy()` method, originally from the [broom package](https://github.com/dgrtwo/broom), for tidying model objects. The tidytext package provides this method for extracting the per-topic-per-word probabilities, called $\beta$ ("beta"), from the model.
 
 
 ```r
@@ -81,7 +81,7 @@ ap_lda_td
 
 Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. For example, the term 
 
-We could use dplyr's `top_n()` to find the top 10 terms within each topic.As a tidy data frame, this lends itself well to a ggplot2 visualization (Figure \ref{fig:aptoptermsplot}).
+We could use dplyr's `top_n()` to find the top 10 terms within each topic. As a tidy data frame, this lends itself well to a ggplot2 visualization (Figure \@ref(fig:aptoptermsplot)).
 
 
 ```r
@@ -141,7 +141,7 @@ beta_spread
 ## # ... with 188 more rows
 ```
 
-The words with the greatest differences between the two topics are visualized in Figure \ref{fig:topiccompare}.
+The words with the greatest differences between the two topics are visualized in Figure \@ref(fig:topiccompare).
 
 
 ```r
@@ -232,7 +232,7 @@ Suppose a vandal has broken into your study and torn apart four of your books:
 
 This vandal has torn the books into individual chapters, and left them in one large pile. How can we restore these disorganized chapters to their original books? This is a challenging problem since the individual chapters are **unlabeled**: we don't know what words might distinguish them into groups. We'll thus use topic modeling to discover how chapters cluster into distinct topics, each of them representing one of the books.
 
-We'll retrieve the text of these four books using the gutenbergr package introduced in Chapter \ref{tfidf}.
+We'll retrieve the text of these four books using the gutenbergr package introduced in Chapter \@ref(tfidf).
 
 
 ```r
@@ -300,7 +300,7 @@ word_counts
 
 ### LDA on chapters
 
-Right now our data frame `word_counts` is in a tidy form, with one-term-per-document-per-row. However, the topicmodels package requires a `DocumentTermMatrix` (from the tm package). As described in Chapter \ref{dtm}, we can cast a one-token-per-row table into a `DocumentTermMatrix` with tidytext's `cast_dtm()`.
+Right now our data frame `word_counts` is in a tidy form, with one-term-per-document-per-row. However, the topicmodels package requires a `DocumentTermMatrix` (from the tm package). As described in Chapter \@ref(dtm), we can cast a one-token-per-row table into a `DocumentTermMatrix` with tidytext's `cast_dtm()`.
 
 
 ```r
@@ -398,7 +398,7 @@ top_terms
 ## 20     4      miss 0.006228387
 ```
 
-This output lends itself well to a ggplot2 visualization (Figure \ref{toptermsplot}).
+This output lends itself well to a ggplot2 visualization (Figure \@ref(toptermsplot)).
 
 
 ```r
@@ -452,7 +452,7 @@ Each of these values is an estimated proportion of words from that document that
 
 Now that we have these document classifiations, we can see how well our unsupervised learning did at distinguishing the four books. We'd expect that chapters within a book would be found to be mostly (or entirely), generated from the corresponding topic.
 
-First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure \ref{fig:chaptersldagamma}). 
+First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure \@ref(fig:chaptersldagamma).
 
 
 ```r
@@ -750,68 +750,13 @@ Once the model is created, however, we can use the `tidy()` and `augment()` func
 ```r
 # word-topic pairs
 tidy(mallet_model)
-```
 
-```
-## # A tibble: 71,064 × 3
-##    topic    term         beta
-##    <int>   <chr>        <dbl>
-## 1      1 limping 2.540414e-07
-## 2      2 limping 2.330590e-05
-## 3      3 limping 7.726535e-05
-## 4      4 limping 2.966949e-07
-## 5      1  pirate 2.540414e-07
-## 6      2  pirate 2.307515e-07
-## 7      3  pirate 1.029349e-04
-## 8      4  pirate 2.966949e-07
-## 9      1  gibbet 2.540414e-07
-## 10     2  gibbet 6.945621e-05
-## # ... with 71,054 more rows
-```
-
-```r
 # document-topic pairs
 tidy(mallet_model, matrix = "gamma")
-```
 
-```
-## # A tibble: 772 × 3
-##                 document topic     gamma
-##                    <chr> <int>     <dbl>
-## 1   Great Expectations_1     1 0.0798791
-## 2  Great Expectations_10     1 0.1470407
-## 3  Great Expectations_11     1 0.1584356
-## 4  Great Expectations_12     1 0.1411807
-## 5  Great Expectations_13     1 0.2103933
-## 6  Great Expectations_14     1 0.2510246
-## 7  Great Expectations_15     1 0.1491597
-## 8  Great Expectations_16     1 0.1916244
-## 9  Great Expectations_17     1 0.2137640
-## 10 Great Expectations_18     1 0.1699932
-## # ... with 762 more rows
-```
-
-```r
 # column needs to be named "term" for "augment"
 term_counts <- rename(word_counts, term = word)
 augment(mallet_model, term_counts)
-```
-
-```
-## # A tibble: 104,721 × 4
-##                    document    term     n .topic
-##                       <chr>   <chr> <int>  <int>
-## 1     Great Expectations_57     joe    88      2
-## 2      Great Expectations_7     joe    70      2
-## 3     Great Expectations_17   biddy    63      2
-## 4     Great Expectations_27     joe    58      2
-## 5     Great Expectations_38 estella    58      2
-## 6      Great Expectations_2     joe    56      2
-## 7     Great Expectations_23  pocket    53      2
-## 8     Great Expectations_15     joe    50      2
-## 9     Great Expectations_18     joe    50      2
-## 10 The War of the Worlds_16 brother    50      3
-## # ... with 104,711 more rows
 ```
 
 We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration: the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.

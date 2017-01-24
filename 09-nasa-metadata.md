@@ -310,7 +310,7 @@ nasa_keyword <- nasa_keyword %>%
 
 ## Word co-ocurrences and correlations
 
-As a next step, let's examine which words commonly occur together in the titles, descriptions, and keywords of NASA datasets, as described in [Chapter 5](#ngrams). We can then examine word networks for these fields; this may help us see, for example, which datasets are related to each other. 
+As a next step, let's examine which words commonly occur together in the titles, descriptions, and keywords of NASA datasets, as described in Chapter \@ref(ngrams). We can then examine word networks for these fields; this may help us see, for example, which datasets are related to each other. 
 
 ### Networks of Description and Title Words
 
@@ -418,7 +418,7 @@ desc_words %>%
 <p class="caption">(\#fig:plotdesc)Word network in NASA dataset descriptions</p>
 </div>
 
-Figure \@ref(fig:plotdesc) shows such *strong* connections between the top dozen or so words (words like "data", "global", "resolution", and "instrument") that we do not see clear clustering structure in the network. We may want to use tf-idf (as described in detail in [Chapter 4](#tfidf)) as a metric to find characteristic words for each description field, instead of looking at counts of words. 
+Figure \@ref(fig:plotdesc) shows such *strong* connections between the top dozen or so words (words like "data", "global", "resolution", and "instrument") that we do not see clear clustering structure in the network. We may want to use tf-idf (as described in detail in Chapter \@ref(tfidf)) as a metric to find characteristic words for each description field, instead of looking at counts of words. 
 
 ### Networks of Keywords
 
@@ -466,7 +466,7 @@ keyword_counts %>%
 <p class="caption">(\#fig:plotcounts)Co-occurrence network in NASA dataset keywords</p>
 </div>
 
-We definitely see clustering here, and strong connections between keywords like **OCEANS**, **OCEAN OPTICS**, and **OCEAN COLOR**, or **PROJECT** and **COMPLETED**. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in [Chapter 5](#ngrams). This looks for those keywords that are more likely to occur together than with other keywords in a description field.
+We definitely see clustering here, and strong connections between keywords like **OCEANS**, **OCEAN OPTICS**, and **OCEAN COLOR**, or **PROJECT** and **COMPLETED**. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in Chapter \@ref(ngrams). This looks for those keywords that are more likely to occur together than with other keywords in a description field.
 
 
 ```r
@@ -521,7 +521,7 @@ This network appears much different than the co-occurence network. The differenc
 
 ## Calculating tf-idf for the description fields
 
-The network graph in Figure \@ref(fig:plotdesc) showed us that the description fields are dominated by a few common words like "data", "global", and "resolution"; this would be an excellent opportunity to use tf-idf as a statistic to find characteristic words for individual description fields. As discussed in [Chapter 4](#tf-idf), we can use tf-idf, the term frequency times inverse document frequency, to identify words that are especially important to a document within a collection of documents. Let's apply that approach to the description fields of these NASA datasets. 
+The network graph in Figure \@ref(fig:plotdesc) showed us that the description fields are dominated by a few common words like "data", "global", and "resolution"; this would be an excellent opportunity to use tf-idf as a statistic to find characteristic words for individual description fields. As discussed in Chapter \@ref(tfidf), we can use tf-idf, the term frequency times inverse document frequency, to identify words that are especially important to a document within a collection of documents. Let's apply that approach to the description fields of these NASA datasets. 
 
 ### What is tf-idf for the description field words?
 
@@ -604,7 +604,7 @@ Using tf-idf has allowed us to identify important description words for each of 
 
 ## Topic modeling
 
-Using tf-idf as a statistic has already given us insight into the content of NASA description fields, but let's try an additional approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in [Chapter 7](#topicmodeling) to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use [latent Dirichlet allocation (LDA)](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) for our topic modeling; there are other possible approaches for topic modeling.
+Using tf-idf as a statistic has already given us insight into the content of NASA description fields, but let's try an additional approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in Chapter \@ref(topicmodeling) to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use [latent Dirichlet allocation (LDA)](https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation) for our topic modeling; there are other possible approaches for topic modeling.
 
 ### Casting to a document-term matrix
 
@@ -648,7 +648,7 @@ word_counts
 ## # ... with 1,895,300 more rows
 ```
 
-This is the information we need, the number of times each word is used in each document, to make a `DocumentTermMatrix`. We can `cast()` from our tidy text format to this non-tidy format as described in detail in [Chapter 6](#dtm).
+This is the information we need, the number of times each word is used in each document, to make a `DocumentTermMatrix`. We can `cast()` from our tidy text format to this non-tidy format as described in detail in Chapter \@ref(dtm).
 
 
 ```r

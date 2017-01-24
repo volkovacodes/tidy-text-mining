@@ -200,7 +200,7 @@ bigrams_filtered %>%
 ## # ... with 24 more rows
 ```
 
-A bigram can also be treated as a term in a document in the same way that we treated individual words. For example, we can look at the TF-IDF (Chapter \@ref(tfidf)) of bigrams across Austen novels. These TF-IDF values can be visualized within each book, just as we did for words (Figure \@ref(fig:bigramtfidf)).
+A bigram can also be treated as a term in a document in the same way that we treated individual words. For example, we can look at the tf-idf (Chapter \@ref(tfidf)) of bigrams across Austen novels. These tf-idf values can be visualized within each book, just as we did for words (Figure \@ref(fig:bigramtfidf)).
 
 
 ```r
@@ -232,13 +232,13 @@ bigram_tf_idf
 ```
 
 <div class="figure">
-<img src="05-word-combinations_files/figure-html/bigramtfidf-1.png" alt="The 12 bigrams with the highest TF-IDF from each Jane Austen novel." width="864" />
-<p class="caption">(\#fig:bigramtfidf)The 12 bigrams with the highest TF-IDF from each Jane Austen novel.</p>
+<img src="05-word-combinations_files/figure-html/bigramtfidf-1.png" alt="The 12 bigrams with the highest tf-idf from each Jane Austen novel." width="864" />
+<p class="caption">(\#fig:bigramtfidf)The 12 bigrams with the highest tf-idf from each Jane Austen novel.</p>
 </div>
 
 Much as we discovered in Chapter \@ref(tfidf), the units that distinguish each Austen book are almost exclusively names. We also notice some pairings of a common verb and a name, such as "replied elizabeth" in Pride & Prejudice, or "cried emma" in Emma.
 
-There are advantages and disadvantages to examining the TF-IDF of bigrams rather than individual words. Pairs of consecutive words might capture structure that isn't present when one is just counting single words, and may provide context that makes tokens more understandable (for example, "pulteney street", in Northanger Abbey, is more informative than "pulteney"). However, the per-bigram counts are also *sparser*: a typical two-word pair is rarer than either of its component words. Thus, bigrams can be especially useful when you have a very large text dataset.
+There are advantages and disadvantages to examining the tf-idf of bigrams rather than individual words. Pairs of consecutive words might capture structure that isn't present when one is just counting single words, and may provide context that makes tokens more understandable (for example, "pulteney street", in Northanger Abbey, is more informative than "pulteney"). However, the per-bigram counts are also *sparser*: a typical two-word pair is rarer than either of its component words. Thus, bigrams can be especially useful when you have a very large text dataset.
 
 ### Using bigrams to provide context in sentiment analysis
 

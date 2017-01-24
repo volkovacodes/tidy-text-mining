@@ -253,7 +253,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><strong>Every document is a mixture of topics.</strong> We imagine that each document may contain words from several topics in particular proportions. For example, in a two-topic model we could say “Document 1 is 90% topic A and 10% topic B, while Document 2 is 30% topic A and 70% topic B.”</li>
 </ul>
 <p>LDA is a mathematical method for estimating both of these at the same time: finding the mixture of words that is associated with each topic, while also determining the mixture of topics that describes each word. It has a number of existing implementations, and we’ll explore one of them.</p>
-<p>In Chapter  we briefly introduced the <code>AssociatedPress</code> dataset provided by the topicmodels package, as an example of a DocumentTermMatrix. This is a collection of 2246 news articles from an American news agency, mostly published around 1988.</p>
+<p>In Chapter <a href="dtm.html#dtm">6</a> we briefly introduced the <code>AssociatedPress</code> dataset provided by the topicmodels package, as an example of a DocumentTermMatrix. This is a collection of 2246 news articles from an American news agency, mostly published around 1988.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(topicmodels)
 
 <span class="kw">data</span>(<span class="st">&quot;AssociatedPress&quot;</span>)
@@ -271,7 +271,7 @@ ap_lda</code></pre></div>
 <p>Fitting the model was the “easy part”: the remainder of the analysis will involve exploring and interpreting the model using tidying functions.</p>
 <div id="word-topic-probabilities" class="section level3">
 <h3><span class="header-section-number">7.1.1</span> Word-topic probabilities</h3>
-<p>In Chapter  we introduced the <code>tidy()</code> method, originally from the <a href="https://github.com/dgrtwo/broom">broom package</a>, for tidying model objects. The tidytext package provides this method for extracting the per-topic-per-word probabilities, called <span class="math inline">\(\beta\)</span> (“beta”), from the model.</p>
+<p>In Chapter <a href="dtm.html#dtm">6</a> we introduced the <code>tidy()</code> method, originally from the <a href="https://github.com/dgrtwo/broom">broom package</a>, for tidying model objects. The tidytext package provides this method for extracting the per-topic-per-word probabilities, called <span class="math inline">\(\beta\)</span> (“beta”), from the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
 ap_lda_td &lt;-<span class="st"> </span><span class="kw">tidy</span>(ap_lda)
@@ -291,7 +291,7 @@ ap_lda_td</code></pre></div>
 ## 10     2     abbott 2.968045e-05
 ## # ... with 20,936 more rows</code></pre>
 <p>Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. For example, the term</p>
-<p>We could use dplyr’s <code>top_n()</code> to find the top 10 terms within each topic.As a tidy data frame, this lends itself well to a ggplot2 visualization (Figure ).</p>
+<p>We could use dplyr’s <code>top_n()</code> to find the top 10 terms within each topic. As a tidy data frame, this lends itself well to a ggplot2 visualization (Figure <a href="topicmodeling.html#fig:aptoptermsplot">7.1</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(dplyr)
 
@@ -338,7 +338,7 @@ beta_spread</code></pre></div>
 ## 9            army 2.622192e-04 1.048089e-03   1.9989152
 ## 10          asked 1.885803e-04 1.559209e-03   3.0475641
 ## # ... with 188 more rows</code></pre>
-<p>The words with the greatest differences between the two topics are visualized in Figure .</p>
+<p>The words with the greatest differences between the two topics are visualized in Figure <a href="topicmodeling.html#fig:topiccompare">7.2</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">beta_spread %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(<span class="dt">direction =</span> log_ratio &gt;<span class="st"> </span><span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, <span class="kw">abs</span>(log_ratio)) %&gt;%
@@ -407,7 +407,7 @@ ap_gamma</code></pre></div>
 <li><em>Pride and Prejudice</em> by Jane Austen</li>
 </ul>
 <p>This vandal has torn the books into individual chapters, and left them in one large pile. How can we restore these disorganized chapters to their original books? This is a challenging problem since the individual chapters are <strong>unlabeled</strong>: we don’t know what words might distinguish them into groups. We’ll thus use topic modeling to discover how chapters cluster into distinct topics, each of them representing one of the books.</p>
-<p>We’ll retrieve the text of these four books using the gutenbergr package introduced in Chapter .</p>
+<p>We’ll retrieve the text of these four books using the gutenbergr package introduced in Chapter <a href="tfidf.html#tfidf">4</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 
 titles &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Twenty Thousand Leagues under the Sea&quot;</span>, <span class="st">&quot;The War of the Worlds&quot;</span>,
@@ -456,7 +456,7 @@ word_counts</code></pre></div>
 ## # ... with 104,711 more rows</code></pre>
 <div id="lda-on-chapters" class="section level3">
 <h3><span class="header-section-number">7.2.1</span> LDA on chapters</h3>
-<p>Right now our data frame <code>word_counts</code> is in a tidy form, with one-term-per-document-per-row. However, the topicmodels package requires a <code>DocumentTermMatrix</code> (from the tm package). As described in Chapter , we can cast a one-token-per-row table into a <code>DocumentTermMatrix</code> with tidytext’s <code>cast_dtm()</code>.</p>
+<p>Right now our data frame <code>word_counts</code> is in a tidy form, with one-term-per-document-per-row. However, the topicmodels package requires a <code>DocumentTermMatrix</code> (from the tm package). As described in Chapter <a href="dtm.html#dtm">6</a>, we can cast a one-token-per-row table into a <code>DocumentTermMatrix</code> with tidytext’s <code>cast_dtm()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_dtm &lt;-<span class="st"> </span>word_counts %&gt;%
 <span class="st">  </span><span class="kw">cast_dtm</span>(document, word, n)
 
@@ -521,7 +521,7 @@ top_terms</code></pre></div>
 ## 18     4       pip 0.006817363
 ## 19     4    looked 0.006365257
 ## 20     4      miss 0.006228387</code></pre>
-<p>This output lends itself well to a ggplot2 visualization (Figure ).</p>
+<p>This output lends itself well to a ggplot2 visualization (Figure <a href="#toptermsplot"><strong>??</strong></a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 top_terms %&gt;%
@@ -561,7 +561,7 @@ chapters_lda_gamma</code></pre></div>
 ## # ... with 762 more rows</code></pre>
 <p>Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the Great Expectations_57 document has only a 0.00135% probability of coming from topic 1.</p>
 <p>Now that we have these document classifiations, we can see how well our unsupervised learning did at distinguishing the four books. We’d expect that chapters within a book would be found to be mostly (or entirely), generated from the corresponding topic.</p>
-<p>First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure ).</p>
+<p>First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure <a href="topicmodeling.html#fig:chaptersldagamma">7.4</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda_gamma &lt;-<span class="st"> </span>chapters_lda_gamma %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(document, <span class="kw">c</span>(<span class="st">&quot;title&quot;</span>, <span class="st">&quot;chapter&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>, <span class="dt">convert =</span> <span class="ot">TRUE</span>)
 
@@ -769,54 +769,14 @@ mallet_model$<span class="kw">loadDocuments</span>(docs)
 mallet_model$<span class="kw">train</span>(<span class="dv">100</span>)</code></pre></div>
 <p>Once the model is created, however, we can use the <code>tidy()</code> and <code>augment()</code> functions described in the rest of the chapter in an almost identical way. This includes extracting the probabilities of words within each topic or topics within each document.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># word-topic pairs</span>
-<span class="kw">tidy</span>(mallet_model)</code></pre></div>
-<pre><code>## # A tibble: 71,064 × 3
-##    topic    term         beta
-##    &lt;int&gt;   &lt;chr&gt;        &lt;dbl&gt;
-## 1      1 limping 2.540414e-07
-## 2      2 limping 2.330590e-05
-## 3      3 limping 7.726535e-05
-## 4      4 limping 2.966949e-07
-## 5      1  pirate 2.540414e-07
-## 6      2  pirate 2.307515e-07
-## 7      3  pirate 1.029349e-04
-## 8      4  pirate 2.966949e-07
-## 9      1  gibbet 2.540414e-07
-## 10     2  gibbet 6.945621e-05
-## # ... with 71,054 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># document-topic pairs</span>
-<span class="kw">tidy</span>(mallet_model, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)</code></pre></div>
-<pre><code>## # A tibble: 772 × 3
-##                 document topic     gamma
-##                    &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;
-## 1   Great Expectations_1     1 0.0798791
-## 2  Great Expectations_10     1 0.1470407
-## 3  Great Expectations_11     1 0.1584356
-## 4  Great Expectations_12     1 0.1411807
-## 5  Great Expectations_13     1 0.2103933
-## 6  Great Expectations_14     1 0.2510246
-## 7  Great Expectations_15     1 0.1491597
-## 8  Great Expectations_16     1 0.1916244
-## 9  Great Expectations_17     1 0.2137640
-## 10 Great Expectations_18     1 0.1699932
-## # ... with 762 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># column needs to be named &quot;term&quot; for &quot;augment&quot;</span>
+<span class="kw">tidy</span>(mallet_model)
+
+<span class="co"># document-topic pairs</span>
+<span class="kw">tidy</span>(mallet_model, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
+
+<span class="co"># column needs to be named &quot;term&quot; for &quot;augment&quot;</span>
 term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_counts, <span class="dt">term =</span> word)
 <span class="kw">augment</span>(mallet_model, term_counts)</code></pre></div>
-<pre><code>## # A tibble: 104,721 × 4
-##                    document    term     n .topic
-##                       &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;  &lt;int&gt;
-## 1     Great Expectations_57     joe    88      2
-## 2      Great Expectations_7     joe    70      2
-## 3     Great Expectations_17   biddy    63      2
-## 4     Great Expectations_27     joe    58      2
-## 5     Great Expectations_38 estella    58      2
-## 6      Great Expectations_2     joe    56      2
-## 7     Great Expectations_23  pocket    53      2
-## 8     Great Expectations_15     joe    50      2
-## 9     Great Expectations_18     joe    50      2
-## 10 The War of the Worlds_16 brother    50      3
-## # ... with 104,711 more rows</code></pre>
 <p>We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration: the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.</p>
 
 </div>

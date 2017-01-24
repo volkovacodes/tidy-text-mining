@@ -388,7 +388,7 @@ bigrams_united</code></pre></div>
 ## 9           Persuasion      milsom     5
 ## 10          Persuasion      rivers     4
 ## # ... with 24 more rows</code></pre>
-<p>A bigram can also be treated as a term in a document in the same way that we treated individual words. For example, we can look at the TF-IDF (Chapter <a href="tfidf.html#tfidf">4</a>) of bigrams across Austen novels. These TF-IDF values can be visualized within each book, just as we did for words (Figure <a href="ngrams.html#fig:bigramtfidf">5.1</a>).</p>
+<p>A bigram can also be treated as a term in a document in the same way that we treated individual words. For example, we can look at the tf-idf (Chapter <a href="tfidf.html#tfidf">4</a>) of bigrams across Austen novels. These tf-idf values can be visualized within each book, just as we did for words (Figure <a href="ngrams.html#fig:bigramtfidf">5.1</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bigram_tf_idf &lt;-<span class="st"> </span>bigrams_united %&gt;%
 <span class="st">  </span><span class="kw">count</span>(book, bigram) %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(bigram, book, n) %&gt;%
@@ -412,13 +412,13 @@ bigram_tf_idf</code></pre></div>
 ## 10   Pride &amp; Prejudice    lady catherine   100 0.01380453 1.791759 0.02473439
 ## # ... with 36,207 more rows</code></pre>
 <div class="figure"><span id="fig:bigramtfidf"></span>
-<img src="05-word-combinations_files/figure-html/bigramtfidf-1.png" alt="The 12 bigrams with the highest TF-IDF from each Jane Austen novel." width="864" />
+<img src="05-word-combinations_files/figure-html/bigramtfidf-1.png" alt="The 12 bigrams with the highest tf-idf from each Jane Austen novel." width="864" />
 <p class="caption">
-Figure 5.1: The 12 bigrams with the highest TF-IDF from each Jane Austen novel.
+Figure 5.1: The 12 bigrams with the highest tf-idf from each Jane Austen novel.
 </p>
 </div>
 <p>Much as we discovered in Chapter <a href="tfidf.html#tfidf">4</a>, the units that distinguish each Austen book are almost exclusively names. We also notice some pairings of a common verb and a name, such as “replied elizabeth” in Pride &amp; Prejudice, or “cried emma” in Emma.</p>
-<p>There are advantages and disadvantages to examining the TF-IDF of bigrams rather than individual words. Pairs of consecutive words might capture structure that isn’t present when one is just counting single words, and may provide context that makes tokens more understandable (for example, “pulteney street”, in Northanger Abbey, is more informative than “pulteney”). However, the per-bigram counts are also <em>sparser</em>: a typical two-word pair is rarer than either of its component words. Thus, bigrams can be especially useful when you have a very large text dataset.</p>
+<p>There are advantages and disadvantages to examining the tf-idf of bigrams rather than individual words. Pairs of consecutive words might capture structure that isn’t present when one is just counting single words, and may provide context that makes tokens more understandable (for example, “pulteney street”, in Northanger Abbey, is more informative than “pulteney”). However, the per-bigram counts are also <em>sparser</em>: a typical two-word pair is rarer than either of its component words. Thus, bigrams can be especially useful when you have a very large text dataset.</p>
 </div>
 <div id="using-bigrams-to-provide-context-in-sentiment-analysis" class="section level3">
 <h3><span class="header-section-number">5.1.3</span> Using bigrams to provide context in sentiment analysis</h3>

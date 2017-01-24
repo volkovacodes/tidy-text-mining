@@ -439,7 +439,7 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 </div>
 <div id="word-co-ocurrences-and-correlations" class="section level2">
 <h2><span class="header-section-number">9.2</span> Word co-ocurrences and correlations</h2>
-<p>As a next step, let’s examine which words commonly occur together in the titles, descriptions, and keywords of NASA datasets, as described in <a href="ngrams.html#ngrams">Chapter 5</a>. We can then examine word networks for these fields; this may help us see, for example, which datasets are related to each other.</p>
+<p>As a next step, let’s examine which words commonly occur together in the titles, descriptions, and keywords of NASA datasets, as described in Chapter <a href="ngrams.html#ngrams">5</a>. We can then examine word networks for these fields; this may help us see, for example, which datasets are related to each other.</p>
 <div id="networks-of-description-and-title-words" class="section level3">
 <h3><span class="header-section-number">9.2.1</span> Networks of Description and Title Words</h3>
 <p>We can use <code>pairwise_count()</code> from the widyr package to count how many times each pair of words occurs together in a title or description field.</p>
@@ -520,7 +520,7 @@ desc_words %&gt;%
 Figure 9.2: Word network in NASA dataset descriptions
 </p>
 </div>
-<p>Figure <a href="nasa.html#fig:plotdesc">9.2</a> shows such <em>strong</em> connections between the top dozen or so words (words like “data”, “global”, “resolution”, and “instrument”) that we do not see clear clustering structure in the network. We may want to use tf-idf (as described in detail in <a href="tfidf.html#tfidf">Chapter 4</a>) as a metric to find characteristic words for each description field, instead of looking at counts of words.</p>
+<p>Figure <a href="nasa.html#fig:plotdesc">9.2</a> shows such <em>strong</em> connections between the top dozen or so words (words like “data”, “global”, “resolution”, and “instrument”) that we do not see clear clustering structure in the network. We may want to use tf-idf (as described in detail in Chapter <a href="tfidf.html#tfidf">4</a>) as a metric to find characteristic words for each description field, instead of looking at counts of words.</p>
 </div>
 <div id="networks-of-keywords" class="section level3">
 <h3><span class="header-section-number">9.2.2</span> Networks of Keywords</h3>
@@ -558,7 +558,7 @@ keyword_counts %&gt;%
 Figure 9.3: Co-occurrence network in NASA dataset keywords
 </p>
 </div>
-<p>We definitely see clustering here, and strong connections between keywords like <strong>OCEANS</strong>, <strong>OCEAN OPTICS</strong>, and <strong>OCEAN COLOR</strong>, or <strong>PROJECT</strong> and <strong>COMPLETED</strong>. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in <a href="ngrams.html#ngrams">Chapter 5</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
+<p>We definitely see clustering here, and strong connections between keywords like <strong>OCEANS</strong>, <strong>OCEAN OPTICS</strong>, and <strong>OCEAN COLOR</strong>, or <strong>PROJECT</strong> and <strong>COMPLETED</strong>. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in Chapter <a href="ngrams.html#ngrams">5</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_cors &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">50</span>) %&gt;%
@@ -601,7 +601,7 @@ Figure 9.4: Correlation network in NASA dataset keywords
 </div>
 <div id="calculating-tf-idf-for-the-description-fields" class="section level2">
 <h2><span class="header-section-number">9.3</span> Calculating tf-idf for the description fields</h2>
-<p>The network graph in Figure <a href="nasa.html#fig:plotdesc">9.2</a> showed us that the description fields are dominated by a few common words like “data”, “global”, and “resolution”; this would be an excellent opportunity to use tf-idf as a statistic to find characteristic words for individual description fields. As discussed in <a href="#tf-idf">Chapter 4</a>, we can use tf-idf, the term frequency times inverse document frequency, to identify words that are especially important to a document within a collection of documents. Let’s apply that approach to the description fields of these NASA datasets.</p>
+<p>The network graph in Figure <a href="nasa.html#fig:plotdesc">9.2</a> showed us that the description fields are dominated by a few common words like “data”, “global”, and “resolution”; this would be an excellent opportunity to use tf-idf as a statistic to find characteristic words for individual description fields. As discussed in Chapter <a href="tfidf.html#tfidf">4</a>, we can use tf-idf, the term frequency times inverse document frequency, to identify words that are especially important to a document within a collection of documents. Let’s apply that approach to the description fields of these NASA datasets.</p>
 <div id="what-is-tf-idf-for-the-description-field-words" class="section level3">
 <h3><span class="header-section-number">9.3.1</span> What is tf-idf for the description field words?</h3>
 <p>We will consider each description field a document, and the whole set of description fields the collection or corpus of documents. We have already used <code>unnest_tokens()</code> earlier in this chapter to make a tidy data frame of the words in the description fields, so now we can use <code>bind_tf_idf()</code> to calculate tf-idf for each word.</p>
@@ -662,7 +662,7 @@ Figure 9.5: Distribution of tf-idf for words from datasets labeled with select k
 </div>
 <div id="topic-modeling" class="section level2">
 <h2><span class="header-section-number">9.4</span> Topic modeling</h2>
-<p>Using tf-idf as a statistic has already given us insight into the content of NASA description fields, but let’s try an additional approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in <a href="topicmodeling.html#topicmodeling">Chapter 7</a> to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use <a href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">latent Dirichlet allocation (LDA)</a> for our topic modeling; there are other possible approaches for topic modeling.</p>
+<p>Using tf-idf as a statistic has already given us insight into the content of NASA description fields, but let’s try an additional approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in Chapter <a href="topicmodeling.html#topicmodeling">7</a> to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use <a href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">latent Dirichlet allocation (LDA)</a> for our topic modeling; there are other possible approaches for topic modeling.</p>
 <div id="casting-to-a-document-term-matrix" class="section level3">
 <h3><span class="header-section-number">9.4.1</span> Casting to a document-term matrix</h3>
 <p>To do the topic modeling as implemented here, we need to make a <code>DocumentTermMatrix</code>, a special kind of matrix from the tm package (of course, this is just a specific implementation of the general concept of a “document-term matrix”). Rows correspond to documents (description texts in our case) and columns correspond to terms (i.e., words); it is a sparse matrix and the values are word counts.</p>
@@ -696,7 +696,7 @@ word_counts</code></pre></div>
 ## 9  55942a8ec63a7fe59b4986ef       al    32
 ## 10 55942a8ec63a7fe59b4986ef    human    31
 ## # ... with 1,895,300 more rows</code></pre>
-<p>This is the information we need, the number of times each word is used in each document, to make a <code>DocumentTermMatrix</code>. We can <code>cast()</code> from our tidy text format to this non-tidy format as described in detail in <a href="dtm.html#dtm">Chapter 6</a>.</p>
+<p>This is the information we need, the number of times each word is used in each document, to make a <code>DocumentTermMatrix</code>. We can <code>cast()</code> from our tidy text format to this non-tidy format as described in detail in Chapter <a href="dtm.html#dtm">6</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_dtm &lt;-<span class="st"> </span>word_counts %&gt;%
 <span class="st">  </span><span class="kw">cast_dtm</span>(id, word, n)
 

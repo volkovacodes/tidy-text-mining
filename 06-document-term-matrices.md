@@ -181,7 +181,7 @@ inaug_td
 ## # ... with 44,168 more rows
 ```
 
-We may be interested in finding the words most specific to each inaugural speeches. This could be quantified by calculating the TF-IDF of each term-speech pair using the `bind_tf_idf` function, as described in Chapter \@ref(tfidf).
+We may be interested in finding the words most specific to each inaugural speeches. This could be quantified by calculating the tf-idf of each term-speech pair using the `bind_tf_idf()` function, as described in Chapter \@ref(tfidf).
 
 
 ```r
@@ -212,8 +212,8 @@ inaug_tf_idf
 We could use this data to pick four notable inaugural addresses (from Presidents Lincoln, Roosevelt, Kennedy, and Obama), and visualize the words most specific to each speech, as shown in Figure \@ref(fig:presidentspeeches).
 
 <div class="figure">
-<img src="06-document-term-matrices_files/figure-html/presidentspeeches-1.png" alt="The terms with the highest TF-IDF from each of four selected inaugural addresses." width="672" />
-<p class="caption">(\#fig:presidentspeeches)The terms with the highest TF-IDF from each of four selected inaugural addresses.</p>
+<img src="06-document-term-matrices_files/figure-html/presidentspeeches-1.png" alt="The terms with the highest tf-idf from each of four selected inaugural addresses." width="672" />
+<p class="caption">(\#fig:presidentspeeches)The terms with the highest tf-idf from each of four selected inaugural addresses.</p>
 </div>
 
 As another example of a visualization possible with tidy data, we could extract the year from each document's name, and compute the total number of words within each year.
@@ -434,7 +434,7 @@ acq_tokens %>%
 ```
 
 ```r
-# TF-IDF
+# tf-idf
 acq_tokens %>%
   count(id, word) %>%
   bind_tf_idf(word, id, n) %>%
@@ -535,7 +535,7 @@ stock_tokens
 ## # ... with 105,047 more rows, and 1 more variables: heading <chr>
 ```
 
-Here we see the some of each article's metadata alongside the words used. We could use TF-IDF to determine which words were most specific to each stock symbol.
+Here we see the some of each article's metadata alongside the words used. We could use tf-idf to determine which words were most specific to each stock symbol.
 
 
 ```r
@@ -551,8 +551,8 @@ stock_tf_idf <- stock_tokens %>%
 The top terms for each are visualized in Figure \@ref(fig:stocktfidf). As we'd expect the company's name and is typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).
 
 <div class="figure">
-<img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest TF-IDF in recent articles specific to each company." width="768" />
-<p class="caption">(\#fig:stocktfidf)The 8 words with the highest TF-IDF in recent articles specific to each company.</p>
+<img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest tf-idf in recent articles specific to each company." width="768" />
+<p class="caption">(\#fig:stocktfidf)The 8 words with the highest tf-idf in recent articles specific to each company.</p>
 </div>
 
 If we were interested in using recent news to analyze the market and make investment decisions, we'd likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter \@ref(most-positive-negative). For example, we could examine this within the AFINN lexicon (Figure \@ref(fig:stockafinn)).

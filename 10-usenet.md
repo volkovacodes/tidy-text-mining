@@ -57,7 +57,7 @@ raw_text
 ## # ... with 511,645 more rows
 ```
 
-Notice the `id` column, which identifies a unique message, and the `newsgroup` column, which describes which of the 20 newsgroups each message comes from. What newsgroups are included, and how many messages were posted in each (Figure \ref{fig:messagecounts})?
+Notice the `id` column, which identifies a unique message, and the `newsgroup` column, which describes which of the 20 newsgroups each message comes from. What newsgroups are included, and how many messages were posted in each (Figure \@ref(fig:messagecounts))?
 
 
 ```r
@@ -174,7 +174,7 @@ words_by_newsgroup
 
 ### Term frequency and inverse document frequency: tf-idf
 
-We'd expect the newsgroups to differ in terms of topic and content, and therefore for the frequency of words to differ between them. Let's try quantifying this using the tf-idf metric we learned about in Chapter \ref{tfidf}.
+We'd expect the newsgroups to differ in terms of topic and content, and therefore for the frequency of words to differ between them. Let's try quantifying this using the tf-idf metric we learned about in Chapter \@ref(tfidf).
 
 
 ```r
@@ -202,7 +202,7 @@ tf_idf
 ## # ... with 173,903 more rows
 ```
 
-We can examine the top tf-idf for a few selected groups to extract words specific to those topics. For example, we could look at all the `sci.` boards, visualized in Figure \ref{fig:scitfidf}.
+We can examine the top tf-idf for a few selected groups to extract words specific to those topics. For example, we could look at all the `sci.` boards, visualized in Figure \@ref(fig:scitfidf).
 
 
 ```r
@@ -285,7 +285,7 @@ It looks like there were four main clusters of newsgroups: computers/electronics
 
 ### Topic modeling
 
-In Chapter \ref{topicmodels}, we used the latent Dirichlet allocation (LDA) algorithm to cluster a set of chapters into the books they originally came from. Could LDA do the same to sort out Usenet messages from different newsgroups?
+In Chapter \@ref(topicmodels), we used the latent Dirichlet allocation (LDA) algorithm to cluster a set of chapters into the books they originally came from. Could LDA do the same to sort out Usenet messages from different newsgroups?
 
 Let's let it divide up the four science-related newsgroups. We first process it into a document-term matrix with `cast_dtm`, then fit the model with the `LDA()` function from the topicmodels package.
 
@@ -312,7 +312,7 @@ library(topicmodels)
 sci_lda <- LDA(sci_dtm, k = 4, control = list(seed = 2016))
 ```
 
-What four topics did it extract, and did they match the four newsgroups? This approach will look familiar from Chapter \ref{topicmodels}: we visualize each topic based on the most frequent terms within it (Figure \ref{fig:usenettopicterms}).
+What four topics did it extract, and did they match the four newsgroups? This approach will look familiar from Chapter \@ref(topicmodels): we visualize each topic based on the most frequent terms within it (Figure \@ref(fig:usenettopicterms)).
 
 
 ```r
@@ -333,7 +333,7 @@ sci_lda %>%
 <p class="caption">(\#fig:usenettopicterms)The top 8 words from each topic fit by LDA on the science-related newsgroups</p>
 </div>
 
-From the top words, we can start to suspect which topics may capture which newsgroups. Topic 1 certainly represents the sci.space newsgroup (thus the most common word being "space"), and topic 2 is likely drawn from cryptography. We can confirm this by seeing how many documents from each newsgroup appeared to be drawn from which topics (Figure \ref{fig:usenetassignments}).
+From the top words, we can start to suspect which topics may capture which newsgroups. Topic 1 certainly represents the sci.space newsgroup (thus the most common word being "space"), and topic 2 is likely drawn from cryptography. We can confirm this by seeing how many documents from each newsgroup appeared to be drawn from which topics (Figure \@ref(fig:usenetassignments)).
 
 
 ```r
@@ -358,9 +358,9 @@ Much as we saw in the literature analysis, topic modeling was able to discover t
 
 ## Sentiment analysis
 
-We can use the sentiment analysis techniques we explored in Chapter \ref{sentiment} to examine how positive and negative words occurred in these Usenet posts. Which newsgroups appeared the most positive or negative overall?
+We can use the sentiment analysis techniques we explored in Chapter \@ref(sentiment) to examine how positive and negative words occurred in these Usenet posts. Which newsgroups appeared the most positive or negative overall?
 
-We'll focus on the AFINN sentiment lexicon, which provides numeric positivity scores for each word, and visualize it with a bar plot (Figure \ref{fig:newsgroupsentiments}).
+We'll focus on the AFINN sentiment lexicon, which provides numeric positivity scores for each word, and visualize it with a bar plot (Figure \@ref(fig:newsgroupsentiments)).
 
 
 ```r
@@ -418,7 +418,7 @@ contributions
 ## # ... with 1,899 more rows
 ```
 
-Which words had the most effect on sentiment scores (Figure \ref{usenetcontributions})? 
+Which words had the most effect on sentiment scores (Figure \@ref(usenetcontributions))? 
 
 
 ```r
@@ -437,7 +437,7 @@ contributions %>%
 
 These words look generally reasonable as indicators of each message's sentiment, but we can spot possible problems with the approach. "True" could just as easily be a part of "not true" or a similar negative expression, and the words "God" and "Jesus" are apparently very common on Usenet but could easily be used in many contexts, positive or negative.
 
-We may also care about which words contributed the most *within each newsgroup*, so that we can see which newsgroups might be incorrectly estimated. We can calculate each word's contribution to each newsgroup's sentiment scorem and visualize the top few from each (Figure \ref{fig:newsgroupsentiment}).
+We may also care about which words contributed the most *within each newsgroup*, so that we can see which newsgroups might be incorrectly estimated. We can calculate each word's contribution to each newsgroup's sentiment scorem and visualize the top few from each (Figure \@ref(fig:newsgroupsentiment)).
 
 
 ```r
@@ -594,7 +594,7 @@ Well, we can confidently say that the sentiment analysis worked.
 
 ### N-gram analysis
 
-In Chapter \ref{ngrams}, we considered the effect of words such as "not" and "no" on sentiment analysis of Jane Austen novels, such as considering whether a phrase like "don't like" led to passages incorrectly being labeled as positive. The Usenet dataset is is a much larger corpus of more modern text, so we may be interested in how sentiment analysis may be reversed in this text.
+In Chapter \@ref(ngrams), we considered the effect of words such as "not" and "no" on sentiment analysis of Jane Austen novels, such as considering whether a phrase like "don't like" led to passages incorrectly being labeled as positive. The Usenet dataset is is a much larger corpus of more modern text, so we may be interested in how sentiment analysis may be reversed in this text.
 
 We'd start by finding and counting all the bigrams in the Usenet posts.
 
@@ -612,7 +612,7 @@ usenet_bigram_counts <- usenet_bigrams %>%
   separate(bigram, c("word1", "word2"), sep = " ")
 ```
 
-We could define a list of six words that we suspect are used in negation, such as "no", "not", and "without", and consider which words most often followed them (Figure \ref{fig:negatewords}).
+We could define a list of six words that we suspect are used in negation, such as "no", "not", and "without", and consider which words most often followed them (Figure \@ref(fig:negatewords)).
 
 
 ```r
