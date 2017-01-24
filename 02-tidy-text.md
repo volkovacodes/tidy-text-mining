@@ -5,10 +5,10 @@
 We define the tidy text format as being a table with **one-term-per-row.** Structuring text data in this way means that it conforms to tidy data principles and can be manipulated with a set of consistent tools. This is worth contrasting with the ways text is often stored in text mining approaches.
 
 * **Raw string**: Text can, of course, be stored as raw strings within R, and often text data is first read into memory in this form.
-* **Corpus**: These types of objects typically annotate the raw string content with additional metadata and details.
+* **Corpus**: These types of objects typically contain raw strings annotated with additional metadata and details.
 * **Document-term matrix**: This is a sparse matrix describing a collection (i.e., a corpus) of documents with one row for each document and one column for each term. The value in the matrix is typically word count or tf-idf (see Chapter \@ref(tfidf)).
 
-Let's hold off on exploring structures like a document-term matrix until Chapter \@ref(dtm), and get down to the basics of converting text to a tidy format.
+Let's hold off on exploring corpus and document-term matrix objects until Chapter \@ref(dtm), and get down to the basics of converting text to a tidy format.
 
 ## The `unnest_tokens` function
 
@@ -49,9 +49,9 @@ text_df
 ## 4     4                        and Immortality
 ```
 
-Notice that this data frame isn't yet compatible with tidy tools. We can't filter out words or count which occur most frequently, since each row is made up of multiple combined words. We need to convert this so that it has **one-token-per-document-per-row**. A token, in this context, is a meaningful unit of text that we are interested in using for further analysis. Tokenization is the process of breaking up text into individual tokens, and it is most commonly done at the level of single words. Within our tidy text framework, we will both break the text into individual tokens *and* transform it to a tidy data structure.
+Notice that this data frame isn't yet compatible with tidy tools. We can't filter out words or count which occur most frequently, since each row is made up of multiple combined words. We need to convert this so that it has **one-token-per-document-per-row**. A token is a meaningful unit of text, most often a word, that we are interested in using for further analysis.
 
-To do this, we use tidytext's `unnest_tokens()` function.
+Within our tidy text framework, we need to both break the text into individual tokens (a process called *tokenization*) *and* transform it to a tidy data structure. To do this, we use tidytext's `unnest_tokens()` function.
 
 
 ```r
@@ -123,7 +123,7 @@ original_books
 ## # ... with 73,412 more rows
 ```
 
-To work with this as a tidy dataset, we need to restructure it in the **one-token-per-row** format. The `unnest_tokens()` function is a way to convert a data frame with a text column to be one-token-per-row.
+To work with this as a tidy dataset, we need to restructure it in the **one-token-per-row** format, which as we saw earlier is done with the `unnest_tokens()` function.
 
 
 ```r
@@ -163,7 +163,7 @@ tidy_books <- tidy_books %>%
   anti_join(stop_words)
 ```
 
-We can also use `count()` to find the most common words in all the books as a whole.
+We can also use dplyr's `count()` to find the most common words in all the books as a whole.
 
 
 ```r
@@ -188,7 +188,7 @@ tidy_books %>%
 ## # ... with 13,904 more rows
 ```
 
-For example, this allows us to visualize the commonly used words using ggplot2.
+Because we've been using tidy tools, our word counts are stored in a tidy data frame. This allows us to pipe this directly the ggplot2 package, for example to create a visualization of the most common words (Figure \@ref(#plotcount)).
 
 
 ```r
@@ -208,8 +208,6 @@ tidy_books %>%
 <img src="02-tidy-text_files/figure-html/plotcount-1.png" alt="The most common words in Jane Austen's novels" width="576" />
 <p class="caption">(\#fig:plotcount)The most common words in Jane Austen's novels</p>
 </div>
-
-We could pipe this straight into ggplot2 because of our consistent use of tidy tools.
 
 ## The gutenbergr package
 
@@ -312,19 +310,19 @@ tidy_both <- bind_rows(
   mutate(tidy_hgwells, author = "H.G. Wells"))
 
 austen_percent <- tidy_books %>%
-  mutate(word = str_extract(word, "[a-z]+")) %>%
+  mutate(word = str_extract(word, "[a-z']+")) %>%
   count(word) %>%
   transmute(word, austen = n / sum(n))
 
 frequency <- tidy_both %>%
-  mutate(word = str_extract(word, "[a-z]+")) %>%
+  mutate(word = str_extract(word, "[a-z']+")) %>%
   count(author, word) %>%
   mutate(other = n / sum(n)) %>%
   left_join(austen_percent) %>%
   ungroup()
 ```
 
-We use `str_extract()` here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words but we don't want to count "\_any\_" separately from "any". Now let's plot.
+We use `str_extract()` here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words, but we don't want to count "\_any\_" separately from "any". Now let's plot (Figure \@ref(fig:plotcompare)).
 
 
 ```r
@@ -349,7 +347,7 @@ ggplot(frequency, aes(x = other, y = austen, color = abs(austen - other))) +
 
 Words that are close to the line in these plots have similar frequencies in both sets of texts, for example, in both Austen and Brontë texts ("miss", "time", "day" at the upper frequency end) or in both Austen and Wells texts ("time", "day", "brother" at the high frequency end). Words that are far from the line are words that are found more in one set of texts than another. For example, in the Austen-Brontë panel, words like "elizabeth", "emma", and "edmund" (all proper nouns) are found in Austen's texts but not much in the Brontë texts, while words like "arthur", "dog", and "ham" are found in the Brontë texts but not the Austen texts. In comparing H.G. Wells with Jane Austen, Wells uses words like "beast", "island", "feet", and "black" that Austen does not, while Austen uses words like "family", "friend", "letter", and "dear" that Wells does not.
 
-Overall, notice in Figure \@ref(fig:plotcompare) that the words in the Austen-Brontë panel are closer to the zero-slope line than in the Austen-Wells panel and also extend to lower frequencies; Austen and the Brontë sisters use more similar words than Austen and H.G. Wells. Also, we  notice that not all the words are found in all three sets of texts and there are fewer points in the plot for Austen and H.G. Wells.
+Overall, notice in Figure \@ref(fig:plotcompare) that the words in the Austen-Brontë panel are closer to the zero-slope line than in the Austen-Wells panel and also extend to lower frequencies; Austen and the Brontë sisters use more similar words than Austen and H.G. Wells. Also, we notice that not all the words are found in all three sets of texts and there are fewer points in the plot for Austen and H.G. Wells.
 
 Let's quantify how similar and different these sets of word frequencies are using a correlation test. How correlated are the word frequencies between Austen and the Brontë sisters, and between Austen and Wells?
 
@@ -364,13 +362,13 @@ cor.test(data = frequency[frequency$author == "Brontë Sisters",],
 ## 	Pearson's product-moment correlation
 ## 
 ## data:  other and austen
-## t = 119.43, df = 10765, p-value < 2.2e-16
+## t = 124.28, df = 10866, p-value < 2.2e-16
 ## alternative hypothesis: true correlation is not equal to 0
 ## 95 percent confidence interval:
-##  0.7466616 0.7629140
+##  0.7583028 0.7738345
 ## sample estimates:
 ##       cor 
-## 0.7549037
+## 0.7661805
 ```
 
 ```r
@@ -383,13 +381,13 @@ cor.test(data = frequency[frequency$author == "H.G. Wells",],
 ## 	Pearson's product-moment correlation
 ## 
 ## data:  other and austen
-## t = 35.91, df = 6027, p-value < 2.2e-16
+## t = 36.441, df = 6053, p-value < 2.2e-16
 ## alternative hypothesis: true correlation is not equal to 0
 ## 95 percent confidence interval:
-##  0.3988024 0.4403950
+##  0.4032820 0.4446006
 ## sample estimates:
-##       cor 
-## 0.4198191
+##      cor 
+## 0.424162
 ```
 
-The relationship between the word frequencies is different between these sets of texts, as it appears in the plots.
+Just as we saw in the plots, the word frequencies are more correlated between the Austen and Brontë novels than between Austen and H.G. Wells.

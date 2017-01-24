@@ -245,10 +245,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>We define the tidy text format as being a table with <strong>one-term-per-row.</strong> Structuring text data in this way means that it conforms to tidy data principles and can be manipulated with a set of consistent tools. This is worth contrasting with the ways text is often stored in text mining approaches.</p>
 <ul>
 <li><strong>Raw string</strong>: Text can, of course, be stored as raw strings within R, and often text data is first read into memory in this form.</li>
-<li><strong>Corpus</strong>: These types of objects typically annotate the raw string content with additional metadata and details.</li>
+<li><strong>Corpus</strong>: These types of objects typically contain raw strings annotated with additional metadata and details.</li>
 <li><strong>Document-term matrix</strong>: This is a sparse matrix describing a collection (i.e., a corpus) of documents with one row for each document and one column for each term. The value in the matrix is typically word count or tf-idf (see Chapter <a href="tfidf.html#tfidf">4</a>).</li>
 </ul>
-<p>Let’s hold off on exploring structures like a document-term matrix until Chapter <a href="dtm.html#dtm">6</a>, and get down to the basics of converting text to a tidy format.</p>
+<p>Let’s hold off on exploring corpus and document-term matrix objects until Chapter <a href="dtm.html#dtm">6</a>, and get down to the basics of converting text to a tidy format.</p>
 <div id="the-unnest_tokens-function" class="section level2">
 <h2><span class="header-section-number">2.1</span> The <code>unnest_tokens</code> function</h2>
 <p>Emily Dickinson wrote some lovely text in her time.</p>
@@ -272,8 +272,8 @@ text_df</code></pre></div>
 ## 2     2             He kindly stopped for me -
 ## 3     3 The Carriage held but just Ourselves -
 ## 4     4                        and Immortality</code></pre>
-<p>Notice that this data frame isn’t yet compatible with tidy tools. We can’t filter out words or count which occur most frequently, since each row is made up of multiple combined words. We need to convert this so that it has <strong>one-token-per-document-per-row</strong>. A token, in this context, is a meaningful unit of text that we are interested in using for further analysis. Tokenization is the process of breaking up text into individual tokens, and it is most commonly done at the level of single words. Within our tidy text framework, we will both break the text into individual tokens <em>and</em> transform it to a tidy data structure.</p>
-<p>To do this, we use tidytext’s <code>unnest_tokens()</code> function.</p>
+<p>Notice that this data frame isn’t yet compatible with tidy tools. We can’t filter out words or count which occur most frequently, since each row is made up of multiple combined words. We need to convert this so that it has <strong>one-token-per-document-per-row</strong>. A token is a meaningful unit of text, most often a word, that we are interested in using for further analysis.</p>
+<p>Within our tidy text framework, we need to both break the text into individual tokens (a process called <em>tokenization</em>) <em>and</em> transform it to a tidy data structure. To do this, we use tidytext’s <code>unnest_tokens()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
 text_df %&gt;%
@@ -329,7 +329,7 @@ original_books</code></pre></div>
 ## 9                        Sense &amp; Sensibility          9       0
 ## 10             CHAPTER 1 Sense &amp; Sensibility         10       1
 ## # ... with 73,412 more rows</code></pre>
-<p>To work with this as a tidy dataset, we need to restructure it in the <strong>one-token-per-row</strong> format. The <code>unnest_tokens()</code> function is a way to convert a data frame with a text column to be one-token-per-row.</p>
+<p>To work with this as a tidy dataset, we need to restructure it in the <strong>one-token-per-row</strong> format, which as we saw earlier is done with the <code>unnest_tokens()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 tidy_books &lt;-<span class="st"> </span>original_books %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text)
@@ -355,7 +355,7 @@ tidy_books</code></pre></div>
 
 tidy_books &lt;-<span class="st"> </span>tidy_books %&gt;%
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words)</code></pre></div>
-<p>We can also use <code>count()</code> to find the most common words in all the books as a whole.</p>
+<p>We can also use dplyr’s <code>count()</code> to find the most common words in all the books as a whole.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_books %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) </code></pre></div>
 <pre><code>## # A tibble: 13,914 × 2
@@ -372,7 +372,7 @@ tidy_books &lt;-<span class="st"> </span>tidy_books %&gt;%
 ## 9  sister   727
 ## 10  house   699
 ## # ... with 13,904 more rows</code></pre>
-<p>For example, this allows us to visualize the commonly used words using ggplot2.</p>
+<p>Because we’ve been using tidy tools, our word counts are stored in a tidy data frame. This allows us to pipe this directly the ggplot2 package, for example to create a visualization of the most common words (Figure @ref(#plotcount)).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 tidy_books %&gt;%
@@ -389,7 +389,6 @@ tidy_books %&gt;%
 Figure 2.1: The most common words in Jane Austen’s novels
 </p>
 </div>
-<p>We could pipe this straight into ggplot2 because of our consistent use of tidy tools.</p>
 </div>
 <div id="the-gutenbergr-package" class="section level2">
 <h2><span class="header-section-number">2.3</span> The gutenbergr package</h2>
@@ -450,17 +449,17 @@ hgwells &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>
   <span class="kw">mutate</span>(tidy_hgwells, <span class="dt">author =</span> <span class="st">&quot;H.G. Wells&quot;</span>))
 
 austen_percent &lt;-<span class="st"> </span>tidy_books %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">str_extract</span>(word, <span class="st">&quot;[a-z]+&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">str_extract</span>(word, <span class="st">&quot;[a-z&#39;]+&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word) %&gt;%
 <span class="st">  </span><span class="kw">transmute</span>(word, <span class="dt">austen =</span> n /<span class="st"> </span><span class="kw">sum</span>(n))
 
 frequency &lt;-<span class="st"> </span>tidy_both %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">str_extract</span>(word, <span class="st">&quot;[a-z]+&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">str_extract</span>(word, <span class="st">&quot;[a-z&#39;]+&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(author, word) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">other =</span> n /<span class="st"> </span><span class="kw">sum</span>(n)) %&gt;%
 <span class="st">  </span><span class="kw">left_join</span>(austen_percent) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
-<p>We use <code>str_extract()</code> here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words but we don’t want to count “_any_” separately from “any”. Now let’s plot.</p>
+<p>We use <code>str_extract()</code> here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words, but we don’t want to count “_any_” separately from “any”. Now let’s plot (Figure <a href="tidytext.html#fig:plotcompare">2.2</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
 
 <span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(<span class="dt">x =</span> other, <span class="dt">y =</span> austen, <span class="dt">color =</span> <span class="kw">abs</span>(austen -<span class="st"> </span>other))) +
@@ -488,27 +487,27 @@ Figure 2.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, 
 ##  Pearson&#39;s product-moment correlation
 ## 
 ## data:  other and austen
-## t = 119.43, df = 10765, p-value &lt; 2.2e-16
+## t = 124.28, df = 10866, p-value &lt; 2.2e-16
 ## alternative hypothesis: true correlation is not equal to 0
 ## 95 percent confidence interval:
-##  0.7466616 0.7629140
+##  0.7583028 0.7738345
 ## sample estimates:
 ##       cor 
-## 0.7549037</code></pre>
+## 0.7661805</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(<span class="dt">data =</span> frequency[frequency$author ==<span class="st"> &quot;H.G. Wells&quot;</span>,], 
          ~<span class="st"> </span>other +<span class="st"> </span>austen)</code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 
 ## data:  other and austen
-## t = 35.91, df = 6027, p-value &lt; 2.2e-16
+## t = 36.441, df = 6053, p-value &lt; 2.2e-16
 ## alternative hypothesis: true correlation is not equal to 0
 ## 95 percent confidence interval:
-##  0.3988024 0.4403950
+##  0.4032820 0.4446006
 ## sample estimates:
-##       cor 
-## 0.4198191</code></pre>
-<p>The relationship between the word frequencies is different between these sets of texts, as it appears in the plots.</p>
+##      cor 
+## 0.424162</code></pre>
+<p>Just as we saw in the plots, the word frequencies are more correlated between the Austen and Brontë novels than between Austen and H.G. Wells.</p>
 
 </div>
 </div>
