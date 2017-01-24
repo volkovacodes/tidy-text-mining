@@ -702,6 +702,29 @@ usenet_bigram_counts %&gt;%
 <p><img src="10-usenet_files/figure-html/negatewords-1.png" width="768" /></p>
 <p>The words shown are the ones that contributed the most to the sentiment scores in the wrong direction. It looks like the largest sources of misidentifying a word as positive come from “dont want/like/care”, and the most common in the other direction is “no problem”.</p>
 <p>In this analysis of Usenet messages we’ve incorporated almost every method described in this book, ranging from tf-idf to topic modeling, and from sentiment analysis to n-gram tokenization. Throughout the chapter, and indeed through all of our case studies, we’ve been able to rely on a small list of common tools for exploration and visualization. We hope that these examples show much all tidy text analyses have in common with each other, and indeed with all tidy data analyses.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(igraph)
+<span class="kw">library</span>(ggraph)
+
+visualize_bigrams &lt;-<span class="st"> </span>function(bigrams) {
+  <span class="kw">set.seed</span>(<span class="dv">2016</span>)
+  a &lt;-<span class="st"> </span>grid::<span class="kw">arrow</span>(<span class="dt">type =</span> <span class="st">&quot;closed&quot;</span>, <span class="dt">length =</span> <span class="kw">unit</span>(.<span class="dv">15</span>, <span class="st">&quot;inches&quot;</span>))
+  
+  bigrams %&gt;%
+<span class="st">    </span><span class="kw">graph_from_data_frame</span>() %&gt;%
+<span class="st">    </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
+<span class="st">    </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">arrow =</span> a) +
+<span class="st">    </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">    </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
+<span class="st">    </span><span class="kw">theme_void</span>()
+}
+
+usenet_bigram_counts %&gt;%
+<span class="st">  </span><span class="kw">select</span>(word1, word2, n) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(!word1 %in%<span class="st"> </span>stop_words$word,
+         !word2 %in%<span class="st"> </span>stop_words$word) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">25</span>) %&gt;%
+<span class="st">  </span><span class="kw">visualize_bigrams</span>()</code></pre></div>
+<p><img src="10-usenet_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
 
 </div>
 </div>

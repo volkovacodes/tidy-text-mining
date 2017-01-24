@@ -649,3 +649,29 @@ In this analysis of Usenet messages we've incorporated almost every method descr
 
 
 
+```r
+library(igraph)
+library(ggraph)
+
+visualize_bigrams <- function(bigrams) {
+  set.seed(2016)
+  a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
+  
+  bigrams %>%
+    graph_from_data_frame() %>%
+    ggraph(layout = "fr") +
+    geom_edge_link(aes(edge_alpha = n), show.legend = FALSE, arrow = a) +
+    geom_node_point(color = "lightblue", size = 5) +
+    geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
+    theme_void()
+}
+
+usenet_bigram_counts %>%
+  select(word1, word2, n) %>%
+  filter(!word1 %in% stop_words$word,
+         !word2 %in% stop_words$word) %>%
+  filter(n >= 25) %>%
+  visualize_bigrams()
+```
+
+<img src="10-usenet_files/figure-html/unnamed-chunk-12-1.png" width="672" />
