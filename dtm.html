@@ -156,11 +156,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>6</b> Tidying and casting document-term matrices and corpus objects</a><ul>
-<li class="chapter" data-level="6.1" data-path="dtm.html"><a href="dtm.html#tidying-a-document-term-matrix"><i class="fa fa-check"></i><b>6.1</b> Tidying a document-term matrix</a><ul>
+<li class="chapter" data-level="6.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>6.1</b> Tidying a document-term matrix</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>6.1.1</b> Tidying DocumentTermMatrix objects</a></li>
 <li class="chapter" data-level="6.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>6.1.2</b> Tidying dfm objects</a></li>
 </ul></li>
-<li class="chapter" data-level="6.2" data-path="dtm.html"><a href="dtm.html#casting-tidy-text-data-into-a-matrix"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a matrix</a></li>
+<li class="chapter" data-level="6.2" data-path="dtm.html"><a href="dtm.html#cast-dtm"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a matrix</a></li>
 <li class="chapter" data-level="6.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a><ul>
 <li class="chapter" data-level="6.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>6.3.1</b> Example: mining financial articles</a></li>
 </ul></li>
@@ -172,11 +172,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#example-the-great-library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
 <li class="chapter" data-level="7.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>7.2.1</b> LDA on chapters</a></li>
+<li class="chapter" data-level="7.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.2.2</b> Per-document classification</a></li>
+<li class="chapter" data-level="7.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.2.3</b> By word assignments: <code>augment</code></a></li>
 </ul></li>
-<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document-classification"><i class="fa fa-check"></i><b>7.3</b> Per-document classification</a></li>
-<li class="chapter" data-level="7.4" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.4</b> By word assignments: <code>augment</code></a><ul>
-<li class="chapter" data-level="7.4.1" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.4.1</b> Alternative LDA implementations</a></li>
-</ul></li>
+<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.3</b> Alternative LDA implementations</a></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
 <li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
@@ -245,7 +244,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In the previous chapters, we’ve been analyzing text arranged in the tidy text format: a table with one-token-per-document-per-row, such as is constructed by the <code>unnest_tokens</code> function. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2 to explore and visualize text data. We’ve demonstrated that many informative text analyses can be performed using these tools.</p>
 <p>However, most of the existing R tools for natural language processing, besides the tidytext package, aren’t compatible with this format. The <a href="https://cran.r-project.org/web/views/NaturalLanguageProcessing.html">CRAN Task View for Natural Language Processing</a> lists a large selection of packages that take other structures of input and provide non-tidy outputs. These package are very useful in text mining applications, and many existing text datasets are structured according to these formats.</p>
 <p>Computer scientist Hal Abelson has observed that “No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system.” In that spirit, this chapter will discuss the “glue” that connects the tidy text format with other important packages and data structures, allowing you to rely on both existing text mining packages and the suite of tidy tools to perform your analysis. In particular, we’ll examine the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix.</p>
-<div id="tidying-a-document-term-matrix" class="section level2">
+<div id="tidy-dtm" class="section level2">
 <h2><span class="header-section-number">6.1</span> Tidying a document-term matrix</h2>
 <p>One of the most common structures that text mining packages work with is the <a href="https://en.wikipedia.org/wiki/Document-term_matrix">document-term matrix</a> (or DTM). This is a matrix where:</p>
 <ul>
@@ -414,7 +413,7 @@ Figure 6.3: Changes in word frequency over time within Presidential inaugural ad
 <p>These examples show how you can use tidytext, and the related suite of tidy tools, to analyze sources even if their origin was not in a tidy format.</p>
 </div>
 </div>
-<div id="casting-tidy-text-data-into-a-matrix" class="section level2">
+<div id="cast-dtm" class="section level2">
 <h2><span class="header-section-number">6.2</span> Casting tidy text data into a matrix</h2>
 <p>Just as some existing text mining packages provide document-term matrices as sample data or output, some algorithms expect such matrices as input. Therefore, tidytext provides <code>cast_</code> verbs for converting from a tidy form to these matrices.</p>
 <p>For example, we could take the tidied AP dataset and cast it back into a document-term matrix using the <code>cast_dtm</code> function.</p>
