@@ -83,7 +83,7 @@ bigrams_filtered <- bigrams_separated %>%
   filter(!word1 %in% stop_words$word) %>%
   filter(!word2 %in% stop_words$word)
 
-# New bigram counts:
+# new bigram counts:
 bigram_counts <- bigrams_filtered %>% 
   count(word1, word2, sort = TRUE)
 
@@ -438,7 +438,7 @@ bigram_graph
 
 igraph has plotting functions built in, but they're not what the package is designed to do, so many other packages have developed visualization methods for graph objects. We recommend the [ggraph package](https://github.com/thomasp85/ggraph), because it implements these visualizations in terms of the grammar of graphics, which we are already familiar with from ggplot2.
 
-We can convert an igraph object into a ggraph with the `ggraph` function, after which we add layers to it, much like layers are added in ggplot2. For example, for a basic graph we need to add three layers: nodes, edges, and text
+We can convert an igraph object into a ggraph with the `ggraph` function, after which we add layers to it, much like layers are added in ggplot2. For example, for a basic graph we need to add three layers: nodes, edges, and text.
 
 
 ```r
@@ -520,7 +520,7 @@ At this point, we could visualize bigrams in other works, such as the King James
 
 
 ```r
-# The King James version is book 10 on Project Gutenberg:
+# the King James version is book 10 on Project Gutenberg:
 library(gutenbergr)
 kjv <- gutenberg_download(10)
 ```
@@ -555,13 +555,8 @@ Tokenizing by n-gram is a useful way to explore pairs of adjacent words. However
 
 Tidy data is a useful structure for comparing between variables or grouping by rows, but it can be challenging to compare between rows: for example, to count the number of times that two words appear within the same document, or to see how correlated they are. Most operations for finding pairwise counts or correlations need to turn the data into a wide matrix first.
 
-
-```r
-knitr::include_graphics("images/widyr.jpg")
-```
-
 <div class="figure">
-<img src="images/widyr.jpg" alt="The philosophy behind the widyr package, which can perform operations such as counting and correlating on pairs of values in a tidy dataset. The widyr package first 'casts' a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result." width="90%" />
+<img src="images/widyr.jpg" alt="The philosophy behind the widyr package, which can perform operations such as counting and correlating on pairs of values in a tidy dataset. The widyr package first 'casts' a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result." width="100%" />
 <p class="caption">(\#fig:widyr)The philosophy behind the widyr package, which can perform operations such as counting and correlating on pairs of values in a tidy dataset. The widyr package first 'casts' a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result.</p>
 </div>
 
@@ -683,7 +678,7 @@ The `pairwise_cor()` function in widyr lets us find the correlation correlation 
 ```r
 library(widyr)
 
-# We need to filter for at least relatively common words first
+# we need to filter for at least relatively common words first
 word_cors <- austen_section_words %>%
   group_by(word) %>%
   filter(n() >= 20) %>%

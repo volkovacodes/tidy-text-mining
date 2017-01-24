@@ -300,7 +300,7 @@ bigrams_filtered &lt;-<span class="st"> </span>bigrams_separated %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(!word1 %in%<span class="st"> </span>stop_words$word) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(!word2 %in%<span class="st"> </span>stop_words$word)
 
-<span class="co"># New bigram counts:</span>
+<span class="co"># new bigram counts:</span>
 bigram_counts &lt;-<span class="st"> </span>bigrams_filtered %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 
@@ -567,7 +567,7 @@ bigram_graph</code></pre></div>
 ## [29] dr      -&gt;grant      miss    -&gt;bertram    sir     -&gt;thomas&#39;s   ten     -&gt;minutes   
 ## + ... omitted several edges</code></pre>
 <p>igraph has plotting functions built in, but they’re not what the package is designed to do, so many other packages have developed visualization methods for graph objects. We recommend the <a href="https://github.com/thomasp85/ggraph">ggraph package</a>, because it implements these visualizations in terms of the grammar of graphics, which we are already familiar with from ggplot2.</p>
-<p>We can convert an igraph object into a ggraph with the <code>ggraph</code> function, after which we add layers to it, much like layers are added in ggplot2. For example, for a basic graph we need to add three layers: nodes, edges, and text</p>
+<p>We can convert an igraph object into a ggraph with the <code>ggraph</code> function, after which we add layers to it, much like layers are added in ggplot2. For example, for a basic graph we need to add three layers: nodes, edges, and text.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggraph)
 <span class="kw">set.seed</span>(<span class="dv">2017</span>)
 
@@ -632,7 +632,7 @@ visualize_bigrams &lt;-<span class="st"> </span>function(bigrams) {
 <span class="st">    </span><span class="kw">theme_void</span>()
 }</code></pre></div>
 <p>At this point, we could visualize bigrams in other works, such as the King James Version of the Bible:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># The King James version is book 10 on Project Gutenberg:</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># the King James version is book 10 on Project Gutenberg:</span>
 <span class="kw">library</span>(gutenbergr)
 kjv &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>(<span class="dv">10</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
@@ -659,9 +659,8 @@ Figure 5.6: Directed graph of common bigrams in the King James Bible, showing th
 <h2><span class="header-section-number">5.2</span> Counting and correlating pairs of words with the widyr package</h2>
 <p>Tokenizing by n-gram is a useful way to explore pairs of adjacent words. However, we may also be interested in words that tend to co-occur within particular documents or particular chapters, even if they don’t occur next to each other.</p>
 <p>Tidy data is a useful structure for comparing between variables or grouping by rows, but it can be challenging to compare between rows: for example, to count the number of times that two words appear within the same document, or to see how correlated they are. Most operations for finding pairwise counts or correlations need to turn the data into a wide matrix first.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::<span class="kw">include_graphics</span>(<span class="st">&quot;images/widyr.jpg&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:widyr"></span>
-<img src="images/widyr.jpg" alt="The philosophy behind the widyr package, which can perform operations such as counting and correlating on pairs of values in a tidy dataset. The widyr package first 'casts' a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result." width="90%" />
+<img src="images/widyr.jpg" alt="The philosophy behind the widyr package, which can perform operations such as counting and correlating on pairs of values in a tidy dataset. The widyr package first 'casts' a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result." width="100%" />
 <p class="caption">
 Figure 5.7: The philosophy behind the widyr package, which can perform operations such as counting and correlating on pairs of values in a tidy dataset. The widyr package first ‘casts’ a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result.
 </p>
@@ -778,7 +777,7 @@ word_pairs</code></pre></div>
 <p>The <code>pairwise_cor()</code> function in widyr lets us find the correlation correlation between words based on how often they appear in the same section. Its syntax is similar to <code>pairwise_count()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
 
-<span class="co"># We need to filter for at least relatively common words first</span>
+<span class="co"># we need to filter for at least relatively common words first</span>
 word_cors &lt;-<span class="st"> </span>austen_section_words %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(word) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">20</span>) %&gt;%
