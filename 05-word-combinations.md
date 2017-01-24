@@ -232,8 +232,8 @@ bigram_tf_idf
 ```
 
 <div class="figure">
-<img src="05-word-combinations_files/figure-html/bigramtfidf-1.png" alt="The 12 bigrams with the highest tf-idf from each Jane Austen novel." width="864" />
-<p class="caption">(\#fig:bigramtfidf)The 12 bigrams with the highest tf-idf from each Jane Austen novel.</p>
+<img src="05-word-combinations_files/figure-html/bigramtfidf-1.png" alt="The 12 bigrams with the highest tf-idf from each Jane Austen novel" width="864" />
+<p class="caption">(\#fig:bigramtfidf)The 12 bigrams with the highest tf-idf from each Jane Austen novel</p>
 </div>
 
 Much as we discovered in Chapter \@ref(tfidf), the units that distinguish each Austen book are almost exclusively names. We also notice some pairings of a common verb and a name, such as "replied elizabeth" in Pride & Prejudice, or "cried emma" in Emma.
@@ -349,8 +349,8 @@ not_words %>%
 ```
 
 <div class="figure">
-<img src="05-word-combinations_files/figure-html/notwordsplot-1.png" alt="The 20 words followed by 'not' that had the greatest contribution to sentiment scores, in either a positive or negative direction." width="768" />
-<p class="caption">(\#fig:notwordsplot)The 20 words followed by 'not' that had the greatest contribution to sentiment scores, in either a positive or negative direction.</p>
+<img src="05-word-combinations_files/figure-html/notwordsplot-1.png" alt="The 20 words followed by 'not' that had the greatest contribution to sentiment scores, in either a positive or negative direction" width="768" />
+<p class="caption">(\#fig:notwordsplot)The 20 words followed by 'not' that had the greatest contribution to sentiment scores, in either a positive or negative direction</p>
 </div>
 
 The bigrams "not like" and "not help" were overwhelmingly the largest causes of misidentification, making the text seem much more positive than it is. But we can see phrases like "not afraid" and "not fail" sometimes suggest text is more negative than it is.
@@ -452,8 +452,8 @@ ggraph(bigram_graph, layout = "fr") +
 ```
 
 <div class="figure">
-<img src="05-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word." width="960" />
-<p class="caption">(\#fig:bigramgraph)Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word.</p>
+<img src="05-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word" width="960" />
+<p class="caption">(\#fig:bigramgraph)Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word</p>
 </div>
 
 In Figure \@ref(fig:bigramgraph), we can visualize some details of the text structure. For example, we see that salutations such as "miss", "lady", "sir", "and "colonel" form common centers of nodes, which are often followed by names. We also see pairs or triplets along the outside that form common short phrases ("half hour", "thousand pounds", or "short time/pause").
@@ -543,8 +543,8 @@ kjv_bigrams %>%
 ```
 
 <div class="figure">
-<img src="05-word-combinations_files/figure-html/kjvbigrams-1.png" alt="Directed graph of common bigrams in the King James Bible, showing those that occurred more than 40 times." width="672" />
-<p class="caption">(\#fig:kjvbigrams)Directed graph of common bigrams in the King James Bible, showing those that occurred more than 40 times.</p>
+<img src="05-word-combinations_files/figure-html/kjvbigrams-1.png" alt="Directed graph of common bigrams in the King James Bible, showing those that occurred more than 40 times" width="672" />
+<p class="caption">(\#fig:kjvbigrams)Directed graph of common bigrams in the King James Bible, showing those that occurred more than 40 times</p>
 </div>
 
 Figure \@ref(fig:kjvbigrams) thus lays out a common "blueprint" of language within the Bible, particularly focused around "thy" and "thou" (which could probably be considered stopwords!) You can use the gutenbergr package and these `count_bigrams`/`visualize_bigrams` functions to visualize bigrams in other classic books you're interested in.
@@ -745,8 +745,8 @@ word_cors %>%
 ```
 
 <div class="figure">
-<img src="05-word-combinations_files/figure-html/wordcors-1.png" alt="Words from Pride and Prejudice that were most correlated with 'elizabeth', 'pounds', 'married', and 'pride'." width="768" />
-<p class="caption">(\#fig:wordcors)Words from Pride and Prejudice that were most correlated with 'elizabeth', 'pounds', 'married', and 'pride'.</p>
+<img src="05-word-combinations_files/figure-html/wordcors-1.png" alt="Words from Pride and Prejudice that were most correlated with 'elizabeth', 'pounds', 'married', and 'pride'" width="768" />
+<p class="caption">(\#fig:wordcors)Words from Pride and Prejudice that were most correlated with 'elizabeth', 'pounds', 'married', and 'pride'</p>
 </div>
 
 Just as we used ggraph to visualize bigrams, we can use it to visualize the correlations and clusters of words that were found by the widyr package (Figure \@ref(fig:wordcorsnetwork)).
@@ -766,8 +766,8 @@ word_cors %>%
 ```
 
 <div class="figure">
-<img src="05-word-combinations_files/figure-html/wordcorsnetwork-1.png" alt="Pairs of words in Pride and Prejudice that show at least a .15 correlation of appearing within the same 10-line section." width="768" />
-<p class="caption">(\#fig:wordcorsnetwork)Pairs of words in Pride and Prejudice that show at least a .15 correlation of appearing within the same 10-line section.</p>
+<img src="05-word-combinations_files/figure-html/wordcorsnetwork-1.png" alt="Pairs of words in Pride and Prejudice that show at least a .15 correlation of appearing within the same 10-line section" width="768" />
+<p class="caption">(\#fig:wordcorsnetwork)Pairs of words in Pride and Prejudice that show at least a .15 correlation of appearing within the same 10-line section</p>
 </div>
 
 Note that unlike the bigram analysis, the relationships here are symmetrical, rather than directional (there are no arrows). We can also see that while pairings of names and titles that dominated bigram pairings are common, such as "colonel/fitzwilliam", we can also see pairings of words that appear close to each other, such as "walk" and "park", or "dance" and "ball".
