@@ -284,7 +284,7 @@ It looks like there were four main clusters of newsgroups: computers/electronics
 
 ### Topic modeling
 
-In Chapter \@ref(topicmodels), we used the latent Dirichlet allocation (LDA) algorithm to divide a set of chapters into the books they originally came from. Could LDA do the same to sort out Usenet messages that came from different newsgroups?
+In Chapter \@ref(topicmodeling), we used the latent Dirichlet allocation (LDA) algorithm to divide a set of chapters into the books they originally came from. Could LDA do the same to sort out Usenet messages that came from different newsgroups?
 
 Let's try dividing up messages from the four science-related newsgroups. We first process these into a document-term matrix with `cast_dtm()` (Chapter \@ref(cast-dtm)), then fit the model with the `LDA()` function from the topicmodels package.
 
@@ -312,7 +312,7 @@ library(topicmodels)
 sci_lda <- LDA(sci_dtm, k = 4, control = list(seed = 2016))
 ```
 
-What four topics did this model extract, and did they match the four newsgroups? This approach will look familiar from Chapter \@ref(topicmodels): we visualize each topic based on the most frequent terms within it (Figure \@ref(fig:usenettopicterms)).
+What four topics did this model extract, and did they match the four newsgroups? This approach will look familiar from Chapter \@ref(topicmodeling): we visualize each topic based on the most frequent terms within it (Figure \@ref(fig:usenettopicterms)).
 
 
 ```r
@@ -348,7 +348,10 @@ sci_lda %>%
        y = "# of messages where this was the highest % topic")
 ```
 
-<img src="10-usenet_files/figure-html/usenetassignments-1.png" width="672" />
+<div class="figure">
+<img src="10-usenet_files/figure-html/usenetassignments-1.png" alt="Distribution of gamma for each topic within each Usenet newsgroup" width="672" />
+<p class="caption">(\#fig:usenetassignments)Distribution of gamma for each topic within each Usenet newsgroup</p>
+</div>
 
 Much as we saw in the literature analysis, topic modeling was able to discover the distinct topics present in the text without needing to consult the labels.
 
@@ -414,7 +417,7 @@ contributions
 ## # ... with 1,899 more rows
 ```
 
-Which words had the most effect on sentiment scores overall (Figure \@ref(usenetcontributions))? 
+Which words had the most effect on sentiment scores overall (Figure \@ref(fig:usenetcontributions))? 
 
 
 ```r
@@ -461,7 +464,10 @@ top_sentiment_words
 ## # ... with 13,053 more rows
 ```
 
-<img src="10-usenet_files/figure-html/newsgroupsentiment-1.png" width="960" />
+<div class="figure">
+<img src="10-usenet_files/figure-html/newsgroupsentiment-1.png" alt="The 12 words that contributed the most to sentiment scores within each of six newsgroups" width="960" />
+<p class="caption">(\#fig:newsgroupsentiment)The 12 words that contributed the most to sentiment scores within each of six newsgroups</p>
+</div>
 
 This confirms our hypothesis about the "misc.forsale" newsgroup: most of the sentiment was driven by positive adjectives such as "excellent" and "perfect". We can also see how much sentiment is confounded with topic. An atheism newsgroup is likely to discuss "god" in detail even in a negative context, and we can see that it makes the newsgroup look more positive. Similarly, the negative contribution of the word "gun" to the "talk.politics.guns" group will occur even when the members are discussing guns positively.
 

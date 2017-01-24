@@ -444,7 +444,7 @@ Figure 10.3: A network of Usenet groups based on the correlation of word counts 
 </div>
 <div id="topic-modeling-1" class="section level3">
 <h3><span class="header-section-number">10.2.2</span> Topic modeling</h3>
-<p>In Chapter <a href="#topicmodels"><strong>??</strong></a>, we used the latent Dirichlet allocation (LDA) algorithm to divide a set of chapters into the books they originally came from. Could LDA do the same to sort out Usenet messages that came from different newsgroups?</p>
+<p>In Chapter <a href="topicmodeling.html#topicmodeling">7</a>, we used the latent Dirichlet allocation (LDA) algorithm to divide a set of chapters into the books they originally came from. Could LDA do the same to sort out Usenet messages that came from different newsgroups?</p>
 <p>Let’s try dividing up messages from the four science-related newsgroups. We first process these into a document-term matrix with <code>cast_dtm()</code> (Chapter <a href="dtm.html#cast-dtm">6.2</a>), then fit the model with the <code>LDA()</code> function from the topicmodels package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># include only words that occur at least 50 times</span>
 word_sci_newsgroups &lt;-<span class="st"> </span>usenet_words %&gt;%
@@ -462,7 +462,7 @@ sci_dtm &lt;-<span class="st"> </span>word_sci_newsgroups %&gt;%
 <span class="st">  </span><span class="kw">cast_dtm</span>(document, word, n)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(topicmodels)
 sci_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(sci_dtm, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">seed =</span> <span class="dv">2016</span>))</code></pre></div>
-<p>What four topics did this model extract, and did they match the four newsgroups? This approach will look familiar from Chapter <a href="#topicmodels"><strong>??</strong></a>: we visualize each topic based on the most frequent terms within it (Figure <a href="usenet.html#fig:usenettopicterms">10.4</a>).</p>
+<p>What four topics did this model extract, and did they match the four newsgroups? This approach will look familiar from Chapter <a href="topicmodeling.html#topicmodeling">7</a>: we visualize each topic based on the most frequent terms within it (Figure <a href="usenet.html#fig:usenettopicterms">10.4</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sci_lda %&gt;%
 <span class="st">  </span><span class="kw">tidy</span>() %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(topic) %&gt;%
@@ -479,7 +479,7 @@ sci_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(sci_dtm, <span
 Figure 10.4: The top 8 words from each topic fit by LDA on the science-related newsgroups
 </p>
 </div>
-<p>From the top words, we can start to suspect which topics may capture which newsgroups. Topic 1 certainly represents the sci.space newsgroup (thus the most common word being “space”), and topic 2 is likely drawn from cryptography, with terms such as “key” and “encryption”. Just as we did in Chapter <a href="topicmodeling.html#per-document">7.2.2</a>, we can confirm this by seeing how documents from each newsgroup have higher “gamma” for each topic (Figure <a href="#fig:usenetassignments"><strong>??</strong></a>).</p>
+<p>From the top words, we can start to suspect which topics may capture which newsgroups. Topic 1 certainly represents the sci.space newsgroup (thus the most common word being “space”), and topic 2 is likely drawn from cryptography, with terms such as “key” and “encryption”. Just as we did in Chapter <a href="topicmodeling.html#per-document">7.2.2</a>, we can confirm this by seeing how documents from each newsgroup have higher “gamma” for each topic (Figure <a href="usenet.html#fig:usenetassignments">10.5</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sci_lda %&gt;%
 <span class="st">  </span><span class="kw">tidy</span>(<span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(document, <span class="kw">c</span>(<span class="st">&quot;newsgroup&quot;</span>, <span class="st">&quot;id&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) %&gt;%
@@ -489,7 +489,12 @@ Figure 10.4: The top 8 words from each topic fit by LDA on the science-related n
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>newsgroup) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Topic&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;# of messages where this was the highest % topic&quot;</span>)</code></pre></div>
-<p><img src="10-usenet_files/figure-html/usenetassignments-1.png" width="672" /></p>
+<div class="figure"><span id="fig:usenetassignments"></span>
+<img src="10-usenet_files/figure-html/usenetassignments-1.png" alt="Distribution of gamma for each topic within each Usenet newsgroup" width="672" />
+<p class="caption">
+Figure 10.5: Distribution of gamma for each topic within each Usenet newsgroup
+</p>
+</div>
 <p>Much as we saw in the literature analysis, topic modeling was able to discover the distinct topics present in the text without needing to consult the labels.</p>
 <p>Notice that the division of Usenet messages wasn’t as clean as the division of book chapters, with a substantial number of messages from each newsgroup getting high values of “gamma” for other topics. This isn’t surprising since many of the messages are short and could overlap in terms of common words (for example, discussions of space travel could include many of the same words as discussions of electronics). This is a realistic example of how LDA might divide documents into rough topics while still allowing a degree of overlap.</p>
 </div>
@@ -497,7 +502,7 @@ Figure 10.4: The top 8 words from each topic fit by LDA on the science-related n
 <div id="sentiment-analysis" class="section level2">
 <h2><span class="header-section-number">10.3</span> Sentiment analysis</h2>
 <p>We can use the sentiment analysis techniques we explored in Chapter <a href="sentiment.html#sentiment">3</a> to examine how often positive and negative words occurred in these Usenet posts. Which newsgroups were the most positive or negative overall?</p>
-<p>We’ll focus on the AFINN sentiment lexicon, which provides numeric positivity scores for each word, and visualize it with a bar plot (Figure <a href="usenet.html#fig:newsgroupsentiments">10.5</a>).</p>
+<p>We’ll focus on the AFINN sentiment lexicon, which provides numeric positivity scores for each word, and visualize it with a bar plot (Figure <a href="usenet.html#fig:newsgroupsentiments">10.6</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newsgroup_sentiments &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(newsgroup) %&gt;%
@@ -512,7 +517,7 @@ newsgroup_sentiments %&gt;%
 <div class="figure"><span id="fig:newsgroupsentiments"></span>
 <img src="10-usenet_files/figure-html/newsgroupsentiments-1.png" alt="Average AFINN score for posts within each newsgroup" width="672" />
 <p class="caption">
-Figure 10.5: Average AFINN score for posts within each newsgroup
+Figure 10.6: Average AFINN score for posts within each newsgroup
 </p>
 </div>
 <p>According to this analysis, the “misc.forsale” newsgroup was the most positive. This makes sense, since it likely included many positive adjectives about the products that users wanted to sell!</p>
@@ -540,7 +545,7 @@ contributions</code></pre></div>
 ## 9    ability        177          354
 ## 10    aboard          8            8
 ## # ... with 1,899 more rows</code></pre>
-<p>Which words had the most effect on sentiment scores overall (Figure <a href="#usenetcontributions"><strong>??</strong></a>)?</p>
+<p>Which words had the most effect on sentiment scores overall (Figure <a href="usenet.html#fig:usenetcontributions">10.7</a>)?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contributions %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">25</span>, <span class="kw">abs</span>(contribution)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, contribution)) %&gt;%
@@ -550,11 +555,11 @@ contributions</code></pre></div>
 <div class="figure"><span id="fig:usenetcontributions"></span>
 <img src="10-usenet_files/figure-html/usenetcontributions-1.png" alt="Words with the greatest contributions to positive/negative sentiment scores in the Usenet text" width="576" />
 <p class="caption">
-Figure 10.6: Words with the greatest contributions to positive/negative sentiment scores in the Usenet text
+Figure 10.7: Words with the greatest contributions to positive/negative sentiment scores in the Usenet text
 </p>
 </div>
 <p>These words look generally reasonable as indicators of each message’s sentiment, but we can spot possible problems with the approach. “True” could just as easily be a part of “not true” or a similar negative expression, and the words “God” and “Jesus” are apparently very common on Usenet but could easily be used in many contexts, positive or negative.</p>
-<p>We may also care about which words contributed the most <em>within each newsgroup</em>, so that we can see which newsgroups might be incorrectly estimated. We can calculate each word’s contribution to each newsgroup’s sentiment score, and visualize the strongest contributors from a selection of the groups (Figure <a href="#fig:newsgroupsentiment"><strong>??</strong></a>).</p>
+<p>We may also care about which words contributed the most <em>within each newsgroup</em>, so that we can see which newsgroups might be incorrectly estimated. We can calculate each word’s contribution to each newsgroup’s sentiment score, and visualize the strongest contributors from a selection of the groups (Figure <a href="usenet.html#fig:newsgroupsentiment">10.8</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_sentiment_words &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> score *<span class="st"> </span>n /<span class="st"> </span><span class="kw">sum</span>(n))
@@ -574,7 +579,12 @@ top_sentiment_words</code></pre></div>
 ## 9   talk.politics.mideast    war   187    -2 -0.005880411
 ## 10 soc.religion.christian   true   179     2  0.005628842
 ## # ... with 13,053 more rows</code></pre>
-<p><img src="10-usenet_files/figure-html/newsgroupsentiment-1.png" width="960" /></p>
+<div class="figure"><span id="fig:newsgroupsentiment"></span>
+<img src="10-usenet_files/figure-html/newsgroupsentiment-1.png" alt="The 12 words that contributed the most to sentiment scores within each of six newsgroups" width="960" />
+<p class="caption">
+Figure 10.8: The 12 words that contributed the most to sentiment scores within each of six newsgroups
+</p>
+</div>
 <p>This confirms our hypothesis about the “misc.forsale” newsgroup: most of the sentiment was driven by positive adjectives such as “excellent” and “perfect”. We can also see how much sentiment is confounded with topic. An atheism newsgroup is likely to discuss “god” in detail even in a negative context, and we can see that it makes the newsgroup look more positive. Similarly, the negative contribution of the word “gun” to the “talk.politics.guns” group will occur even when the members are discussing guns positively.</p>
 <p>This helps remind us that sentiment analysis can be confounded by topic, and that we should always examine the influential words before interpreting it too deeply.</p>
 </div>
@@ -675,7 +685,7 @@ top_sentiment_words</code></pre></div>
 <span class="st">  </span><span class="kw">count</span>(newsgroup, bigram, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(bigram, <span class="kw">c</span>(<span class="st">&quot;word1&quot;</span>, <span class="st">&quot;word2&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)</code></pre></div>
-<p>We could then define a list of six words that we suspect are used in negation, such as “no”, “not”, and “without”, and visualize the sentiment-associated words that most often followed them (Figure <a href="usenet.html#fig:negatewords">10.7</a>). This shows the words that most often contributed in the “wrong” direction.</p>
+<p>We could then define a list of six words that we suspect are used in negation, such as “no”, “not”, and “without”, and visualize the sentiment-associated words that most often followed them (Figure <a href="usenet.html#fig:negatewords">10.9</a>). This shows the words that most often contributed in the “wrong” direction.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negate_words &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;not&quot;</span>, <span class="st">&quot;without&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;can&#39;t&quot;</span>, <span class="st">&quot;don&#39;t&quot;</span>, <span class="st">&quot;won&#39;t&quot;</span>)
 
 usenet_bigram_counts %&gt;%
@@ -697,7 +707,7 @@ usenet_bigram_counts %&gt;%
 <div class="figure"><span id="fig:negatewords"></span>
 <img src="10-usenet_files/figure-html/negatewords-1.png" alt="Words that contributed the most to sentiment when they followed a 'negating' word" width="768" />
 <p class="caption">
-Figure 10.7: Words that contributed the most to sentiment when they followed a ‘negating’ word
+Figure 10.9: Words that contributed the most to sentiment when they followed a ‘negating’ word
 </p>
 </div>
 <p>It looks like the largest sources of misidentifying a word as positive come from “don’t want/like/care”, and the largest source of incorrectly classified negative sentiment is “no problem”.</p>
