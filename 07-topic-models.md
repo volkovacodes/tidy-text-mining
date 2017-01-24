@@ -164,7 +164,7 @@ We can see that the words more common in topic 2 include political parties such 
 
 ### Document-topic probabilities
 
-Besides estimating each topic as a mixture of words, LDA also models each document as a mixture of topics We can examine the per-document-per-topic probabilities, called $$\gamma$$ ("gamma"), with the `matrix = "gamma"` argument to `tidy()`.
+Besides estimating each topic as a mixture of words, LDA also models each document as a mixture of topics We can examine the per-document-per-topic probabilities, called $\gamma$ ("gamma"), with the `matrix = "gamma"` argument to `tidy()`.
 
 
 ```r
@@ -191,7 +191,7 @@ ap_gamma
 
 Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the first document has only a 24.8% probability of coming from topic 1.
 
-We can see that many of these documents were drawn from a mix of the two topics, but that document 6 was drawn almost entirely from topic 2, having a $\gamma$ of only 5.9\times 10^{-4} from topic 1. To check this answer, we could see what the most common words in that document were.
+We can see that many of these documents were drawn from a mix of the two topics, but that document 6 was drawn almost entirely from topic 2, having a $\gamma$ close to zero from topic 1. To check this answer, we could see what the most common words in that document were.
 
 
 ```r
@@ -756,16 +756,16 @@ tidy(mallet_model)
 ## # A tibble: 71,064 × 3
 ##    topic    term         beta
 ##    <int>   <chr>        <dbl>
-## 1      1 limping 2.043750e-07
-## 2      2 limping 1.026346e-04
-## 3      3 limping 2.938613e-07
-## 4      4 limping 3.000151e-07
-## 5      1  pirate 8.195438e-05
-## 6      2  pirate 2.559465e-07
-## 7      3  pirate 2.938613e-07
-## 8      4  pirate 3.000151e-07
-## 9      1  gibbet 2.043750e-07
-## 10     2  gibbet 7.703991e-05
+## 1      1 limping 2.711595e-07
+## 2      2 limping 2.821618e-07
+## 3      3 limping 1.054246e-04
+## 4      4 limping 2.221943e-07
+## 5      1  pirate 2.711595e-07
+## 6      2  pirate 2.821618e-07
+## 7      3  pirate 1.054246e-04
+## 8      4  pirate 2.221943e-07
+## 9      1  gibbet 2.711595e-07
+## 10     2  gibbet 2.821618e-07
 ## # ... with 71,054 more rows
 ```
 
@@ -778,16 +778,16 @@ tidy(mallet_model, matrix = "gamma")
 ## # A tibble: 772 × 3
 ##                 document topic     gamma
 ##                    <chr> <int>     <dbl>
-## 1   Great Expectations_1     1 0.1524180
-## 2  Great Expectations_10     1 0.2148582
-## 3  Great Expectations_11     1 0.2498466
-## 4  Great Expectations_12     1 0.2507112
-## 5  Great Expectations_13     1 0.2912921
-## 6  Great Expectations_14     1 0.2961066
-## 7  Great Expectations_15     1 0.2377769
-## 8  Great Expectations_16     1 0.2779188
-## 9  Great Expectations_17     1 0.3025281
-## 10 Great Expectations_18     1 0.2572733
+## 1   Great Expectations_1     1 0.2974957
+## 2  Great Expectations_10     1 0.2358200
+## 3  Great Expectations_11     1 0.2253067
+## 4  Great Expectations_12     1 0.2492888
+## 5  Great Expectations_13     1 0.1654494
+## 6  Great Expectations_14     1 0.3206967
+## 7  Great Expectations_15     1 0.2629870
+## 8  Great Expectations_16     1 0.2525381
+## 9  Great Expectations_17     1 0.2351124
+## 10 Great Expectations_18     1 0.2166779
 ## # ... with 762 more rows
 ```
 
@@ -801,16 +801,16 @@ augment(mallet_model, term_counts)
 ## # A tibble: 104,721 × 4
 ##                    document    term     n .topic
 ##                       <chr>   <chr> <int>  <int>
-## 1     Great Expectations_57     joe    88      2
-## 2      Great Expectations_7     joe    70      2
-## 3     Great Expectations_17   biddy    63      2
-## 4     Great Expectations_27     joe    58      2
-## 5     Great Expectations_38 estella    58      2
-## 6      Great Expectations_2     joe    56      2
-## 7     Great Expectations_23  pocket    53      2
-## 8     Great Expectations_15     joe    50      2
-## 9     Great Expectations_18     joe    50      2
-## 10 The War of the Worlds_16 brother    50      4
+## 1     Great Expectations_57     joe    88      3
+## 2      Great Expectations_7     joe    70      3
+## 3     Great Expectations_17   biddy    63      3
+## 4     Great Expectations_27     joe    58      3
+## 5     Great Expectations_38 estella    58      4
+## 6      Great Expectations_2     joe    56      3
+## 7     Great Expectations_23  pocket    53      1
+## 8     Great Expectations_15     joe    50      3
+## 9     Great Expectations_18     joe    50      3
+## 10 The War of the Worlds_16 brother    50      1
 ## # ... with 104,711 more rows
 ```
 

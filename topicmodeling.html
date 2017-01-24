@@ -356,7 +356,7 @@ Figure 7.2: Words with the greatest difference in ‘beta’ between topic 2 and
 </div>
 <div id="document-topic-probabilities" class="section level3">
 <h3><span class="header-section-number">7.1.2</span> Document-topic probabilities</h3>
-<p>Besides estimating each topic as a mixture of words, LDA also models each document as a mixture of topics We can examine the per-document-per-topic probabilities, called <span class="math display">\[\gamma\]</span> (“gamma”), with the <code>matrix = &quot;gamma&quot;</code> argument to <code>tidy()</code>.</p>
+<p>Besides estimating each topic as a mixture of words, LDA also models each document as a mixture of topics We can examine the per-document-per-topic probabilities, called <span class="math inline">\(\gamma\)</span> (“gamma”), with the <code>matrix = &quot;gamma&quot;</code> argument to <code>tidy()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_gamma &lt;-<span class="st"> </span><span class="kw">tidy</span>(ap_lda, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
 ap_gamma</code></pre></div>
 <pre><code>## # A tibble: 4,492 × 3
@@ -374,7 +374,7 @@ ap_gamma</code></pre></div>
 ## 10       10     1 0.1468904793
 ## # ... with 4,482 more rows</code></pre>
 <p>Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the first document has only a 24.8% probability of coming from topic 1.</p>
-<p>We can see that many of these documents were drawn from a mix of the two topics, but that document 6 was drawn almost entirely from topic 2, having a <span class="math inline">\(\gamma\)</span> of only 5.910^{-4} from topic 1. To check this answer, we could see what the most common words in that document were.</p>
+<p>We can see that many of these documents were drawn from a mix of the two topics, but that document 6 was drawn almost entirely from topic 2, having a <span class="math inline">\(\gamma\)</span> close to zero from topic 1. To check this answer, we could see what the most common words in that document were.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tidy</span>(AssociatedPress) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(document ==<span class="st"> </span><span class="dv">6</span>) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(count))</code></pre></div>
@@ -772,32 +772,32 @@ mallet_model$<span class="kw">train</span>(<span class="dv">100</span>)</code></
 <pre><code>## # A tibble: 71,064 × 3
 ##    topic    term         beta
 ##    &lt;int&gt;   &lt;chr&gt;        &lt;dbl&gt;
-## 1      1 limping 2.043750e-07
-## 2      2 limping 1.026346e-04
-## 3      3 limping 2.938613e-07
-## 4      4 limping 3.000151e-07
-## 5      1  pirate 8.195438e-05
-## 6      2  pirate 2.559465e-07
-## 7      3  pirate 2.938613e-07
-## 8      4  pirate 3.000151e-07
-## 9      1  gibbet 2.043750e-07
-## 10     2  gibbet 7.703991e-05
+## 1      1 limping 2.711595e-07
+## 2      2 limping 2.821618e-07
+## 3      3 limping 1.054246e-04
+## 4      4 limping 2.221943e-07
+## 5      1  pirate 2.711595e-07
+## 6      2  pirate 2.821618e-07
+## 7      3  pirate 1.054246e-04
+## 8      4  pirate 2.221943e-07
+## 9      1  gibbet 2.711595e-07
+## 10     2  gibbet 2.821618e-07
 ## # ... with 71,054 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># document-topic pairs</span>
 <span class="kw">tidy</span>(mallet_model, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)</code></pre></div>
 <pre><code>## # A tibble: 772 × 3
 ##                 document topic     gamma
 ##                    &lt;chr&gt; &lt;int&gt;     &lt;dbl&gt;
-## 1   Great Expectations_1     1 0.1524180
-## 2  Great Expectations_10     1 0.2148582
-## 3  Great Expectations_11     1 0.2498466
-## 4  Great Expectations_12     1 0.2507112
-## 5  Great Expectations_13     1 0.2912921
-## 6  Great Expectations_14     1 0.2961066
-## 7  Great Expectations_15     1 0.2377769
-## 8  Great Expectations_16     1 0.2779188
-## 9  Great Expectations_17     1 0.3025281
-## 10 Great Expectations_18     1 0.2572733
+## 1   Great Expectations_1     1 0.2974957
+## 2  Great Expectations_10     1 0.2358200
+## 3  Great Expectations_11     1 0.2253067
+## 4  Great Expectations_12     1 0.2492888
+## 5  Great Expectations_13     1 0.1654494
+## 6  Great Expectations_14     1 0.3206967
+## 7  Great Expectations_15     1 0.2629870
+## 8  Great Expectations_16     1 0.2525381
+## 9  Great Expectations_17     1 0.2351124
+## 10 Great Expectations_18     1 0.2166779
 ## # ... with 762 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># column needs to be named &quot;term&quot; for &quot;augment&quot;</span>
 term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_counts, <span class="dt">term =</span> word)
@@ -805,16 +805,16 @@ term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_co
 <pre><code>## # A tibble: 104,721 × 4
 ##                    document    term     n .topic
 ##                       &lt;chr&gt;   &lt;chr&gt; &lt;int&gt;  &lt;int&gt;
-## 1     Great Expectations_57     joe    88      2
-## 2      Great Expectations_7     joe    70      2
-## 3     Great Expectations_17   biddy    63      2
-## 4     Great Expectations_27     joe    58      2
-## 5     Great Expectations_38 estella    58      2
-## 6      Great Expectations_2     joe    56      2
-## 7     Great Expectations_23  pocket    53      2
-## 8     Great Expectations_15     joe    50      2
-## 9     Great Expectations_18     joe    50      2
-## 10 The War of the Worlds_16 brother    50      4
+## 1     Great Expectations_57     joe    88      3
+## 2      Great Expectations_7     joe    70      3
+## 3     Great Expectations_17   biddy    63      3
+## 4     Great Expectations_27     joe    58      3
+## 5     Great Expectations_38 estella    58      4
+## 6      Great Expectations_2     joe    56      3
+## 7     Great Expectations_23  pocket    53      1
+## 8     Great Expectations_15     joe    50      3
+## 9     Great Expectations_18     joe    50      3
+## 10 The War of the Worlds_16 brother    50      1
 ## # ... with 104,711 more rows</code></pre>
 <p>We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration: the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.</p>
 
