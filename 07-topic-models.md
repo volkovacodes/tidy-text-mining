@@ -86,6 +86,7 @@ We could use dplyr's `top_n()` to find the top 10 terms within each topic.As a t
 
 ```r
 library(ggplot2)
+library(dplyr)
 
 ap_top_terms <- ap_lda_td %>%
   group_by(topic) %>%
@@ -190,7 +191,7 @@ ap_gamma
 
 Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the first document has only a 24.8% probability of coming from topic 1.
 
-We can see that many of these documents were drawn from a mix of the two topics, but that document 6 was drawn almost entirely from topic 2, having a `gamma` of only 5.9\times 10^{-4} from topic 1. To check this answer, we could see what the most common words in that document were.
+We can see that many of these documents were drawn from a mix of the two topics, but that document 6 was drawn almost entirely from topic 2, having a $\gamma$ of only 5.9\times 10^{-4} from topic 1. To check this answer, we could see what the most common words in that document were.
 
 
 ```r
@@ -755,16 +756,16 @@ tidy(mallet_model)
 ## # A tibble: 71,064 × 3
 ##    topic    term         beta
 ##    <int>   <chr>        <dbl>
-## 1      1 limping 2.964310e-07
-## 2      2 limping 9.657610e-05
-## 3      3 limping 2.940082e-07
-## 4      4 limping 2.169543e-07
-## 5      1  pirate 2.964310e-07
-## 6      2  pirate 9.657610e-05
-## 7      3  pirate 2.940082e-07
-## 8      4  pirate 2.169543e-07
-## 9      1  gibbet 2.964310e-07
-## 10     2  gibbet 7.249228e-05
+## 1      1 limping 2.043750e-07
+## 2      2 limping 1.026346e-04
+## 3      3 limping 2.938613e-07
+## 4      4 limping 3.000151e-07
+## 5      1  pirate 8.195438e-05
+## 6      2  pirate 2.559465e-07
+## 7      3  pirate 2.938613e-07
+## 8      4  pirate 3.000151e-07
+## 9      1  gibbet 2.043750e-07
+## 10     2  gibbet 7.703991e-05
 ## # ... with 71,054 more rows
 ```
 
@@ -775,18 +776,18 @@ tidy(mallet_model, matrix = "gamma")
 
 ```
 ## # A tibble: 772 × 3
-##                 document topic      gamma
-##                    <chr> <int>      <dbl>
-## 1   Great Expectations_1     1 0.06606218
-## 2  Great Expectations_10     1 0.03729963
-## 3  Great Expectations_11     1 0.04677914
-## 4  Great Expectations_12     1 0.06436700
-## 5  Great Expectations_13     1 0.01601124
-## 6  Great Expectations_14     1 0.07069672
-## 7  Great Expectations_15     1 0.05901451
-## 8  Great Expectations_16     1 0.07825719
-## 9  Great Expectations_17     1 0.03848315
-## 10 Great Expectations_18     1 0.02993911
+##                 document topic     gamma
+##                    <chr> <int>     <dbl>
+## 1   Great Expectations_1     1 0.1524180
+## 2  Great Expectations_10     1 0.2148582
+## 3  Great Expectations_11     1 0.2498466
+## 4  Great Expectations_12     1 0.2507112
+## 5  Great Expectations_13     1 0.2912921
+## 6  Great Expectations_14     1 0.2961066
+## 7  Great Expectations_15     1 0.2377769
+## 8  Great Expectations_16     1 0.2779188
+## 9  Great Expectations_17     1 0.3025281
+## 10 Great Expectations_18     1 0.2572733
 ## # ... with 762 more rows
 ```
 
@@ -809,7 +810,7 @@ augment(mallet_model, term_counts)
 ## 7     Great Expectations_23  pocket    53      2
 ## 8     Great Expectations_15     joe    50      2
 ## 9     Great Expectations_18     joe    50      2
-## 10 The War of the Worlds_16 brother    50      3
+## 10 The War of the Worlds_16 brother    50      4
 ## # ... with 104,711 more rows
 ```
 
