@@ -745,7 +745,7 @@ wrong_words</code></pre></div>
 </div>
 <div id="alternative-lda-implementations" class="section level2">
 <h2><span class="header-section-number">7.3</span> Alternative LDA implementations</h2>
-<p>The <code>LDA()</code> function in the topicmodels package is only one implementation of the latent Dirichlet allocation algorithm. For example, the <a href="https://cran.r-project.org/package=mallet">mallet</a> package <span class="citation">(<span class="citeproc-not-found" data-reference-id="R-mallet"><strong>???</strong></span>)</span> implements a wrapper around the <a href="http://mallet.cs.umass.edu/">MALLET</a> Java package for text classification tools, and the tidytext package provides tidiers for this model output as well.</p>
+<p>The <code>LDA()</code> function in the topicmodels package is only one implementation of the latent Dirichlet allocation algorithm. For example, the <a href="https://cran.r-project.org/package=mallet">mallet</a> package <span class="citation">(Mimno <a href="#ref-R-mallet">2013</a>)</span> implements a wrapper around the <a href="http://mallet.cs.umass.edu/">MALLET</a> Java package for text classification tools, and the tidytext package provides tidiers for this model output as well.</p>
 <p>The mallet package takes a somewhat different approach to the input format. For instance, it takes non-tokenized documents and performs the tokenization itself, and requires a separate file of stopwords. This means we have to collapse the text into one string for each document before perfomring LDA.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mallet)
 
@@ -780,6 +780,9 @@ term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_co
 <div id="refs" class="references">
 <div id="ref-R-broom">
 <p>Robinson, David, Matthieu Gomez, Boris Demeshev, Dieter Menne, Benjamin Nutter, Luke Johnston, Ben Bolker, Francois Briatte, and Hadley Wickham. 2015. <em>Broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
+</div>
+<div id="ref-R-mallet">
+<p>Mimno, David. 2013. <em>Mallet: A Wrapper Around the Java Machine Learning Tool MALLET</em>. <a href="https://cran.r-project.org/package=mallet" class="uri">https://cran.r-project.org/package=mallet</a>.</p>
 </div>
 </div>
             </section>
