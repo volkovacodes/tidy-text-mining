@@ -741,13 +741,68 @@ Once the model is created, however, we can use the `tidy()` and `augment()` func
 ```r
 # word-topic pairs
 tidy(mallet_model)
+```
 
+```
+## # A tibble: 71,064 × 3
+##    topic    term         beta
+##    <int>   <chr>        <dbl>
+## 1      1 limping 9.132803e-05
+## 2      2 limping 2.334177e-07
+## 3      3 limping 2.695660e-07
+## 4      4 limping 3.173026e-07
+## 5      1  pirate 9.132803e-05
+## 6      2  pirate 2.334177e-07
+## 7      3  pirate 2.695660e-07
+## 8      4  pirate 3.173026e-07
+## 9      1  gibbet 6.855296e-05
+## 10     2  gibbet 2.334177e-07
+## # ... with 71,054 more rows
+```
+
+```r
 # document-topic pairs
 tidy(mallet_model, matrix = "gamma")
+```
 
+```
+## # A tibble: 772 × 3
+##                 document topic     gamma
+##                    <chr> <int>     <dbl>
+## 1   Great Expectations_1     1 0.4719344
+## 2  Great Expectations_10     1 0.6291615
+## 3  Great Expectations_11     1 0.5535276
+## 4  Great Expectations_12     1 0.5764580
+## 5  Great Expectations_13     1 0.6283708
+## 6  Great Expectations_14     1 0.4559426
+## 7  Great Expectations_15     1 0.6044691
+## 8  Great Expectations_16     1 0.4928088
+## 9  Great Expectations_17     1 0.6081461
+## 10 Great Expectations_18     1 0.6050406
+## # ... with 762 more rows
+```
+
+```r
 # column needs to be named "term" for "augment"
 term_counts <- rename(word_counts, term = word)
 augment(mallet_model, term_counts)
+```
+
+```
+## # A tibble: 104,721 × 4
+##                    document    term     n .topic
+##                       <chr>   <chr> <int>  <int>
+## 1     Great Expectations_57     joe    88      1
+## 2      Great Expectations_7     joe    70      1
+## 3     Great Expectations_17   biddy    63      1
+## 4     Great Expectations_27     joe    58      1
+## 5     Great Expectations_38 estella    58      1
+## 6      Great Expectations_2     joe    56      1
+## 7     Great Expectations_23  pocket    53      1
+## 8     Great Expectations_15     joe    50      1
+## 9     Great Expectations_18     joe    50      1
+## 10 The War of the Worlds_16 brother    50      3
+## # ... with 104,711 more rows
 ```
 
 We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration; the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.
