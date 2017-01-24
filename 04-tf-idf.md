@@ -51,7 +51,7 @@ book_words
 ## # ... with 40,369 more rows
 ```
 
-There is one row in this `book_words` data frame for each word-book combination; `n` is the number of times that word is used in that book and `total` is the total words in that book. The usual suspects are here with the highest `n`, "the", "and", "to", and so forth. Let's look at the distribution of `n/total` for each novel, the number of times a word appears in a novel divided by the total number of terms (words) in that novel. This is exactly what term frequency is.
+There is one row in this `book_words` data frame for each word-book combination; `n` is the number of times that word is used in that book and `total` is the total words in that book. The usual suspects are here with the highest `n`, "the", "and", "to", and so forth. In Figure \@ref(fig:plottf), let's look at the distribution of `n/total` for each novel, the number of times a word appears in a novel divided by the total number of terms (words) in that novel. This is exactly what term frequency is.
 
 
 ```r
@@ -119,7 +119,7 @@ freq_by_rank %>%
 <p class="caption">(\#fig:zipf)Zipf's law for Jane Austen's novels</p>
 </div>
 
-Notice that this plot is in log-log coordinates. We see that all six of Jane Austen's novels are similar to each other, and that the relationship between rank and frequency does have negative slope. It is not quite constant, though; perhaps we could view this as a broken [power law](https://en.wikipedia.org/wiki/Power_law) with, say, three sections. Let's see what the exponent of the power law is for the middle section of the rank range.
+Notice that Figure \@ref(fig:zipf) is in log-log coordinates. We see that all six of Jane Austen's novels are similar to each other, and that the relationship between rank and frequency does have negative slope. It is not quite constant, though; perhaps we could view this as a broken [power law](https://en.wikipedia.org/wiki/Power_law) with, say, three sections. Let's see what the exponent of the power law is for the middle section of the rank range.
 
 
 ```r
@@ -143,7 +143,7 @@ lm(log10(`term frequency`) ~ log10(rank), data = rank_subset)
 Classic versions of Zipf's law have
 
 $$\text{frequency} \propto \frac{1}{\text{rank}}$$
-and we have in fact gotten a slope close to -1 here. Let's plot this fitted power law with the data to see how it looks.
+and we have in fact gotten a slope close to -1 here. Let's plot this fitted power law with the data in Figure \@ref(fig:zipffit) to see how it looks.
 
 
 ```r
@@ -218,7 +218,7 @@ book_words %>%
 ## # ... with 40,369 more rows
 ```
 
-Here we see all proper nouns, names that are in fact important in these novels. None of them occur in all of novels, and they are important, characteristic words for each text within the corpus of Jane Austen's novels. Some of the values for idf are the same for different terms because there are 6 documents in this corpus and we are seeing the numerical value for $\ln(6/1)$, $\ln(6/2)$, etc. Let's look at a visualization for these high tf-idf words.
+Here we see all proper nouns, names that are in fact important in these novels. None of them occur in all of novels, and they are important, characteristic words for each text within the corpus of Jane Austen's novels. Some of the values for idf are the same for different terms because there are 6 documents in this corpus and we are seeing the numerical value for $\ln(6/1)$, $\ln(6/2)$, etc. Let's look at a visualization for these high tf-idf words in Figure \@ref(fig:plotausten).
 
 
 ```r
@@ -258,7 +258,7 @@ ggplot(plot_austen, aes(word, tf_idf, fill = book)) +
 <p class="caption">(\#fig:plotseparate)Highest tf-idf words in each of Jane Austen's Novels</p>
 </div>
 
-Still all proper nouns! These words are, as measured by tf-idf, the most important to each novel and most readers would likely agree.
+Still all proper nouns in Figure \@ref(fig:plotseparate)! These words are, as measured by tf-idf, the most important to each novel and most readers would likely agree.
 
 ## A corpus of physics texts
 
@@ -304,7 +304,7 @@ physics_words
 ## # ... with 12,582 more rows
 ```
 
-Here we see just the raw counts; we need to remember that these documents are all different lengths. Let's go ahead and calculate tf-idf.
+Here we see just the raw counts; we need to remember that these documents are all different lengths. Let's go ahead and calculate tf-idf, then visualize the high tf-id words in Figure \@ref(fig:plotphysics).
 
 
 ```r
@@ -330,7 +330,7 @@ ggplot(plot_physics[1:20,], aes(word, tf_idf, fill = author)) +
 <p class="caption">(\#fig:plotphysics)Highest tf-idf words in classic physics corpus</p>
 </div>
 
-Nice! Let's look at each text individually.
+Nice! Let's look at each text individually in Figure \@ref(fig:physicsseparate).
 
 
 ```r
@@ -425,4 +425,4 @@ ggplot(plot_physics, aes(word, tf_idf, fill = author)) +
 <p class="caption">(\#fig:mystopwords)Highest tf-idf words in classic physics texts</p>
 </div>
 
-We don't hear enough about ramparts or things being ethereal in physics today.
+One thing we can conclude from Figure \@ref(fig:mystopwords) is that we don't hear enough about ramparts or things being ethereal in physics today.
