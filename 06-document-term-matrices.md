@@ -85,7 +85,7 @@ ap_td
 
 Notice that we now have a tidy three-column `tbl_df`, with variables `document`, `term`, and `count`. This tidying operation is similar to the `melt` function from the reshape2 package [@R-reshape2] for non-sparse matrices. Notice that only the non-zero values are included: document 1 includes terms such as "adding" and "adult", but not "aaron" or "abandon", and thus the tidied version has no rows where `count` is zero.
 
-As we've seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles with the approach described in Chapter \ref{sentiment}.
+As we've seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles with the approach described in Chapter \@ref(sentiment).
 
 
 ```r
@@ -112,7 +112,7 @@ ap_sentiments
 ## # ... with 30,084 more rows
 ```
 
-This would let us visualize which words from the AP articles most often contributed to positive or negative sentiment, seen in Figure \ref{fig:apsentiments}. We can see that the most common positive words include "like", "work", "support", and "good", while the most negative words include "killed", "death", and "vice". (The inclusion of "vice" as a negative term is probably a mistake on the algorithm's part, since it likely usually refers to "vice president").
+This would let us visualize which words from the AP articles most often contributed to positive or negative sentiment, seen in Figure \@ref(fig:apsentiments). We can see that the most common positive words include "like", "work", "support", and "good", while the most negative words include "killed", "death", and "vice". (The inclusion of "vice" as a negative term is probably a mistake on the algorithm's part, since it likely usually refers to "vice president").
 
 
 ```r
@@ -181,7 +181,7 @@ inaug_td
 ## # ... with 44,168 more rows
 ```
 
-We may be interested in finding the words most specific to each inaugural speeches. This could be quantified by calculating the TF-IDF of each term-speech pair using the `bind_tf_idf` function, as described in Chapter \ref{tfidf}.
+We may be interested in finding the words most specific to each inaugural speeches. This could be quantified by calculating the TF-IDF of each term-speech pair using the `bind_tf_idf` function, as described in Chapter \@ref(tfidf).
 
 
 ```r
@@ -209,7 +209,7 @@ inaug_tf_idf
 ## # ... with 44,168 more rows
 ```
 
-We could use this data to pick four notable inaugural addresses (from Presidents Lincoln, Roosevelt, Kennedy, and Obama), and visualize the words most specific to each speech, as shown in Figure \ref{fig:presidentspeeches}.
+We could use this data to pick four notable inaugural addresses (from Presidents Lincoln, Roosevelt, Kennedy, and Obama), and visualize the words most specific to each speech, as shown in Figure \@ref(fig:presidentspeeches).
 
 <div class="figure">
 <img src="06-document-term-matrices_files/figure-html/presidentspeeches-1.png" alt="The terms with the highest TF-IDF from each of four selected inaugural addresses." width="672" />
@@ -229,7 +229,7 @@ year_term_counts <- inaug_td %>%
   mutate(year_total = sum(count))
 ```
 
-This lets us pick several words and visualize how they changed in frequency over time, as shown in \ref{fig:yearterm}. We can see that over time, American presidents became less likely to refer to the country as the "Union" and more likely to refer to "America". They also became less likely to talk about the "constitution" and foreign" countries, and more likely to mention "freedom" and "God".
+This lets us pick several words and visualize how they changed in frequency over time, as shown in \@ref(fig:yearterm). We can see that over time, American presidents became less likely to refer to the country as the "Union" and more likely to refer to "America". They also became less likely to talk about the "constitution" and foreign" countries, and more likely to mention "freedom" and "God".
 
 
 ```r
@@ -331,7 +331,7 @@ austen_dtm
 ## Weighting          : term frequency (tf)
 ```
 
-This casting process allows for reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications. In Chapter \ref{topicmodeling}, we'll examine some examples where a tidy-text dataset has to be converted into a DocumentTermMatrix for processing.
+This casting process allows for reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications. In Chapter \@ref(topicmodeling), we'll examine some examples where a tidy-text dataset has to be converted into a DocumentTermMatrix for processing.
 
 ## Tidying corpus objects with metadata
 
@@ -460,7 +460,7 @@ acq_tokens %>%
 ## # ... with 2,843 more rows
 ```
 
-### Example: mining financial articles
+### Example: mining financial articles {#financial}
 
 `Corpus` objects are a common output format for data ingesting packages, which means the `tidy()` function gives us access to a wide variety of text data. One example is [tm.plugin.webmining](https://cran.r-project.org/package=tm.plugin.webmining), which connects to online feeds to retrieve news articles based on a keyword. For instance, performing `WebCorpus(GoogleFinanceSource("NASDAQ:MSFT")))` allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.
 
@@ -548,14 +548,14 @@ stock_tf_idf <- stock_tokens %>%
   arrange(-tf_idf)
 ```
 
-The top terms for each are visualized in Figure \ref{fig:stocktfidf}. As we'd expect the company's name and is typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).
+The top terms for each are visualized in Figure \@ref(fig:stocktfidf). As we'd expect the company's name and is typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).
 
 <div class="figure">
 <img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest TF-IDF in recent articles specific to each company." width="768" />
 <p class="caption">(\#fig:stocktfidf)The 8 words with the highest TF-IDF in recent articles specific to each company.</p>
 </div>
 
-If we were interested in using recent news to analyze the market and make investment decisions, we'd likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter \ref{most-positive-negative}. For example, we could examine this within the AFINN lexicon (Figure \ref{fig:stockafinn}).
+If we were interested in using recent news to analyze the market and make investment decisions, we'd likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter \@ref(most-positive-negative). For example, we could examine this within the AFINN lexicon (Figure \@ref(fig:stockafinn)).
 
 
 ```r
@@ -604,7 +604,7 @@ stock_tokens %>%
 <p class="caption">(\#fig:stockloughransentiments)The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon</p>
 </div>
 
-These assignments (Figure \ref{fig:stockloughransentiments}) of words to sentiments look more reasonable: common positive words include "strong" and "better", but not "shares" or "growth", while negative words include "volatility" but not "fool". The other sentiments look reasonable as well: the most common "uncertainty" terms include "could" and "may".
+These assignments (Figure \@ref(fig:stockloughransentiments)) of words to sentiments look more reasonable: common positive words include "strong" and "better", but not "shares" or "growth", while negative words include "volatility" but not "fool". The other sentiments look reasonable as well: the most common "uncertainty" terms include "could" and "may".
 
 Now that we know we can trust the dictionary to approximate the articles' sentiments, we can use our typical methods for counting the number of uses of each sentiment-associated word in each corpus.
 
@@ -633,7 +633,7 @@ stock_sentiment_count
 ## 9     Yahoo            3        28      130       74           0          71
 ```
 
-It might be interesting to examine which company has the most news with "litigious" or "uncertain" terms. But the simplest measure, much as it was for most analysis in Chapter \ref{sentiment}, is to see whether the news is more positive or negative. As a general quantitative measure of sentiment, we'll use "(positive - negative) / (positive + negative)" (Figure \ref{fig:stockpositivity}).
+It might be interesting to examine which company has the most news with "litigious" or "uncertain" terms. But the simplest measure, much as it was for most analysis in Chapter \@ref(sentiment), is to see whether the news is more positive or negative. As a general quantitative measure of sentiment, we'll use "(positive - negative) / (positive + negative)" (Figure \@ref(fig:stockpositivity)).
 
 
 ```r

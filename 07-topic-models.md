@@ -756,16 +756,16 @@ tidy(mallet_model)
 ## # A tibble: 71,064 × 3
 ##    topic    term         beta
 ##    <int>   <chr>        <dbl>
-## 1      1 limping 2.350637e-07
-## 2      2 limping 9.258904e-05
-## 3      3 limping 2.786318e-07
-## 4      4 limping 2.974362e-07
-## 5      1  pirate 2.350637e-07
-## 6      2  pirate 2.308954e-07
-## 7      3  pirate 1.117313e-04
-## 8      4  pirate 2.974362e-07
-## 9      1  gibbet 2.350637e-07
-## 10     2  gibbet 2.308954e-07
+## 1      1 limping 2.847570e-07
+## 2      2 limping 2.714613e-07
+## 3      3 limping 9.692860e-05
+## 4      4 limping 2.378933e-07
+## 5      1  pirate 2.847570e-07
+## 6      2  pirate 2.714613e-07
+## 7      3  pirate 9.692860e-05
+## 8      4  pirate 2.378933e-07
+## 9      1  gibbet 2.847570e-07
+## 10     2  gibbet 2.714613e-07
 ## # ... with 71,054 more rows
 ```
 
@@ -778,16 +778,16 @@ tidy(mallet_model, matrix = "gamma")
 ## # A tibble: 772 × 3
 ##                 document topic      gamma
 ##                    <chr> <int>      <dbl>
-## 1   Great Expectations_1     1 0.09887737
-## 2  Great Expectations_10     1 0.16307028
-## 3  Great Expectations_11     1 0.16641104
-## 4  Great Expectations_12     1 0.17674253
-## 5  Great Expectations_13     1 0.15084270
-## 6  Great Expectations_14     1 0.25922131
-## 7  Great Expectations_15     1 0.14457601
-## 8  Great Expectations_16     1 0.14932318
-## 9  Great Expectations_17     1 0.22949438
-## 10 Great Expectations_18     1 0.16796346
+## 1   Great Expectations_1     1 0.07124352
+## 2  Great Expectations_10     1 0.04839704
+## 3  Great Expectations_11     1 0.03634969
+## 4  Great Expectations_12     1 0.06152205
+## 5  Great Expectations_13     1 0.01601124
+## 6  Great Expectations_14     1 0.07069672
+## 7  Great Expectations_15     1 0.06436211
+## 8  Great Expectations_16     1 0.03087986
+## 9  Great Expectations_17     1 0.02724719
+## 10 Great Expectations_18     1 0.01708390
 ## # ... with 762 more rows
 ```
 
@@ -805,12 +805,12 @@ augment(mallet_model, term_counts)
 ## 2      Great Expectations_7     joe    70      2
 ## 3     Great Expectations_17   biddy    63      2
 ## 4     Great Expectations_27     joe    58      2
-## 5     Great Expectations_38 estella    58      2
+## 5     Great Expectations_38 estella    58      3
 ## 6      Great Expectations_2     joe    56      2
-## 7     Great Expectations_23  pocket    53      2
+## 7     Great Expectations_23  pocket    53      3
 ## 8     Great Expectations_15     joe    50      2
 ## 9     Great Expectations_18     joe    50      2
-## 10 The War of the Worlds_16 brother    50      3
+## 10 The War of the Worlds_16 brother    50      2
 ## # ... with 104,711 more rows
 ```
 

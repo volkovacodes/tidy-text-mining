@@ -162,7 +162,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="6.2" data-path="dtm.html"><a href="dtm.html#casting-tidy-text-data-into-a-matrix"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a matrix</a></li>
 <li class="chapter" data-level="6.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a><ul>
-<li class="chapter" data-level="6.3.1" data-path="dtm.html"><a href="dtm.html#example-mining-financial-articles"><i class="fa fa-check"></i><b>6.3.1</b> Example: mining financial articles</a></li>
+<li class="chapter" data-level="6.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>6.3.1</b> Example: mining financial articles</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic modeling</a><ul>
@@ -296,7 +296,7 @@ ap_td</code></pre></div>
 ## 10        1    assault     1
 ## # ... with 302,021 more rows</code></pre>
 <p>Notice that we now have a tidy three-column <code>tbl_df</code>, with variables <code>document</code>, <code>term</code>, and <code>count</code>. This tidying operation is similar to the <code>melt</code> function from the reshape2 package <span class="citation">(Wickham <a href="#ref-R-reshape2">2007</a>)</span> for non-sparse matrices. Notice that only the non-zero values are included: document 1 includes terms such as “adding” and “adult”, but not “aaron” or “abandon”, and thus the tidied version has no rows where <code>count</code> is zero.</p>
-<p>As we’ve seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles with the approach described in Chapter .</p>
+<p>As we’ve seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles with the approach described in Chapter <a href="sentiment.html#sentiment">3</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_sentiments &lt;-<span class="st"> </span>ap_td %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>), <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">term =</span> <span class="st">&quot;word&quot;</span>))
 
@@ -315,7 +315,7 @@ ap_sentiments</code></pre></div>
 ## 9         1   liked     1  positive
 ## 10        1 miracle     1  positive
 ## # ... with 30,084 more rows</code></pre>
-<p>This would let us visualize which words from the AP articles most often contributed to positive or negative sentiment, seen in Figure . We can see that the most common positive words include “like”, “work”, “support”, and “good”, while the most negative words include “killed”, “death”, and “vice”. (The inclusion of “vice” as a negative term is probably a mistake on the algorithm’s part, since it likely usually refers to “vice president”).</p>
+<p>This would let us visualize which words from the AP articles most often contributed to positive or negative sentiment, seen in Figure <a href="dtm.html#fig:apsentiments">6.1</a>. We can see that the most common positive words include “like”, “work”, “support”, and “good”, while the most negative words include “killed”, “death”, and “vice”. (The inclusion of “vice” as a negative term is probably a mistake on the algorithm’s part, since it likely usually refers to “vice president”).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 ap_sentiments %&gt;%
@@ -361,7 +361,7 @@ inaug_td</code></pre></div>
 ## 9      1821-Monroe fellow    10
 ## 10      1825-Adams fellow     3
 ## # ... with 44,168 more rows</code></pre>
-<p>We may be interested in finding the words most specific to each inaugural speeches. This could be quantified by calculating the TF-IDF of each term-speech pair using the <code>bind_tf_idf</code> function, as described in Chapter .</p>
+<p>We may be interested in finding the words most specific to each inaugural speeches. This could be quantified by calculating the TF-IDF of each term-speech pair using the <code>bind_tf_idf</code> function, as described in Chapter <a href="tfidf.html#tfidf">4</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inaug_tf_idf &lt;-<span class="st"> </span>inaug_td %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(term, document, count) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf))
@@ -381,7 +381,7 @@ inaug_tf_idf</code></pre></div>
 ## 9  1793-Washington   witnesses     1 0.006802721 2.944439 0.02003020
 ## 10 1793-Washington     besides     1 0.006802721 2.656757 0.01807318
 ## # ... with 44,168 more rows</code></pre>
-<p>We could use this data to pick four notable inaugural addresses (from Presidents Lincoln, Roosevelt, Kennedy, and Obama), and visualize the words most specific to each speech, as shown in Figure .</p>
+<p>We could use this data to pick four notable inaugural addresses (from Presidents Lincoln, Roosevelt, Kennedy, and Obama), and visualize the words most specific to each speech, as shown in Figure <a href="dtm.html#fig:presidentspeeches">6.2</a>.</p>
 <div class="figure"><span id="fig:presidentspeeches"></span>
 <img src="06-document-term-matrices_files/figure-html/presidentspeeches-1.png" alt="The terms with the highest TF-IDF from each of four selected inaugural addresses." width="672" />
 <p class="caption">
@@ -396,7 +396,7 @@ year_term_counts &lt;-<span class="st"> </span>inaug_td %&gt;%
 <span class="st">  </span><span class="kw">complete</span>(year, term, <span class="dt">fill =</span> <span class="kw">list</span>(<span class="dt">count =</span> <span class="dv">0</span>)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(year) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year_total =</span> <span class="kw">sum</span>(count))</code></pre></div>
-<p>This lets us pick several words and visualize how they changed in frequency over time, as shown in . We can see that over time, American presidents became less likely to refer to the country as the “Union” and more likely to refer to “America”. They also became less likely to talk about the “constitution” and foreign&quot; countries, and more likely to mention “freedom” and “God”.</p>
+<p>This lets us pick several words and visualize how they changed in frequency over time, as shown in <a href="dtm.html#fig:yearterm">6.3</a>. We can see that over time, American presidents became less likely to refer to the country as the “Union” and more likely to refer to “America”. They also became less likely to talk about the “constitution” and foreign&quot; countries, and more likely to mention “freedom” and “God”.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">year_term_counts %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(term %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;god&quot;</span>, <span class="st">&quot;america&quot;</span>, <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;union&quot;</span>, <span class="st">&quot;constitution&quot;</span>, <span class="st">&quot;freedom&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year, count /<span class="st"> </span>year_total)) +
@@ -456,7 +456,7 @@ austen_dtm</code></pre></div>
 ## Sparsity           : 54%
 ## Maximal term length: 19
 ## Weighting          : term frequency (tf)</code></pre>
-<p>This casting process allows for reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications. In Chapter , we’ll examine some examples where a tidy-text dataset has to be converted into a DocumentTermMatrix for processing.</p>
+<p>This casting process allows for reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications. In Chapter <a href="topicmodeling.html#topicmodeling">7</a>, we’ll examine some examples where a tidy-text dataset has to be converted into a DocumentTermMatrix for processing.</p>
 </div>
 <div id="tidying-corpus-objects-with-metadata" class="section level2">
 <h2><span class="header-section-number">6.3</span> Tidying corpus objects with metadata</h2>
@@ -547,7 +547,7 @@ acq_tokens %&gt;%
 ## 9    441      rmj     8 0.12121212 3.218876 0.3901668
 ## 10   467  nursery     3 0.09677419 3.912023 0.3785829
 ## # ... with 2,843 more rows</code></pre>
-<div id="example-mining-financial-articles" class="section level3">
+<div id="financial" class="section level3">
 <h3><span class="header-section-number">6.3.1</span> Example: mining financial articles</h3>
 <p><code>Corpus</code> objects are a common output format for data ingesting packages, which means the <code>tidy()</code> function gives us access to a wide variety of text data. One example is <a href="https://cran.r-project.org/package=tm.plugin.webmining">tm.plugin.webmining</a>, which connects to online feeds to retrieve news articles based on a keyword. For instance, performing <code>WebCorpus(GoogleFinanceSource(&quot;NASDAQ:MSFT&quot;)))</code> allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.</p>
 <p>Here we’ll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix. (These results were downloaded in January 2017, when this chapter was written, but you’ll certainly find different results if you ran it for yourself).</p>
@@ -607,14 +607,14 @@ stock_tf_idf &lt;-<span class="st"> </span>stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(!<span class="kw">str_detect</span>(word, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(word, company, n) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(-tf_idf)</code></pre></div>
-<p>The top terms for each are visualized in Figure . As we’d expect the company’s name and is typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).</p>
+<p>The top terms for each are visualized in Figure <a href="dtm.html#fig:stocktfidf">6.4</a>. As we’d expect the company’s name and is typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).</p>
 <div class="figure"><span id="fig:stocktfidf"></span>
 <img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest TF-IDF in recent articles specific to each company." width="768" />
 <p class="caption">
 Figure 6.4: The 8 words with the highest TF-IDF in recent articles specific to each company.
 </p>
 </div>
-<p>If we were interested in using recent news to analyze the market and make investment decisions, we’d likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter . For example, we could examine this within the AFINN lexicon (Figure ).</p>
+<p>If we were interested in using recent news to analyze the market and make investment decisions, we’d likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter <a href="sentiment.html#most-positive-negative">3.4</a>. For example, we could examine this within the AFINN lexicon (Figure <a href="dtm.html#fig:stockafinn">6.5</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
@@ -653,7 +653,7 @@ Figure 6.5: The words with the largest contribution to sentiment scores in recen
 Figure 6.6: The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon
 </p>
 </div>
-<p>These assignments (Figure ) of words to sentiments look more reasonable: common positive words include “strong” and “better”, but not “shares” or “growth”, while negative words include “volatility” but not “fool”. The other sentiments look reasonable as well: the most common “uncertainty” terms include “could” and “may”.</p>
+<p>These assignments (Figure <a href="dtm.html#fig:stockloughransentiments">6.6</a>) of words to sentiments look more reasonable: common positive words include “strong” and “better”, but not “shares” or “growth”, while negative words include “volatility” but not “fool”. The other sentiments look reasonable as well: the most common “uncertainty” terms include “could” and “may”.</p>
 <p>Now that we know we can trust the dictionary to approximate the articles’ sentiments, we can use our typical methods for counting the number of uses of each sentiment-associated word in each corpus.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_sentiment_count &lt;-<span class="st"> </span>stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;loughran&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
@@ -673,7 +673,7 @@ stock_sentiment_count</code></pre></div>
 ## 7   Netflix            4         7      111      162           0         106
 ## 8   Twitter            4        12      157       79           1          75
 ## 9     Yahoo            3        28      130       74           0          71</code></pre>
-<p>It might be interesting to examine which company has the most news with “litigious” or “uncertain” terms. But the simplest measure, much as it was for most analysis in Chapter , is to see whether the news is more positive or negative. As a general quantitative measure of sentiment, we’ll use “(positive - negative) / (positive + negative)” (Figure ).</p>
+<p>It might be interesting to examine which company has the most news with “litigious” or “uncertain” terms. But the simplest measure, much as it was for most analysis in Chapter <a href="sentiment.html#sentiment">3</a>, is to see whether the news is more positive or negative. As a general quantitative measure of sentiment, we’ll use “(positive - negative) / (positive + negative)” (Figure <a href="dtm.html#fig:stockpositivity">6.7</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_sentiment_count %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">score =</span> (positive -<span class="st"> </span>negative) /<span class="st"> </span>(positive +<span class="st"> </span>negative)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">company =</span> <span class="kw">reorder</span>(company, score)) %&gt;%
