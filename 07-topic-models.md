@@ -97,7 +97,7 @@ ap_top_terms <- ap_lda_td %>%
 ap_top_terms %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip()
 ```
@@ -143,6 +143,8 @@ beta_spread
 
 The words with the greatest differences between the two topics are visualized in Figure \@ref(fig:topiccompare).
 
+(ref:topiccap) Words with the greatest difference in $\beta$ between topic 2 and topic 1
+
 
 ```r
 beta_spread %>%
@@ -156,8 +158,8 @@ beta_spread %>%
 ```
 
 <div class="figure">
-<img src="07-topic-models_files/figure-html/topiccompare-1.png" alt="Words with the greatest difference in 'beta' between topic 2 and topic 1" width="672" />
-<p class="caption">(\#fig:topiccompare)Words with the greatest difference in 'beta' between topic 2 and topic 1</p>
+<img src="07-topic-models_files/figure-html/topiccompare-1.png" alt="(ref:topiccap)" width="672" />
+<p class="caption">(\#fig:topiccompare)(ref:topiccap)</p>
 </div>
 
 We can see that the words more common in topic 2 include political parties such as "democratic" and "republican", as well as politician's names such as "dukakis" and "gorbachev". Topic 1 was more characterized by currencies like "yen" and "dollar", as well as financial terms such as "index", "prices" and "rates". This helps confirm that the two topics the algorithm identified were political and financial news.
@@ -359,7 +361,7 @@ chapters_lda_td
 
 Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. For example, the term "joe" has an almost zero probability of being generated from topics 1, 2, or 3, but it makes up 1.45% chance of being generated from topic 4.
 
-We could use dplyr's `top_n()` to find the top 5 terms within each topic:
+We could use dplyr's `top_n()` to find the top 5 terms within each topic.
 
 
 ```r
@@ -398,7 +400,7 @@ top_terms
 ## 20     4      miss 0.006228387
 ```
 
-This output lends itself well to a ggplot2 visualization (Figure \@ref(toptermsplot)).
+This output lends itself well to a ggplot2 visualization (Figure \@ref(fig:toptermsplot)).
 
 
 ```r
@@ -407,7 +409,7 @@ library(ggplot2)
 top_terms %>%
   mutate(term = reorder(term, beta)) %>%
   ggplot(aes(term, beta, fill = factor(topic))) +
-  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip()
 ```
@@ -419,11 +421,11 @@ top_terms %>%
 
 These topics are pretty clearly associated with the four books! There's no question that the topic of "nemo", "sea", and "nautilus" belongs to *Twenty Thousand Leagues Under the Sea*, and that "jane", "darcy", and "elizabeth" belongs to *Pride and Prejudice*. We see "pip" and "joe" from *Great Expectations* and "martians", "black", and "night" from *The War of the Worlds*.
 
-We also notice that there can be words in common between multiple topics, such as "miss" in topics 1 and 4, and "time" in topics 3 and 4. This shows how LDA is a "fuzzy clustering" method: rather than giving particular words to each topic, it treats them as a mixture of all words, with different proportions.
+We also notice that there can be words in common between multiple topics, such as "miss" in topics 1 and 4, and "time" in topics 3 and 4. This shows how LDA is a "fuzzy clustering" method; rather than giving particular words to each topic, it treats them as a mixture of all words, with different proportions.
 
 ## Per-document classification
 
-Each chapter was a "document" in this analysis. Thus, we may want to know which topics are associated with each document. Can we put the chapters back together in the correct books? We can find this by examining the 
+Each chapter was a "document" in this analysis. Thus, we may want to know which topics are associated with each document. Can we put the chapters back together in the correct books? We can find this by examining a different set of probabilities from the topic modeling, the per-document-per-topic probabilities.
 
 
 ```r
@@ -452,7 +454,7 @@ Each of these values is an estimated proportion of words from that document that
 
 Now that we have these document classifiations, we can see how well our unsupervised learning did at distinguishing the four books. We'd expect that chapters within a book would be found to be mostly (or entirely), generated from the corresponding topic.
 
-First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure \@ref(fig:chaptersldagamma).
+First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure \@ref(fig:chaptersldagamma)).
 
 
 ```r
@@ -729,7 +731,7 @@ The mallet package takes a somewhat different approach to the input format. For 
 ```r
 library(mallet)
 
-# Create a vector with one string per chapter
+# create a vector with one string per chapter
 collapsed <- by_chapter_word %>%
   anti_join(stop_words, by = "word") %>%
   mutate(word = str_replace(word, "'", "")) %>%
@@ -759,4 +761,4 @@ term_counts <- rename(word_counts, term = word)
 augment(mallet_model, term_counts)
 ```
 
-We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration: the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.
+We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration; the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.

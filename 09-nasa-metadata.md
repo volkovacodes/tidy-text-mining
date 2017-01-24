@@ -422,7 +422,7 @@ Figure \@ref(fig:plotdesc) shows such *strong* connections between the top dozen
 
 ### Networks of Keywords
 
-Next, let's make a network of the keywords to see which keywords commonly occur together in the same datasets.
+Next, let's make a network of the keywords in Figure \@ref(fig:plotcounts) to see which keywords commonly occur together in the same datasets.
 
 
 ```r
@@ -517,7 +517,7 @@ keyword_cors %>%
 <p class="caption">(\#fig:plotcors)Correlation network in NASA dataset keywords</p>
 </div>
 
-This network appears much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keywordsoccur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted (for further analysis) from the `graph_from_data_frame()` function above.
+This network in Figure \@ref(fig:plotcors) appears much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keywordsoccur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted (for further analysis) from the `graph_from_data_frame()` function above.
 
 ## Calculating tf-idf for the description fields
 
@@ -799,7 +799,7 @@ lda_gamma
 ## # ... with 768,062 more rows
 ```
 
-Notice that some of the probabilites visible at the top of the data frame are low and some are higher. Our model has assigned a probability to each description belonging to each of the topics we constructed from the sets of words. How are the probabilities distributed? Let's visualize them.
+Notice that some of the probabilites visible at the top of the data frame are low and some are higher. Our model has assigned a probability to each description belonging to each of the topics we constructed from the sets of words. How are the probabilities distributed? Let's visualize them (Figure \@ref(fig:plotgamma)).
 
 
 ```r

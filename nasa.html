@@ -524,7 +524,7 @@ Figure 9.2: Word network in NASA dataset descriptions
 </div>
 <div id="networks-of-keywords" class="section level3">
 <h3><span class="header-section-number">9.2.2</span> Networks of Keywords</h3>
-<p>Next, let’s make a network of the keywords to see which keywords commonly occur together in the same datasets.</p>
+<p>Next, let’s make a network of the keywords in Figure <a href="nasa.html#fig:plotcounts">9.3</a> to see which keywords commonly occur together in the same datasets.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_counts &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">pairwise_count</span>(keyword, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>, <span class="dt">upper =</span> <span class="ot">FALSE</span>)
 
@@ -596,7 +596,7 @@ keyword_cors %&gt;%
 Figure 9.4: Correlation network in NASA dataset keywords
 </p>
 </div>
-<p>This network appears much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keywordsoccur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted (for further analysis) from the <code>graph_from_data_frame()</code> function above.</p>
+<p>This network in Figure <a href="nasa.html#fig:plotcors">9.4</a> appears much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keywordsoccur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted (for further analysis) from the <code>graph_from_data_frame()</code> function above.</p>
 </div>
 </div>
 <div id="calculating-tf-idf-for-the-description-fields" class="section level2">
@@ -800,7 +800,7 @@ lda_gamma</code></pre></div>
 ## 9  55942a6ec63a7fe59b496bf7     1 4.408626e-05
 ## 10 55942a8ec63a7fe59b4986f6     1 2.878188e-05
 ## # ... with 768,062 more rows</code></pre>
-<p>Notice that some of the probabilites visible at the top of the data frame are low and some are higher. Our model has assigned a probability to each description belonging to each of the topics we constructed from the sets of words. How are the probabilities distributed? Let’s visualize them.</p>
+<p>Notice that some of the probabilites visible at the top of the data frame are low and some are higher. Our model has assigned a probability to each description belonging to each of the topics we constructed from the sets of words. How are the probabilities distributed? Let’s visualize them (Figure <a href="nasa.html#fig:plotgamma">9.7</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(lda_gamma, <span class="kw">aes</span>(gamma, <span class="dt">fill =</span> <span class="kw">as.factor</span>(topic))) +
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">ncol =</span> <span class="dv">4</span>) +

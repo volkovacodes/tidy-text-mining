@@ -304,7 +304,7 @@ ap_top_terms &lt;-<span class="st"> </span>ap_lda_td %&gt;%
 ap_top_terms %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">term =</span> <span class="kw">reorder</span>(term, beta)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(term, beta, <span class="dt">fill =</span> <span class="kw">factor</span>(topic))) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:aptoptermsplot"></span>
@@ -339,6 +339,7 @@ beta_spread</code></pre></div>
 ## 10          asked 1.885803e-04 1.559209e-03   3.0475641
 ## # ... with 188 more rows</code></pre>
 <p>The words with the greatest differences between the two topics are visualized in Figure <a href="topicmodeling.html#fig:topiccompare">7.2</a>.</p>
+
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">beta_spread %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(<span class="dt">direction =</span> log_ratio &gt;<span class="st"> </span><span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, <span class="kw">abs</span>(log_ratio)) %&gt;%
@@ -348,9 +349,9 @@ beta_spread</code></pre></div>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Log2 ratio of beta in topic 2 / topic 1&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:topiccompare"></span>
-<img src="07-topic-models_files/figure-html/topiccompare-1.png" alt="Words with the greatest difference in 'beta' between topic 2 and topic 1" width="672" />
+<img src="07-topic-models_files/figure-html/topiccompare-1.png" alt="Words with the greatest difference in \(\beta\) between topic 2 and topic 1" width="672" />
 <p class="caption">
-Figure 7.2: Words with the greatest difference in ‘beta’ between topic 2 and topic 1
+Figure 7.2: Words with the greatest difference in <span class="math inline">\(\beta\)</span> between topic 2 and topic 1
 </p>
 </div>
 <p>We can see that the words more common in topic 2 include political parties such as “democratic” and “republican”, as well as politician’s names such as “dukakis” and “gorbachev”. Topic 1 was more characterized by currencies like “yen” and “dollar”, as well as financial terms such as “index”, “prices” and “rates”. This helps confirm that the two topics the algorithm identified were political and financial news.</p>
@@ -490,7 +491,7 @@ chapters_lda_td</code></pre></div>
 ## 10     2 estella 5.316964e-65
 ## # ... with 72,850 more rows</code></pre>
 <p>Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. For example, the term “joe” has an almost zero probability of being generated from topics 1, 2, or 3, but it makes up 1.45% chance of being generated from topic 4.</p>
-<p>We could use dplyr’s <code>top_n()</code> to find the top 5 terms within each topic:</p>
+<p>We could use dplyr’s <code>top_n()</code> to find the top 5 terms within each topic.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_terms &lt;-<span class="st"> </span>chapters_lda_td %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(topic) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">5</span>, beta) %&gt;%
@@ -521,13 +522,13 @@ top_terms</code></pre></div>
 ## 18     4       pip 0.006817363
 ## 19     4    looked 0.006365257
 ## 20     4      miss 0.006228387</code></pre>
-<p>This output lends itself well to a ggplot2 visualization (Figure <a href="#toptermsplot"><strong>??</strong></a>).</p>
+<p>This output lends itself well to a ggplot2 visualization (Figure <a href="topicmodeling.html#fig:toptermsplot">7.3</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 top_terms %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">term =</span> <span class="kw">reorder</span>(term, beta)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(term, beta, <span class="dt">fill =</span> <span class="kw">factor</span>(topic))) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:toptermsplot"></span>
@@ -537,12 +538,12 @@ Figure 7.3: The terms that are most common within each topic
 </p>
 </div>
 <p>These topics are pretty clearly associated with the four books! There’s no question that the topic of “nemo”, “sea”, and “nautilus” belongs to <em>Twenty Thousand Leagues Under the Sea</em>, and that “jane”, “darcy”, and “elizabeth” belongs to <em>Pride and Prejudice</em>. We see “pip” and “joe” from <em>Great Expectations</em> and “martians”, “black”, and “night” from <em>The War of the Worlds</em>.</p>
-<p>We also notice that there can be words in common between multiple topics, such as “miss” in topics 1 and 4, and “time” in topics 3 and 4. This shows how LDA is a “fuzzy clustering” method: rather than giving particular words to each topic, it treats them as a mixture of all words, with different proportions.</p>
+<p>We also notice that there can be words in common between multiple topics, such as “miss” in topics 1 and 4, and “time” in topics 3 and 4. This shows how LDA is a “fuzzy clustering” method; rather than giving particular words to each topic, it treats them as a mixture of all words, with different proportions.</p>
 </div>
 </div>
 <div id="per-document-classification" class="section level2">
 <h2><span class="header-section-number">7.3</span> Per-document classification</h2>
-<p>Each chapter was a “document” in this analysis. Thus, we may want to know which topics are associated with each document. Can we put the chapters back together in the correct books? We can find this by examining the</p>
+<p>Each chapter was a “document” in this analysis. Thus, we may want to know which topics are associated with each document. Can we put the chapters back together in the correct books? We can find this by examining a different set of probabilities from the topic modeling, the per-document-per-topic probabilities.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda_gamma &lt;-<span class="st"> </span><span class="kw">tidy</span>(chapters_lda, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
 chapters_lda_gamma</code></pre></div>
 <pre><code>## # A tibble: 772 × 3
@@ -561,7 +562,7 @@ chapters_lda_gamma</code></pre></div>
 ## # ... with 762 more rows</code></pre>
 <p>Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the Great Expectations_57 document has only a 0.00135% probability of coming from topic 1.</p>
 <p>Now that we have these document classifiations, we can see how well our unsupervised learning did at distinguishing the four books. We’d expect that chapters within a book would be found to be mostly (or entirely), generated from the corresponding topic.</p>
-<p>First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure <a href="topicmodeling.html#fig:chaptersldagamma">7.4</a>.</p>
+<p>First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure <a href="topicmodeling.html#fig:chaptersldagamma">7.4</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda_gamma &lt;-<span class="st"> </span>chapters_lda_gamma %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(document, <span class="kw">c</span>(<span class="st">&quot;title&quot;</span>, <span class="st">&quot;chapter&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>, <span class="dt">convert =</span> <span class="ot">TRUE</span>)
 
@@ -754,7 +755,7 @@ wrong_words</code></pre></div>
 <p>The mallet package takes a somewhat different approach to the input format. For instance, it takes non-tokenized documents and performs the tokenization itself, and requires a separate file of stopwords. This means we have to collapse the text into one string for each document before perfomring LDA.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mallet)
 
-<span class="co"># Create a vector with one string per chapter</span>
+<span class="co"># create a vector with one string per chapter</span>
 collapsed &lt;-<span class="st"> </span>by_chapter_word %&gt;%
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">str_replace</span>(word, <span class="st">&quot;&#39;&quot;</span>, <span class="st">&quot;&quot;</span>)) %&gt;%
@@ -777,7 +778,7 @@ mallet_model$<span class="kw">train</span>(<span class="dv">100</span>)</code></
 <span class="co"># column needs to be named &quot;term&quot; for &quot;augment&quot;</span>
 term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_counts, <span class="dt">term =</span> word)
 <span class="kw">augment</span>(mallet_model, term_counts)</code></pre></div>
-<p>We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration: the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.</p>
+<p>We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration; the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.</p>
 
 </div>
 </div>

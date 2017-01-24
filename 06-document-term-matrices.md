@@ -125,7 +125,7 @@ ap_sentiments %>%
   mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
   mutate(term = reorder(term, n)) %>%
   ggplot(aes(term, n, fill = sentiment)) +
-  geom_bar(alpha = 0.8, stat = "identity") +
+  geom_bar(stat = "identity") +
   ylab("Contribution to sentiment") +
   coord_flip()
 ```
@@ -212,8 +212,8 @@ inaug_tf_idf
 We could use this data to pick four notable inaugural addresses (from Presidents Lincoln, Roosevelt, Kennedy, and Obama), and visualize the words most specific to each speech, as shown in Figure \@ref(fig:presidentspeeches).
 
 <div class="figure">
-<img src="06-document-term-matrices_files/figure-html/presidentspeeches-1.png" alt="The terms with the highest tf-idf from each of four selected inaugural addresses." width="672" />
-<p class="caption">(\#fig:presidentspeeches)The terms with the highest tf-idf from each of four selected inaugural addresses.</p>
+<img src="06-document-term-matrices_files/figure-html/presidentspeeches-1.png" alt="The terms with the highest tf-idf from each of four selected inaugural addresses" width="576" />
+<p class="caption">(\#fig:presidentspeeches)The terms with the highest tf-idf from each of four selected inaugural addresses</p>
 </div>
 
 As another example of a visualization possible with tidy data, we could extract the year from each document's name, and compute the total number of words within each year.
@@ -244,8 +244,8 @@ year_term_counts %>%
 ```
 
 <div class="figure">
-<img src="06-document-term-matrices_files/figure-html/yearterm-1.png" alt="Changes in word frequency over time within Presidential inaugural addresses, for four selected terms." width="672" />
-<p class="caption">(\#fig:yearterm)Changes in word frequency over time within Presidential inaugural addresses, for four selected terms.</p>
+<img src="06-document-term-matrices_files/figure-html/yearterm-1.png" alt="Changes in word frequency over time within Presidential inaugural addresses, for four selected terms" width="672" />
+<p class="caption">(\#fig:yearterm)Changes in word frequency over time within Presidential inaugural addresses, for four selected terms</p>
 </div>
 
 These examples show how you can use tidytext, and the related suite of tidy tools, to analyze sources even if their origin was not in a tidy format.
@@ -551,8 +551,8 @@ stock_tf_idf <- stock_tokens %>%
 The top terms for each are visualized in Figure \@ref(fig:stocktfidf). As we'd expect the company's name and is typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).
 
 <div class="figure">
-<img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest tf-idf in recent articles specific to each company." width="768" />
-<p class="caption">(\#fig:stocktfidf)The 8 words with the highest tf-idf in recent articles specific to each company.</p>
+<img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest tf-idf in recent articles specific to each company" width="768" />
+<p class="caption">(\#fig:stocktfidf)The 8 words with the highest tf-idf in recent articles specific to each company</p>
 </div>
 
 If we were interested in using recent news to analyze the market and make investment decisions, we'd likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter \@ref(most-positive-negative). For example, we could examine this within the AFINN lexicon (Figure \@ref(fig:stockafinn)).
@@ -648,8 +648,8 @@ stock_sentiment_count %>%
 ```
 
 <div class="figure">
-<img src="06-document-term-matrices_files/figure-html/stockpositivity-1.png" alt="'Positivity' of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company." width="672" />
-<p class="caption">(\#fig:stockpositivity)'Positivity' of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company.</p>
+<img src="06-document-term-matrices_files/figure-html/stockpositivity-1.png" alt="'Positivity' of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company" width="672" />
+<p class="caption">(\#fig:stockpositivity)'Positivity' of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company</p>
 </div>
 
 Based on this analysis, we'd say that in January 2017 most of the coverage of Yahoo and Twitter was strongly negative, while coverage of Google and Amazon was the most positive. A glance at current financial headlines suggest that it's on the right track. If you were interested in further analysis, you could use one of R's many quantitative finance packages to compare these articles to recent stock prices and other metrics.

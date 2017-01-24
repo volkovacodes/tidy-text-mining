@@ -270,8 +270,8 @@ bind_rows(afinn,
 ```
 
 <div class="figure">
-<img src="03-sentiment-analysis_files/figure-html/compareplot-1.png" alt="(ref:comparecap) " width="864" />
-<p class="caption">(\#fig:compareplot)(ref:comparecap) </p>
+<img src="03-sentiment-analysis_files/figure-html/compareplot-1.png" alt="(ref:comparecap)" width="864" />
+<p class="caption">(\#fig:compareplot)(ref:comparecap)</p>
 </div>
 
 The three different lexicons for calculating sentiment give results that are different in an absolute sense but have similar relative trajectories through the novel. We see similar dips and peaks in sentiment at about the same places in the novel, but the absolute values are significantly different. The AFINN lexicon

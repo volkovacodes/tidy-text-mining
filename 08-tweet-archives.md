@@ -6,7 +6,7 @@ One type of text that gets plenty of attention is text shared online via Twitter
 
 ## Getting the data and distribution of tweets
 
-An individual can download their own Twitter archive by following [directions available on Twitter's website](https://support.twitter.com/articles/20170160). We each downloaded ours and will now open them up. Let's use the lubridate package to convert the string timestamps to date-time objects and initially take a look at our tweeting patterns overall.
+An individual can download their own Twitter archive by following [directions available on Twitter's website](https://support.twitter.com/articles/20170160). We each downloaded ours and will now open them up. Let's use the lubridate package to convert the string timestamps to date-time objects and initially take a look at our tweeting patterns overall (Figure \@ref(fig:setup)).
 
 
 ```r
@@ -201,7 +201,7 @@ word_ratios %>%
 
 We are about equally likely to tweet about maps, email, APIs, and functions.
 
-Which words are most likely to be from Julia's account or from David's account? Let's just take the top 15 most distinctive words for each account and plot them.
+Which words are most likely to be from Julia's account or from David's account? Let's just take the top 15 most distinctive words for each account and plot them in Figure \@ref(fig:plotratios).
 
 
 ```r
@@ -375,9 +375,9 @@ words_by_time %>%
 <p class="caption">(\#fig:topdave)Trending words in David's tweets</p>
 </div>
 
-David tweeted a lot about the UseR conference while he was there and then quickly stopped. He has tweeted more about Stack Overflow toward the end of the year and [less about ggplot2](https://twitter.com/drob/status/712639593703542785) as the year has progressed.
+We see in Figure \@ref(fig:topdave) that David tweeted a lot about the UseR conference while he was there and then quickly stopped. He has tweeted more about Stack Overflow toward the end of the year and [less about ggplot2](https://twitter.com/drob/status/712639593703542785) as the year has progressed.
 
-Now let's plot words that have changed frequency in Julia's tweets.
+Now let's plot words that have changed frequency in Julia's tweets in Figure \@ref(fig:topjulia).
 
 
 ```r
@@ -497,7 +497,7 @@ word_by_rts %>%
 ## # ... with 168 more rows
 ```
 
-At the top of this sorted data frame, we see tweets from Julia and David about packages that they work on, like [gutenbergr](https://cran.r-project.org/package=gutenbergr), [gganimate](https://github.com/dgrtwo/gganimate), and [tidytext](https://cran.r-project.org/package=tidytext). Let's plot the words that have the highest median retweets for each of our accounts.
+At the top of this sorted data frame, we see tweets from Julia and David about packages that they work on, like [gutenbergr](https://cran.r-project.org/package=gutenbergr), [gganimate](https://github.com/dgrtwo/gganimate), and [tidytext](https://cran.r-project.org/package=tidytext). Let's plot the words that have the highest median retweets for each of our accounts (Figure \@ref(fig:plotrts)).
 
 
 ```r
@@ -543,7 +543,7 @@ word_by_favs <- tidy_tweets %>%
   ungroup()
 ```
 
-We have built the data frames we need. Now let's make our visualization.
+We have built the data frames we need. Now let's make our visualization in Figure \@ref(fig:plotfavs).
 
 
 ```r
