@@ -756,16 +756,16 @@ tidy(mallet_model)
 ## # A tibble: 71,064 × 3
 ##    topic    term         beta
 ##    <int>   <chr>        <dbl>
-## 1      1 limping 2.847570e-07
-## 2      2 limping 2.714613e-07
-## 3      3 limping 9.692860e-05
-## 4      4 limping 2.378933e-07
-## 5      1  pirate 2.847570e-07
-## 6      2  pirate 2.714613e-07
-## 7      3  pirate 9.692860e-05
-## 8      4  pirate 2.378933e-07
-## 9      1  gibbet 2.847570e-07
-## 10     2  gibbet 2.714613e-07
+## 1      1 limping 2.540414e-07
+## 2      2 limping 2.330590e-05
+## 3      3 limping 7.726535e-05
+## 4      4 limping 2.966949e-07
+## 5      1  pirate 2.540414e-07
+## 6      2  pirate 2.307515e-07
+## 7      3  pirate 1.029349e-04
+## 8      4  pirate 2.966949e-07
+## 9      1  gibbet 2.540414e-07
+## 10     2  gibbet 6.945621e-05
 ## # ... with 71,054 more rows
 ```
 
@@ -776,18 +776,18 @@ tidy(mallet_model, matrix = "gamma")
 
 ```
 ## # A tibble: 772 × 3
-##                 document topic      gamma
-##                    <chr> <int>      <dbl>
-## 1   Great Expectations_1     1 0.07124352
-## 2  Great Expectations_10     1 0.04839704
-## 3  Great Expectations_11     1 0.03634969
-## 4  Great Expectations_12     1 0.06152205
-## 5  Great Expectations_13     1 0.01601124
-## 6  Great Expectations_14     1 0.07069672
-## 7  Great Expectations_15     1 0.06436211
-## 8  Great Expectations_16     1 0.03087986
-## 9  Great Expectations_17     1 0.02724719
-## 10 Great Expectations_18     1 0.01708390
+##                 document topic     gamma
+##                    <chr> <int>     <dbl>
+## 1   Great Expectations_1     1 0.0798791
+## 2  Great Expectations_10     1 0.1470407
+## 3  Great Expectations_11     1 0.1584356
+## 4  Great Expectations_12     1 0.1411807
+## 5  Great Expectations_13     1 0.2103933
+## 6  Great Expectations_14     1 0.2510246
+## 7  Great Expectations_15     1 0.1491597
+## 8  Great Expectations_16     1 0.1916244
+## 9  Great Expectations_17     1 0.2137640
+## 10 Great Expectations_18     1 0.1699932
 ## # ... with 762 more rows
 ```
 
@@ -805,12 +805,12 @@ augment(mallet_model, term_counts)
 ## 2      Great Expectations_7     joe    70      2
 ## 3     Great Expectations_17   biddy    63      2
 ## 4     Great Expectations_27     joe    58      2
-## 5     Great Expectations_38 estella    58      3
+## 5     Great Expectations_38 estella    58      2
 ## 6      Great Expectations_2     joe    56      2
-## 7     Great Expectations_23  pocket    53      3
+## 7     Great Expectations_23  pocket    53      2
 ## 8     Great Expectations_15     joe    50      2
 ## 9     Great Expectations_18     joe    50      2
-## 10 The War of the Worlds_16 brother    50      2
+## 10 The War of the Worlds_16 brother    50      3
 ## # ... with 104,711 more rows
 ```
 
