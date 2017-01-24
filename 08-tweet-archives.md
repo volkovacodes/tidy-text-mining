@@ -211,7 +211,7 @@ word_ratios %>%
   ungroup() %>%
   mutate(word = reorder(word, logratio)) %>%
   ggplot(aes(word, logratio, fill = logratio < 0)) +
-  geom_bar(alpha = 0.8, stat = "identity") +
+  geom_bar(stat = "identity") +
   coord_flip() +
   ylab("log odds ratio (David/Julia)") +
   scale_fill_discrete(name = "", labels = c("David", "Julia"))
@@ -366,7 +366,7 @@ words_by_time %>%
   inner_join(top_slopes, by = c("word", "person")) %>%
   filter(person == "David") %>%
   ggplot(aes(time_floor, count/time_total, color = word)) +
-  geom_line(alpha = 0.8, size = 1.3) +
+  geom_line(size = 1.3) +
   labs(x = NULL, y = "Word frequency")
 ```
 
@@ -385,7 +385,7 @@ words_by_time %>%
   inner_join(top_slopes, by = c("word", "person")) %>%
   filter(person == "Julia") %>%
   ggplot(aes(time_floor, count/time_total, color = word)) +
-  geom_line(alpha = 0.8, size = 1.3) +
+  geom_line(size = 1.3) +
   labs(x = NULL, y = "Word frequency")
 ```
 
@@ -509,7 +509,7 @@ word_by_rts %>%
   mutate(word = factor(word, unique(word))) %>%
   ungroup() %>%
   ggplot(aes(word, retweets, fill = person)) +
-  geom_bar(stat = "identity", alpha = 0.8, show.legend = FALSE) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ person, scales = "free", ncol = 2) +
   coord_flip() +
   labs(x = NULL, 
@@ -555,7 +555,7 @@ word_by_favs %>%
   mutate(word = factor(word, unique(word))) %>%
   ungroup() %>%
   ggplot(aes(word, favorites, fill = person)) +
-  geom_bar(stat = "identity", alpha = 0.8, show.legend = FALSE) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ person, scales = "free", ncol = 2) +
   coord_flip() +
   labs(x = NULL, 

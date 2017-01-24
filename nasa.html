@@ -644,7 +644,7 @@ Figure 9.4: Correlation network in NASA dataset keywords
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">unique</span>(word)))) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> keyword)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~keyword, <span class="dt">ncol =</span> <span class="dv">3</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>() +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Highest tf-idf words in NASA metadata description fields&quot;</span>,
@@ -768,7 +768,7 @@ top_terms</code></pre></div>
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">term =</span> <span class="kw">factor</span>(<span class="kw">paste</span>(term, topic, <span class="dt">sep =</span> <span class="st">&quot;__&quot;</span>), <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">paste</span>(term, topic, <span class="dt">sep =</span> <span class="st">&quot;__&quot;</span>)))) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(term, beta, <span class="dt">fill =</span> <span class="kw">as.factor</span>(topic))) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>() +
 <span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> function(x) <span class="kw">gsub</span>(<span class="st">&quot;__.+$&quot;</span>, <span class="st">&quot;&quot;</span>, x)) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Top 10 terms in each LDA topic&quot;</span>,
@@ -801,7 +801,7 @@ lda_gamma</code></pre></div>
 ## # ... with 768,062 more rows</code></pre>
 <p>Notice that some of the probabilites visible at the top of the data frame are low and some are higher. Our model has assigned a probability to each description belonging to each of the topics we constructed from the sets of words. How are the probabilities distributed? Let’s visualize them (Figure <a href="nasa.html#fig:plotgamma">9.7</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(lda_gamma, <span class="kw">aes</span>(gamma, <span class="dt">fill =</span> <span class="kw">as.factor</span>(topic))) +
-<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">ncol =</span> <span class="dv">4</span>) +
 <span class="st">  </span><span class="kw">scale_y_log10</span>() +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Distribution of probability for each topic&quot;</span>,
@@ -867,7 +867,7 @@ top_keywords</code></pre></div>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">keyword =</span> <span class="kw">factor</span>(<span class="kw">paste</span>(keyword, topic, <span class="dt">sep =</span> <span class="st">&quot;__&quot;</span>), 
                           <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">paste</span>(keyword, topic, <span class="dt">sep =</span> <span class="st">&quot;__&quot;</span>)))) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(keyword, n, <span class="dt">fill =</span> <span class="kw">as.factor</span>(topic))) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Top keywords for each LDA topic&quot;</span>,
        <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;Number of documents&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>() +

@@ -215,7 +215,7 @@ tf_idf %>%
   top_n(12, tf_idf) %>%
   mutate(word = reorder(word, tf_idf)) %>%
   ggplot(aes(word, tf_idf, fill = newsgroup)) +
-  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ newsgroup, scales = "free") +
   ylab("tf-idf") +
   coord_flip()
@@ -373,7 +373,7 @@ newsgroup_sentiments <- words_by_newsgroup %>%
 newsgroup_sentiments %>%
   mutate(newsgroup = reorder(newsgroup, score)) %>%
   ggplot(aes(newsgroup, score, fill = score > 0)) +
-  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
   coord_flip() +
   ylab("Average sentiment score")
 ```
@@ -425,7 +425,7 @@ contributions %>%
   top_n(25, abs(contribution)) %>%
   mutate(word = reorder(word, contribution)) %>%
   ggplot(aes(word, contribution, fill = contribution > 0)) +
-  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
   coord_flip()
 ```
 
@@ -630,7 +630,7 @@ usenet_bigram_counts %>%
   ungroup() %>%
   mutate(word2 = reorder(paste(word2, word1, sep = "__"), contribution)) %>%
   ggplot(aes(word2, contribution, fill = contribution > 0)) +
-  geom_bar(alpha = 0.8, stat = "identity", show.legend = FALSE) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
   facet_wrap(~ word1, scales = "free", nrow = 3) +
   scale_x_discrete(labels = function(x) gsub("__.+$", "", x)) +
   xlab("Words preceded by a negation") +
