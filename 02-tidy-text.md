@@ -188,7 +188,7 @@ tidy_books %>%
 ## # ... with 13,904 more rows
 ```
 
-Because we've been using tidy tools, our word counts are stored in a tidy data frame. This allows us to pipe this directly the ggplot2 package, for example to create a visualization of the most common words (Figure \@ref(#plotcount)).
+Because we've been using tidy tools, our word counts are stored in a tidy data frame. This allows us to pipe this directly to the ggplot2 package, for example to create a visualization of the most common words (Figure \@ref(fig:plotcount)).
 
 
 ```r
