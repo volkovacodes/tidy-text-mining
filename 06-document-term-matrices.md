@@ -4,7 +4,7 @@
 
 In the previous chapters, we've been analyzing text arranged in the tidy text format: a table with one-token-per-document-per-row, such as is constructed by the `unnest_tokens` function. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2 to explore and visualize text data. We've demonstrated that many informative text analyses can be performed using these tools.
 
-However, most of the existing R tools for natural language processing, besides the tidytext package, aren't compatible with this format. The [CRAN Task View for Natural Language Processing](https://cran.r-project.org/web/views/NaturalLanguageProcessing.html) lists a large selection of packages that take other structures of input and provide non-tidy outputs. These package are very useful in text mining applications, and many existing text datasets are structured according to these formats.
+However, most of the existing R tools for natural language processing, besides the tidytext package, aren't compatible with this format. The [CRAN Task View for Natural Language Processing](https://cran.r-project.org/web/views/NaturalLanguageProcessing.html) lists a large selection of packages that take other structures of input and provide non-tidy outputs. These packages are very useful in text mining applications, and many existing text datasets are structured according to these formats.
 
 Computer scientist Hal Abelson has observed that "No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system." In that spirit, this chapter will discuss the "glue" that connects the tidy text format with other important packages and data structures, allowing you to rely on both existing text mining packages and the suite of tidy tools to perform your analysis. In particular, we'll examine the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix.
 
@@ -181,7 +181,7 @@ inaug_td
 ## # ... with 44,168 more rows
 ```
 
-We may be interested in finding the words most specific to each inaugural speeches. This could be quantified by calculating the tf-idf of each term-speech pair using the `bind_tf_idf()` function, as described in Chapter \@ref(tfidf).
+We may be interested in finding the words most specific to each of the inaugural speeches. This could be quantified by calculating the tf-idf of each term-speech pair using the `bind_tf_idf()` function, as described in Chapter \@ref(tfidf).
 
 
 ```r
@@ -535,7 +535,7 @@ stock_tokens
 ## # ... with 105,047 more rows, and 1 more variables: heading <chr>
 ```
 
-Here we see the some of each article's metadata alongside the words used. We could use tf-idf to determine which words were most specific to each stock symbol.
+Here we see some of each article's metadata alongside the words used. We could use tf-idf to determine which words were most specific to each stock symbol.
 
 
 ```r
@@ -548,7 +548,7 @@ stock_tf_idf <- stock_tokens %>%
   arrange(-tf_idf)
 ```
 
-The top terms for each are visualized in Figure \@ref(fig:stocktfidf). As we'd expect the company's name and is typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).
+The top terms for each are visualized in Figure \@ref(fig:stocktfidf). As we'd expect the company's name is typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).
 
 <div class="figure">
 <img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest tf-idf in recent articles specific to each company" width="768" />
