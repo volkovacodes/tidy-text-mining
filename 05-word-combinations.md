@@ -8,7 +8,7 @@ In this chapter, we'll explore some of the methods tidytext offers for calculati
 
 ## Tokenizing by n-gram
 
-We've been using the `unnest_tokens` function to tokenize by word, or sometimes by sentence or paragraph, which is useful for the kinds of sentiment and frequency analyses we've been doing so far. But we can also use the function to tokenize into consecutive sequences of words, called **n-grams**. By seeing how often word X is followed by word Y, we can then build a model of the relationships between them.
+We've been using the `unnest_tokens` function to tokenize by word, or sometimes by sentence, which is useful for the kinds of sentiment and frequency analyses we've been doing so far. But we can also use the function to tokenize into consecutive sequences of words, called **n-grams**. By seeing how often word X is followed by word Y, we can then build a model of the relationships between them.
 
 We do this by adding the `token = "ngrams"` option to `unnest_tokens()`, and setting `n` to the number of words we wish to capture in each n-gram. When we set `n` to 2, we are examining pairs of two consecutive words, often called "bigrams":
 
@@ -41,7 +41,7 @@ austen_bigrams
 ## # ... with 725,038 more rows
 ```
 
-This data structure is still a variation of the tidy text format. It is structured as one-row-per-token (with extra metadata, such as `book`, still preserved), but each token now represents a bigram. Notice that these bigrams overlap: "sense and" is one token, while "and sensibility" is another.
+This data structure is still a variation of the tidy text format. It is structured as one-token-per-row (with extra metadata, such as `book`, still preserved), but each token now represents a bigram. Notice that these bigrams overlap: "sense and" is one token, while "and sensibility" is another.
 
 ### Counting and filtering n-grams
 
@@ -172,7 +172,7 @@ austen_books() %>%
 
 ### Analyzing bigrams
 
-This one-row-per-bigram format is helpful for exploratory analyses of the text. As a simple example, we might be interested in the most common "streets" mentioned in each book:
+This one-bigram-per-row format is helpful for exploratory analyses of the text. As a simple example, we might be interested in the most common "streets" mentioned in each book:
 
 
 ```r
@@ -336,6 +336,8 @@ It's worth asking which words contributed the most in the "wrong" direction. To 
 
 
 ```r
+library(ggplot2)
+
 not_words %>%
   mutate(contribution = n * score) %>%
   arrange(desc(abs(contribution))) %>%
@@ -368,7 +370,7 @@ negated_words <- bigrams_separated %>%
   ungroup()
 ```
 
-We could then visualize what the most common words to follow each particular negation are (Figure \@ref(fig:negatedwords)). While "not like" and "not help" are still the two most common examples, we can also see pairings such as "no great" and "never loved." These are just a few examples of how finding consecutive words can give context to text mining methods.
+We could then visualize what the most common words to follow each particular negation are (Figure \@ref(fig:negatedwords)). While "not like" and "not help" are still the two most common examples, we can also see pairings such as "no great" and "never loved." We could combine this with the approaches in Chapter \@ref(sentiments) to reverse the AFINN scores of each word that follows a negation. These are just a few examples of how finding consecutive words can give context to text mining methods.
 
 <div class="figure">
 <img src="05-word-combinations_files/figure-html/negatedwords-1.png" alt="The most common positive or negative words to follow negations such as 'never', 'no', 'not', and 'without'" width="864" />
@@ -383,7 +385,7 @@ We may be interested in visualizing all of the relationships among words simulta
 * **to**: the node an edge is going towards
 * **weight**: A numeric value associated with each edge
 
-The [igraph](http://igraph.org/) package has many powerful functions for manipulating and analyzing networks. One way to create an igraph object from tidy data is the `graph_from_data_frame()` function, which takes a data frame that starts with "from", "to", and "node", columns, in that order.
+The [igraph](http://igraph.org/) package has many powerful functions for manipulating and analyzing networks. One way to create an igraph object from tidy data is the `graph_from_data_frame()` function, which takes a data frame of edges with columns for "from", "to", and edge attributes (in this case `n`):
 
 
 ```r
@@ -461,7 +463,7 @@ In Figure \@ref(fig:bigramgraph), we can visualize some details of the text stru
 We conclude with a few polishing operations to make a better looking graph (Figure \@ref(fig:bigramggraphausten2)):
 
 * We add the `edge_alpha` aesthetic to the link layer to make links transparent based on how common or rare the bigram is
-* We add directionality with an arrow, constructed using `grid::arrow()`
+* We add directionality with an arrow, constructed using `grid::arrow()`, including an `end_cap` option that tells the arrow to end before touching the node
 * We tinker with the options to the node layer to make the nodes more attractive (larger, blue points)
 * We add a theme that's useful for plotting networks, `theme_void()`
 
@@ -472,7 +474,8 @@ set.seed(2016)
 a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
 
 ggraph(bigram_graph, layout = "fr") +
-  geom_edge_link(aes(edge_alpha = n), show.legend = FALSE, arrow = a) +
+  geom_edge_link(aes(edge_alpha = n), show.legend = FALSE,
+                 arrow = a, end_cap = circle(.07, 'inches')) +
   geom_node_point(color = "lightblue", size = 5) +
   geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
   theme_void()
@@ -489,10 +492,17 @@ Note that this is a visualization of a **Markov chain**, a common model in text 
 
 ### Visualizing bigrams in other texts
 
-We went to a good amount of work in cleaning and visualizing bigrams on a text dataset, so let's collect it into a function so that we can do it on other text datasets easily.
+We went to a good amount of work in cleaning and visualizing bigrams on a text dataset, so let's collect it into a function so that we easily perform it on other text datasets. To make it easy to use these functions yourself, we've also reloaded the packages necessary for them. 
 
 
 ```r
+library(dplyr)
+library(tidyr)
+library(tidytext)
+library(ggplot2)
+library(igraph)
+library(ggraph)
+
 count_bigrams <- function(dataset) {
   dataset %>%
     unnest_tokens(bigram, text, token = "ngrams", n = 2) %>%
@@ -564,7 +574,7 @@ We'll examine some of the ways tidy text can be turned into a wide matrix in Cha
 
 ### Counting and correlating among sections
 
-Consider the book "Pride and Prejudice" divided into 10-line sections, as we did for sentiment analysis in Chapter \@ref(sentiment). We may be interested in what words tend to appear within the same section.
+Consider the book "Pride and Prejudice" divided into 10-line sections, as we did (with larger sections) for sentiment analysis in Chapter \@ref(sentiment). We may be interested in what words tend to appear within the same section.
 
 
 ```r
@@ -625,7 +635,7 @@ word_pairs
 ## # ... with 795,998 more rows
 ```
 
-Notice that while the input had one row for each pair of a document and a word, the output has one row for each pair of words. This is also a tidy format, but of a very different structure that we can use to answer new questions.
+Notice that while the input had one row for each pair of a document (a 10-line section) and a word, the output has one row for each pair of words. This is also a tidy format, but of a very different structure that we can use to answer new questions.
 
 For example, we can see that the most common pair of words in a section is "Elizabeth" and "Darcy" (the two main characters). We can easily find the words that most often occur with Darcy:
 
@@ -672,12 +682,10 @@ $$\phi=\frac{n_{11}n_{00}-n_{10}n_{01}}{\sqrt{n_{1\cdot}n_{0\cdot}n_{\cdot0}n_{\
 
 (The phi coefficient is equivalent to the Pearson correlation, which you may have heard of elsewhere, when it is applied to binary data).
 
-The `pairwise_cor()` function in widyr lets us find the correlation correlation between words based on how often they appear in the same section. Its syntax is similar to `pairwise_count()`.
+The `pairwise_cor()` function in widyr lets us find the phi coefficient between words based on how often they appear in the same section. Its syntax is similar to `pairwise_count()`.
 
 
 ```r
-library(widyr)
-
 # we need to filter for at least relatively common words first
 word_cors <- austen_section_words %>%
   group_by(word) %>%
@@ -729,7 +737,7 @@ word_cors %>%
 ## # ... with 383 more rows
 ```
 
-This would let us examine the most-correlated words with any selection of words. For example, we could pick four words and visualize the words most associated with them (Figure \@ref(fig:wordcors)).
+This lets us pick particular interesting words and find the other words most associated with them (Figure \@ref(fig:wordcors)).
 
 
 ```r
