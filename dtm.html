@@ -252,7 +252,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>each column represents one term, and</li>
 <li>each value (typically) contains the number of appearances of that term in that document.</li>
 </ul>
-<p>DTMs are usually implemented as sparse matrices, meaning the vast majority of values are 0. These objects can be treated as though they were matrices (for example, accessing particular rows and columns), but are stored in a more efficient format. We’ll discuss several implementations of these matrices in this chapter.</p>
+<p>Since most pairings of document and term do not occur (they have the value zero), DTMs are usually implemented as sparse matrices. These objects can be treated as though they were matrices (for example, accessing particular rows and columns), but are stored in a more efficient format. We’ll discuss several implementations of these matrices in this chapter.</p>
 <p>DTM objects cannot be used directly with tidy tools, just as tidy data frames cannot be used as input for most text mining packages. Thus, the tidytext package provides two verbs that convert between the two formats.</p>
 <ul>
 <li><code>tidy()</code> turns a document-term matrix into a tidy data frame. This verb comes from the broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>, which provides similar tidying functions for many statistical models and objects.</li>
@@ -260,7 +260,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <div id="tidying-documenttermmatrix-objects" class="section level3">
 <h3><span class="header-section-number">6.1.1</span> Tidying DocumentTermMatrix objects</h3>
-<p>Perhaps the most widely used implementation of DTMs in R is the <code>DocumentTermMatrix</code> class in the tm package. Many available text mining datasets are provided in this format. For example, consider the corpus of Associated Press newspaper articles included in the topicmodels package.</p>
+<p>Perhaps the most widely used implementation of DTMs in R is the <code>DocumentTermMatrix</code> class in the tm package. Many available text mining datasets are provided in this format. For example, consider the collection of Associated Press newspaper articles included in the topicmodels package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tm)
 
 <span class="kw">data</span>(<span class="st">&quot;AssociatedPress&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;topicmodels&quot;</span>)
@@ -387,7 +387,7 @@ inaug_tf_idf</code></pre></div>
 Figure 6.2: The terms with the highest tf-idf from each of four selected inaugural addresses. Note that quanteda’s tokenizer includes the ‘?’ punctuation mark as a term, though the texts we’ve tokenized ourselves with unnest_tokens do not.
 </p>
 </div>
-<p>As another example of a visualization possible with tidy data, we could extract the year from each document’s name, and compute the total number of words within each year.</p>
+<p>As another example of a visualization possible with tidy data, we could extract the year from each document’s name, and compute the total number of words within each year. Note that we’ve used tidyr’s <code>complete()</code> function to include zeroes (cases where a word didn’t appear in a document) in the table.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
 year_term_counts &lt;-<span class="st"> </span>inaug_td %&gt;%
@@ -549,7 +549,7 @@ acq_tokens %&gt;%
 <div id="financial" class="section level3">
 <h3><span class="header-section-number">6.3.1</span> Example: mining financial articles</h3>
 <p><code>Corpus</code> objects are a common output format for data ingesting packages, which means the <code>tidy()</code> function gives us access to a wide variety of text data. One example is <a href="https://cran.r-project.org/package=tm.plugin.webmining">tm.plugin.webmining</a>, which connects to online feeds to retrieve news articles based on a keyword. For instance, performing <code>WebCorpus(GoogleFinanceSource(&quot;NASDAQ:MSFT&quot;)))</code> allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.</p>
-<p>Here we’ll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix. (These results were downloaded in January 2017, when this chapter was written, but you’ll certainly find different results if you ran it for yourself).</p>
+<p>Here we’ll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix. These results were downloaded in January 2017, when this chapter was written, but you’ll certainly find different results if you ran it for yourself. (Note that this code takes several minutes to run).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tm.plugin.webmining)
 <span class="kw">library</span>(purrr)
 
@@ -564,6 +564,7 @@ download_articles &lt;-<span class="st"> </span>function(symbol) {
 stock_articles &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">company =</span> company,
                              <span class="dt">symbol =</span> symbol) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">corpus =</span> <span class="kw">map</span>(symbol, download_articles))</code></pre></div>
+<p>This uses the <code>map()</code> function from the purrr package, which applies a function to each item in <code>symbol</code> to create a list, which we store in the <code>corpus</code> list column.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_articles</code></pre></div>
 <pre><code>## # A tibble: 9 × 3
 ##     company symbol          corpus
@@ -577,7 +578,7 @@ stock_articles &lt;-<span class="st"> </span><span class="kw">data_frame</span>(
 ## 7       IBM    IBM &lt;S3: WebCorpus&gt;
 ## 8     Yahoo   YHOO &lt;S3: WebCorpus&gt;
 ## 9   Netflix   NFLX &lt;S3: WebCorpus&gt;</code></pre>
-<p>Each of the items in the <code>corpus</code> list column is a <code>WebCorpus</code> object, which is a special case of a corpus like <code>acq</code>. We can thus turn each into a data frame using the <code>tidy()</code> function, unnest it with tidyr’s <code>unnest()</code>, then tokenize the <code>text</code> column of the individual articles using <code>unnest_tokens</code>.</p>
+<p>Each of the items in the <code>corpus</code> list column is a <code>WebCorpus</code> object, which is a special case of a corpus like <code>acq</code>. We can thus turn each into a data frame using the <code>tidy()</code> function, unnest it with tidyr’s <code>unnest()</code>, then tokenize the <code>text</code> column of the individual articles using <code>unnest_tokens()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_tokens &lt;-<span class="st"> </span>stock_articles %&gt;%
 <span class="st">  </span><span class="kw">unnest</span>(<span class="kw">map</span>(corpus, tidy)) %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text) %&gt;%
@@ -631,7 +632,7 @@ Figure 6.4: The 8 words with the highest tf-idf in recent articles specific to e
 Figure 6.5: The words with the largest contribution to sentiment scores in recent financial articles, according to the AFINN dictionary. The ‘contribution’ is the product of the word and the sentiment score.
 </p>
 </div>
-<p>In the context of these financial articles, there are a few big red flags here. The words “share” and “shares” are counted as positive verbs by the AFINN lexicon (“Alice will <strong>share</strong> her cake with Bob”), but they’re actually neutral nouns (“The stock price was $X per <strong>share</strong>”) that could just as easily be in a positive sentence as a negative one. The word “fool” is even more deceptive: it refers to Motley Fool, a financial services company. In short, we can see that the AFINN sentiment lexicon is entirely unsuited to the context of financial data (as are the NRC and Bing).</p>
+<p>In the context of these financial articles, there are a few big red flags here. The words “share” and “shares” are counted as positive verbs by the AFINN lexicon (“Alice will <strong>share</strong> her cake with Bob”), but they’re actually neutral nouns (“The stock price is $12 per <strong>share</strong>”) that could just as easily be in a positive sentence as a negative one. The word “fool” is even more deceptive: it refers to Motley Fool, a financial services company. In short, we can see that the AFINN sentiment lexicon is entirely unsuited to the context of financial data (as are the NRC and Bing).</p>
 <p>Instead, we introduce another sentiment lexicon: the Loughran and McDonald dictionary of financial sentiment terms <span class="citation">(LOUGHRAN and MCDONALD <a href="#ref-loughran2011liability">2011</a>)</span>. This dictionary was developed based on analyses of financial reports, and intentionally avoids words like “share” and “fool”, as well as subtler terms like “liability” and “risk” that may not have a negative meaning in a financial context.</p>
 <p>The Loughran data divides words into six sentiments: “positive”, “negative”, “litigious”, “uncertain”, “constraining”, and “superfluous”. We could start by examining the most common words belonging to each sentiment within this text dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_tokens %&gt;%
