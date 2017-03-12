@@ -241,7 +241,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="topicmodeling" class="section level1">
 <h1><span class="header-section-number">7</span> Topic modeling</h1>
-<p>In text mining, we often have collections of documents, such as blog posts or news articles, that we’d like to divide into natural groups so that we can understand them separately. Topic modeling is a method for unsupervised classification of such documents, similar to “clustering” on numerical data, which finds natural groups of items even when we’re not sure what we’re looking for.</p>
+<p>In text mining, we often have collections of documents, such as blog posts or news articles, that we’d like to divide into natural groups so that we can understand them separately. Topic modeling is a method for unsupervised classification of such documents, similar to clustering on numeric data, which finds natural groups of items even when we’re not sure what we’re looking for.</p>
 <p>Latent Dirichlet allocation is a particularly popular method for fitting a topic model. It treats each document as a mixture of topics, and each topic as a mixture of words. This allows documents to “overlap” each other in terms of content, rather than being separated into discrete groups, in a way that mirrors typical use of natural language.</p>
 <p>We can use tidy text principles to approach topic modeling using consistent and effective tools. In this chapter, we’ll learn to tidy LDA objects from the <a href="https://cran.r-project.org/package=topicmodels">topicmodels package</a> to examine model results using ggplot2 and dplyr. We’ll also explore an example of clustering chapters from several books, where we can see that a topic model “learns” to tell the difference between the four books based on the text content.</p>
 <div id="latent-dirichlet-allocation" class="section level2">
@@ -262,7 +262,7 @@ AssociatedPress</code></pre></div>
 ## Sparsity           : 99%
 ## Maximal term length: 18
 ## Weighting          : term frequency (tf)</code></pre>
-<p>We can use the <code>LDA()</code> function from the topicmodels package, setting <code>k = 2</code>, to create a two-topic LDA model. This function returns an object containing the full details of the model fit, such as how words are associated with topics and how topics are associated with documents.</p>
+<p>We can use the <code>LDA()</code> function from the topicmodels package, setting <code>k = 2</code>, to create a two-topic LDA model. (Almost any topic model in practice will use a larger <code>k</code>, but we will see in Chapter <a href="topicmodeling.html#library-heist">7.2</a> that this analysis approach extends to a larger number of topics). This function returns an object containing the full details of the model fit, such as how words are associated with topics and how topics are associated with documents.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># set a seed so that the output of the model is predictable</span>
 ap_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(AssociatedPress, <span class="dt">k =</span> <span class="dv">2</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">seed =</span> <span class="dv">1234</span>))
 ap_lda</code></pre></div>
@@ -273,8 +273,8 @@ ap_lda</code></pre></div>
 <p>In Chapter <a href="dtm.html#dtm">6</a> we introduced the <code>tidy()</code> method, originally from the broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>, for tidying model objects. The tidytext package provides this method for extracting the per-topic-per-word probabilities, called <span class="math inline">\(\beta\)</span> (“beta”), from the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
-ap_lda_td &lt;-<span class="st"> </span><span class="kw">tidy</span>(ap_lda)
-ap_lda_td</code></pre></div>
+ap_topics &lt;-<span class="st"> </span><span class="kw">tidy</span>(ap_lda, <span class="dt">matrix =</span> <span class="st">&quot;beta&quot;</span>)
+ap_topics</code></pre></div>
 <pre><code>## # A tibble: 20,946 × 3
 ##    topic       term         beta
 ##    &lt;int&gt;      &lt;chr&gt;        &lt;dbl&gt;
@@ -294,7 +294,7 @@ ap_lda_td</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(dplyr)
 
-ap_top_terms &lt;-<span class="st"> </span>ap_lda_td %&gt;%
+ap_top_terms &lt;-<span class="st"> </span>ap_topics %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(topic) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, beta) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
@@ -313,10 +313,10 @@ Figure 7.1: The terms that are most common within each topic
 </p>
 </div>
 <p>This visualization lets us understand the two topics that were extracted from the articles. The most common words in topic 1 include “percent”, “million”, “billion”, and “company”, which suggests it may represent business or financial news. Those most common in topic 2 include “president”, “government”, and “soviet”, suggeting that this topic represents political news. One important observation about the words in each topic is that some words, such as “new” and “people”, are common within both topics. This is an advantage of topic modeling as opposed to “hard clustering” methods: topics used in natural language could have some overlap in terms of words.</p>
-<p>As an alternative, we could consider the terms that had the <em>greatest difference</em> in <span class="math inline">\(\beta\)</span> between topic 1 and topic 2. This can be estimated based on the log ratio of the two: <span class="math inline">\(\log_2(\frac{\beta_2}{\beta_1})\)</span>. (To constrain it to a set of especially relevant words, we can filter for relatively common words, such as those that have a <span class="math inline">\(\beta\)</span> greater than 1/1000 in at least one topic).</p>
+<p>As an alternative, we could consider the terms that had the <em>greatest difference</em> in <span class="math inline">\(\beta\)</span> between topic 1 and topic 2. This can be estimated based on the log ratio of the two: <span class="math inline">\(\log_2(\frac{\beta_2}{\beta_1})\)</span> (a log ratio is useful because it makes the difference symmetrical: <span class="math inline">\(\beta_2\)</span> being twice as large leads to a log ratio of 1, while <span class="math inline">\(\beta_1\)</span> being twice as large results in -1). To constrain it to a set of especially relevant words, we can filter for relatively common words, such as those that have a <span class="math inline">\(\beta\)</span> greater than 1/1000 in at least one topic.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
-beta_spread &lt;-<span class="st"> </span>ap_lda_td %&gt;%
+beta_spread &lt;-<span class="st"> </span>ap_topics %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">topic =</span> <span class="kw">paste0</span>(<span class="st">&quot;topic&quot;</span>, topic)) %&gt;%
 <span class="st">  </span><span class="kw">spread</span>(topic, beta) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(topic1 &gt;<span class="st"> </span>.<span class="dv">001</span> |<span class="st"> </span>topic2 &gt;<span class="st"> </span>.<span class="dv">001</span>) %&gt;%
@@ -350,8 +350,8 @@ Figure 7.2: Words with the greatest difference in <span class="math inline">\(\b
 <div id="document-topic-probabilities" class="section level3">
 <h3><span class="header-section-number">7.1.2</span> Document-topic probabilities</h3>
 <p>Besides estimating each topic as a mixture of words, LDA also models each document as a mixture of topics. We can examine the per-document-per-topic probabilities, called <span class="math inline">\(\gamma\)</span> (“gamma”), with the <code>matrix = &quot;gamma&quot;</code> argument to <code>tidy()</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_gamma &lt;-<span class="st"> </span><span class="kw">tidy</span>(ap_lda, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
-ap_gamma</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_documents &lt;-<span class="st"> </span><span class="kw">tidy</span>(ap_lda, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
+ap_documents</code></pre></div>
 <pre><code>## # A tibble: 4,492 × 3
 ##    document topic        gamma
 ##       &lt;int&gt; &lt;int&gt;        &lt;dbl&gt;
@@ -400,18 +400,14 @@ ap_gamma</code></pre></div>
 </ul>
 <p>This vandal has torn the books into individual chapters, and left them in one large pile. How can we restore these disorganized chapters to their original books? This is a challenging problem since the individual chapters are <strong>unlabeled</strong>: we don’t know what words might distinguish them into groups. We’ll thus use topic modeling to discover how chapters cluster into distinct topics, each of them (presumably) representing one of the books.</p>
 <p>We’ll retrieve the text of these four books using the gutenbergr package introduced in Chapter <a href="tfidf.html#tfidf">4</a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
-
-titles &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Twenty Thousand Leagues under the Sea&quot;</span>, <span class="st">&quot;The War of the Worlds&quot;</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titles &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Twenty Thousand Leagues under the Sea&quot;</span>, <span class="st">&quot;The War of the Worlds&quot;</span>,
             <span class="st">&quot;Pride and Prejudice&quot;</span>, <span class="st">&quot;Great Expectations&quot;</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gutenbergr)
 
 books &lt;-<span class="st"> </span><span class="kw">gutenberg_works</span>(title %in%<span class="st"> </span>titles) %&gt;%
 <span class="st">  </span><span class="kw">gutenberg_download</span>(<span class="dt">meta_fields =</span> <span class="st">&quot;title&quot;</span>)</code></pre></div>
 <p>As pre-processing, we divide these into chapters, use tidytext’s <code>unnest_tokens()</code> to separate them into words, then remove <code>stop_words</code>. We’re treating every chapter as a separate “document”, each with a name like <code>Great Expectations_1</code> or <code>Pride and Prejudice_11</code>. (In other applications, each document might be one newspaper article, or one blog post).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
-<span class="kw">library</span>(stringr)
-<span class="kw">library</span>(tidyr)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
 
 <span class="co"># divide into documents, each representing one chapter</span>
 by_chapter &lt;-<span class="st"> </span>books %&gt;%
@@ -459,14 +455,12 @@ chapters_dtm</code></pre></div>
 ## Maximal term length: 19
 ## Weighting          : term frequency (tf)</code></pre>
 <p>We can then use the <code>LDA()</code> function to create a four-topic model. In this case we know we’re looking for four topics because there are four books; in other problems we may need to try a few different values of <code>k</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(topicmodels)
-
-chapters_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(chapters_dtm, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">seed =</span> <span class="dv">1234</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(chapters_dtm, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">seed =</span> <span class="dv">1234</span>))
 chapters_lda</code></pre></div>
 <pre><code>## A LDA_VEM topic model with 4 topics.</code></pre>
 <p>Much as we did on the Associated Press data, we can examine per-topic-per-word probabilities.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda_td &lt;-<span class="st"> </span><span class="kw">tidy</span>(chapters_lda)
-chapters_lda_td</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapter_topics &lt;-<span class="st"> </span><span class="kw">tidy</span>(chapters_lda, <span class="dt">matrix =</span> <span class="st">&quot;beta&quot;</span>)
+chapter_topics</code></pre></div>
 <pre><code>## # A tibble: 72,860 × 3
 ##    topic    term         beta
 ##    &lt;int&gt;   &lt;chr&gt;        &lt;dbl&gt;
@@ -483,7 +477,7 @@ chapters_lda_td</code></pre></div>
 ## # ... with 72,850 more rows</code></pre>
 <p>Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. For example, the term “joe” has an almost zero probability of being generated from topics 1, 2, or 3, but it makes up 1.45% of topic 4.</p>
 <p>We could use dplyr’s <code>top_n()</code> to find the top 5 terms within each topic.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_terms &lt;-<span class="st"> </span>chapters_lda_td %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_terms &lt;-<span class="st"> </span>chapter_topics %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(topic) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">5</span>, beta) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
@@ -533,8 +527,8 @@ Figure 7.3: The terms that are most common within each topic
 <div id="per-document" class="section level3">
 <h3><span class="header-section-number">7.2.2</span> Per-document classification</h3>
 <p>Each document in this analysis represented a single chapter. Thus, we may want to know which topics are associated with each document. Can we put the chapters back together in the correct books? We can find this by examining the per-document-per-topic probabilities, <span class="math inline">\(\gamma\)</span> (“gamma”).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda_gamma &lt;-<span class="st"> </span><span class="kw">tidy</span>(chapters_lda, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
-chapters_lda_gamma</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_gamma &lt;-<span class="st"> </span><span class="kw">tidy</span>(chapters_lda, <span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>)
+chapters_gamma</code></pre></div>
 <pre><code>## # A tibble: 772 × 3
 ##                    document topic        gamma
 ##                       &lt;chr&gt; &lt;int&gt;        &lt;dbl&gt;
@@ -549,13 +543,13 @@ chapters_lda_gamma</code></pre></div>
 ## 9     Great Expectations_18     1 1.272044e-05
 ## 10 The War of the Worlds_16     1 1.084337e-05
 ## # ... with 762 more rows</code></pre>
-<p>Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the Great Expectations_57 document has only a 0.00135% probability of coming from topic 1.</p>
+<p>Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the Great Expectations_57 document has only a 0.00135% probability of coming from topic 1 (Pride and Prejudice).</p>
 <p>Now that we have these topic-probabilities, we can see how well our unsupervised learning did at distinguishing the four books. We’d expect that chapters within a book would be found to be mostly (or entirely), generated from the corresponding topic.</p>
 <p>First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure <a href="topicmodeling.html#fig:chaptersldagamma">7.4</a>).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_lda_gamma &lt;-<span class="st"> </span>chapters_lda_gamma %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_gamma &lt;-<span class="st"> </span>chapters_gamma %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(document, <span class="kw">c</span>(<span class="st">&quot;title&quot;</span>, <span class="st">&quot;chapter&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>, <span class="dt">convert =</span> <span class="ot">TRUE</span>)
 
-chapters_lda_gamma</code></pre></div>
+chapters_gamma</code></pre></div>
 <pre><code>## # A tibble: 772 × 4
 ##                    title chapter topic        gamma
 ## *                  &lt;chr&gt;   &lt;int&gt; &lt;int&gt;        &lt;dbl&gt;
@@ -570,8 +564,8 @@ chapters_lda_gamma</code></pre></div>
 ## 9     Great Expectations      18     1 1.272044e-05
 ## 10 The War of the Worlds      16     1 1.084337e-05
 ## # ... with 762 more rows</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># reorder titles in order of topic 1, topic 2, etc</span>
-chapters_lda_gamma %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># reorder titles in order of topic 1, topic 2, etc before plotting</span>
+chapters_gamma %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">title =</span> <span class="kw">reorder</span>(title, gamma *<span class="st"> </span>topic)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="kw">factor</span>(topic), gamma)) +
 <span class="st">  </span><span class="kw">geom_boxplot</span>() +
@@ -584,7 +578,7 @@ Figure 7.4: The gamma probabilities for each chapter within each book
 </div>
 <p>We notice that almost all of the chapters from <em>Pride and Prejudice</em>, <em>War of the Worlds</em>, and <em>Twenty Thousand Leagues Under the Sea</em> were uniquely identified as a single topic each.</p>
 <p>It does look like some chapters from Great Expectations (which should be topic 4) were somewhat associated with other topics. Are there any cases where the topic most associated with a chapter belonged to another book? First we’d find the topic that was most associated with each chapter using <code>top_n()</code>, which is effectively the “classification” of that chapter.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapter_classifications &lt;-<span class="st"> </span>chapters_lda_gamma %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapter_classifications &lt;-<span class="st"> </span>chapters_gamma %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(title, chapter) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">1</span>, gamma) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()
@@ -641,7 +635,7 @@ assignments</code></pre></div>
 ## 9   Great Expectations_9   joe    44      4
 ## 10 Great Expectations_13   joe    40      4
 ## # ... with 104,711 more rows</code></pre>
-<p>This returns a tidy data frame of book-term counts, but adds an extra column: <code>.topic</code>, with the topic each term was assigned to within each document. (Extra columns added by <code>augment</code> always start with <code>.</code>, to prevent overwriting existing columns). We can combine this assignments with the consensus book titles to find which words were incorrectly classified.</p>
+<p>This returns a tidy data frame of book-term counts, but adds an extra column: <code>.topic</code>, with the topic each term was assigned to within each document. (Extra columns added by <code>augment</code> always start with <code>.</code>, to prevent overwriting existing columns). We can combine this <code>assignments</code> table with the consensus book titles to find which words were incorrectly classified.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">assignments &lt;-<span class="st"> </span>assignments %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(document, <span class="kw">c</span>(<span class="st">&quot;title&quot;</span>, <span class="st">&quot;chapter&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>, <span class="dt">convert =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(book_topics, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;.topic&quot;</span> =<span class="st"> &quot;topic&quot;</span>))
@@ -746,7 +740,7 @@ wrong_words</code></pre></div>
 <div id="alternative-lda-implementations" class="section level2">
 <h2><span class="header-section-number">7.3</span> Alternative LDA implementations</h2>
 <p>The <code>LDA()</code> function in the topicmodels package is only one implementation of the latent Dirichlet allocation algorithm. For example, the <a href="https://cran.r-project.org/package=mallet">mallet</a> package <span class="citation">(Mimno <a href="#ref-R-mallet">2013</a>)</span> implements a wrapper around the <a href="http://mallet.cs.umass.edu/">MALLET</a> Java package for text classification tools, and the tidytext package provides tidiers for this model output as well.</p>
-<p>The mallet package takes a somewhat different approach to the input format. For instance, it takes non-tokenized documents and performs the tokenization itself, and requires a separate file of stopwords. This means we have to collapse the text into one string for each document before perfomring LDA.</p>
+<p>The mallet package takes a somewhat different approach to the input format. For instance, it takes non-tokenized documents and performs the tokenization itself, and requires a separate file of stopwords. This means we have to collapse the text into one string for each document before performing LDA.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mallet)
 
 <span class="co"># create a vector with one string per chapter</span>

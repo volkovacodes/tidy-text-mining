@@ -2,7 +2,7 @@
 
 
 
-In text mining, we often have collections of documents, such as blog posts or news articles, that we'd like to divide into natural groups so that we can understand them separately. Topic modeling is a method for unsupervised classification of such documents, similar to "clustering" on numerical data, which finds natural groups of items even when we're not sure what we're looking for.
+In text mining, we often have collections of documents, such as blog posts or news articles, that we'd like to divide into natural groups so that we can understand them separately. Topic modeling is a method for unsupervised classification of such documents, similar to clustering on numeric data, which finds natural groups of items even when we're not sure what we're looking for.
 
 Latent Dirichlet allocation is a particularly popular method for fitting a topic model. It treats each document as a mixture of topics, and each topic as a mixture of words. This allows documents to "overlap" each other in terms of content, rather than being separated into discrete groups, in a way that mirrors typical use of natural language.
 
@@ -35,7 +35,7 @@ AssociatedPress
 ## Weighting          : term frequency (tf)
 ```
 
-We can use the `LDA()` function from the topicmodels package, setting `k = 2`, to create a two-topic LDA model. This function returns an object containing the full details of the model fit, such as how words are associated with topics and how topics are associated with documents.
+We can use the `LDA()` function from the topicmodels package, setting `k = 2`, to create a two-topic LDA model. (Almost any topic model in practice will use a larger `k`, but we will see in Chapter \@ref(library-heist) that this analysis approach extends to a larger number of topics). This function returns an object containing the full details of the model fit, such as how words are associated with topics and how topics are associated with documents.
 
 
 ```r
@@ -58,8 +58,8 @@ In Chapter \@ref(dtm) we introduced the `tidy()` method, originally from the bro
 ```r
 library(tidytext)
 
-ap_lda_td <- tidy(ap_lda)
-ap_lda_td
+ap_topics <- tidy(ap_lda, matrix = "beta")
+ap_topics
 ```
 
 ```
@@ -88,7 +88,7 @@ We could use dplyr's `top_n()` to find the 10 terms that are most common within 
 library(ggplot2)
 library(dplyr)
 
-ap_top_terms <- ap_lda_td %>%
+ap_top_terms <- ap_topics %>%
   group_by(topic) %>%
   top_n(10, beta) %>%
   ungroup() %>%
@@ -109,13 +109,13 @@ ap_top_terms %>%
 
 This visualization lets us understand the two topics that were extracted from the articles. The most common words in topic 1 include "percent", "million", "billion", and "company", which suggests it may represent business or financial news. Those most common in topic 2 include "president", "government", and "soviet", suggeting that this topic represents political news. One important observation about the words in each topic is that some words, such as "new" and "people", are common within both topics. This is an advantage of topic modeling as opposed to "hard clustering" methods: topics used in natural language could have some overlap in terms of words.
 
-As an alternative, we could consider the terms that had the *greatest difference* in $\beta$ between topic 1 and topic 2. This can be estimated based on the log ratio of the two: $\log_2(\frac{\beta_2}{\beta_1})$. (To constrain it to a set of especially relevant words, we can filter for relatively common words, such as those that have a $\beta$ greater than 1/1000 in at least one topic).
+As an alternative, we could consider the terms that had the *greatest difference* in $\beta$ between topic 1 and topic 2. This can be estimated based on the log ratio of the two: $\log_2(\frac{\beta_2}{\beta_1})$ (a log ratio is useful because it makes the difference symmetrical: $\beta_2$ being twice as large leads to a log ratio of 1, while $\beta_1$ being twice as large results in -1). To constrain it to a set of especially relevant words, we can filter for relatively common words, such as those that have a $\beta$ greater than 1/1000 in at least one topic.
 
 
 ```r
 library(tidyr)
 
-beta_spread <- ap_lda_td %>%
+beta_spread <- ap_topics %>%
   mutate(topic = paste0("topic", topic)) %>%
   spread(topic, beta) %>%
   filter(topic1 > .001 | topic2 > .001) %>%
@@ -158,8 +158,8 @@ Besides estimating each topic as a mixture of words, LDA also models each docume
 
 
 ```r
-ap_gamma <- tidy(ap_lda, matrix = "gamma")
-ap_gamma
+ap_documents <- tidy(ap_lda, matrix = "gamma")
+ap_documents
 ```
 
 ```
@@ -226,8 +226,6 @@ We'll retrieve the text of these four books using the gutenbergr package introdu
 
 
 ```r
-library(dplyr)
-
 titles <- c("Twenty Thousand Leagues under the Sea", "The War of the Worlds",
             "Pride and Prejudice", "Great Expectations")
 ```
@@ -246,9 +244,7 @@ As pre-processing, we divide these into chapters, use tidytext's `unnest_tokens(
 
 
 ```r
-library(tidytext)
 library(stringr)
-library(tidyr)
 
 # divide into documents, each representing one chapter
 by_chapter <- books %>%
@@ -312,8 +308,6 @@ We can then use the `LDA()` function to create a four-topic model. In this case 
 
 
 ```r
-library(topicmodels)
-
 chapters_lda <- LDA(chapters_dtm, k = 4, control = list(seed = 1234))
 chapters_lda
 ```
@@ -326,8 +320,8 @@ Much as we did on the Associated Press data, we can examine per-topic-per-word p
 
 
 ```r
-chapters_lda_td <- tidy(chapters_lda)
-chapters_lda_td
+chapter_topics <- tidy(chapters_lda, matrix = "beta")
+chapter_topics
 ```
 
 ```
@@ -353,7 +347,7 @@ We could use dplyr's `top_n()` to find the top 5 terms within each topic.
 
 
 ```r
-top_terms <- chapters_lda_td %>%
+top_terms <- chapter_topics %>%
   group_by(topic) %>%
   top_n(5, beta) %>%
   ungroup() %>%
@@ -415,8 +409,8 @@ Each document in this analysis represented a single chapter. Thus, we may want t
 
 
 ```r
-chapters_lda_gamma <- tidy(chapters_lda, matrix = "gamma")
-chapters_lda_gamma
+chapters_gamma <- tidy(chapters_lda, matrix = "gamma")
+chapters_gamma
 ```
 
 ```
@@ -436,7 +430,7 @@ chapters_lda_gamma
 ## # ... with 762 more rows
 ```
 
-Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the Great Expectations_57 document has only a 0.00135% probability of coming from topic 1.
+Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the Great Expectations_57 document has only a 0.00135% probability of coming from topic 1 (Pride and Prejudice).
 
 Now that we have these topic-probabilities, we can see how well our unsupervised learning did at distinguishing the four books. We'd expect that chapters within a book would be found to be mostly (or entirely), generated from the corresponding topic.
 
@@ -444,10 +438,10 @@ First we re-separate the document name into title and chapter, after which we ca
 
 
 ```r
-chapters_lda_gamma <- chapters_lda_gamma %>%
+chapters_gamma <- chapters_gamma %>%
   separate(document, c("title", "chapter"), sep = "_", convert = TRUE)
 
-chapters_lda_gamma
+chapters_gamma
 ```
 
 ```
@@ -469,8 +463,8 @@ chapters_lda_gamma
 
 
 ```r
-# reorder titles in order of topic 1, topic 2, etc
-chapters_lda_gamma %>%
+# reorder titles in order of topic 1, topic 2, etc before plotting
+chapters_gamma %>%
   mutate(title = reorder(title, gamma * topic)) %>%
   ggplot(aes(factor(topic), gamma)) +
   geom_boxplot() +
@@ -488,7 +482,7 @@ It does look like some chapters from Great Expectations (which should be topic 4
 
 
 ```r
-chapter_classifications <- chapters_lda_gamma %>%
+chapter_classifications <- chapters_gamma %>%
   group_by(title, chapter) %>%
   top_n(1, gamma) %>%
   ungroup()
@@ -567,7 +561,7 @@ assignments
 ## # ... with 104,711 more rows
 ```
 
-This returns a tidy data frame of book-term counts, but adds an extra column: `.topic`, with the topic each term was assigned to within each document. (Extra columns added by `augment` always start with `.`, to prevent overwriting existing columns). We can combine this assignments with the consensus book titles to find which words were incorrectly classified.
+This returns a tidy data frame of book-term counts, but adds an extra column: `.topic`, with the topic each term was assigned to within each document. (Extra columns added by `augment` always start with `.`, to prevent overwriting existing columns). We can combine this `assignments` table with the consensus book titles to find which words were incorrectly classified.
 
 
 ```r
@@ -712,7 +706,7 @@ The LDA algorithm is stochastic, and it can accidentally land on a topic that sp
 
 The `LDA()` function in the topicmodels package is only one implementation of the latent Dirichlet allocation algorithm. For example, the [mallet](https://cran.r-project.org/package=mallet) package [@R-mallet] implements a wrapper around the [MALLET](http://mallet.cs.umass.edu/) Java package for text classification tools, and the tidytext package provides tidiers for this model output as well.
 
-The mallet package takes a somewhat different approach to the input format. For instance, it takes non-tokenized documents and performs the tokenization itself, and requires a separate file of stopwords. This means we have to collapse the text into one string for each document before perfomring LDA.
+The mallet package takes a somewhat different approach to the input format. For instance, it takes non-tokenized documents and performs the tokenization itself, and requires a separate file of stopwords. This means we have to collapse the text into one string for each document before performing LDA.
 
 
 
