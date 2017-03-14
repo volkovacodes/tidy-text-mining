@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-13">
+<meta name="date" content="2017-03-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -127,6 +127,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="2.2" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>2.2</b> Tidying the works of Jane Austen</a></li>
 <li class="chapter" data-level="2.3" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>2.3</b> The gutenbergr package</a></li>
 <li class="chapter" data-level="2.4" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>2.4</b> Word frequencies</a></li>
+<li class="chapter" data-level="2.5" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>2.5</b> Conclusion</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>3</b> Sentiment analysis with tidy data</a><ul>
 <li class="chapter" data-level="3.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>3.1</b> The <code>sentiments</code> dataset</a></li>
@@ -241,9 +242,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="tidytext" class="section level1">
 <h1><span class="header-section-number">2</span> The tidy text format</h1>
-<p>We define the tidy text format as being a table with <strong>one-term-per-row.</strong> Structuring text data in this way means that it conforms to tidy data principles and can be manipulated with a set of consistent tools. This is worth contrasting with the ways text is often stored in text mining approaches.</p>
+<p>We define the tidy text format as being a table with <strong>one-token-per-row.</strong> Structuring text data in this way means that it conforms to tidy data principles and can be manipulated with a set of consistent tools. This is worth contrasting with the ways text is often stored in text mining approaches.</p>
 <ul>
-<li><strong>Raw string</strong>: Text can, of course, be stored as raw strings within R, and often text data is first read into memory in this form.</li>
+<li><strong>String</strong>: Text can, of course, be stored as strings, i.e., character vectors, within R, and often text data is first read into memory in this form.</li>
 <li><strong>Corpus</strong>: These types of objects typically contain raw strings annotated with additional metadata and details.</li>
 <li><strong>Document-term matrix</strong>: This is a sparse matrix describing a collection (i.e., a corpus) of documents with one row for each document and one column for each term. The value in the matrix is typically word count or tf-idf (see Chapter <a href="tfidf.html#tfidf">4</a>).</li>
 </ul>
@@ -348,7 +349,7 @@ tidy_books</code></pre></div>
 ## 9  Sense &amp; Sensibility         10       1           1
 ## 10 Sense &amp; Sensibility         13       1         the
 ## # ... with 725,044 more rows</code></pre>
-<p>This function uses the <a href="https://github.com/ropensci/tokenizers">tokenizers</a> package <span class="citation">(Mullen <a href="#ref-R-tokenizers">2016</a>)</span> to separate each line of text in the original data frame into tokens. The default tokenizing is for words, but other options include characters, n-grams, sentences, lines, paragraphs, or separation around a regex pattern.</p>
+<p>This function uses the <a href="https://github.com/ropensci/tokenizers">tokenizers</a> package to separate each line of text in the original data frame into tokens. The default tokenizing is for words, but other options include characters, n-grams, sentences, lines, paragraphs, or separation around a regex pattern.</p>
 <p>Now that the data is in one-word-per-row format, we can manipulate it with tidy tools like dplyr. We can remove stop words (kept in the tidytext dataset <code>stop_words</code>) with an <code>anti_join()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(stop_words)
 
@@ -379,7 +380,7 @@ tidy_books %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;<span class="st"> </span><span class="dv">600</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, n)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, n)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_col</span>() +
 <span class="st">  </span><span class="kw">xlab</span>(<span class="ot">NULL</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:plotcount"></span>
@@ -443,26 +444,22 @@ hgwells &lt;-<span class="st"> </span><span class="kw">gutenberg_download</span>
 ## 10   aunt   896
 ## # ... with 25,704 more rows</code></pre>
 <p>Interesting that “time”, “eyes”, and “hand” are in the top 10 for both H.G. Wells and the Brontë sisters.</p>
-<p>Now, let’s calculate the frequency for each word for the works of Jane Austen, the Brontë sisters, and H.G. Wells.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_both &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(
-  <span class="kw">mutate</span>(tidy_bronte, <span class="dt">author =</span> <span class="st">&quot;Brontë Sisters&quot;</span>),
-  <span class="kw">mutate</span>(tidy_hgwells, <span class="dt">author =</span> <span class="st">&quot;H.G. Wells&quot;</span>))
+<p>Now, let’s calculate the frequency for each word for the works of Jane Austen, the Brontë sisters, and H.G. Wells. We can use <code>spread</code> and <code>gather</code> from tidyr to reshape our dataframe so that it is just what we need for plotting and comparing the three sets of novels.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
-austen_percent &lt;-<span class="st"> </span>tidy_books %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">str_extract</span>(word, <span class="st">&quot;[a-z&#39;]+&quot;</span>)) %&gt;%
-<span class="st">  </span><span class="kw">count</span>(word) %&gt;%
-<span class="st">  </span><span class="kw">transmute</span>(word, <span class="dt">austen =</span> n /<span class="st"> </span><span class="kw">sum</span>(n))
-
-frequency &lt;-<span class="st"> </span>tidy_both %&gt;%
+frequency &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(<span class="kw">mutate</span>(tidy_bronte, <span class="dt">author =</span> <span class="st">&quot;Brontë Sisters&quot;</span>),
+                       <span class="kw">mutate</span>(tidy_hgwells, <span class="dt">author =</span> <span class="st">&quot;H.G. Wells&quot;</span>), 
+                       <span class="kw">mutate</span>(tidy_books, <span class="dt">author =</span> <span class="st">&quot;Jane Austen&quot;</span>)) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">str_extract</span>(word, <span class="st">&quot;[a-z&#39;]+&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(author, word) %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">other =</span> n /<span class="st"> </span><span class="kw">sum</span>(n)) %&gt;%
-<span class="st">  </span><span class="kw">left_join</span>(austen_percent) %&gt;%
-<span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">proportion =</span> n /<span class="st"> </span><span class="kw">sum</span>(n)) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(-n) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">spread</span>(author, proportion) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">gather</span>(author, proportion, <span class="st">`</span><span class="dt">Brontë Sisters</span><span class="st">`</span>:<span class="st">`</span><span class="dt">H.G. Wells</span><span class="st">`</span>)</code></pre></div>
 <p>We use <code>str_extract()</code> here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words, but we don’t want to count “_any_” separately from “any”. Now let’s plot (Figure <a href="tidytext.html#fig:plotcompare">2.2</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
 
-<span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(<span class="dt">x =</span> other, <span class="dt">y =</span> austen, <span class="dt">color =</span> <span class="kw">abs</span>(austen -<span class="st"> </span>other))) +
+<span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(<span class="dt">x =</span> proportion, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Jane Austen</span><span class="st">`</span>, <span class="dt">color =</span> <span class="kw">abs</span>(<span class="st">`</span><span class="dt">Jane Austen</span><span class="st">`</span> -<span class="st"> </span>proportion))) +
 <span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">color =</span> <span class="st">&quot;gray40&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>) +
 <span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">alpha =</span> <span class="fl">0.1</span>, <span class="dt">size =</span> <span class="fl">2.5</span>, <span class="dt">width =</span> <span class="fl">0.3</span>, <span class="dt">height =</span> <span class="fl">0.3</span>) +
 <span class="st">  </span><span class="kw">geom_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> word), <span class="dt">check_overlap =</span> <span class="ot">TRUE</span>, <span class="dt">vjust =</span> <span class="fl">1.5</span>) +
@@ -482,11 +479,11 @@ Figure 2.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, 
 <p>Overall, notice in Figure <a href="tidytext.html#fig:plotcompare">2.2</a> that the words in the Austen-Brontë panel are closer to the zero-slope line than in the Austen-Wells panel and also extend to lower frequencies; Austen and the Brontë sisters use more similar words than Austen and H.G. Wells. Also, we notice that not all the words are found in all three sets of texts and there are fewer points in the plot for Austen and H.G. Wells.</p>
 <p>Let’s quantify how similar and different these sets of word frequencies are using a correlation test. How correlated are the word frequencies between Austen and the Brontë sisters, and between Austen and Wells?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(<span class="dt">data =</span> frequency[frequency$author ==<span class="st"> &quot;Brontë Sisters&quot;</span>,],
-         ~<span class="st"> </span>other +<span class="st"> </span>austen)</code></pre></div>
+         ~<span class="st"> </span>proportion +<span class="st"> `</span><span class="dt">Jane Austen</span><span class="st">`</span>)</code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 
-## data:  other and austen
+## data:  proportion and Jane Austen
 ## t = 124.28, df = 10866, p-value &lt; 2.2e-16
 ## alternative hypothesis: true correlation is not equal to 0
 ## 95 percent confidence interval:
@@ -495,11 +492,11 @@ Figure 2.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, 
 ##       cor 
 ## 0.7661805</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(<span class="dt">data =</span> frequency[frequency$author ==<span class="st"> &quot;H.G. Wells&quot;</span>,], 
-         ~<span class="st"> </span>other +<span class="st"> </span>austen)</code></pre></div>
+         ~<span class="st"> </span>proportion +<span class="st"> `</span><span class="dt">Jane Austen</span><span class="st">`</span>)</code></pre></div>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation
 ## 
-## data:  other and austen
+## data:  proportion and Jane Austen
 ## t = 36.441, df = 6053, p-value &lt; 2.2e-16
 ## alternative hypothesis: true correlation is not equal to 0
 ## 95 percent confidence interval:
@@ -508,6 +505,10 @@ Figure 2.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, 
 ##      cor 
 ## 0.424162</code></pre>
 <p>Just as we saw in the plots, the word frequencies are more correlated between the Austen and Brontë novels than between Austen and H.G. Wells.</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2><span class="header-section-number">2.5</span> Conclusion</h2>
+<p>In this chapter, we explored what we mean by tidy data when it comes to text, and how tidy data principles can be applied to natural language processing. When text is organized in a format with one token per row, tasks like removing stop words or calculating word frequencies are natural applications of familiar operations within the tidy tool ecosystem. The one-token-per-row framework can be extended from single words to n-grams and other meaningful units of text, as well as to many more analysis priorities.</p>
 
 </div>
 </div>
@@ -515,9 +516,6 @@ Figure 2.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, 
 <div id="refs" class="references">
 <div id="ref-R-janeaustenr">
 <p>Silge, Julia. 2016. <em>Janeaustenr: Jane Austen’s Complete Novels</em>. <a href="https://CRAN.R-project.org/package=janeaustenr" class="uri">https://CRAN.R-project.org/package=janeaustenr</a>.</p>
-</div>
-<div id="ref-R-tokenizers">
-<p>Mullen, Lincoln. 2016. <em>Tokenizers: A Consistent Interface to Tokenize Natural Language Text</em>. <a href="https://CRAN.R-project.org/package=tokenizers" class="uri">https://CRAN.R-project.org/package=tokenizers</a>.</p>
 </div>
 <div id="ref-R-gutenbergr">
 <p>Robinson, David. 2016. <em>Gutenbergr: Download and Process Public Domain Works from Project Gutenberg</em>. <a href="https://cran.rstudio.com/package=gutenbergr" class="uri">https://cran.rstudio.com/package=gutenbergr</a>.</p>

@@ -227,7 +227,7 @@ plot_austen <- book_words %>%
   mutate(word = factor(word, levels = rev(unique(word))))
 
 ggplot(plot_austen[1:20,], aes(word, tf_idf, fill = book)) +
-  geom_bar(stat = "identity") +
+  geom_col() +
   labs(x = NULL, y = "tf-idf") +
   coord_flip()
 ```
@@ -247,7 +247,7 @@ plot_austen <- plot_austen %>%
   ungroup
 
 ggplot(plot_austen, aes(word, tf_idf, fill = book)) +
-  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_col(show.legend = FALSE) +
   labs(x = NULL, y = "tf-idf") +
   facet_wrap(~book, ncol = 2, scales = "free") +
   coord_flip()
@@ -320,7 +320,7 @@ plot_physics <- physics_words %>%
                                             "Einstein, Albert")))
 
 ggplot(plot_physics[1:20,], aes(word, tf_idf, fill = author)) +
-  geom_bar(stat = "identity") +
+  geom_col() +
   labs(x = NULL, y = "tf-idf") +
   coord_flip()
 ```
@@ -340,7 +340,7 @@ plot_physics <- plot_physics %>%
   mutate(word = reorder(word, tf_idf))
 
 ggplot(plot_physics, aes(word, tf_idf, fill = author)) +
-  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_col(show.legend = FALSE) +
   labs(x = NULL, y = "tf-idf") +
   facet_wrap(~author, ncol = 2, scales = "free") +
   coord_flip()
@@ -414,7 +414,7 @@ plot_physics <- physics_words %>%
                                             "Einstein, Albert")))
 
 ggplot(plot_physics, aes(word, tf_idf, fill = author)) +
-  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_col(show.legend = FALSE) +
   labs(x = NULL, y = "tf-idf") +
   facet_wrap(~author, ncol = 2, scales = "free") +
   coord_flip()

@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-13">
+<meta name="date" content="2017-03-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -127,6 +127,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="2.2" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>2.2</b> Tidying the works of Jane Austen</a></li>
 <li class="chapter" data-level="2.3" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>2.3</b> The gutenbergr package</a></li>
 <li class="chapter" data-level="2.4" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>2.4</b> Word frequencies</a></li>
+<li class="chapter" data-level="2.5" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>2.5</b> Conclusion</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>3</b> Sentiment analysis with tidy data</a><ul>
 <li class="chapter" data-level="3.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>3.1</b> The <code>sentiments</code> dataset</a></li>
@@ -243,7 +244,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <p>If you work in analytics or data science, like we do, you are familiar with the fact that data is being generated all the time at ever faster rates. (You may even be a little weary of people pontificating about this fact.) Analysts are often trained to handle tabular or rectangular data that is mostly numeric, but much of the data proliferating today is unstructured and text-heavy. Many of us who work in analytical fields are not trained in even simple interpretation of natural language.</p>
 <p>We developed the <a href="https://github.com/juliasilge/tidytext">tidytext</a> <span class="citation">(Silge and Robinson <a href="#ref-R-tidytext">2016</a>)</span> R package because we were familiar with many methods for data wrangling and visualization, but couldn’t easily apply these same methods to text. We found that using tidy data principles can make many text mining tasks easier, more effective, and consistent with tools already in wide use. Treating text as data frames of individual words allows us to manipulate, summarize, and visualize the characteristics of text easily and integrate natural language processing into effective workflows we were already using.</p>
-<p>This book serves as an introduction of text mining using the tidytext package and other tidy tools. The functions provided by the tidytext package are relatively simple; what is important are the possible applications. Thus, this book provides compelling examples of real text mining problems.</p>
+<p>This book serves as an introduction of text mining using the tidytext package and other tidy tools in R. The functions provided by the tidytext package are relatively simple; what is important are the possible applications. Thus, this book provides compelling examples of real text mining problems.</p>
 <div id="what-is-tidy-text" class="section level2">
 <h2><span class="header-section-number">1.1</span> What is tidy text?</h2>
 <p>As described by Hadley Wickham <span class="citation">(Wickham <a href="#ref-tidydata">2014</a>)</span>, tidy data has a specific structure:</p>
@@ -254,7 +255,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <p>We thus define the tidy text format as being <strong>a table with one-token-per-row.</strong> This is in contrast to the ways text is often stored in current analyses, as raw strings, in a structured “corpus” object, or in a document-term matrix. For tidy text mining, the <strong>token</strong> that is stored in each row is most often a single word, but can also be an n-gram, sentence, or paragraph. In the tidytext package, we provide functionality to tokenize by commonly used units of text like these and convert to a one-term-per-row format.</p>
 <p>Tidy data sets allow manipulation with a standard set of “tidy” tools, including popular packages such as dplyr <span class="citation">(Wickham and Francois <a href="#ref-R-dplyr">2016</a>)</span>, tidyr <span class="citation">(Wickham <a href="#ref-R-tidyr">2016</a>)</span>, ggplot2 <span class="citation">(Wickham <a href="#ref-R-ggplot2">2009</a>)</span>, and broom <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>. By keeping the input and output in tidy tables, users can transition fluidly between these packages. We’ve found these tidy tools extend naturally to many text analyses and explorations.</p>
-<p>At the same time, the tidytext package doesn’t expect a user to keep text data in a tidy form at all times during an analysis. The package includes functions to <code>tidy()</code> objects (see the broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>) from popular text mining R packages such as tm <span class="citation">(Ingo Feinerer and Meyer <a href="#ref-tm">2008</a>)</span> and quanteda <span class="citation">(Benoit and Nulty <a href="#ref-R-quanteda">2016</a>)</span>. This allows, for example, a workflow where importing, filtering, and processing is done using dplyr and other tidy tools, after which the data is converted into a document-term matrix for machine learning applications. The models can then be re-converted into a tidy form for interpretation and visualization with ggplot2.</p>
+<p>At the same time, the tidytext package doesn’t expect a user to keep text data in a tidy form at all times during an analysis. The package includes functions to <code>tidy()</code> objects (see the broom package [Robinson et al cited above]) from popular text mining R packages such as tm <span class="citation">(Ingo Feinerer and Meyer <a href="#ref-tm">2008</a>)</span> and quanteda <span class="citation">(Benoit and Nulty <a href="#ref-R-quanteda">2016</a>)</span>. This allows, for example, a workflow where importing, filtering, and processing is done using dplyr and other tidy tools, after which the data is converted into a document-term matrix for machine learning applications. The models can then be re-converted into a tidy form for interpretation and visualization with ggplot2.</p>
 </div>
 <div id="about-this-book" class="section level2">
 <h2><span class="header-section-number">1.2</span> About this book</h2>

@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-13">
+<meta name="date" content="2017-03-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -127,6 +127,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="2.2" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>2.2</b> Tidying the works of Jane Austen</a></li>
 <li class="chapter" data-level="2.3" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>2.3</b> The gutenbergr package</a></li>
 <li class="chapter" data-level="2.4" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>2.4</b> Word frequencies</a></li>
+<li class="chapter" data-level="2.5" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>2.5</b> Conclusion</a></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>3</b> Sentiment analysis with tidy data</a><ul>
 <li class="chapter" data-level="3.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>3.1</b> The <code>sentiments</code> dataset</a></li>
@@ -392,7 +393,7 @@ Figure 8.2: Comparing the frequency of words used by Julia and David
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, logratio)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, logratio, <span class="dt">fill =</span> logratio &lt;<span class="st"> </span><span class="dv">0</span>)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_col</span>() +
 <span class="st">  </span><span class="kw">coord_flip</span>() +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;log odds ratio (David/Julia)&quot;</span>) +
 <span class="st">  </span><span class="kw">scale_fill_discrete</span>(<span class="dt">name =</span> <span class="st">&quot;&quot;</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;David&quot;</span>, <span class="st">&quot;Julia&quot;</span>))</code></pre></div>
@@ -616,7 +617,7 @@ word_by_rts %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="kw">unique</span>(word))) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, retweets, <span class="dt">fill =</span> person)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>person, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>() +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, 
@@ -652,7 +653,7 @@ word_by_favs &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> <
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="kw">unique</span>(word))) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, favorites, <span class="dt">fill =</span> person)) +
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>person, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">2</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>() +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, 
