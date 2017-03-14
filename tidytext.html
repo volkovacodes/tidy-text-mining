@@ -292,7 +292,7 @@ text_df %&gt;%
 ## 9      2  kindly
 ## 10     2 stopped
 ## # ... with 10 more rows</code></pre>
-<p>We’ve now split each row so that there is one token (word) in each row of the new data frame; the default tokenization in <code>unnest_tokens()</code> is for single words, as shown here. Also notice:</p>
+<p>The two basic arguments to <code>unnest_tokens</code> used here are column names, first the output column name that the text will be unnested into (<code>word</code>, in this case) and then the input column that the text comes from (<code>text</code>, in this case). After using <code>unnest_tokens</code>, we’ve split each row so that there is one token (word) in each row of the new data frame; the default tokenization in <code>unnest_tokens()</code> is for single words, as shown here. Also notice:</p>
 <ul>
 <li>Other columns, such as the line number each word came from, are retained.</li>
 <li>Punctuation has been stripped.</li>
@@ -350,7 +350,7 @@ tidy_books</code></pre></div>
 ## 10 Sense &amp; Sensibility         13       1         the
 ## # ... with 725,044 more rows</code></pre>
 <p>This function uses the <a href="https://github.com/ropensci/tokenizers">tokenizers</a> package to separate each line of text in the original data frame into tokens. The default tokenizing is for words, but other options include characters, n-grams, sentences, lines, paragraphs, or separation around a regex pattern.</p>
-<p>Now that the data is in one-word-per-row format, we can manipulate it with tidy tools like dplyr. We can remove stop words (kept in the tidytext dataset <code>stop_words</code>) with an <code>anti_join()</code>.</p>
+<p>Now that the data is in one-word-per-row format, we can manipulate it with tidy tools like dplyr. Often in text analysis, we will want to remove stop words; stop words are words that are not useful for an analysis, typically extremely common words such as “the”, “of”, “to”, and so forth. We can remove stop words (kept in the tidytext dataset <code>stop_words</code>) with an <code>anti_join()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(stop_words)
 
 tidy_books &lt;-<span class="st"> </span>tidy_books %&gt;%
