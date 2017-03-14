@@ -2,11 +2,11 @@
 
 
 
-In our final chapter, we'll use what we've learned in this book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this dataset include newsgroups for topics like politics, religion, cars, sports, and cryptography, and offer a rich set of text written by many users. This data set is publicly available at [http://qwone.com/~jason/20Newsgroups/](http://qwone.com/~jason/20Newsgroups/) and has become popular for exercises in text analysis and machine learning.
+In our final chapter, we'll use what we've learned in this book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this dataset include newsgroups for topics like politics, religion, cars, sports, and cryptography, and offer a rich set of text written by many users. This data set is publicly available at [http://qwone.com/~jason/20Newsgroups/](http://qwone.com/~jason/20Newsgroups/) (the `20news-bydate.tar.gz` file) and has become popular for exercises in text analysis and machine learning.
 
 ## Pre-processing
 
-We'll start by reading in all the messages, which are organized in sub-folders with one file for each message. We can read in files like these with a combination of `read_lines()`, `map()` and `unnest()`. Note that this step takes several minutes to read all the documents.
+We'll start by reading in all the messages from the `20news-bydate` folder, which are organized in sub-folders with one file for each message. We can read in files like these with a combination of `read_lines()`, `map()` and `unnest()`. Note that this step takes several minutes to read all the documents.
 
 
 ```r
@@ -20,6 +20,7 @@ library(readr)
 ```r
 training_folder <- "data/20news-bydate/20news-bydate-train/"
 
+# Define a function to read all files from a folder into a data frame
 read_folder <- function(infolder) {
   data_frame(file = dir(infolder, full.names = TRUE)) %>%
     mutate(text = map(file, read_lines)) %>%
@@ -27,6 +28,7 @@ read_folder <- function(infolder) {
     unnest(text)
 }
 
+# Use unnest() and map() to apply read_folder to each subfolder
 raw_text <- data_frame(folder = dir(training_folder, full.names = TRUE)) %>%
   unnest(map(folder, read_folder)) %>%
   transmute(newsgroup = basename(folder), id, text)
@@ -77,7 +79,7 @@ raw_text %>%
 
 We can see that Usenet newsgroup names are named hierarchically, starting with a main topic such as "talk", "sci", or "rec", followed by further specifications.
 
-### Pre-processing text
+### Pre-processing text {#pre-processing-text}
 
 Most of the datasets we've examined in this book were pre-processed, meaning we didn't have to remove, for example, copyright notices from the Jane Austen novels. Here, however, each message has some structure and extra text that we don't want to include in our analysis. For example, every message has a header, containing field such as "from:" or "in_reply_to:" that describe the message. Some also have automated email signatures, which occur after a line like `--`.
 
@@ -207,8 +209,6 @@ We can examine the top tf-idf for a few selected groups to extract words specifi
 
 
 ```r
-library(ggplot2)
-
 tf_idf %>%
   filter(str_detect(newsgroup, "^sci\\.")) %>%
   group_by(newsgroup) %>%
@@ -280,7 +280,7 @@ newsgroup_cors %>%
 <p class="caption">(\#fig:newsgroupcorsnetwork)A network of Usenet groups based on the correlation of word counts between them, including only connections with a correlation greater than .4</p>
 </div>
 
-It looks like there were four main clusters of newsgroups: computers/electronics, politics/religion, motor vehicles, and sports. This certainly makes sense in terms of what words and topics we'd expect these newsgroups to in common.
+It looks like there were four main clusters of newsgroups: computers/electronics, politics/religion, motor vehicles, and sports. This certainly makes sense in terms of what words and topics we'd expect these newsgroups to have in common.
 
 ### Topic modeling
 
@@ -361,7 +361,7 @@ Notice that the division of Usenet messages wasn't as clean as the division of b
 
 We can use the sentiment analysis techniques we explored in Chapter \@ref(sentiment) to examine how often positive and negative words occurred in these Usenet posts. Which newsgroups were the most positive or negative overall?
 
-We'll focus on the AFINN sentiment lexicon, which provides numeric positivity scores for each word, and visualize it with a bar plot (Figure \@ref(fig:newsgroupsentiments)).
+In this example we'll use the AFINN sentiment lexicon, which provides numeric positivity scores for each word, and visualize it with a bar plot (Figure \@ref(fig:newsgroupsentiments)).
 
 
 ```r

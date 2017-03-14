@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-12">
+<meta name="date" content="2017-03-13">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -241,16 +241,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="usenet" class="section level1">
 <h1><span class="header-section-number">10</span> Case study: analyzing usenet text</h1>
-<p>In our final chapter, we’ll use what we’ve learned in this book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this dataset include newsgroups for topics like politics, religion, cars, sports, and cryptography, and offer a rich set of text written by many users. This data set is publicly available at <a href="http://qwone.com/~jason/20Newsgroups/" class="uri">http://qwone.com/~jason/20Newsgroups/</a> and has become popular for exercises in text analysis and machine learning.</p>
+<p>In our final chapter, we’ll use what we’ve learned in this book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this dataset include newsgroups for topics like politics, religion, cars, sports, and cryptography, and offer a rich set of text written by many users. This data set is publicly available at <a href="http://qwone.com/~jason/20Newsgroups/" class="uri">http://qwone.com/~jason/20Newsgroups/</a> (the <code>20news-bydate.tar.gz</code> file) and has become popular for exercises in text analysis and machine learning.</p>
 <div id="pre-processing" class="section level2">
 <h2><span class="header-section-number">10.1</span> Pre-processing</h2>
-<p>We’ll start by reading in all the messages, which are organized in sub-folders with one file for each message. We can read in files like these with a combination of <code>read_lines()</code>, <code>map()</code> and <code>unnest()</code>. Note that this step takes several minutes to read all the documents.</p>
+<p>We’ll start by reading in all the messages from the <code>20news-bydate</code> folder, which are organized in sub-folders with one file for each message. We can read in files like these with a combination of <code>read_lines()</code>, <code>map()</code> and <code>unnest()</code>. Note that this step takes several minutes to read all the documents.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidyr)
 <span class="kw">library</span>(purrr)
 <span class="kw">library</span>(readr)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">training_folder &lt;-<span class="st"> &quot;data/20news-bydate/20news-bydate-train/&quot;</span>
 
+<span class="co"># Define a function to read all files from a folder into a data frame</span>
 read_folder &lt;-<span class="st"> </span>function(infolder) {
   <span class="kw">data_frame</span>(<span class="dt">file =</span> <span class="kw">dir</span>(infolder, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)) %&gt;%
 <span class="st">    </span><span class="kw">mutate</span>(<span class="dt">text =</span> <span class="kw">map</span>(file, read_lines)) %&gt;%
@@ -258,6 +259,7 @@ read_folder &lt;-<span class="st"> </span>function(infolder) {
 <span class="st">    </span><span class="kw">unnest</span>(text)
 }
 
+<span class="co"># Use unnest() and map() to apply read_folder to each subfolder</span>
 raw_text &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">folder =</span> <span class="kw">dir</span>(training_folder, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)) %&gt;%
 <span class="st">  </span><span class="kw">unnest</span>(<span class="kw">map</span>(folder, read_folder)) %&gt;%
 <span class="st">  </span><span class="kw">transmute</span>(<span class="dt">newsgroup =</span> <span class="kw">basename</span>(folder), id, text)</code></pre></div>
@@ -382,9 +384,7 @@ tf_idf</code></pre></div>
 ## 10           comp.windows.x          oname   136 0.003535498 2.995732 0.01059141
 ## # ... with 173,903 more rows</code></pre>
 <p>We can examine the top tf-idf for a few selected groups to extract words specific to those topics. For example, we could look at all the <code>sci.</code> boards, visualized in Figure <a href="usenet.html#fig:scitfidf">10.2</a>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
-
-tf_idf %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tf_idf %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(newsgroup, <span class="st">&quot;^sci</span><span class="ch">\\</span><span class="st">.&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(newsgroup) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">12</span>, tf_idf) %&gt;%
@@ -440,7 +440,7 @@ newsgroup_cors %&gt;%
 Figure 10.3: A network of Usenet groups based on the correlation of word counts between them, including only connections with a correlation greater than .4
 </p>
 </div>
-<p>It looks like there were four main clusters of newsgroups: computers/electronics, politics/religion, motor vehicles, and sports. This certainly makes sense in terms of what words and topics we’d expect these newsgroups to in common.</p>
+<p>It looks like there were four main clusters of newsgroups: computers/electronics, politics/religion, motor vehicles, and sports. This certainly makes sense in terms of what words and topics we’d expect these newsgroups to have in common.</p>
 </div>
 <div id="topic-modeling-1" class="section level3">
 <h3><span class="header-section-number">10.2.2</span> Topic modeling</h3>
@@ -502,7 +502,7 @@ Figure 10.5: Distribution of gamma for each topic within each Usenet newsgroup
 <div id="sentiment-analysis" class="section level2">
 <h2><span class="header-section-number">10.3</span> Sentiment analysis</h2>
 <p>We can use the sentiment analysis techniques we explored in Chapter <a href="sentiment.html#sentiment">3</a> to examine how often positive and negative words occurred in these Usenet posts. Which newsgroups were the most positive or negative overall?</p>
-<p>We’ll focus on the AFINN sentiment lexicon, which provides numeric positivity scores for each word, and visualize it with a bar plot (Figure <a href="usenet.html#fig:newsgroupsentiments">10.6</a>).</p>
+<p>In this example we’ll use the AFINN sentiment lexicon, which provides numeric positivity scores for each word, and visualize it with a bar plot (Figure <a href="usenet.html#fig:newsgroupsentiments">10.6</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newsgroup_sentiments &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(newsgroup) %&gt;%

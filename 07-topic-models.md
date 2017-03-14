@@ -589,34 +589,30 @@ assignments
 ## # ... with 104,711 more rows
 ```
 
-This combination of the true book (`title`) and the book assigned to it (`consensus`) is useful for further exploration. We can, for example, create a *confusion matrix,* showing how often words from one book were assigned to another, using dplyr's `count()` and tidyr's `spread()`.
+This combination of the true book (`title`) and the book assigned to it (`consensus`) is useful for further exploration. We can, for example, visualize a **confusion matrix**, showing how often words from one book were assigned to another, using dplyr's `count()` and ggplot2's `geom_tile` (Figure \@ref(fig:confusionmatrix}).
 
 
 ```r
 assignments %>%
   count(title, consensus, wt = count) %>%
-  spread(consensus, n, fill = 0)
+  mutate(percent = n / sum(n)) %>%
+  ggplot(aes(consensus, title, fill = percent)) +
+  geom_tile() +
+  scale_fill_gradient2(high = "red", label = percent_format()) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
+        panel.grid = element_blank()) +
+  labs(x = "Book words were assigned to",
+       y = "Book words came from",
+       fill = "% of assignments")
 ```
 
-```
-## Source: local data frame [4 x 5]
-## Groups: title [4]
-## 
-##                                   title `Great Expectations` `Pride and Prejudice`
-## *                                 <chr>                <dbl>                 <dbl>
-## 1                    Great Expectations                49770                  3876
-## 2                   Pride and Prejudice                    1                 37229
-## 3                 The War of the Worlds                    0                     0
-## 4 Twenty Thousand Leagues under the Sea                    0                     5
-##   `The War of the Worlds` `Twenty Thousand Leagues under the Sea`
-## *                   <dbl>                                   <dbl>
-## 1                    1845                                      77
-## 2                       7                                       5
-## 3                   22561                                       7
-## 4                       0                                   39629
-```
+<div class="figure">
+<img src="07-topic-models_files/figure-html/confusionmatrix-1.png" alt="Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to." width="384" />
+<p class="caption">(\#fig:confusionmatrix)Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to.</p>
+</div>
 
-Each row of this table represents the true book each word came from, and each column represents what row it was assigned to. We notice that almost all the words for *Pride and Prejudice*, *Twenty Thousand Leagues Under the Sea*, and *War of the Worlds* were correctly assigned, while *Great Expectations* had a fair amount of misassignment (which, as we saw above, led to two chapters getting misclassified).
+We notice that almost all the words for *Pride and Prejudice*, *Twenty Thousand Leagues Under the Sea*, and *War of the Worlds* were correctly assigned, while *Great Expectations* had a fair amount of misassigned words (which, as we saw above, led to two chapters getting misclassified).
 
 What were the most commonly mistaken words?
 
