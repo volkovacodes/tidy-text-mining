@@ -328,7 +328,7 @@ nasa_keyword</code></pre></div>
 ## 10 55942a58c63a7fe59b495a7a EARTH SCIENCE
 ## # ... with 126,804 more rows</code></pre>
 <p>This is a tidy data frame because we have one row for each keyword; this means we will have multiple rows for each dataset because a dataset can have more than one keyword.</p>
-<p>Now it is time to use tidytext’s <code>unnest_tokens()</code> for the title and description fields so we can do the text analysis. Let’s also remove common English words from the titles and descriptions. We will not remove stop words from the keywords, because those are short, human-assigned keywords like <strong>RADIATION</strong> or <strong>CLIMATE INDICATORS</strong>.</p>
+<p>Now it is time to use tidytext’s <code>unnest_tokens()</code> for the title and description fields so we can do the text analysis. Let’s also remove stop words from the titles and descriptions. We will not remove stop words from the keywords, because those are short, human-assigned keywords like “RADIATION” or “CLIMATE INDICATORS”.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
 nasa_title &lt;-<span class="st"> </span>nasa_title %&gt;%<span class="st"> </span>
@@ -432,7 +432,7 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 ## 9                   OCEANS  2765
 ## 10            LAND SURFACE  2720
 ## # ... with 1,764 more rows</code></pre>
-<p>Many NASA datasets have <strong>Project completed</strong> as a set of keywords. We likely want to change all of the keywords to either lower or upper case to get rid of duplicates like <strong>OCEANS</strong> and <strong>Oceans</strong>. Let’s do that here.</p>
+<p>We likely want to change all of the keywords to either lower or upper case to get rid of duplicates like “OCEANS” and “Oceans”. Let’s do that here.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_keyword &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">keyword =</span> <span class="kw">toupper</span>(keyword))</code></pre></div>
 </div>
@@ -558,7 +558,7 @@ keyword_counts %&gt;%
 Figure 9.3: Co-occurrence network in NASA dataset keywords
 </p>
 </div>
-<p>We definitely see clustering here, and strong connections between keywords like <strong>OCEANS</strong>, <strong>OCEAN OPTICS</strong>, and <strong>OCEAN COLOR</strong>, or <strong>PROJECT</strong> and <strong>COMPLETED</strong>. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in Chapter <a href="ngrams.html#ngrams">5</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
+<p>We definitely see clustering here, and strong connections between keywords like “OCEANS”, “OCEAN OPTICS”, and “OCEAN COLOR”, or “PROJECT” and “COMPLETED”. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in Chapter <a href="ngrams.html#ngrams">5</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_cors &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">50</span>) %&gt;%
@@ -657,7 +657,7 @@ Figure 9.4: Correlation network in NASA dataset keywords
 Figure 9.5: Distribution of tf-idf for words from datasets labeled with select keywords
 </p>
 </div>
-<p>Using tf-idf has allowed us to identify important description words for each of these keywords. Datasets labeled with the keyword <strong>SEISMOLOGY</strong> have words like “earthquake”, “risk”, and “hazard” in their description, while those labeled with <strong>HUMAN HEALTH</strong> have descriptions characterized by words like “wellbeing”, “vulnerability”, and “children.” Most of the combinations of letters that are not English words are certainly acronyms (like OMB for the Office of Management and Budget), and the examples of years and numbers are important for these topics. The tf-idf statistic has identified the kinds of words it is intended to, important words for individual documents within a collection of documents.</p>
+<p>Using tf-idf has allowed us to identify important description words for each of these keywords. Datasets labeled with the keyword “SEISMOLOGY” have words like “earthquake”, “risk”, and “hazard” in their description, while those labeled with “HUMAN HEALTH” have descriptions characterized by words like “wellbeing”, “vulnerability”, and “children.” Most of the combinations of letters that are not English words are certainly acronyms (like OMB for the Office of Management and Budget), and the examples of years and numbers are important for these topics. The tf-idf statistic has identified the kinds of words it is intended to, important words for individual documents within a collection of documents.</p>
 </div>
 </div>
 <div id="topic-modeling" class="section level2">
@@ -706,7 +706,7 @@ desc_dtm</code></pre></div>
 ## Sparsity           : 100%
 ## Maximal term length: 166
 ## Weighting          : term frequency (tf)</code></pre>
-<p>We see that this dataset contains documents (each of them a NASA description field) and terms (words). Notice that this example document-term matrix is (very close to) 100% sparse, meaning that almost all of the entries in this matrix are zero. There are non-zero entries everywhere in the matrix that corresponds to a certain word appearing in a certain document.</p>
+<p>We see that this dataset contains documents (each of them a NASA description field) and terms (words). Notice that this example document-term matrix is (very close to) 100% sparse, meaning that almost all of the entries in this matrix are zero. Each non-zero entry corresponds to a certain word appearing in a certain document.</p>
 </div>
 <div id="ready-for-topic-modeling" class="section level3">
 <h3><span class="header-section-number">9.4.2</span> Ready for topic modeling</h3>
@@ -767,7 +767,8 @@ top_terms</code></pre></div>
 <span class="st">  </span><span class="kw">group_by</span>(topic, term) %&gt;%<span class="st">    </span>
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(beta)) %&gt;%<span class="st">  </span>
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">term =</span> <span class="kw">factor</span>(<span class="kw">paste</span>(term, topic, <span class="dt">sep =</span> <span class="st">&quot;__&quot;</span>), <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">paste</span>(term, topic, <span class="dt">sep =</span> <span class="st">&quot;__&quot;</span>)))) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">term =</span> <span class="kw">factor</span>(<span class="kw">paste</span>(term, topic, <span class="dt">sep =</span> <span class="st">&quot;__&quot;</span>), 
+                       <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">paste</span>(term, topic, <span class="dt">sep =</span> <span class="st">&quot;__&quot;</span>)))) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(term, beta, <span class="dt">fill =</span> <span class="kw">as.factor</span>(topic))) +
 <span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>() +
@@ -881,7 +882,7 @@ Figure 9.8: Top keywords in topic modeling of NASA metadata description field te
 </p>
 </div>
 <p>Let’s take a step back and remind ourselves what Figure <a href="nasa.html#fig:plottopkeywords">9.8</a> is telling us. NASA datasets are tagged with keywords by human beings, and we have built an LDA topic model (with 24 topics) for the description fields of the NASA datasets. This plot answers the question, “For the datasets with description fields that have a high probability of belonging to a given topic, what are the most common human-assigned keywords?”</p>
-<p>It’s interesting that the keywords for topics 13, 16, and 18 are essentially duplicates of each other, because the top terms in those topics do exhibit meaningful differences. Also note that by number of documents, the combination of 13, 16, and 18 is quite a large percentage of the total number of datasets represented in this plot, and even more if we were to include topic 11. By number, there are <em>many</em> datasets at NASA that deal with oceans, ocean color, and ocean optics. We see <strong>PROJECT COMPLETED</strong> in topics 9, 10, and 21, along with the names of NASA laboratories and research centers. Other important subject areas that stand out are groups of keywords about atmospheric science, budget/finance, and population/human dimensions. We can go back to Figure <a href="nasa.html#fig:plotbeta">9.6</a> on terms and topics to see which words in the description fields are driving datasets being assigned to these topics. For example, topic 4 is associated with keywords about population and human dimensions, and some of the top terms for that topic are “population”, “international”, “center”, and “university”.</p>
+<p>It’s interesting that the keywords for topics 13, 16, and 18 are essentially duplicates of each other (“OCEAN COLOR”, “OCEAN OPTICS”, “OCEANS”), because the top words in those topics do exhibit meaningful differences, as shown in Figure <a href="nasa.html#fig:plotbeta">9.6</a>. Also note that by number of documents, the combination of 13, 16, and 18 is quite a large percentage of the total number of datasets represented in this plot, and even more if we were to include topic 11. By number, there are <em>many</em> datasets at NASA that deal with oceans, ocean color, and ocean optics. We see “PROJECT COMPLETED” in topics 9, 10, and 21, along with the names of NASA laboratories and research centers. Other important subject areas that stand out are groups of keywords about atmospheric science, budget/finance, and population/human dimensions. We can go back to Figure <a href="nasa.html#fig:plotbeta">9.6</a> on terms and topics to see which words in the description fields are driving datasets being assigned to these topics. For example, topic 4 is associated with keywords about population and human dimensions, and some of the top terms for that topic are “population”, “international”, “center”, and “university”.</p>
 <p>By using a combination of network analysis, tf-idf, and topic modeling, we have come to a greater understanding of how datasets are related at NASA. Specifically, we have more information now about how keywords are connected to each other and which datasets are likely to be related. The topic model could be used to suggest keywords based on the words in the description field, or the work on the keywords could suggest the most important combination of keywords for certain areas of study.</p>
 
 </div>
