@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-14">
+<meta name="date" content="2017-03-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -324,7 +324,7 @@ sentiments</code></pre></div>
 <div id="sentiment-analysis-with-inner-join" class="section level2">
 <h2><span class="header-section-number">3.2</span> Sentiment analysis with inner join</h2>
 <p>With data in a tidy format, sentiment analysis can be done as an inner join. This is another of the great successes of viewing text mining as a tidy data analysis task; much as removing stop words is an antijoin operation, performing sentiment analysis is an inner join operation.</p>
-<p>Let’s look at the words with a joy score from the NRC lexicon. What are the most common joy words in <em>Emma</em>? First, we need to take the text of the novels and convert the text to the tidy format using <code>unnest_tokens()</code>.</p>
+<p>Let’s look at the words with a joy score from the NRC lexicon. What are the most common joy words in <em>Emma</em>? First, we need to take the text of the novels and convert the text to the tidy format using <code>unnest_tokens()</code>. Let’s also set up some other columns to keep track of which line and chapter of the book each word comes from; we use <code>group_by</code> and <code>mutate</code> to construct those columns.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(janeaustenr)
 <span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(stringr)
@@ -359,7 +359,7 @@ tidy_books %&gt;%
 ## 10    kind    82
 ## # ... with 293 more rows</code></pre>
 <p>We see many positive, happy words about hope, friendship, and love here.</p>
-<p>Or instead we could examine how sentiment changes during each novel. We can do this with just a handful of lines that are mostly dplyr functions. First, we find a sentiment score for each word using the Bing lexicon and <code>inner_join()</code>.</p>
+<p>Or instead we could examine how sentiment changes throughout each novel. We can do this with just a handful of lines that are mostly dplyr functions. First, we find a sentiment score for each word using the Bing lexicon and <code>inner_join()</code>.</p>
 <p>Next, we count up how many positive and negative words there are in defined sections of each book. We define an <code>index</code> here to keep track of where we are in the narrative; this index (using integer division) counts up sections of 100 lines of text. The <code>%/%</code> operator does integer division (<code>x %/% y</code> is equivalent to <code>floor(x/y)</code>) so the index keeps track of which 100-line section of text we are counting up negative and positive sentiment in. Small sections of text may not have enough words in them to get a good estimate of sentiment while really large sections can wash out narrative structure. For these books, using 100 lines works well, but this can vary depending on individual texts, how long the lines were to start with, etc.</p>
 <p>We then use <code>spread()</code> so that we have negative and positive sentiment in separate columns, and lastly calculate a net sentiment (positive - negative).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
@@ -458,7 +458,7 @@ Figure 3.2: Comparing three sentiment lexicons using <em>Pride and Prejudice</em
 </div>
 <div id="most-positive-negative" class="section level2">
 <h2><span class="header-section-number">3.4</span> Most common positive and negative words</h2>
-<p>One advantage of having the data frame with both sentiment and word is that we can analyze word counts that contribute to each sentiment.</p>
+<p>One advantage of having the data frame with both sentiment and word is that we can analyze word counts that contribute to each sentiment. By implementing <code>count()</code> here with arguments of both <code>word</code> and <code>sentiment</code>, we find out how much each word contributed to each sentiment.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bing_word_counts &lt;-<span class="st"> </span>tidy_books %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, sentiment, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
@@ -496,7 +496,26 @@ bing_word_counts</code></pre></div>
 Figure 3.3: Words that contribute to positive and negative sentiment in Jane Austen’s novels
 </p>
 </div>
-<p>Figure <a href="sentiment.html#fig:pipetoplot">3.3</a> lets us spot an anomaly in the sentiment analysis; the word “miss” is coded as negative but it is used as a title for young, unmarried women in Jane Austen’s works. If it were appropriate for our purposes, we could easily add “miss” to a custom stop-words list using <code>bind_rows()</code>.</p>
+<p>Figure <a href="sentiment.html#fig:pipetoplot">3.3</a> lets us spot an anomaly in the sentiment analysis; the word “miss” is coded as negative but it is used as a title for young, unmarried women in Jane Austen’s works. If it were appropriate for our purposes, we could easily add “miss” to a custom stop-words list using <code>bind_rows()</code>. We could implement that with a strategy such as this.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">custom_stop_words &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(<span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;miss&quot;</span>), 
+                                          <span class="dt">lexicon =</span> <span class="kw">c</span>(<span class="st">&quot;custom&quot;</span>)), 
+                               stop_words)
+
+custom_stop_words</code></pre></div>
+<pre><code>## # A tibble: 1,150 × 2
+##           word lexicon
+##          &lt;chr&gt;   &lt;chr&gt;
+## 1         miss  custom
+## 2            a   SMART
+## 3          a&#39;s   SMART
+## 4         able   SMART
+## 5        about   SMART
+## 6        above   SMART
+## 7    according   SMART
+## 8  accordingly   SMART
+## 9       across   SMART
+## 10    actually   SMART
+## # ... with 1,140 more rows</code></pre>
 </div>
 <div id="wordclouds" class="section level2">
 <h2><span class="header-section-number">3.5</span> Wordclouds</h2>

@@ -118,7 +118,7 @@ One last caveat is that the size of the chunk of text that we use to add up unig
 
 With data in a tidy format, sentiment analysis can be done as an inner join. This is another of the great successes of viewing text mining as a tidy data analysis task; much as removing stop words is an antijoin operation, performing sentiment analysis is an inner join operation.
 
-Let's look at the words with a joy score from the NRC lexicon. What are the most common joy words in *Emma*? First, we need to take the text of the novels and convert the text to the tidy format using `unnest_tokens()`.
+Let's look at the words with a joy score from the NRC lexicon. What are the most common joy words in *Emma*? First, we need to take the text of the novels and convert the text to the tidy format using `unnest_tokens()`. Let's also set up some other columns to keep track of which line and chapter of the book each word comes from; we use `group_by` and `mutate` to construct those columns.
 
 
 ```r
@@ -167,7 +167,7 @@ tidy_books %>%
 
 We see many positive, happy words about hope, friendship, and love here.
 
-Or instead we could examine how sentiment changes during each novel. We can do this with just a handful of lines that are mostly dplyr functions. First, we find a sentiment score for each word using the Bing lexicon and `inner_join()`. 
+Or instead we could examine how sentiment changes throughout each novel. We can do this with just a handful of lines that are mostly dplyr functions. First, we find a sentiment score for each word using the Bing lexicon and `inner_join()`. 
 
 Next, we count up how many positive and negative words there are in defined sections of each book. We define an `index` here to keep track of where we are in the narrative; this index (using integer division) counts up sections of 100 lines of text. The `%/%` operator does integer division (`x %/% y` is equivalent to `floor(x/y)`) so the index keeps track of which 100-line section of text we are counting up negative and positive sentiment in. Small sections of text may not have enough words in them to get a good estimate of sentiment while really large sections can wash out narrative structure. For these books, using 100 lines works well, but this can vary depending on individual texts, how long the lines were to start with, etc. 
 
@@ -312,7 +312,7 @@ Both lexicons have more negative than positive words, but the ratio of negative 
 
 ## Most common positive and negative words {#most-positive-negative}
 
-One advantage of having the data frame with both sentiment and word is that we can analyze word counts that contribute to each sentiment.
+One advantage of having the data frame with both sentiment and word is that we can analyze word counts that contribute to each sentiment. By implementing `count()` here with arguments of both `word` and `sentiment`, we find out how much each word contributed to each sentiment.
 
 
 ```r
@@ -362,7 +362,34 @@ bing_word_counts %>%
 <p class="caption">(\#fig:pipetoplot)Words that contribute to positive and negative sentiment in Jane Austen's novels</p>
 </div>
 
-Figure \@ref(fig:pipetoplot) lets us spot an anomaly in the sentiment analysis; the word "miss" is coded as negative but it is used as a title for young, unmarried women in Jane Austen's works. If it were appropriate for our purposes, we could easily add "miss" to a custom stop-words list using `bind_rows()`.
+Figure \@ref(fig:pipetoplot) lets us spot an anomaly in the sentiment analysis; the word "miss" is coded as negative but it is used as a title for young, unmarried women in Jane Austen's works. If it were appropriate for our purposes, we could easily add "miss" to a custom stop-words list using `bind_rows()`. We could implement that with a strategy such as this.
+
+
+```r
+custom_stop_words <- bind_rows(data_frame(word = c("miss"), 
+                                          lexicon = c("custom")), 
+                               stop_words)
+
+custom_stop_words
+```
+
+```
+## # A tibble: 1,150 × 2
+##           word lexicon
+##          <chr>   <chr>
+## 1         miss  custom
+## 2            a   SMART
+## 3          a's   SMART
+## 4         able   SMART
+## 5        about   SMART
+## 6        above   SMART
+## 7    according   SMART
+## 8  accordingly   SMART
+## 9       across   SMART
+## 10    actually   SMART
+## # ... with 1,140 more rows
+```
+
 
 ## Wordclouds
 

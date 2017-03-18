@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-14">
+<meta name="date" content="2017-03-18">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -363,6 +363,7 @@ Figure 4.3: Fitting an exponent for Zipf’s law with Jane Austen’s novels
 <div id="the-bind_tf_idf-function" class="section level2">
 <h2><span class="header-section-number">4.3</span> The <code>bind_tf_idf</code> function</h2>
 <p>The idea of tf-idf is to find the important words for the content of each document by decreasing the weight for commonly used words and increasing the weight for words that are not used very much in a collection or corpus of documents, in this case, the group of Jane Austen’s novels as a whole. Calculating tf-idf attempts to find the words that are important (i.e., common) in a text, but not <em>too</em> common. Let’s do that now.</p>
+<p>The <code>bind_tf_idf</code> function in the tidytext package takes a tidy text dataset as input with one row per token (term), per document. One column (<code>word</code> here) contains the terms/tokens, one column contains the documents (<code>book</code> in this case), and the last necessary column contains the counts, how many times each document contains each term (<code>n</code> in this example). We calculated a <code>total</code> for each book for our explorations in previous sections, but it is not necessary for the <code>bind_tf_idf</code> function; the table only needs to contain all the words in each document.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">book_words &lt;-<span class="st"> </span>book_words %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(word, book, n)
 book_words</code></pre></div>
