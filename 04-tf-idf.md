@@ -4,7 +4,7 @@
 
 A central question in text mining and natural language processing is how to quantify what a document is about. Can we do this by looking at the words that make up the document? One measure of how important a word may be is its *term frequency* (tf), how frequently a word occurs in a document, as we examined in Chapter \@ref(tidytext). There are words in a document, however, that occur many times but may not be important; in English, these are probably words like "the", "is", "of", and so forth. We might take the approach of adding words like these to a list of stop words and removing them before analysis, but it is possible that some of these words might be more important in some documents than others. A list of stop words is not a very sophisticated approach to adjusting term frequency for commonly used words.
 
-Another approach is to look at a term's *inverse document frequency* (idf), which decreases the weight for commonly used words and increases the weight for words that are not used very much in a collection of documents. This can be combined with term frequency to calculate a term's *tf-idf* (the two quantities multiplied together), the frequency of a term adjusted for how rarely it is used. It is intended to measure how important a word is to a document in a collection (or corpus) of documents. It is a rule-of-thumb or heuristic quantity; while it has proved useful in text mining, search engines, etc., its theoretical foundations are considered less than firm by information theory experts. The inverse document frequency for any given term is defined as
+Another approach is to look at a term's *inverse document frequency* (idf), which decreases the weight for commonly used words and increases the weight for words that are not used very much in a collection of documents. This can be combined with term frequency to calculate a term's *tf-idf* (the two quantities multiplied together), the frequency of a term adjusted for how rarely it is used. It is intended to measure how important a word is to a document in a collection (or corpus) of documents, for example, to one novel in a collection of novels or to one website in a collection of websites. It is a rule-of-thumb or heuristic quantity; while it has proved useful in text mining, search engines, etc., its theoretical foundations are considered less than firm by information theory experts. The inverse document frequency for any given term is defined as
 
 $$idf(\text{term}) = \ln{\left(\frac{n_{\text{documents}}}{n_{\text{documents containing term}}}\right)}$$
 
@@ -260,7 +260,7 @@ ggplot(plot_austen, aes(word, tf_idf, fill = book)) +
 <p class="caption">(\#fig:plotseparate)Highest tf-idf words in each of Jane Austen's Novels</p>
 </div>
 
-Still all proper nouns in Figure \@ref(fig:plotseparate)! These words are, as measured by tf-idf, the most important to each novel and most readers would likely agree.
+Still all proper nouns in Figure \@ref(fig:plotseparate)! These words are, as measured by tf-idf, the most important to each novel and most readers would likely agree. What measuring tf-idf has done here is show us that Jane Austen used similar language across her six novels, and what distinguishes one novel from the rest within the collection of her works are the proper nouns, the names of people and places. This is the point of tf-idf; it identifies words that are important to one document within a collection of documents.
 
 ## A corpus of physics texts
 
@@ -357,31 +357,54 @@ Very interesting indeed. One thing we see here is "gif" in the Einstein text?!
 
 
 ```r
-grep("eq\\.", physics$text, value = TRUE)[1:10]
+library(stringr)
+
+physics %>% 
+  filter(str_detect(text, "eq\\.")) %>% 
+  select(text)
 ```
 
 ```
-##  [1] "                         eq. 1: file eq01.gif"                  
-##  [2] "                         eq. 2: file eq02.gif"                  
-##  [3] "                         eq. 3: file eq03.gif"                  
-##  [4] "                         eq. 4: file eq04.gif"                  
-##  [5] "                       eq. 05a: file eq05a.gif"                 
-##  [6] "                       eq. 05b: file eq05b.gif"                 
-##  [7] "the distance between the points being eq. 06 ."                 
-##  [8] "direction of its length with a velocity v is eq. 06 of a metre."
-##  [9] "velocity v=c we should have eq. 06a ,"                          
-## [10] "the rod as judged from K1 would have been eq. 06 ;"
+## # A tibble: 55 × 1
+##                                                               text
+##                                                              <chr>
+## 1                                             eq. 1: file eq01.gif
+## 2                                             eq. 2: file eq02.gif
+## 3                                             eq. 3: file eq03.gif
+## 4                                             eq. 4: file eq04.gif
+## 5                                          eq. 05a: file eq05a.gif
+## 6                                          eq. 05b: file eq05b.gif
+## 7                   the distance between the points being eq. 06 .
+## 8  direction of its length with a velocity v is eq. 06 of a metre.
+## 9                            velocity v=c we should have eq. 06a ,
+## 10              the rod as judged from K1 would have been eq. 06 ;
+## # ... with 45 more rows
 ```
 
 Some cleaning up of the text is in order. "K1" is the name of a coordinate system for Einstein:
 
 
 ```r
-grep("K1", physics$text, value = TRUE)[1]
+physics %>% 
+  filter(str_detect(text, "K1")) %>% 
+  select(text)
 ```
 
 ```
-## [1] "to a second co-ordinate system K1 provided that the latter is"
+## # A tibble: 59 × 1
+##                                                                      text
+##                                                                     <chr>
+## 1           to a second co-ordinate system K1 provided that the latter is
+## 2          condition of uniform motion of translation. Relative to K1 the
+## 3     tenet thus: If, relative to K, K1 is a uniformly moving co-ordinate
+## 4   with respect to K1 according to exactly the same general laws as with
+## 5  does not hold, then the Galileian co-ordinate systems K, K1, K2, etc.,
+## 6   Relative to K1, the same event would be fixed in respect of space and
+## 7   to K1, when the magnitudes x, y, z, t, of the same event with respect
+## 8    of light (and of course for every ray) with respect to K and K1. For
+## 9  reference-body K and for the reference-body K1. A light-signal is sent
+## 10  immediately follows. If referred to the system K1, the propagation of
+## # ... with 49 more rows
 ```
 
 Maybe it makes sense to keep this one. Also notice that in this line we have "co-ordinate", which explains why there are separate "co" and "ordinate" items in the high tf-idf words for the Einstein text; the `unnest_tokens()` function separates around punctuation.
@@ -390,11 +413,26 @@ Maybe it makes sense to keep this one. Also notice that in this line we have "co
 
 
 ```r
-grep("AK", physics$text, value = TRUE)[1]
+physics %>% 
+  filter(str_detect(text, "AK")) %>% 
+  select(text)
 ```
 
 ```
-## [1] "Now let us assume that the ray has come from A to C along AK, KC; the"
+## # A tibble: 34 × 1
+##                                                                      text
+##                                                                     <chr>
+## 1   Now let us assume that the ray has come from A to C along AK, KC; the
+## 2    be equal to the time along KMN. But the time along AK is longer than
+## 3  that along AL: hence the time along AKN is longer than that along ABC.
+## 4      And KC being longer than KN, the time along AKC will exceed, by as
+## 5      line which is comprised between the perpendiculars AK, BL. Then it
+## 6  ordinary refraction. Now it appears that AK and BL dip down toward the
+## 7  side where the air is less easy to penetrate: for AK being longer than
+## 8    than do AK, BL. And this suffices to show that the ray will continue
+## 9      surface AB at the points AK_k_B. Then instead of the hemispherical
+## 10 along AL, LB, and along AK, KB, are always represented by the line AH,
+## # ... with 24 more rows
 ```
 
 Let's remove some of these less meaningful words to make a better, more meaningful plot. Notice that we make a custom list of stop words and use `anti_join()` to remove them; this is a flexible approach that can be used in many situations. We will need to go back a few steps since we are removing words from the tidy data frame.

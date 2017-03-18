@@ -336,6 +336,7 @@ tidy_books &lt;-<span class="st"> </span><span class="kw">austen_books</span>() 
                                                  <span class="dt">ignore_case =</span> <span class="ot">TRUE</span>)))) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text)</code></pre></div>
+<p>Notice that we chose the name <code>word</code> for the output column from <code>unnest_tokens()</code>. This is a convenient choice because the sentiment lexicons and stop word datasets have columns named <code>word</code>; performing inner joins and anti-joins is thus easier.</p>
 <p>Now that the text is in a tidy format with one term per row, we are ready to do the sentiment analysis. First, let’s use the NRC lexicon and <code>filter()</code> for the joy words. Next, let’s <code>filter()</code> the data frame with the text from the books for the words from <em>Emma</em> and then use <code>inner_join()</code> to perform the sentiment analysis. What are the most common joy words in <em>Emma</em>? Let’s use <code>count()</code> from dplyr.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nrcjoy &lt;-<span class="st"> </span><span class="kw">get_sentiments</span>(<span class="st">&quot;nrc&quot;</span>) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(sentiment ==<span class="st"> &quot;joy&quot;</span>)
@@ -556,7 +557,7 @@ Figure 3.5: Most common positive and negative words in Jane Austen’s novels
 <blockquote>
 <p>I am not having a good day.</p>
 </blockquote>
-<p>is a sad sentence, not a happy one, because of negation. R packages included coreNLP <span class="citation">(T. Arnold and Tilton <a href="#ref-R-coreNLP">2016</a>)</span>, cleanNLP <span class="citation">(T. B. Arnold <a href="#ref-R-cleanNLP">2016</a>)</span>, and sentimentr <span class="citation">(Rinker <a href="#ref-R-sentimentr">2017</a>)</span> are examples of such sentiment analysis algorithms. For these, we may want to tokenize text into sentences.</p>
+<p>is a sad sentence, not a happy one, because of negation. R packages included coreNLP <span class="citation">(T. Arnold and Tilton <a href="#ref-R-coreNLP">2016</a>)</span>, cleanNLP <span class="citation">(T. B. Arnold <a href="#ref-R-cleanNLP">2016</a>)</span>, and sentimentr <span class="citation">(Rinker <a href="#ref-R-sentimentr">2017</a>)</span> are examples of such sentiment analysis algorithms. For these, we may want to tokenize text into sentences, and it makes sense to use a new name for the output column in such a case.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">PandP_sentences &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">text =</span> prideprejudice) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">unnest_tokens</span>(sentence, text, <span class="dt">token =</span> <span class="st">&quot;sentences&quot;</span>)</code></pre></div>
 <p>Let’s look at just one.</p>
@@ -583,7 +584,7 @@ austen_chapters %&gt;%<span class="st"> </span>
 ## 5    Northanger Abbey       32
 ## 6          Persuasion       25</code></pre>
 <p>We have recovered the correct number of chapters in each novel (plus an “extra” row for each novel title). In this data frame, each row corresponds to one chapter.</p>
-<p>Near the beginning of this vignette, we used a similar regex to find where all the chapters were in Austen’s novels for a tidy data frame organized by one-word-per-row. We can use tidy text analysis to ask questions such as what are the most negative chapters in each of Jane Austen’s novels? First, let’s get the list of negative words from the Bing lexicon. Second, let’s make a data frame of how many words are in each chapter so we can normalize for the length of chapters. Then, let’s find the number of negative words in each chapter and divide by the total words in each chapter. Which chapter has the highest proportion of negative words?</p>
+<p>Near the beginning of this chapter, we used a similar regex to find where all the chapters were in Austen’s novels for a tidy data frame organized by one-word-per-row. We can use tidy text analysis to ask questions such as what are the most negative chapters in each of Jane Austen’s novels? First, let’s get the list of negative words from the Bing lexicon. Second, let’s make a data frame of how many words are in each chapter so we can normalize for the length of chapters. Then, let’s find the number of negative words in each chapter and divide by the total words in each chapter. Which chapter has the highest proportion of negative words?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bingnegative &lt;-<span class="st"> </span><span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(sentiment ==<span class="st"> &quot;negative&quot;</span>)
 
@@ -599,7 +600,7 @@ tidy_books %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">ratio =</span> negativewords/words) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(chapter !=<span class="st"> </span><span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">1</span>) %&gt;%
-<span class="st">  </span>ungroup</code></pre></div>
+<span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
 <pre><code>## # A tibble: 6 × 5
 ##                  book chapter negativewords words      ratio
 ##                &lt;fctr&gt;   &lt;int&gt;         &lt;int&gt; &lt;int&gt;      &lt;dbl&gt;

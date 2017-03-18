@@ -551,7 +551,9 @@ tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_ju
 <p>Now that we have this second, smaller set of only recent tweets, let’s use <code>unnest_tokens()</code> to transform these tweets to a tidy data set. Let’s remove all retweets and replies from this data set so we only look at regular tweets that David and Julia have posted directly.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_tweets &lt;-<span class="st"> </span>tweets %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(!<span class="kw">str_detect</span>(text, <span class="st">&quot;^(RT|@)&quot;</span>)) %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">text =</span> <span class="kw">str_replace_all</span>(text, <span class="st">&quot;https://t.co/[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|http://[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|&amp;amp;|&amp;lt;|&amp;gt;|RT|https&quot;</span>, <span class="st">&quot;&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">text =</span> <span class="kw">str_replace_all</span>(text, 
+                                <span class="st">&quot;https://t.co/[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|http://[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|&amp;amp;|&amp;lt;|&amp;gt;|RT|https&quot;</span>, 
+                                <span class="st">&quot;&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text, <span class="dt">token =</span> <span class="st">&quot;regex&quot;</span>, <span class="dt">pattern =</span> reg) %&gt;%
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words)
 
