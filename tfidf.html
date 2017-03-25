@@ -5,28 +5,26 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Text Mining with R</title>
+  <title></title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
+  <meta name="description" content="">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="Text Mining with R" />
+  <meta property="og:title" content="" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
-  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
+  
+  
+  
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Text Mining with R" />
+  <meta name="twitter:title" content="" />
   
-  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="twitter:image" content="images/cover.png" />
-
-<meta name="author" content="Julia Silge and David Robinson">
+  
+  
 
 
-<meta name="date" content="2017-03-18">
+
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -114,7 +112,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
@@ -232,7 +229,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
           </h1>
         </div>
 
@@ -287,7 +284,7 @@ book_words</code></pre></div>
 <span class="st">  </span><span class="kw">xlim</span>(<span class="ot">NA</span>, <span class="fl">0.0009</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:plottf"></span>
-<img src="04-tf-idf_files/figure-html/plottf-1.png" alt="Term Frequency Distribution in Jane Austen's Novels" width="864" />
+<img src="03-tf-idf_files/figure-html/plottf-1.png" alt="Term Frequency Distribution in Jane Austen's Novels" width="864" />
 <p class="caption">
 Figure 4.1: Term Frequency Distribution in Jane Austen’s Novels
 </p>
@@ -326,7 +323,7 @@ freq_by_rank</code></pre></div>
 <span class="st">  </span><span class="kw">scale_x_log10</span>() +
 <span class="st">  </span><span class="kw">scale_y_log10</span>()</code></pre></div>
 <div class="figure"><span id="fig:zipf"></span>
-<img src="04-tf-idf_files/figure-html/zipf-1.png" alt="Zipf's law for Jane Austen's novels" width="672" />
+<img src="03-tf-idf_files/figure-html/zipf-1.png" alt="Zipf's law for Jane Austen's novels" width="672" />
 <p class="caption">
 Figure 4.2: Zipf’s law for Jane Austen’s novels
 </p>
@@ -353,7 +350,7 @@ Figure 4.2: Zipf’s law for Jane Austen’s novels
 <span class="st">  </span><span class="kw">scale_x_log10</span>() +
 <span class="st">  </span><span class="kw">scale_y_log10</span>()</code></pre></div>
 <div class="figure"><span id="fig:zipffit"></span>
-<img src="04-tf-idf_files/figure-html/zipffit-1.png" alt="Fitting an exponent for Zipf's law with Jane Austen's novels" width="672" />
+<img src="03-tf-idf_files/figure-html/zipffit-1.png" alt="Fitting an exponent for Zipf's law with Jane Austen's novels" width="672" />
 <p class="caption">
 Figure 4.3: Fitting an exponent for Zipf’s law with Jane Austen’s novels
 </p>
@@ -410,7 +407,7 @@ book_words</code></pre></div>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:plotausten"></span>
-<img src="04-tf-idf_files/figure-html/plotausten-1.png" alt="Highest tf-idf words in Jane Austen's Novels" width="864" />
+<img src="03-tf-idf_files/figure-html/plotausten-1.png" alt="Highest tf-idf words in Jane Austen's Novels" width="864" />
 <p class="caption">
 Figure 4.4: Highest tf-idf words in Jane Austen’s Novels
 </p>
@@ -427,7 +424,7 @@ Figure 4.4: Highest tf-idf words in Jane Austen’s Novels
 <span class="st">  </span><span class="kw">facet_wrap</span>(~book, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:plotseparate"></span>
-<img src="04-tf-idf_files/figure-html/plotseparate-1.png" alt="Highest tf-idf words in each of Jane Austen's Novels" width="864" />
+<img src="03-tf-idf_files/figure-html/plotseparate-1.png" alt="Highest tf-idf words in each of Jane Austen's Novels" width="864" />
 <p class="caption">
 Figure 4.5: Highest tf-idf words in each of Jane Austen’s Novels
 </p>
@@ -479,7 +476,7 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:plotphysics"></span>
-<img src="04-tf-idf_files/figure-html/plotphysics-1.png" alt="Highest tf-idf words in classic physics corpus" width="864" />
+<img src="03-tf-idf_files/figure-html/plotphysics-1.png" alt="Highest tf-idf words in classic physics corpus" width="864" />
 <p class="caption">
 Figure 4.6: Highest tf-idf words in classic physics corpus
 </p>
@@ -496,7 +493,7 @@ Figure 4.6: Highest tf-idf words in classic physics corpus
 <span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:physicsseparate"></span>
-<img src="04-tf-idf_files/figure-html/physicsseparate-1.png" alt="Highest tf-idf words in each physics texts" width="768" />
+<img src="03-tf-idf_files/figure-html/physicsseparate-1.png" alt="Highest tf-idf words in each physics texts" width="768" />
 <p class="caption">
 Figure 4.7: Highest tf-idf words in each physics texts
 </p>
@@ -579,7 +576,7 @@ plot_physics &lt;-<span class="st"> </span>physics_words %&gt;%
 <span class="st">  </span><span class="kw">facet_wrap</span>(~author, <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:mystopwords"></span>
-<img src="04-tf-idf_files/figure-html/mystopwords-1.png" alt="Highest tf-idf words in classic physics texts" width="768" />
+<img src="03-tf-idf_files/figure-html/mystopwords-1.png" alt="Highest tf-idf words in classic physics texts" width="768" />
 <p class="caption">
 Figure 4.8: Highest tf-idf words in classic physics texts
 </p>
@@ -622,7 +619,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/04-tf-idf.Rmd",
+"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/03-tf-idf.Rmd",
 "text": "Edit"
 },
 "download": null,

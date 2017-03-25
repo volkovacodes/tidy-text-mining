@@ -5,28 +5,26 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Text Mining with R</title>
+  <title></title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
+  <meta name="description" content="">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="Text Mining with R" />
+  <meta property="og:title" content="" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
-  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
+  
+  
+  
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Text Mining with R" />
+  <meta name="twitter:title" content="" />
   
-  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="twitter:image" content="images/cover.png" />
-
-<meta name="author" content="Julia Silge and David Robinson">
+  
+  
 
 
-<meta name="date" content="2017-03-18">
+
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -114,7 +112,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
@@ -232,7 +229,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
           </h1>
         </div>
 
@@ -297,13 +294,13 @@ nasa_desc %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(desc) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">5</span>)</code></pre></div>
 <pre><code>## # A tibble: 5 × 1
-##                                                                                                    desc
-##                                                                                                   &lt;chr&gt;
-## 1 A WiMAX networked UAV Telemetry System (WNUTS) is designed for\nnet-centric remote sensing and launch
-## 2  ML3DZMBRO is the EOS Aura Microwave Limb Sounder (MLS) daily zonal mean product for bromine monoxide
-## 3  This Level 2 data collection contains derived precipitable column water vapor amounts, during daytim
-## 4  To address the NASA GSFC need for significant improvements in wide bandgap materials and detectors f
-## 5  This data set includes brightness temperature data measured over the Sea of Japan, the Western Pacif</code></pre>
+##                                                                                                   desc
+##                                                                                                  &lt;chr&gt;
+## 1 There is an extraordinary need for a universal biomedical analyzer that has broadly flexible capabil
+## 2 Press kit for ISS mission Expedition 19 from 03/2009-05/2009. Press kits contain information about e
+## 3 Solid rocket motor cases are subject to a variety of external environmental and loading conditions f
+## 4 &amp;lt;p&amp;gt;Switching from metallic to composite construction holds the&amp;amp;nbsp;potential to dramatica
+## 5 This dataset is part of the collection of Special Sensor Microwave/Imager (SSM/I) and Special Sensor</code></pre>
 <p>Here we see the first part of several selected description fields from the metadata.</p>
 <p>Now we can build the tidy data frame for the keywords. For this one, we need to use <code>unnest()</code> from tidyr, because they are in a list-column.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
@@ -498,7 +495,7 @@ title_words %&gt;%
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:plottitle"></span>
-<img src="09-nasa-metadata_files/figure-html/plottitle-1.png" alt="Word network in NASA dataset titles" width="864" />
+<img src="08-nasa-metadata_files/figure-html/plottitle-1.png" alt="Word network in NASA dataset titles" width="864" />
 <p class="caption">
 Figure 9.1: Word network in NASA dataset titles
 </p>
@@ -515,7 +512,7 @@ desc_words %&gt;%
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:plotdesc"></span>
-<img src="09-nasa-metadata_files/figure-html/plotdesc-1.png" alt="Word network in NASA dataset descriptions" width="864" />
+<img src="08-nasa-metadata_files/figure-html/plotdesc-1.png" alt="Word network in NASA dataset descriptions" width="864" />
 <p class="caption">
 Figure 9.2: Word network in NASA dataset descriptions
 </p>
@@ -553,7 +550,7 @@ keyword_counts %&gt;%
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:plotcounts"></span>
-<img src="09-nasa-metadata_files/figure-html/plotcounts-1.png" alt="Co-occurrence network in NASA dataset keywords" width="864" />
+<img src="08-nasa-metadata_files/figure-html/plotcounts-1.png" alt="Co-occurrence network in NASA dataset keywords" width="864" />
 <p class="caption">
 Figure 9.3: Co-occurrence network in NASA dataset keywords
 </p>
@@ -591,7 +588,7 @@ keyword_cors %&gt;%
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:plotcors"></span>
-<img src="09-nasa-metadata_files/figure-html/plotcors-1.png" alt="Correlation network in NASA dataset keywords" width="1152" />
+<img src="08-nasa-metadata_files/figure-html/plotcors-1.png" alt="Correlation network in NASA dataset keywords" width="1152" />
 <p class="caption">
 Figure 9.4: Correlation network in NASA dataset keywords
 </p>
@@ -652,7 +649,7 @@ Figure 9.4: Correlation network in NASA dataset keywords
        <span class="dt">caption =</span> <span class="st">&quot;NASA metadata from https://data.nasa.gov/data.json&quot;</span>,
        <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="st">&quot;tf-idf&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:plottfidf"></span>
-<img src="09-nasa-metadata_files/figure-html/plottfidf-1.png" alt="Distribution of tf-idf for words from datasets labeled with select keywords" width="960" />
+<img src="08-nasa-metadata_files/figure-html/plottfidf-1.png" alt="Distribution of tf-idf for words from datasets labeled with select keywords" width="960" />
 <p class="caption">
 Figure 9.5: Distribution of tf-idf for words from datasets labeled with select keywords
 </p>
@@ -777,7 +774,7 @@ top_terms</code></pre></div>
        <span class="dt">x =</span> <span class="ot">NULL</span>, <span class="dt">y =</span> <span class="kw">expression</span>(beta)) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">ncol =</span> <span class="dv">4</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:plotbeta"></span>
-<img src="09-nasa-metadata_files/figure-html/plotbeta-1.png" alt="Top terms in topic modeling of NASA metadata description field texts" width="1152" />
+<img src="08-nasa-metadata_files/figure-html/plotbeta-1.png" alt="Top terms in topic modeling of NASA metadata description field texts" width="1152" />
 <p class="caption">
 Figure 9.6: Top terms in topic modeling of NASA metadata description field texts
 </p>
@@ -809,7 +806,7 @@ lda_gamma</code></pre></div>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Distribution of probability for each topic&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Number of documents&quot;</span>, <span class="dt">x =</span> <span class="kw">expression</span>(gamma))</code></pre></div>
 <div class="figure"><span id="fig:plotgamma"></span>
-<img src="09-nasa-metadata_files/figure-html/plotgamma-1.png" alt="Probability distribution in topic modeling of NASA metadata description field texts" width="1152" />
+<img src="08-nasa-metadata_files/figure-html/plotgamma-1.png" alt="Probability distribution in topic modeling of NASA metadata description field texts" width="1152" />
 <p class="caption">
 Figure 9.7: Probability distribution in topic modeling of NASA metadata description field texts
 </p>
@@ -876,7 +873,7 @@ top_keywords</code></pre></div>
 <span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> function(x) <span class="kw">gsub</span>(<span class="st">&quot;__.+$&quot;</span>, <span class="st">&quot;&quot;</span>, x)) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">ncol =</span> <span class="dv">4</span>, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:plottopkeywords"></span>
-<img src="09-nasa-metadata_files/figure-html/plottopkeywords-1.png" alt="Top keywords in topic modeling of NASA metadata description field texts" width="1536" />
+<img src="08-nasa-metadata_files/figure-html/plottopkeywords-1.png" alt="Top keywords in topic modeling of NASA metadata description field texts" width="1536" />
 <p class="caption">
 Figure 9.8: Top keywords in topic modeling of NASA metadata description field texts
 </p>
@@ -922,7 +919,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/09-nasa-metadata.Rmd",
+"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/08-nasa-metadata.Rmd",
 "text": "Edit"
 },
 "download": null,

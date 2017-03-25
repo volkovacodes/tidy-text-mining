@@ -5,28 +5,26 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Text Mining with R</title>
+  <title></title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
+  <meta name="description" content="">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="Text Mining with R" />
+  <meta property="og:title" content="" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
-  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
+  
+  
+  
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Text Mining with R" />
+  <meta name="twitter:title" content="" />
   
-  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="twitter:image" content="images/cover.png" />
-
-<meta name="author" content="Julia Silge and David Robinson">
+  
+  
 
 
-<meta name="date" content="2017-03-18">
+
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -114,7 +112,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
@@ -232,7 +229,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
           </h1>
         </div>
 
@@ -289,7 +286,7 @@ raw_text %&gt;%
 <span class="st">  </span><span class="kw">geom_col</span>() +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:messagecounts"></span>
-<img src="10-usenet_files/figure-html/messagecounts-1.png" alt="Number of messages from each newsgroup" width="672" />
+<img src="09-usenet_files/figure-html/messagecounts-1.png" alt="Number of messages from each newsgroup" width="672" />
 <p class="caption">
 Figure 10.1: Number of messages from each newsgroup
 </p>
@@ -396,7 +393,7 @@ tf_idf</code></pre></div>
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;tf-idf&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:scitfidf"></span>
-<img src="10-usenet_files/figure-html/scitfidf-1.png" alt="The 12 terms with the highest tf-idf within each of the science-related newsgroups" width="864" />
+<img src="09-usenet_files/figure-html/scitfidf-1.png" alt="The 12 terms with the highest tf-idf within each of the science-related newsgroups" width="864" />
 <p class="caption">
 Figure 10.2: The 12 terms with the highest tf-idf within each of the science-related newsgroups
 </p>
@@ -436,7 +433,7 @@ newsgroup_cors %&gt;%
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:newsgroupcorsnetwork"></span>
-<img src="10-usenet_files/figure-html/newsgroupcorsnetwork-1.png" alt="A network of Usenet groups based on the correlation of word counts between them, including only connections with a correlation greater than .4" width="768" />
+<img src="09-usenet_files/figure-html/newsgroupcorsnetwork-1.png" alt="A network of Usenet groups based on the correlation of word counts between them, including only connections with a correlation greater than .4" width="768" />
 <p class="caption">
 Figure 10.3: A network of Usenet groups based on the correlation of word counts between them, including only connections with a correlation greater than .4
 </p>
@@ -475,7 +472,7 @@ sci_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(sci_dtm, <span
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:usenettopicterms"></span>
-<img src="10-usenet_files/figure-html/usenettopicterms-1.png" alt="The top 8 words from each topic fit by LDA on the science-related newsgroups" width="672" />
+<img src="09-usenet_files/figure-html/usenettopicterms-1.png" alt="The top 8 words from each topic fit by LDA on the science-related newsgroups" width="672" />
 <p class="caption">
 Figure 10.4: The top 8 words from each topic fit by LDA on the science-related newsgroups
 </p>
@@ -491,7 +488,7 @@ Figure 10.4: The top 8 words from each topic fit by LDA on the science-related n
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Topic&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;# of messages where this was the highest % topic&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:usenetassignments"></span>
-<img src="10-usenet_files/figure-html/usenetassignments-1.png" alt="Distribution of gamma for each topic within each Usenet newsgroup" width="672" />
+<img src="09-usenet_files/figure-html/usenetassignments-1.png" alt="Distribution of gamma for each topic within each Usenet newsgroup" width="672" />
 <p class="caption">
 Figure 10.5: Distribution of gamma for each topic within each Usenet newsgroup
 </p>
@@ -516,7 +513,7 @@ newsgroup_sentiments %&gt;%
 <span class="st">  </span><span class="kw">coord_flip</span>() +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Average sentiment score&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:newsgroupsentiments"></span>
-<img src="10-usenet_files/figure-html/newsgroupsentiments-1.png" alt="Average AFINN score for posts within each newsgroup" width="672" />
+<img src="09-usenet_files/figure-html/newsgroupsentiments-1.png" alt="Average AFINN score for posts within each newsgroup" width="672" />
 <p class="caption">
 Figure 10.6: Average AFINN score for posts within each newsgroup
 </p>
@@ -554,7 +551,7 @@ contributions</code></pre></div>
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:usenetcontributions"></span>
-<img src="10-usenet_files/figure-html/usenetcontributions-1.png" alt="Words with the greatest contributions to positive/negative sentiment scores in the Usenet text" width="576" />
+<img src="09-usenet_files/figure-html/usenetcontributions-1.png" alt="Words with the greatest contributions to positive/negative sentiment scores in the Usenet text" width="576" />
 <p class="caption">
 Figure 10.7: Words with the greatest contributions to positive/negative sentiment scores in the Usenet text
 </p>
@@ -581,7 +578,7 @@ top_sentiment_words</code></pre></div>
 ## 10 soc.religion.christian   true   179     2  0.005628842
 ## # ... with 13,053 more rows</code></pre>
 <div class="figure"><span id="fig:newsgroupsentiment"></span>
-<img src="10-usenet_files/figure-html/newsgroupsentiment-1.png" alt="The 12 words that contributed the most to sentiment scores within each of six newsgroups" width="960" />
+<img src="09-usenet_files/figure-html/newsgroupsentiment-1.png" alt="The 12 words that contributed the most to sentiment scores within each of six newsgroups" width="960" />
 <p class="caption">
 Figure 10.8: The 12 words that contributed the most to sentiment scores within each of six newsgroups
 </p>
@@ -706,7 +703,7 @@ usenet_bigram_counts %&gt;%
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:negatewords"></span>
-<img src="10-usenet_files/figure-html/negatewords-1.png" alt="Words that contributed the most to sentiment when they followed a 'negating' word" width="768" />
+<img src="09-usenet_files/figure-html/negatewords-1.png" alt="Words that contributed the most to sentiment when they followed a 'negating' word" width="768" />
 <p class="caption">
 Figure 10.9: Words that contributed the most to sentiment when they followed a ‘negating’ word
 </p>
@@ -751,7 +748,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/10-usenet.Rmd",
+"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/09-usenet.Rmd",
 "text": "Edit"
 },
 "download": null,

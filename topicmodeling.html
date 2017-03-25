@@ -5,28 +5,26 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Text Mining with R</title>
+  <title></title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
+  <meta name="description" content="">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="Text Mining with R" />
+  <meta property="og:title" content="" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
-  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
+  
+  
+  
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Text Mining with R" />
+  <meta name="twitter:title" content="" />
   
-  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="twitter:image" content="images/cover.png" />
-
-<meta name="author" content="Julia Silge and David Robinson">
+  
+  
 
 
-<meta name="date" content="2017-03-18">
+
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -114,7 +112,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
@@ -232,7 +229,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
           </h1>
         </div>
 
@@ -271,7 +268,7 @@ ap_lda</code></pre></div>
 <p>Fitting the model was the “easy part”: the rest of the analysis will involve exploring and interpreting the model using tidying functions from the tidytext package.</p>
 <div id="word-topic-probabilities" class="section level3">
 <h3><span class="header-section-number">7.1.1</span> Word-topic probabilities</h3>
-<p>In Chapter <a href="dtm.html#dtm">6</a> we introduced the <code>tidy()</code> method, originally from the broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>, for tidying model objects. The tidytext package provides this method for extracting the per-topic-per-word probabilities, called <span class="math inline">\(\beta\)</span> (“beta”), from the model.</p>
+<p>In Chapter <a href="dtm.html#dtm">6</a> we introduced the <code>tidy()</code> method, originally from the broom package <span class="citation">[@R-broom]</span>, for tidying model objects. The tidytext package provides this method for extracting the per-topic-per-word probabilities, called <span class="math inline">\(\beta\)</span> (“beta”), from the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
 ap_topics &lt;-<span class="st"> </span><span class="kw">tidy</span>(ap_lda, <span class="dt">matrix =</span> <span class="st">&quot;beta&quot;</span>)
@@ -308,7 +305,7 @@ ap_top_terms %&gt;%
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:aptoptermsplot"></span>
-<img src="07-topic-models_files/figure-html/aptoptermsplot-1.png" alt="The terms that are most common within each topic" width="672" />
+<img src="06-topic-models_files/figure-html/aptoptermsplot-1.png" alt="The terms that are most common within each topic" width="672" />
 <p class="caption">
 Figure 7.1: The terms that are most common within each topic
 </p>
@@ -341,7 +338,7 @@ beta_spread</code></pre></div>
 <p>The words with the greatest differences between the two topics are visualized in Figure <a href="topicmodeling.html#fig:topiccompare">7.2</a>.</p>
 
 <div class="figure"><span id="fig:topiccompare"></span>
-<img src="07-topic-models_files/figure-html/topiccompare-1.png" alt="Words with the greatest difference in \(\beta\) between topic 2 and topic 1" width="672" />
+<img src="06-topic-models_files/figure-html/topiccompare-1.png" alt="Words with the greatest difference in \(\beta\) between topic 2 and topic 1" width="672" />
 <p class="caption">
 Figure 7.2: Words with the greatest difference in <span class="math inline">\(\beta\)</span> between topic 2 and topic 1
 </p>
@@ -518,7 +515,7 @@ top_terms %&gt;%
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:toptermsplot"></span>
-<img src="07-topic-models_files/figure-html/toptermsplot-1.png" alt="The terms that are most common within each topic" width="672" />
+<img src="06-topic-models_files/figure-html/toptermsplot-1.png" alt="The terms that are most common within each topic" width="672" />
 <p class="caption">
 Figure 7.3: The terms that are most common within each topic
 </p>
@@ -572,7 +569,7 @@ chapters_gamma %&gt;%
 <span class="st">  </span><span class="kw">geom_boxplot</span>() +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>title)</code></pre></div>
 <div class="figure"><span id="fig:chaptersldagamma"></span>
-<img src="07-topic-models_files/figure-html/chaptersldagamma-1.png" alt="The gamma probabilities for each chapter within each book" width="768" />
+<img src="06-topic-models_files/figure-html/chaptersldagamma-1.png" alt="The gamma probabilities for each chapter within each book" width="768" />
 <p class="caption">
 Figure 7.4: The gamma probabilities for each chapter within each book
 </p>
@@ -670,7 +667,7 @@ assignments</code></pre></div>
        <span class="dt">y =</span> <span class="st">&quot;Book words came from&quot;</span>,
        <span class="dt">fill =</span> <span class="st">&quot;% of assignments&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:confusionmatrix"></span>
-<img src="07-topic-models_files/figure-html/confusionmatrix-1.png" alt="Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to." width="384" />
+<img src="06-topic-models_files/figure-html/confusionmatrix-1.png" alt="Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to." width="384" />
 <p class="caption">
 Figure 7.5: Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to.
 </p>
@@ -740,7 +737,7 @@ wrong_words</code></pre></div>
 </div>
 <div id="alternative-lda-implementations" class="section level2">
 <h2><span class="header-section-number">7.3</span> Alternative LDA implementations</h2>
-<p>The <code>LDA()</code> function in the topicmodels package is only one implementation of the latent Dirichlet allocation algorithm. For example, the <a href="https://cran.r-project.org/package=mallet">mallet</a> package <span class="citation">(Mimno <a href="#ref-R-mallet">2013</a>)</span> implements a wrapper around the <a href="http://mallet.cs.umass.edu/">MALLET</a> Java package for text classification tools, and the tidytext package provides tidiers for this model output as well.</p>
+<p>The <code>LDA()</code> function in the topicmodels package is only one implementation of the latent Dirichlet allocation algorithm. For example, the <a href="https://cran.r-project.org/package=mallet">mallet</a> package <span class="citation">[@R-mallet]</span> implements a wrapper around the <a href="http://mallet.cs.umass.edu/">MALLET</a> Java package for text classification tools, and the tidytext package provides tidiers for this model output as well.</p>
 <p>The mallet package takes a somewhat different approach to the input format. For instance, it takes non-tokenized documents and performs the tokenization itself, and requires a separate file of stopwords. This means we have to collapse the text into one string for each document before performing LDA.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mallet)
 
@@ -769,15 +766,6 @@ term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_co
 <span class="kw">augment</span>(mallet_model, term_counts)</code></pre></div>
 <p>We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration; the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.</p>
 
-</div>
-</div>
-<h3> References</h3>
-<div id="refs" class="references">
-<div id="ref-R-broom">
-<p>Robinson, David, Matthieu Gomez, Boris Demeshev, Dieter Menne, Benjamin Nutter, Luke Johnston, Ben Bolker, Francois Briatte, and Hadley Wickham. 2015. <em>Broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
-</div>
-<div id="ref-R-mallet">
-<p>Mimno, David. 2013. <em>Mallet: A Wrapper Around the Java Machine Learning Tool MALLET</em>. <a href="https://cran.r-project.org/package=mallet" class="uri">https://cran.r-project.org/package=mallet</a>.</p>
 </div>
 </div>
             </section>
@@ -814,7 +802,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/07-topic-models.Rmd",
+"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/06-topic-models.Rmd",
 "text": "Edit"
 },
 "download": null,

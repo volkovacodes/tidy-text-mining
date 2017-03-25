@@ -5,28 +5,26 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Text Mining with R</title>
+  <title></title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
+  <meta name="description" content="">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="Text Mining with R" />
+  <meta property="og:title" content="" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
-  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
+  
+  
+  
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Text Mining with R" />
+  <meta name="twitter:title" content="" />
   
-  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="twitter:image" content="images/cover.png" />
-
-<meta name="author" content="Julia Silge and David Robinson">
+  
+  
 
 
-<meta name="date" content="2017-03-18">
+
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -114,7 +112,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
@@ -232,7 +229,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
           </h1>
         </div>
 
@@ -244,7 +241,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">6</span> Tidying and casting document-term matrices and corpus objects</h1>
 <p>In the previous chapters, we’ve been analyzing text arranged in the tidy text format: a table with one-token-per-document-per-row, such as is constructed by the <code>unnest_tokens()</code> function. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2 to explore and visualize text data. We’ve demonstrated that many informative text analyses can be performed using these tools.</p>
 <p>However, most of the existing R tools for natural language processing, besides the tidytext package, aren’t compatible with this format. The <a href="https://cran.r-project.org/web/views/NaturalLanguageProcessing.html">CRAN Task View for Natural Language Processing</a> lists a large selection of packages that take other structures of input and provide non-tidy outputs. These packages are very useful in text mining applications, and many existing text datasets are structured according to these formats.</p>
-<p>Computer scientist Hal Abelson has observed that “No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system” <span class="citation">(Abelson <a href="#ref-Friedman:2008:EPL:1378240">2008</a>)</span>. In that spirit, this chapter will discuss the “glue” that connects the tidy text format with other important packages and data structures, allowing you to rely on both existing text mining packages and the suite of tidy tools to perform your analysis. In particular, we’ll examine the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix.</p>
+<p>Computer scientist Hal Abelson has observed that “No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system” <span class="citation">[@Friedman:2008:EPL:1378240]</span>. In that spirit, this chapter will discuss the “glue” that connects the tidy text format with other important packages and data structures, allowing you to rely on both existing text mining packages and the suite of tidy tools to perform your analysis. In particular, we’ll examine the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix.</p>
 <div id="tidy-dtm" class="section level2">
 <h2><span class="header-section-number">6.1</span> Tidying a document-term matrix</h2>
 <p>One of the most common structures that text mining packages work with is the <a href="https://en.wikipedia.org/wiki/Document-term_matrix">document-term matrix</a> (or DTM). This is a matrix where:</p>
@@ -256,7 +253,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Since most pairings of document and term do not occur (they have the value zero), DTMs are usually implemented as sparse matrices. These objects can be treated as though they were matrices (for example, accessing particular rows and columns), but are stored in a more efficient format. We’ll discuss several implementations of these matrices in this chapter.</p>
 <p>DTM objects cannot be used directly with tidy tools, just as tidy data frames cannot be used as input for most text mining packages. Thus, the tidytext package provides two verbs that convert between the two formats.</p>
 <ul>
-<li><code>tidy()</code> turns a document-term matrix into a tidy data frame. This verb comes from the broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>, which provides similar tidying functions for many statistical models and objects.</li>
+<li><code>tidy()</code> turns a document-term matrix into a tidy data frame. This verb comes from the broom package <span class="citation">[@R-broom]</span>, which provides similar tidying functions for many statistical models and objects.</li>
 <li><code>cast()</code> turns a tidy one-term-per-row data frame into a matrix. tidytext provides three variations of this verb, each converting to a different type of matrix: <code>cast_sparse()</code> (converting to a sparse matrix from the Matrix package), <code>cast_dtm()</code> (converting to a <code>DocumentTermMatrix</code> object from tm), and <code>cast_dfm()</code> (converting to a <code>dfm</code> object from quanteda).</li>
 </ul>
 <div id="tidying-documenttermmatrix-objects" class="section level3">
@@ -271,7 +268,7 @@ AssociatedPress</code></pre></div>
 ## Sparsity           : 99%
 ## Maximal term length: 18
 ## Weighting          : term frequency (tf)</code></pre>
-<p>We see that this dataset contains documents (each of them an AP article) and terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the <code>Terms()</code> function.</p>
+<p>We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the <code>Terms()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">terms &lt;-<span class="st"> </span><span class="kw">Terms</span>(AssociatedPress)
 <span class="kw">head</span>(terms)</code></pre></div>
 <pre><code>## [1] &quot;aaron&quot;      &quot;abandon&quot;    &quot;abandoned&quot;  &quot;abandoning&quot; &quot;abbott&quot;     &quot;abboud&quot;</code></pre>
@@ -295,7 +292,7 @@ ap_td</code></pre></div>
 ## 9         1   arrested     1
 ## 10        1    assault     1
 ## # ... with 302,021 more rows</code></pre>
-<p>Notice that we now have a tidy three-column <code>tbl_df</code>, with variables <code>document</code>, <code>term</code>, and <code>count</code>. This tidying operation is similar to the <code>melt()</code> function from the reshape2 package <span class="citation">(Wickham <a href="#ref-R-reshape2">2007</a>)</span> for non-sparse matrices. Notice that only the non-zero values are included: document 1 includes terms such as “adding” and “adult”, but not “aaron” or “abandon”, which means the tidied version has no rows where <code>count</code> is zero.</p>
+<p>Notice that we now have a tidy three-column <code>tbl_df</code>, with variables <code>document</code>, <code>term</code>, and <code>count</code>. This tidying operation is similar to the <code>melt()</code> function from the reshape2 package <span class="citation">[@R-reshape2]</span> for non-sparse matrices. Notice that only the non-zero values are included: document 1 includes terms such as “adding” and “adult”, but not “aaron” or “abandon”, which means the tidied version has no rows where <code>count</code> is zero.</p>
 <p>As we’ve seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles with the approach described in Chapter <a href="sentiment.html#sentiment">3</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_sentiments &lt;-<span class="st"> </span>ap_td %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>), <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">term =</span> <span class="st">&quot;word&quot;</span>))
@@ -329,7 +326,7 @@ ap_sentiments %&gt;%
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Contribution to sentiment&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:apsentiments"></span>
-<img src="06-document-term-matrices_files/figure-html/apsentiments-1.png" alt="Words from AP articles with the greatest contribution to positive or negative sentiments, computed as the product of the word's AFINN sentiment score and its frequency." width="672" />
+<img src="05-document-term-matrices_files/figure-html/apsentiments-1.png" alt="Words from AP articles with the greatest contribution to positive or negative sentiments, computed as the product of the word's AFINN sentiment score and its frequency." width="672" />
 <p class="caption">
 Figure 6.1: Words from AP articles with the greatest contribution to positive or negative sentiments, computed as the product of the word’s AFINN sentiment score and its frequency.
 </p>
@@ -337,17 +334,17 @@ Figure 6.1: Words from AP articles with the greatest contribution to positive or
 </div>
 <div id="tidying-dfm-objects" class="section level3">
 <h3><span class="header-section-number">6.1.2</span> Tidying dfm objects</h3>
-<p>Other text mining packages provide alternative implementations of document-term matrices, such as the <code>dfm</code> (document-feature matrix) class from the quanteda package <span class="citation">(Benoit and Nulty <a href="#ref-R-quanteda">2016</a>)</span>. For example, the quanteda package comes with a corpus of presidential inauguration speeches, which can be converted to a <code>dfm</code> using the appropriate function.</p>
+<p>Other text mining packages provide alternative implementations of document-term matrices, such as the <code>dfm</code> (document-feature matrix) class from the quanteda package <span class="citation">[@R-quanteda]</span>. For example, the quanteda package comes with a corpus of presidential inauguration speeches, which can be converted to a <code>dfm</code> using the appropriate function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(methods)
 
 <span class="kw">data</span>(<span class="st">&quot;data_corpus_inaugural&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;quanteda&quot;</span>)
 inaug_dfm &lt;-<span class="st"> </span>quanteda::<span class="kw">dfm</span>(data_corpus_inaugural)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inaug_dfm</code></pre></div>
-<pre><code>## Document-feature matrix of: 57 documents, 9,174 features (91.6% sparse).</code></pre>
+<pre><code>## Document-feature matrix of: 58 documents, 9,232 features (91.6% sparse).</code></pre>
 <p>The <code>tidy</code> method works on these document-feature matrices as well, turning them into a one-token-per-document-per-row table:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inaug_td &lt;-<span class="st"> </span><span class="kw">tidy</span>(inaug_dfm)
 inaug_td</code></pre></div>
-<pre><code>## # A tibble: 44,178 × 3
+<pre><code>## # A tibble: 44,725 × 3
 ##           document   term count
 ##              &lt;chr&gt;  &lt;chr&gt; &lt;dbl&gt;
 ## 1  1789-Washington fellow     3
@@ -360,30 +357,30 @@ inaug_td</code></pre></div>
 ## 8      1817-Monroe fellow     6
 ## 9      1821-Monroe fellow    10
 ## 10      1825-Adams fellow     3
-## # ... with 44,168 more rows</code></pre>
+## # ... with 44,715 more rows</code></pre>
 <p>We may be interested in finding the words most specific to each of the inaugural speeches. This could be quantified by calculating the tf-idf of each term-speech pair using the <code>bind_tf_idf()</code> function, as described in Chapter <a href="tfidf.html#tfidf">4</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inaug_tf_idf &lt;-<span class="st"> </span>inaug_td %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(term, document, count) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf))
 
 inaug_tf_idf</code></pre></div>
-<pre><code>## # A tibble: 44,178 × 6
+<pre><code>## # A tibble: 44,725 × 6
 ##           document        term count          tf      idf     tf_idf
 ##              &lt;chr&gt;       &lt;chr&gt; &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt;
-## 1  1793-Washington      arrive     1 0.006802721 4.043051 0.02750375
-## 2  1793-Washington upbraidings     1 0.006802721 4.043051 0.02750375
-## 3  1793-Washington    violated     1 0.006802721 3.349904 0.02278846
-## 4  1793-Washington   willingly     1 0.006802721 3.349904 0.02278846
-## 5  1793-Washington   incurring     1 0.006802721 3.349904 0.02278846
-## 6  1793-Washington    previous     1 0.006802721 2.944439 0.02003020
-## 7  1793-Washington   knowingly     1 0.006802721 2.944439 0.02003020
-## 8  1793-Washington injunctions     1 0.006802721 2.944439 0.02003020
-## 9  1793-Washington   witnesses     1 0.006802721 2.944439 0.02003020
-## 10 1793-Washington     besides     1 0.006802721 2.656757 0.01807318
-## # ... with 44,168 more rows</code></pre>
+## 1  1793-Washington      arrive     1 0.006802721 4.060443 0.02762206
+## 2  1793-Washington upbraidings     1 0.006802721 4.060443 0.02762206
+## 3  1793-Washington    violated     1 0.006802721 3.367296 0.02290677
+## 4  1793-Washington   willingly     1 0.006802721 3.367296 0.02290677
+## 5  1793-Washington   incurring     1 0.006802721 3.367296 0.02290677
+## 6  1793-Washington    previous     1 0.006802721 2.961831 0.02014851
+## 7  1793-Washington   knowingly     1 0.006802721 2.961831 0.02014851
+## 8  1793-Washington injunctions     1 0.006802721 2.961831 0.02014851
+## 9  1793-Washington   witnesses     1 0.006802721 2.961831 0.02014851
+## 10 1793-Washington     besides     1 0.006802721 2.674149 0.01819149
+## # ... with 44,715 more rows</code></pre>
 <p>We could use this data to pick four notable inaugural addresses (from Presidents Lincoln, Roosevelt, Kennedy, and Obama), and visualize the words most specific to each speech, as shown in Figure <a href="dtm.html#fig:presidentspeeches">6.2</a>.</p>
 <div class="figure"><span id="fig:presidentspeeches"></span>
-<img src="06-document-term-matrices_files/figure-html/presidentspeeches-1.png" alt="The terms with the highest tf-idf from each of four selected inaugural addresses. Note that quanteda's tokenizer includes the '?' punctuation mark as a term, though the texts we've tokenized ourselves with unnest_tokens do not." width="576" />
+<img src="05-document-term-matrices_files/figure-html/presidentspeeches-1.png" alt="The terms with the highest tf-idf from each of four selected inaugural addresses. Note that quanteda's tokenizer includes the '?' punctuation mark as a term, though the texts we've tokenized ourselves with unnest_tokens do not." width="576" />
 <p class="caption">
 Figure 6.2: The terms with the highest tf-idf from each of four selected inaugural addresses. Note that quanteda’s tokenizer includes the ‘?’ punctuation mark as a term, though the texts we’ve tokenized ourselves with unnest_tokens do not.
 </p>
@@ -406,7 +403,7 @@ year_term_counts &lt;-<span class="st"> </span>inaug_td %&gt;%
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">labels =</span> scales::<span class="kw">percent_format</span>()) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;% frequency of word in inaugural address&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:yearterm"></span>
-<img src="06-document-term-matrices_files/figure-html/yearterm-1.png" alt="Changes in word frequency over time within Presidential inaugural addresses, for four selected terms" width="672" />
+<img src="05-document-term-matrices_files/figure-html/yearterm-1.png" alt="Changes in word frequency over time within Presidential inaugural addresses, for four selected terms" width="672" />
 <p class="caption">
 Figure 6.3: Changes in word frequency over time within Presidential inaugural addresses, for four selected terms
 </p>
@@ -610,7 +607,7 @@ stock_tf_idf &lt;-<span class="st"> </span>stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(-tf_idf)</code></pre></div>
 <p>The top terms for each are visualized in Figure <a href="dtm.html#fig:stocktfidf">6.4</a>. As we’d expect the company’s name and symbol are typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).</p>
 <div class="figure"><span id="fig:stocktfidf"></span>
-<img src="06-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest tf-idf in recent articles specific to each company" width="768" />
+<img src="05-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest tf-idf in recent articles specific to each company" width="768" />
 <p class="caption">
 Figure 6.4: The 8 words with the highest tf-idf in recent articles specific to each company
 </p>
@@ -628,13 +625,13 @@ Figure 6.4: The 8 words with the highest tf-idf in recent articles specific to e
 <span class="st">  </span><span class="kw">coord_flip</span>() +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Frequency of word * AFINN score&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:stockafinn"></span>
-<img src="06-document-term-matrices_files/figure-html/stockafinn-1.png" alt="The words with the largest contribution to sentiment scores in recent financial articles, according to the AFINN dictionary. The 'contribution' is the product of the word and the sentiment score." width="672" />
+<img src="05-document-term-matrices_files/figure-html/stockafinn-1.png" alt="The words with the largest contribution to sentiment scores in recent financial articles, according to the AFINN dictionary. The 'contribution' is the product of the word and the sentiment score." width="672" />
 <p class="caption">
 Figure 6.5: The words with the largest contribution to sentiment scores in recent financial articles, according to the AFINN dictionary. The ‘contribution’ is the product of the word and the sentiment score.
 </p>
 </div>
 <p>In the context of these financial articles, there are a few big red flags here. The words “share” and “shares” are counted as positive verbs by the AFINN lexicon (“Alice will <strong>share</strong> her cake with Bob”), but they’re actually neutral nouns (“The stock price is $12 per <strong>share</strong>”) that could just as easily be in a positive sentence as a negative one. The word “fool” is even more deceptive: it refers to Motley Fool, a financial services company. In short, we can see that the AFINN sentiment lexicon is entirely unsuited to the context of financial data (as are the NRC and Bing).</p>
-<p>Instead, we introduce another sentiment lexicon: the Loughran and McDonald dictionary of financial sentiment terms <span class="citation">(LOUGHRAN and MCDONALD <a href="#ref-loughran2011liability">2011</a>)</span>. This dictionary was developed based on analyses of financial reports, and intentionally avoids words like “share” and “fool”, as well as subtler terms like “liability” and “risk” that may not have a negative meaning in a financial context.</p>
+<p>Instead, we introduce another sentiment lexicon: the Loughran and McDonald dictionary of financial sentiment terms <span class="citation">[@loughran2011liability]</span>. This dictionary was developed based on analyses of financial reports, and intentionally avoids words like “share” and “fool”, as well as subtler terms like “liability” and “risk” that may not have a negative meaning in a financial context.</p>
 <p>The Loughran data divides words into six sentiments: “positive”, “negative”, “litigious”, “uncertain”, “constraining”, and “superfluous”. We could start by examining the most common words belonging to each sentiment within this text dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word) %&gt;%
@@ -649,7 +646,7 @@ Figure 6.5: The words with the largest contribution to sentiment scores in recen
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>sentiment, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Frequency of this word in the recent financial articles&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:stockloughransentiments"></span>
-<img src="06-document-term-matrices_files/figure-html/stockloughransentiments-1.png" alt="The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon" width="672" />
+<img src="05-document-term-matrices_files/figure-html/stockloughransentiments-1.png" alt="The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon" width="672" />
 <p class="caption">
 Figure 6.6: The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon
 </p>
@@ -684,7 +681,7 @@ stock_sentiment_count</code></pre></div>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Company&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Positivity score among 20 recent news articles&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:stockpositivity"></span>
-<img src="06-document-term-matrices_files/figure-html/stockpositivity-1.png" alt="&quot;Positivity&quot; of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company" width="672" />
+<img src="05-document-term-matrices_files/figure-html/stockpositivity-1.png" alt="&quot;Positivity&quot; of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company" width="672" />
 <p class="caption">
 Figure 6.7: “Positivity” of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company
 </p>
@@ -692,24 +689,6 @@ Figure 6.7: “Positivity” of the news coverage around each stock in January 2
 <p>Based on this analysis, we’d say that in January 2017 most of the coverage of Yahoo and Twitter was strongly negative, while coverage of Google and Amazon was the most positive. A glance at current financial headlines suggest that it’s on the right track. If you were interested in further analysis, you could use one of R’s many quantitative finance packages to compare these articles to recent stock prices and other metrics.</p>
 
 </div>
-</div>
-</div>
-<h3> References</h3>
-<div id="refs" class="references">
-<div id="ref-Friedman:2008:EPL:1378240">
-<p>Abelson, Hal. 2008. “Foreword.” In <em>Essentials of Programming Languages, 3rd Edition</em>, 3rd ed. The MIT Press.</p>
-</div>
-<div id="ref-R-broom">
-<p>Robinson, David, Matthieu Gomez, Boris Demeshev, Dieter Menne, Benjamin Nutter, Luke Johnston, Ben Bolker, Francois Briatte, and Hadley Wickham. 2015. <em>Broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
-</div>
-<div id="ref-R-reshape2">
-<p>Wickham, Hadley. 2007. “Reshaping Data with the reshape Package.” <em>Journal of Statistical Software</em> 21 (12): 1–20. <a href="http://www.jstatsoft.org/v21/i12/" class="uri">http://www.jstatsoft.org/v21/i12/</a>.</p>
-</div>
-<div id="ref-R-quanteda">
-<p>Benoit, Kenneth, and Paul Nulty. 2016. <em>Quanteda: Quantitative Analysis of Textual Data</em>. <a href="https://CRAN.R-project.org/package=quanteda" class="uri">https://CRAN.R-project.org/package=quanteda</a>.</p>
-</div>
-<div id="ref-loughran2011liability">
-<p>LOUGHRAN, TIM, and BILL MCDONALD. 2011. “When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks.” <em>The Journal of Finance</em> 66 (1). Blackwell Publishing Inc: 35–65. doi:<a href="https://doi.org/10.1111/j.1540-6261.2010.01625.x">10.1111/j.1540-6261.2010.01625.x</a>.</p>
 </div>
 </div>
             </section>
@@ -746,7 +725,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/06-document-term-matrices.Rmd",
+"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/05-document-term-matrices.Rmd",
 "text": "Edit"
 },
 "download": null,

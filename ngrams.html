@@ -5,28 +5,26 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Text Mining with R</title>
+  <title></title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
+  <meta name="description" content="">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="Text Mining with R" />
+  <meta property="og:title" content="" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
-  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
+  
+  
+  
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Text Mining with R" />
+  <meta name="twitter:title" content="" />
   
-  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="twitter:image" content="images/cover.png" />
-
-<meta name="author" content="Julia Silge and David Robinson">
+  
+  
 
 
-<meta name="date" content="2017-03-18">
+
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -114,7 +112,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
@@ -232,7 +229,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
           </h1>
         </div>
 
@@ -412,7 +409,7 @@ bigram_tf_idf</code></pre></div>
 ## 10   Pride &amp; Prejudice    lady catherine   100 0.01380453 1.791759 0.02473439
 ## # ... with 36,207 more rows</code></pre>
 <div class="figure"><span id="fig:bigramtfidf"></span>
-<img src="05-word-combinations_files/figure-html/bigramtfidf-1.png" alt="The 12 bigrams with the highest tf-idf from each Jane Austen novel" width="864" />
+<img src="04-word-combinations_files/figure-html/bigramtfidf-1.png" alt="The 12 bigrams with the highest tf-idf from each Jane Austen novel" width="864" />
 <p class="caption">
 Figure 5.1: The 12 bigrams with the highest tf-idf from each Jane Austen novel
 </p>
@@ -499,7 +496,7 @@ not_words %&gt;%
 <span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Sentiment score * number of occurrences&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:notwordsplot"></span>
-<img src="05-word-combinations_files/figure-html/notwordsplot-1.png" alt="The 20 words followed by 'not' that had the greatest contribution to sentiment scores, in either a positive or negative direction" width="768" />
+<img src="04-word-combinations_files/figure-html/notwordsplot-1.png" alt="The 20 words followed by 'not' that had the greatest contribution to sentiment scores, in either a positive or negative direction" width="768" />
 <p class="caption">
 Figure 5.2: The 20 words followed by ‘not’ that had the greatest contribution to sentiment scores, in either a positive or negative direction
 </p>
@@ -515,7 +512,7 @@ negated_words &lt;-<span class="st"> </span>bigrams_separated %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
 <p>We could then visualize what the most common words to follow each particular negation are (Figure <a href="ngrams.html#fig:negatedwords">5.3</a>). While “not like” and “not help” are still the two most common examples, we can also see pairings such as “no great” and “never loved.” We could combine this with the approaches in Chapter <a href="#sentiments"><strong>??</strong></a> to reverse the AFINN scores of each word that follows a negation. These are just a few examples of how finding consecutive words can give context to text mining methods.</p>
 <div class="figure"><span id="fig:negatedwords"></span>
-<img src="05-word-combinations_files/figure-html/negatedwords-1.png" alt="The most common positive or negative words to follow negations such as 'never', 'no', 'not', and 'without'" width="864" />
+<img src="04-word-combinations_files/figure-html/negatedwords-1.png" alt="The most common positive or negative words to follow negations such as 'never', 'no', 'not', and 'without'" width="864" />
 <p class="caption">
 Figure 5.3: The most common positive or negative words to follow negations such as ‘never’, ‘no’, ‘not’, and ‘without’
 </p>
@@ -578,7 +575,7 @@ bigram_graph</code></pre></div>
 <span class="st">  </span><span class="kw">geom_node_point</span>() +
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)</code></pre></div>
 <div class="figure"><span id="fig:bigramgraph"></span>
-<img src="05-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word" width="960" />
+<img src="04-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word" width="960" />
 <p class="caption">
 Figure 5.4: Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word
 </p>
@@ -602,7 +599,7 @@ a &lt;-<span class="st"> </span>grid::<span class="kw">arrow</span>(<span class=
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:bigramggraphausten2"></span>
-<img src="05-word-combinations_files/figure-html/bigramggraphausten2-1.png" alt="Common bigrams in Pride and Prejudice, with some polishing." width="960" />
+<img src="04-word-combinations_files/figure-html/bigramggraphausten2-1.png" alt="Common bigrams in Pride and Prejudice, with some polishing." width="960" />
 <p class="caption">
 Figure 5.5: Common bigrams in Pride and Prejudice, with some polishing.
 </p>
@@ -657,7 +654,7 @@ kjv_bigrams %&gt;%
          !<span class="kw">str_detect</span>(word2, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">visualize_bigrams</span>()</code></pre></div>
 <div class="figure"><span id="fig:kjvbigrams"></span>
-<img src="05-word-combinations_files/figure-html/kjvbigrams-1.png" alt="Directed graph of common bigrams in the King James Bible, showing those that occurred more than 40 times" width="672" />
+<img src="04-word-combinations_files/figure-html/kjvbigrams-1.png" alt="Directed graph of common bigrams in the King James Bible, showing those that occurred more than 40 times" width="672" />
 <p class="caption">
 Figure 5.6: Directed graph of common bigrams in the King James Bible, showing those that occurred more than 40 times
 </p>
@@ -834,7 +831,7 @@ word_cors</code></pre></div>
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>item1, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
 <div class="figure"><span id="fig:wordcors"></span>
-<img src="05-word-combinations_files/figure-html/wordcors-1.png" alt="Words from Pride and Prejudice that were most correlated with 'elizabeth', 'pounds', 'married', and 'pride'" width="768" />
+<img src="04-word-combinations_files/figure-html/wordcors-1.png" alt="Words from Pride and Prejudice that were most correlated with 'elizabeth', 'pounds', 'married', and 'pride'" width="768" />
 <p class="caption">
 Figure 5.8: Words from Pride and Prejudice that were most correlated with ‘elizabeth’, ‘pounds’, ‘married’, and ‘pride’
 </p>
@@ -851,7 +848,7 @@ word_cors %&gt;%
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:wordcorsnetwork"></span>
-<img src="05-word-combinations_files/figure-html/wordcorsnetwork-1.png" alt="Pairs of words in Pride and Prejudice that show at least a .15 correlation of appearing within the same 10-line section" width="768" />
+<img src="04-word-combinations_files/figure-html/wordcorsnetwork-1.png" alt="Pairs of words in Pride and Prejudice that show at least a .15 correlation of appearing within the same 10-line section" width="768" />
 <p class="caption">
 Figure 5.9: Pairs of words in Pride and Prejudice that show at least a .15 correlation of appearing within the same 10-line section
 </p>
@@ -896,7 +893,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/05-word-combinations.Rmd",
+"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/04-word-combinations.Rmd",
 "text": "Edit"
 },
 "download": null,

@@ -5,35 +5,33 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Text Mining with R</title>
+  <title></title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
+  <meta name="description" content="">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="Text Mining with R" />
+  <meta property="og:title" content="" />
   <meta property="og:type" content="book" />
   
-  <meta property="og:image" content="images/cover.png" />
-  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
+  
+  
+  
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Text Mining with R" />
+  <meta name="twitter:title" content="" />
   
-  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
-  <meta name="twitter:image" content="images/cover.png" />
-
-<meta name="author" content="Julia Silge and David Robinson">
+  
+  
 
 
-<meta name="date" content="2017-03-18">
+
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="index.html">
+
 <link rel="next" href="tidytext.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -114,7 +112,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
@@ -232,7 +229,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
           </h1>
         </div>
 
@@ -240,22 +237,24 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
+<!--bookdown:title:end-->
+<!--bookdown:title:start-->
 <div id="intro" class="section level1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <p>If you work in analytics or data science, like we do, you are familiar with the fact that data is being generated all the time at ever faster rates. (You may even be a little weary of people pontificating about this fact.) Analysts are often trained to handle tabular or rectangular data that is mostly numeric, but much of the data proliferating today is unstructured and text-heavy. Many of us who work in analytical fields are not trained in even simple interpretation of natural language.</p>
-<p>We developed the <a href="https://github.com/juliasilge/tidytext">tidytext</a> <span class="citation">(Silge and Robinson <a href="#ref-R-tidytext">2016</a>)</span> R package because we were familiar with many methods for data wrangling and visualization, but couldn’t easily apply these same methods to text. We found that using tidy data principles can make many text mining tasks easier, more effective, and consistent with tools already in wide use. Treating text as data frames of individual words allows us to manipulate, summarize, and visualize the characteristics of text easily and integrate natural language processing into effective workflows we were already using.</p>
+<p>We developed the <a href="https://github.com/juliasilge/tidytext">tidytext</a> <span class="citation">[@R-tidytext]</span> R package because we were familiar with many methods for data wrangling and visualization, but couldn’t easily apply these same methods to text. We found that using tidy data principles can make many text mining tasks easier, more effective, and consistent with tools already in wide use. Treating text as data frames of individual words allows us to manipulate, summarize, and visualize the characteristics of text easily and integrate natural language processing into effective workflows we were already using.</p>
 <p>This book serves as an introduction of text mining using the tidytext package and other tidy tools in R. The functions provided by the tidytext package are relatively simple; what is important are the possible applications. Thus, this book provides compelling examples of real text mining problems.</p>
 <div id="what-is-tidy-text" class="section level2">
 <h2><span class="header-section-number">1.1</span> What is tidy text?</h2>
-<p>As described by Hadley Wickham <span class="citation">(Wickham <a href="#ref-tidydata">2014</a>)</span>, tidy data has a specific structure:</p>
+<p>As described by Hadley Wickham <span class="citation">[@tidydata]</span>, tidy data has a specific structure:</p>
 <ul>
 <li>Each variable is a column</li>
 <li>Each observation is a row</li>
 <li>Each type of observational unit is a table</li>
 </ul>
 <p>We thus define the tidy text format as being <strong>a table with one-token-per-row.</strong> A token is a meaningful unit of text, such as a word, that we are interested in using for analysis, and tokenization is the process of splitting text into tokens. This one-token-per-row structure is in contrast to the ways text is often stored in current analyses, as strings, in a structured “corpus” object, or in a document-term matrix. For tidy text mining, the <strong>token</strong> that is stored in each row is most often a single word, but can also be an n-gram, sentence, or paragraph. In the tidytext package, we provide functionality to tokenize by commonly used units of text like these and convert to a one-term-per-row format.</p>
-<p>Tidy data sets allow manipulation with a standard set of “tidy” tools, including popular packages such as dplyr <span class="citation">(Wickham and Francois <a href="#ref-R-dplyr">2016</a>)</span>, tidyr <span class="citation">(Wickham <a href="#ref-R-tidyr">2016</a>)</span>, ggplot2 <span class="citation">(Wickham <a href="#ref-R-ggplot2">2009</a>)</span>, and broom <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>. By keeping the input and output in tidy tables, users can transition fluidly between these packages. We’ve found these tidy tools extend naturally to many text analyses and explorations.</p>
-<p>At the same time, the tidytext package doesn’t expect a user to keep text data in a tidy form at all times during an analysis. The package includes functions to <code>tidy()</code> objects (see the broom package [Robinson et al cited above]) from popular text mining R packages such as tm <span class="citation">(Ingo Feinerer and Meyer <a href="#ref-tm">2008</a>)</span> and quanteda <span class="citation">(Benoit and Nulty <a href="#ref-R-quanteda">2016</a>)</span>. This allows, for example, a workflow where importing, filtering, and processing is done using dplyr and other tidy tools, after which the data is converted into a document-term matrix for machine learning applications. The models can then be re-converted into a tidy form for interpretation and visualization with ggplot2.</p>
+<p>Tidy data sets allow manipulation with a standard set of “tidy” tools, including popular packages such as dplyr <span class="citation">[@R-dplyr]</span>, tidyr <span class="citation">[@R-tidyr]</span>, ggplot2 <span class="citation">[@R-ggplot2]</span>, and broom <span class="citation">[@R-broom]</span>. By keeping the input and output in tidy tables, users can transition fluidly between these packages. We’ve found these tidy tools extend naturally to many text analyses and explorations.</p>
+<p>At the same time, the tidytext package doesn’t expect a user to keep text data in a tidy form at all times during an analysis. The package includes functions to <code>tidy()</code> objects (see the broom package [Robinson et al cited above]) from popular text mining R packages such as tm <span class="citation">[@tm]</span> and quanteda <span class="citation">[@R-quanteda]</span>. This allows, for example, a workflow where importing, filtering, and processing is done using dplyr and other tidy tools, after which the data is converted into a document-term matrix for machine learning applications. The models can then be re-converted into a tidy form for interpretation and visualization with ggplot2.</p>
 </div>
 <div id="about-this-book" class="section level2">
 <h2><span class="header-section-number">1.2</span> About this book</h2>
@@ -291,7 +290,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><strong>Clustering, classification, and prediction:</strong> Machine learning on text is a vast topic that could easily fill its own volume. We introduce one method of unsupervised clustering (topic modeling) in Chapter <a href="topicmodeling.html#topicmodeling">7</a> but many more machine learning algorithms can be used in dealing with text.</li>
 <li><strong>Word embedding:</strong> One popular modern approach for text analysis is to map words to vector representations, which can then be used to examine linguistic relationships between words and to classify text. Such representations of words are not tidy in the sense that we consider here, but have found powerful applications in machine learning algorithms.</li>
-<li><strong>More complex tokenization:</strong> The tidytext package trusts the tokenizers package <span class="citation">(Mullen <a href="#ref-R-tokenizers">2016</a>)</span> to perform tokenization, which itself wraps a variety of tokenizers with a consistent interface, but many others exist for specific applications.</li>
+<li><strong>More complex tokenization:</strong> The tidytext package trusts the tokenizers package <span class="citation">[@R-tokenizers]</span> to perform tokenization, which itself wraps a variety of tokenizers with a consistent interface, but many others exist for specific applications.</li>
 <li><strong>Languages other than English:</strong> Some of our users have had success applying tidytext to their text mining needs for languages other than English, but we don’t cover any such examples in this book.</li>
 </ul>
 <p>We feel that the tidy data philosphy is a powerful tool to make handling data easier and more effective, and this is no less true when it comes to handling text. We also believe tidy tools are well suited to extensions beyond the methods and examples we provide here.</p>
@@ -301,38 +300,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>We are so thankful for the contributions, help, and perspective of people who have moved us forward in this project. There are several people and organizations we would like to thank in particular.</p>
 <p>We would like to thank Gabriela de Queiroz for her contributions to the package while we were at the unconference where we began work on the tidytext package, Lincoln Mullen for his work on <a href="https://github.com/ropensci/tokenizers">tokenizers</a>, Kenneth Benoit for his work on the <a href="https://github.com/kbenoit/quanteda">quanteda</a> package, Thomas Pedersen for his work on <a href="https://github.com/thomasp85/ggraph">ggraph</a>, and Hadley Wickham for his work in framing tidy data principles and building tidy tools. We would also like to thank <a href="https://ropensci.org/">rOpenSci</a>, which hosted us at the unconference where we began work, and the <a href="https://open.nasa.gov/explore/datanauts/">NASA Datanauts</a> program, for the opportunities and support they have provided Julia during her time with them.</p>
 <p>We received thoughtful, thorough technical reviews that improved the quality of this book significantly. We would like to thank Mara Averick, Carolyn Clayton, Simon Jackson, Sean Kross, and Lincoln Mullen for their investment of time and energy in these technical reviews.</p>
-<p>This book was written in the open, and several people contributed via pull requests or issues. Special thanks goes to those who contributed via GitHub: <span class="citation">(<span class="citeproc-not-found" data-reference-id="ainilaha"><strong>???</strong></span>)</span>, Brian G. Barkley, Jon Calder, <span class="citation">(<span class="citeproc-not-found" data-reference-id="eijoac"><strong>???</strong></span>)</span>, Marc Ferradou, Jonathan Gilligan, Matthew Henderson, Simon Jackson, <span class="citation">(<span class="citeproc-not-found" data-reference-id="jedgore"><strong>???</strong></span>)</span>, <span class="citation">(<span class="citeproc-not-found" data-reference-id="kanishkamisra"><strong>???</strong></span>)</span>, Josiah Parry, <span class="citation">(<span class="citeproc-not-found" data-reference-id="suyi19890508"><strong>???</strong></span>)</span>, Stephen Turner, and Yihui Xie.</p>
+<p>This book was written in the open, and several people contributed via pull requests or issues. Special thanks goes to those who contributed via GitHub: <span class="citation">@ainilaha</span>, Brian G. Barkley, Jon Calder, <span class="citation">@eijoac</span>, Marc Ferradou, Jonathan Gilligan, Matthew Henderson, Simon Jackson, <span class="citation">@jedgore</span>, <span class="citation">@kanishkamisra</span>, Josiah Parry, <span class="citation">@suyi19890508</span>, Stephen Turner, and Yihui Xie.</p>
 
-</div>
-</div>
-<h3> References</h3>
-<div id="refs" class="references">
-<div id="ref-R-tidytext">
-<p>Silge, Julia, and David Robinson. 2016. “Tidytext: Text Mining and Analysis Using Tidy Data Principles in R.” <em>JOSS</em> 1 (3). The Open Journal. doi:<a href="https://doi.org/10.21105/joss.00037">10.21105/joss.00037</a>.</p>
-</div>
-<div id="ref-tidydata">
-<p>Wickham, Hadley. 2014. “Tidy Data.” <em>Journal of Statistical Software</em> 59 (1): 1–23. doi:<a href="https://doi.org/10.18637/jss.v059.i10">10.18637/jss.v059.i10</a>.</p>
-</div>
-<div id="ref-R-dplyr">
-<p>Wickham, Hadley, and Romain Francois. 2016. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr" class="uri">https://CRAN.R-project.org/package=dplyr</a>.</p>
-</div>
-<div id="ref-R-tidyr">
-<p>Wickham, Hadley. 2016. <em>Tidyr: Easily Tidy Data with `spread()` and `gather()` Functions</em>. <a href="https://CRAN.R-project.org/package=tidyr" class="uri">https://CRAN.R-project.org/package=tidyr</a>.</p>
-</div>
-<div id="ref-R-ggplot2">
-<p>Wickham, Hadley. 2009. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="http://ggplot2.org" class="uri">http://ggplot2.org</a>.</p>
-</div>
-<div id="ref-R-broom">
-<p>Robinson, David, Matthieu Gomez, Boris Demeshev, Dieter Menne, Benjamin Nutter, Luke Johnston, Ben Bolker, Francois Briatte, and Hadley Wickham. 2015. <em>Broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
-</div>
-<div id="ref-tm">
-<p>Ingo Feinerer, Kurt Hornik, and David Meyer. 2008. “Text Mining Infrastructure in R.” <em>Journal of Statistical Software</em> 25 (5): 1–54. <a href="http://www.jstatsoft.org/v25/i05/" class="uri">http://www.jstatsoft.org/v25/i05/</a>.</p>
-</div>
-<div id="ref-R-quanteda">
-<p>Benoit, Kenneth, and Paul Nulty. 2016. <em>Quanteda: Quantitative Analysis of Textual Data</em>. <a href="https://CRAN.R-project.org/package=quanteda" class="uri">https://CRAN.R-project.org/package=quanteda</a>.</p>
-</div>
-<div id="ref-R-tokenizers">
-<p>Mullen, Lincoln. 2016. <em>Tokenizers: A Consistent Interface to Tokenize Natural Language Text</em>. <a href="https://CRAN.R-project.org/package=tokenizers" class="uri">https://CRAN.R-project.org/package=tokenizers</a>.</p>
 </div>
 </div>
             </section>
@@ -340,8 +309,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="tidytext.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
+
+<a href="tidytext.html" class="navigation navigation-next navigation-unique" aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
@@ -369,7 +338,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/01-intro.Rmd",
+"link": "https://github.com/dgrtwo/tidy-text-mining/edit/master/preface.Rmd",
 "text": "Edit"
 },
 "download": null,
