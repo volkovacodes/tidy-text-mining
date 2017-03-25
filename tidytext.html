@@ -5,33 +5,35 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title></title>
+  <title>Text Mining with R</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="">
+  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="" />
+  <meta property="og:title" content="Text Mining with R" />
   <meta property="og:type" content="book" />
   
-  
-  
-  
+  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="" />
+  <meta name="twitter:title" content="Text Mining with R" />
   
-  
-  
+  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="twitter:image" content="images/cover.png" />
+
+<meta name="author" content="Julia Silge and David Robinson">
 
 
-
+<meta name="date" content="2017-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="intro.html">
+<link rel="prev" href="preface.html">
 <link rel="next" href="sentiment.html">
 
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
@@ -112,111 +114,112 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
-<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#outline"><i class="fa fa-check"></i><b>1.3</b> Outline</a></li>
-<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>1.4</b> Topics this book does not cover</a></li>
-<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#acknowledgements"><i class="fa fa-check"></i><b>1.5</b> Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
+<li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="0.1" data-path="preface.html"><a href="preface.html#outline"><i class="fa fa-check"></i><b>0.1</b> Outline</a></li>
+<li class="chapter" data-level="0.2" data-path="preface.html"><a href="preface.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>0.2</b> Topics this book does not cover</a></li>
+<li class="chapter" data-level="0.3" data-path="preface.html"><a href="preface.html#using-code-examples"><i class="fa fa-check"></i><b>0.3</b> Using code examples</a></li>
+<li class="chapter" data-level="0.4" data-path="preface.html"><a href="preface.html#acknowledgements"><i class="fa fa-check"></i><b>0.4</b> Acknowledgements</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>2</b> The tidy text format</a><ul>
-<li class="chapter" data-level="2.1" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>2.1</b> The <code>unnest_tokens</code> function</a></li>
-<li class="chapter" data-level="2.2" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>2.2</b> Tidying the works of Jane Austen</a></li>
-<li class="chapter" data-level="2.3" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>2.3</b> The gutenbergr package</a></li>
-<li class="chapter" data-level="2.4" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>2.4</b> Word frequencies</a></li>
-<li class="chapter" data-level="2.5" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>2.5</b> Conclusion</a></li>
+<li class="chapter" data-level="1" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>1</b> The tidy text format</a><ul>
+<li class="chapter" data-level="1.1" data-path="tidytext.html"><a href="tidytext.html#contrasting-tidy-text-with-other-data-structures"><i class="fa fa-check"></i><b>1.1</b> Contrasting tidy text with other data structures</a></li>
+<li class="chapter" data-level="1.2" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>1.2</b> The <code>unnest_tokens</code> function</a></li>
+<li class="chapter" data-level="1.3" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>1.3</b> Tidying the works of Jane Austen</a></li>
+<li class="chapter" data-level="1.4" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>1.4</b> The gutenbergr package</a></li>
+<li class="chapter" data-level="1.5" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>1.5</b> Word frequencies</a></li>
+<li class="chapter" data-level="1.6" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>1.6</b> Conclusion</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>3</b> Sentiment analysis with tidy data</a><ul>
-<li class="chapter" data-level="3.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>3.1</b> The <code>sentiments</code> dataset</a></li>
-<li class="chapter" data-level="3.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>3.2</b> Sentiment analysis with inner join</a></li>
-<li class="chapter" data-level="3.3" data-path="sentiment.html"><a href="sentiment.html#comparing-the-three-sentiment-dictionaries"><i class="fa fa-check"></i><b>3.3</b> Comparing the three sentiment dictionaries</a></li>
-<li class="chapter" data-level="3.4" data-path="sentiment.html"><a href="sentiment.html#most-positive-negative"><i class="fa fa-check"></i><b>3.4</b> Most common positive and negative words</a></li>
-<li class="chapter" data-level="3.5" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>3.5</b> Wordclouds</a></li>
-<li class="chapter" data-level="3.6" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>3.6</b> Looking at units beyond just words</a></li>
+<li class="chapter" data-level="2" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>2</b> Sentiment analysis with tidy data</a><ul>
+<li class="chapter" data-level="2.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>2.1</b> The <code>sentiments</code> dataset</a></li>
+<li class="chapter" data-level="2.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>2.2</b> Sentiment analysis with inner join</a></li>
+<li class="chapter" data-level="2.3" data-path="sentiment.html"><a href="sentiment.html#comparing-the-three-sentiment-dictionaries"><i class="fa fa-check"></i><b>2.3</b> Comparing the three sentiment dictionaries</a></li>
+<li class="chapter" data-level="2.4" data-path="sentiment.html"><a href="sentiment.html#most-positive-negative"><i class="fa fa-check"></i><b>2.4</b> Most common positive and negative words</a></li>
+<li class="chapter" data-level="2.5" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>2.5</b> Wordclouds</a></li>
+<li class="chapter" data-level="2.6" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>2.6</b> Looking at units beyond just words</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>4</b> Analyzing word and document frequency: tf-idf</a><ul>
-<li class="chapter" data-level="4.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>4.1</b> Term frequency in Jane Austen’s novels</a></li>
-<li class="chapter" data-level="4.2" data-path="tfidf.html"><a href="tfidf.html#zipfs-law"><i class="fa fa-check"></i><b>4.2</b> Zipf’s law</a></li>
-<li class="chapter" data-level="4.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>4.3</b> The <code>bind_tf_idf</code> function</a></li>
-<li class="chapter" data-level="4.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>4.4</b> A corpus of physics texts</a></li>
+<li class="chapter" data-level="3" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>3</b> Analyzing word and document frequency: tf-idf</a><ul>
+<li class="chapter" data-level="3.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>3.1</b> Term frequency in Jane Austen’s novels</a></li>
+<li class="chapter" data-level="3.2" data-path="tfidf.html"><a href="tfidf.html#zipfs-law"><i class="fa fa-check"></i><b>3.2</b> Zipf’s law</a></li>
+<li class="chapter" data-level="3.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>3.3</b> The <code>bind_tf_idf</code> function</a></li>
+<li class="chapter" data-level="3.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>3.4</b> A corpus of physics texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Relationships between words</a><ul>
-<li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
-<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
-<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
-<li class="chapter" data-level="5.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>5.1.4</b> Visualizing a network of bigrams with igraph</a></li>
-<li class="chapter" data-level="5.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>5.1.5</b> Visualizing bigrams in other texts</a></li>
+<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words</a><ul>
+<li class="chapter" data-level="4.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>4.1</b> Tokenizing by n-gram</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>4.1.1</b> Counting and filtering n-grams</a></li>
+<li class="chapter" data-level="4.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>4.1.2</b> Analyzing bigrams</a></li>
+<li class="chapter" data-level="4.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>4.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
+<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with igraph</a></li>
+<li class="chapter" data-level="4.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>4.1.5</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-among-sections"><i class="fa fa-check"></i><b>5.2.1</b> Counting and correlating among sections</a></li>
-<li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.2.2</b> Pairwise correlation</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>6</b> Tidying and casting document-term matrices and corpus objects</a><ul>
-<li class="chapter" data-level="6.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>6.1</b> Tidying a document-term matrix</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>6.1.1</b> Tidying DocumentTermMatrix objects</a></li>
-<li class="chapter" data-level="6.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>6.1.2</b> Tidying dfm objects</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="dtm.html"><a href="dtm.html#cast-dtm"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a matrix</a></li>
-<li class="chapter" data-level="6.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a><ul>
-<li class="chapter" data-level="6.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>6.3.1</b> Example: mining financial articles</a></li>
+<li class="chapter" data-level="4.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>4.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-among-sections"><i class="fa fa-check"></i><b>4.2.1</b> Counting and correlating among sections</a></li>
+<li class="chapter" data-level="4.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>4.2.2</b> Pairwise correlation</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic modeling</a><ul>
-<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>7.1</b> Latent Dirichlet allocation</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>7.1.1</b> Word-topic probabilities</a></li>
-<li class="chapter" data-level="7.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>7.1.2</b> Document-topic probabilities</a></li>
+<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Tidying and casting document-term matrices and corpus objects</a><ul>
+<li class="chapter" data-level="5.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>5.1</b> Tidying a document-term matrix</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>5.1.1</b> Tidying DocumentTermMatrix objects</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>5.1.2</b> Tidying dfm objects</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>7.2.1</b> LDA on chapters</a></li>
-<li class="chapter" data-level="7.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>7.2.2</b> Per-document classification</a></li>
-<li class="chapter" data-level="7.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.2.3</b> By word assignments: <code>augment</code></a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.3</b> Alternative LDA implementations</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
-<li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
-<li class="chapter" data-level="8.2" data-path="twitter.html"><a href="twitter.html#word-frequencies-1"><i class="fa fa-check"></i><b>8.2</b> Word frequencies</a></li>
-<li class="chapter" data-level="8.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>8.3</b> Comparing word usage</a></li>
-<li class="chapter" data-level="8.4" data-path="twitter.html"><a href="twitter.html#changes-in-word-use"><i class="fa fa-check"></i><b>8.4</b> Changes in word use</a></li>
-<li class="chapter" data-level="8.5" data-path="twitter.html"><a href="twitter.html#favorites-and-retweets"><i class="fa fa-check"></i><b>8.5</b> Favorites and retweets</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>9</b> Case study: mining NASA metadata</a><ul>
-<li class="chapter" data-level="9.1" data-path="nasa.html"><a href="nasa.html#how-data-is-organized-at-nasa"><i class="fa fa-check"></i><b>9.1</b> How data is organized at NASA</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>9.1.1</b> Wrangling and tidying the data</a></li>
-<li class="chapter" data-level="9.1.2" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>9.1.2</b> Some initial simple exploration</a></li>
-</ul></li>
-<li class="chapter" data-level="9.2" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>9.2</b> Word co-ocurrences and correlations</a><ul>
-<li class="chapter" data-level="9.2.1" data-path="nasa.html"><a href="nasa.html#networks-of-description-and-title-words"><i class="fa fa-check"></i><b>9.2.1</b> Networks of Description and Title Words</a></li>
-<li class="chapter" data-level="9.2.2" data-path="nasa.html"><a href="nasa.html#networks-of-keywords"><i class="fa fa-check"></i><b>9.2.2</b> Networks of Keywords</a></li>
-</ul></li>
-<li class="chapter" data-level="9.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>9.3</b> Calculating tf-idf for the description fields</a><ul>
-<li class="chapter" data-level="9.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>9.3.1</b> What is tf-idf for the description field words?</a></li>
-<li class="chapter" data-level="9.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>9.3.2</b> Connecting description fields to keywords</a></li>
-</ul></li>
-<li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>9.4</b> Topic modeling</a><ul>
-<li class="chapter" data-level="9.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>9.4.1</b> Casting to a document-term matrix</a></li>
-<li class="chapter" data-level="9.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>9.4.2</b> Ready for topic modeling</a></li>
-<li class="chapter" data-level="9.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>9.4.3</b> Interpreting the topic model</a></li>
-<li class="chapter" data-level="9.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>9.4.4</b> Connecting topic modeling with keywords</a></li>
+<li class="chapter" data-level="5.2" data-path="dtm.html"><a href="dtm.html#cast-dtm"><i class="fa fa-check"></i><b>5.2</b> Casting tidy text data into a matrix</a></li>
+<li class="chapter" data-level="5.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>5.3</b> Tidying corpus objects with metadata</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>5.3.1</b> Example: mining financial articles</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
-<li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>10.1</b> Pre-processing</a><ul>
-<li class="chapter" data-level="10.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>10.1.1</b> Pre-processing text</a></li>
+<li class="chapter" data-level="6" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>6</b> Topic modeling</a><ul>
+<li class="chapter" data-level="6.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>6.1</b> Latent Dirichlet allocation</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>6.1.1</b> Word-topic probabilities</a></li>
+<li class="chapter" data-level="6.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>6.1.2</b> Document-topic probabilities</a></li>
 </ul></li>
-<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>10.2</b> Words in newsgroups</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>10.2.1</b> Finding tf-idf within newsgroups</a></li>
-<li class="chapter" data-level="10.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>10.2.2</b> Topic modeling</a></li>
+<li class="chapter" data-level="6.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>6.2</b> Example: the great library heist</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>6.2.1</b> LDA on chapters</a></li>
+<li class="chapter" data-level="6.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>6.2.2</b> Per-document classification</a></li>
+<li class="chapter" data-level="6.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>6.2.3</b> By word assignments: <code>augment</code></a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a><ul>
-<li class="chapter" data-level="10.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>10.3.1</b> Sentiment analysis by word</a></li>
-<li class="chapter" data-level="10.3.2" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>10.3.2</b> Sentiment analysis by message</a></li>
-<li class="chapter" data-level="10.3.3" data-path="usenet.html"><a href="usenet.html#n-gram-analysis"><i class="fa fa-check"></i><b>10.3.3</b> N-gram analysis</a></li>
+<li class="chapter" data-level="6.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>6.3</b> Alternative LDA implementations</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>7</b> Case study: comparing Twitter archives</a><ul>
+<li class="chapter" data-level="7.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>7.1</b> Getting the data and distribution of tweets</a></li>
+<li class="chapter" data-level="7.2" data-path="twitter.html"><a href="twitter.html#word-frequencies-1"><i class="fa fa-check"></i><b>7.2</b> Word frequencies</a></li>
+<li class="chapter" data-level="7.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>7.3</b> Comparing word usage</a></li>
+<li class="chapter" data-level="7.4" data-path="twitter.html"><a href="twitter.html#changes-in-word-use"><i class="fa fa-check"></i><b>7.4</b> Changes in word use</a></li>
+<li class="chapter" data-level="7.5" data-path="twitter.html"><a href="twitter.html#favorites-and-retweets"><i class="fa fa-check"></i><b>7.5</b> Favorites and retweets</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>8</b> Case study: mining NASA metadata</a><ul>
+<li class="chapter" data-level="8.1" data-path="nasa.html"><a href="nasa.html#how-data-is-organized-at-nasa"><i class="fa fa-check"></i><b>8.1</b> How data is organized at NASA</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>8.1.1</b> Wrangling and tidying the data</a></li>
+<li class="chapter" data-level="8.1.2" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>8.1.2</b> Some initial simple exploration</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>8.2</b> Word co-ocurrences and correlations</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="nasa.html"><a href="nasa.html#networks-of-description-and-title-words"><i class="fa fa-check"></i><b>8.2.1</b> Networks of Description and Title Words</a></li>
+<li class="chapter" data-level="8.2.2" data-path="nasa.html"><a href="nasa.html#networks-of-keywords"><i class="fa fa-check"></i><b>8.2.2</b> Networks of Keywords</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>8.3</b> Calculating tf-idf for the description fields</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>8.3.1</b> What is tf-idf for the description field words?</a></li>
+<li class="chapter" data-level="8.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>8.3.2</b> Connecting description fields to keywords</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>8.4</b> Topic modeling</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>8.4.1</b> Casting to a document-term matrix</a></li>
+<li class="chapter" data-level="8.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>8.4.2</b> Ready for topic modeling</a></li>
+<li class="chapter" data-level="8.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>8.4.3</b> Interpreting the topic model</a></li>
+<li class="chapter" data-level="8.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>8.4.4</b> Connecting topic modeling with keywords</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
+<li class="chapter" data-level="9" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>9</b> Case study: analyzing usenet text</a><ul>
+<li class="chapter" data-level="9.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>9.1</b> Pre-processing</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>9.1.1</b> Pre-processing text</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>9.2</b> Words in newsgroups</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>9.2.1</b> Finding tf-idf within newsgroups</a></li>
+<li class="chapter" data-level="9.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>9.2.2</b> Topic modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>9.3</b> Sentiment analysis</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>9.3.1</b> Sentiment analysis by word</a></li>
+<li class="chapter" data-level="9.3.2" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>9.3.2</b> Sentiment analysis by message</a></li>
+<li class="chapter" data-level="9.3.3" data-path="usenet.html"><a href="usenet.html#n-gram-analysis"><i class="fa fa-check"></i><b>9.3.3</b> N-gram analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -229,7 +232,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
           </h1>
         </div>
 
@@ -238,16 +241,28 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="tidytext" class="section level1">
-<h1><span class="header-section-number">2</span> The tidy text format</h1>
-<p>We define the tidy text format as being a table with <strong>one-token-per-row.</strong> Structuring text data in this way means that it conforms to tidy data principles and can be manipulated with a set of consistent tools. This is worth contrasting with the ways text is often stored in text mining approaches.</p>
+<h1><span class="header-section-number">1</span> The tidy text format</h1>
+<p>Using tidy data principles is a powerful way to make handling data easier and more effective, and this is no less true when it comes to dealing with text. As described by Hadley Wickham <span class="citation">(Wickham <a href="#ref-tidydata">2014</a>)</span>, tidy data has a specific structure:</p>
+<ul>
+<li>Each variable is a column</li>
+<li>Each observation is a row</li>
+<li>Each type of observational unit is a table</li>
+</ul>
+<p>We thus define the tidy text format as being <strong>a table with one-token-per-row.</strong> A token is a meaningful unit of text, such as a word, that we are interested in using for analysis, and tokenization is the process of splitting text into tokens. This one-token-per-row structure is in contrast to the ways text is often stored in current analyses, perhaps as strings or in a document-term matrix. For tidy text mining, the <strong>token</strong> that is stored in each row is most often a single word, but can also be an n-gram, sentence, or paragraph. In the tidytext package, we provide functionality to tokenize by commonly used units of text like these and convert to a one-term-per-row format.</p>
+<p>Tidy data sets allow manipulation with a standard set of “tidy” tools, including popular packages such as dplyr <span class="citation">(Wickham and Francois <a href="#ref-R-dplyr">2016</a>)</span>, tidyr <span class="citation">(Wickham <a href="#ref-R-tidyr">2016</a>)</span>, ggplot2 <span class="citation">(Wickham <a href="#ref-R-ggplot2">2009</a>)</span>, and broom <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>. By keeping the input and output in tidy tables, users can transition fluidly between these packages. We’ve found these tidy tools extend naturally to many text analyses and explorations.</p>
+<p>At the same time, the tidytext package doesn’t expect a user to keep text data in a tidy form at all times during an analysis. The package includes functions to <code>tidy()</code> objects (see the broom package [Robinson et al cited above]) from popular text mining R packages such as tm <span class="citation">(Ingo Feinerer and Meyer <a href="#ref-tm">2008</a>)</span> and quanteda <span class="citation">(Benoit and Nulty <a href="#ref-R-quanteda">2016</a>)</span>. This allows, for example, a workflow where importing, filtering, and processing is done using dplyr and other tidy tools, after which the data is converted into a document-term matrix for machine learning applications. The models can then be re-converted into a tidy form for interpretation and visualization with ggplot2.</p>
+<div id="contrasting-tidy-text-with-other-data-structures" class="section level2">
+<h2><span class="header-section-number">1.1</span> Contrasting tidy text with other data structures</h2>
+<p>As we stated above, we define the tidy text format as being a table with <strong>one-token-per-row.</strong> Structuring text data in this way means that it conforms to tidy data principles and can be manipulated with a set of consistent tools. This is worth contrasting with the ways text is often stored in text mining approaches.</p>
 <ul>
 <li><strong>String</strong>: Text can, of course, be stored as strings, i.e., character vectors, within R, and often text data is first read into memory in this form.</li>
 <li><strong>Corpus</strong>: These types of objects typically contain raw strings annotated with additional metadata and details.</li>
-<li><strong>Document-term matrix</strong>: This is a sparse matrix describing a collection (i.e., a corpus) of documents with one row for each document and one column for each term. The value in the matrix is typically word count or tf-idf (see Chapter <a href="tfidf.html#tfidf">4</a>).</li>
+<li><strong>Document-term matrix</strong>: This is a sparse matrix describing a collection (i.e., a corpus) of documents with one row for each document and one column for each term. The value in the matrix is typically word count or tf-idf (see Chapter <a href="tfidf.html#tfidf">3</a>).</li>
 </ul>
-<p>Let’s hold off on exploring corpus and document-term matrix objects until Chapter <a href="dtm.html#dtm">6</a>, and get down to the basics of converting text to a tidy format.</p>
+<p>Let’s hold off on exploring corpus and document-term matrix objects until Chapter <a href="dtm.html#dtm">5</a>, and get down to the basics of converting text to a tidy format.</p>
+</div>
 <div id="the-unnest_tokens-function" class="section level2">
-<h2><span class="header-section-number">2.1</span> The <code>unnest_tokens</code> function</h2>
+<h2><span class="header-section-number">1.2</span> The <code>unnest_tokens</code> function</h2>
 <p>Emily Dickinson wrote some lovely text in her time.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">text &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Because I could not stop for Death -&quot;</span>,
           <span class="st">&quot;He kindly stopped for me -&quot;</span>,
@@ -300,8 +315,8 @@ text_df %&gt;%
 <p>Having the text data in this format lets us manipulate, process, and visualize the text using the standard set of tidy tools, namely dplyr, tidyr, ggplot2, and broom.</p>
 </div>
 <div id="tidying-the-works-of-jane-austen" class="section level2">
-<h2><span class="header-section-number">2.2</span> Tidying the works of Jane Austen</h2>
-<p>Let’s use the text of Jane Austen’s 6 completed, published novels from the <a href="https://cran.r-project.org/package=janeaustenr">janeaustenr</a> package <span class="citation">[@R-janeaustenr]</span>, and transform them into a tidy format. The janeaustenr package provides these texts in a one-row-per-line format, where a line is this context is analogous to a literal printed line in a physical book. Let’s start with that, and also use <code>mutate()</code> to annotate a <code>linenumber</code> quantity to keep track of lines in the original format and a <code>chapter</code> (using a regex) to find where all the chapters are.</p>
+<h2><span class="header-section-number">1.3</span> Tidying the works of Jane Austen</h2>
+<p>Let’s use the text of Jane Austen’s 6 completed, published novels from the <a href="https://cran.r-project.org/package=janeaustenr">janeaustenr</a> package <span class="citation">(Silge <a href="#ref-R-janeaustenr">2016</a>)</span>, and transform them into a tidy format. The janeaustenr package provides these texts in a one-row-per-line format, where a line is this context is analogous to a literal printed line in a physical book. Let’s start with that, and also use <code>mutate()</code> to annotate a <code>linenumber</code> quantity to keep track of lines in the original format and a <code>chapter</code> (using a regex) to find where all the chapters are.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(janeaustenr)
 <span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(stringr)
@@ -372,7 +387,7 @@ tidy_books &lt;-<span class="st"> </span>tidy_books %&gt;%
 ## 9  sister   727
 ## 10  house   699
 ## # ... with 13,904 more rows</code></pre>
-<p>Because we’ve been using tidy tools, our word counts are stored in a tidy data frame. This allows us to pipe this directly to the ggplot2 package, for example to create a visualization of the most common words (Figure <a href="tidytext.html#fig:plotcount">2.1</a>).</p>
+<p>Because we’ve been using tidy tools, our word counts are stored in a tidy data frame. This allows us to pipe this directly to the ggplot2 package, for example to create a visualization of the most common words (Figure <a href="tidytext.html#fig:plotcount">1.1</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 tidy_books %&gt;%
@@ -386,17 +401,17 @@ tidy_books %&gt;%
 <div class="figure"><span id="fig:plotcount"></span>
 <img src="01-tidy-text_files/figure-html/plotcount-1.png" alt="The most common words in Jane Austen's novels" width="576" />
 <p class="caption">
-Figure 2.1: The most common words in Jane Austen’s novels
+Figure 1.1: The most common words in Jane Austen’s novels
 </p>
 </div>
-<p>Note that the <code>austen_books()</code> function started us with exactly the text we wanted to analyze, but in other cases we may need to perform cleaning of text data, such as removing copyright headers or formatting. You’ll see examples of this kind of pre-processing in the case study chapters, particularly Chapter <a href="usenet.html#pre-processing-text">10.1.1</a>.</p>
+<p>Note that the <code>austen_books()</code> function started us with exactly the text we wanted to analyze, but in other cases we may need to perform cleaning of text data, such as removing copyright headers or formatting. You’ll see examples of this kind of pre-processing in the case study chapters, particularly Chapter <a href="usenet.html#pre-processing-text">9.1.1</a>.</p>
 </div>
 <div id="the-gutenbergr-package" class="section level2">
-<h2><span class="header-section-number">2.3</span> The gutenbergr package</h2>
-<p>Now that we’ve used the janeaustenr package to explore tidying text, let’s introduce the <a href="https://github.com/ropenscilabs/gutenbergr">gutenbergr</a> package <span class="citation">[@R-gutenbergr]</span>. The gutenbergr package provides access to the public domain works from the <a href="https://www.gutenberg.org/">Project Gutenberg</a> collection. The package includes tools both for downloading books (stripping out the unhelpful header/footer information), and a complete dataset of Project Gutenberg metadata that can be used to find works of interest. In this book, we will mostly use the function <code>gutenberg_download()</code> that downloads one or more works from Project Gutenberg by ID, but you can also use other functions to explore metadata, pair Gutenberg ID with title, author, language, etc., or gather information about authors. To learn more about gutenbergr, check out the <a href="https://ropensci.org/tutorials/gutenbergr_tutorial.html">package’s tutorial at rOpenSci</a>, where it is one of rOpenSci’s packages for data access.</p>
+<h2><span class="header-section-number">1.4</span> The gutenbergr package</h2>
+<p>Now that we’ve used the janeaustenr package to explore tidying text, let’s introduce the <a href="https://github.com/ropenscilabs/gutenbergr">gutenbergr</a> package <span class="citation">(Robinson <a href="#ref-R-gutenbergr">2016</a>)</span>. The gutenbergr package provides access to the public domain works from the <a href="https://www.gutenberg.org/">Project Gutenberg</a> collection. The package includes tools both for downloading books (stripping out the unhelpful header/footer information), and a complete dataset of Project Gutenberg metadata that can be used to find works of interest. In this book, we will mostly use the function <code>gutenberg_download()</code> that downloads one or more works from Project Gutenberg by ID, but you can also use other functions to explore metadata, pair Gutenberg ID with title, author, language, etc., or gather information about authors. To learn more about gutenbergr, check out the <a href="https://ropensci.org/tutorials/gutenbergr_tutorial.html">package’s tutorial at rOpenSci</a>, where it is one of rOpenSci’s packages for data access.</p>
 </div>
 <div id="word-frequencies" class="section level2">
-<h2><span class="header-section-number">2.4</span> Word frequencies</h2>
+<h2><span class="header-section-number">1.5</span> Word frequencies</h2>
 <p>A common task in text mining is to look at word frequencies, just like we have done above for Jane Austen’s novels, and to compare frequencies across different texts. We can do this intuitively and smoothly using tidy data principles. We already have Jane Austen’s works; let’s get two more sets of texts to compare to. First, let’s look at some science fiction and fantasy novels by H.G. Wells, who lived in the late 19th and early 20th centuries. Let’s get <a href="https://www.gutenberg.org/ebooks/35"><em>The Time Machine</em></a>, <a href="https://www.gutenberg.org/ebooks/36"><em>The War of the Worlds</em></a>, <a href="https://www.gutenberg.org/ebooks/5230"><em>The Invisible Man</em></a>, and <a href="https://www.gutenberg.org/ebooks/159"><em>The Island of Doctor Moreau</em></a>. We can access these works using <code>gutenberg_download()</code> and the Project Gutenberg ID numbers for each novel.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gutenbergr)
 
@@ -457,7 +472,7 @@ frequency &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(<span 
 <span class="st">  </span><span class="kw">spread</span>(author, proportion) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">gather</span>(author, proportion, <span class="st">`</span><span class="dt">Brontë Sisters</span><span class="st">`</span>:<span class="st">`</span><span class="dt">H.G. Wells</span><span class="st">`</span>)</code></pre></div>
 <p>We use <code>str_extract()</code> here because the UTF-8 encoded texts from Project Gutenberg have some examples of words with underscores around them to indicate emphasis (like italics). The tokenizer treated these as words, but we don’t want to count “_any_” separately from “any” as we saw in our initial data exploration before choosing to use <code>str_extract()</code>.</p>
-<p>Now let’s plot (Figure <a href="tidytext.html#fig:plotcompare">2.2</a>).</p>
+<p>Now let’s plot (Figure <a href="tidytext.html#fig:plotcompare">1.2</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
 
 <span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(<span class="dt">x =</span> proportion, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Jane Austen</span><span class="st">`</span>, <span class="dt">color =</span> <span class="kw">abs</span>(<span class="st">`</span><span class="dt">Jane Austen</span><span class="st">`</span> -<span class="st"> </span>proportion))) +
@@ -473,12 +488,12 @@ frequency &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(<span 
 <div class="figure"><span id="fig:plotcompare"></span>
 <img src="01-tidy-text_files/figure-html/plotcompare-1.png" alt="Comparing the word frequencies of Jane Austen, the Brontë sisters, and H.G. Wells" width="960" />
 <p class="caption">
-Figure 2.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, and H.G. Wells
+Figure 1.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, and H.G. Wells
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  <span class="co"># expect a warning about rows with missing values being removed</span></code></pre></div>
 <p>Words that are close to the line in these plots have similar frequencies in both sets of texts, for example, in both Austen and Brontë texts (“miss”, “time”, “day” at the upper frequency end) or in both Austen and Wells texts (“time”, “day”, “brother” at the high frequency end). Words that are far from the line are words that are found more in one set of texts than another. For example, in the Austen-Brontë panel, words like “elizabeth”, “emma”, and “fanny” (all proper nouns) are found in Austen’s texts but not much in the Brontë texts, while words like “arthur” and “dog” are found in the Brontë texts but not the Austen texts. In comparing H.G. Wells with Jane Austen, Wells uses words like “beast”, “guns”, “feet”, and “black” that Austen does not, while Austen uses words like “family”, “friend”, “letter”, and “dear” that Wells does not.</p>
-<p>Overall, notice in Figure <a href="tidytext.html#fig:plotcompare">2.2</a> that the words in the Austen-Brontë panel are closer to the zero-slope line than in the Austen-Wells panel. Also notice that the words extend to lower frequencies in the Austen-Brontë panel; there is empty space in the Austen-Wells panel at low frequency. These characteristics indicate that Austen and the Brontë sisters use more similar words than Austen and H.G. Wells. Also, we see that not all the words are found in all three sets of texts and there are fewer data points in the panel for Austen and H.G. Wells.</p>
+<p>Overall, notice in Figure <a href="tidytext.html#fig:plotcompare">1.2</a> that the words in the Austen-Brontë panel are closer to the zero-slope line than in the Austen-Wells panel. Also notice that the words extend to lower frequencies in the Austen-Brontë panel; there is empty space in the Austen-Wells panel at low frequency. These characteristics indicate that Austen and the Brontë sisters use more similar words than Austen and H.G. Wells. Also, we see that not all the words are found in all three sets of texts and there are fewer data points in the panel for Austen and H.G. Wells.</p>
 <p>Let’s quantify how similar and different these sets of word frequencies are using a correlation test. How correlated are the word frequencies between Austen and the Brontë sisters, and between Austen and Wells?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor.test</span>(<span class="dt">data =</span> frequency[frequency$author ==<span class="st"> &quot;Brontë Sisters&quot;</span>,],
          ~<span class="st"> </span>proportion +<span class="st"> `</span><span class="dt">Jane Austen</span><span class="st">`</span>)</code></pre></div>
@@ -509,9 +524,39 @@ Figure 2.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, 
 <p>Just as we saw in the plots, the word frequencies are more correlated between the Austen and Brontë novels than between Austen and H.G. Wells.</p>
 </div>
 <div id="conclusion" class="section level2">
-<h2><span class="header-section-number">2.5</span> Conclusion</h2>
+<h2><span class="header-section-number">1.6</span> Conclusion</h2>
 <p>In this chapter, we explored what we mean by tidy data when it comes to text, and how tidy data principles can be applied to natural language processing. When text is organized in a format with one token per row, tasks like removing stop words or calculating word frequencies are natural applications of familiar operations within the tidy tool ecosystem. The one-token-per-row framework can be extended from single words to n-grams and other meaningful units of text, as well as to many more analysis priorities.</p>
 
+</div>
+</div>
+<h3> References</h3>
+<div id="refs" class="references">
+<div id="ref-tidydata">
+<p>Wickham, Hadley. 2014. “Tidy Data.” <em>Journal of Statistical Software</em> 59 (1): 1–23. doi:<a href="https://doi.org/10.18637/jss.v059.i10">10.18637/jss.v059.i10</a>.</p>
+</div>
+<div id="ref-R-dplyr">
+<p>Wickham, Hadley, and Romain Francois. 2016. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr" class="uri">https://CRAN.R-project.org/package=dplyr</a>.</p>
+</div>
+<div id="ref-R-tidyr">
+<p>Wickham, Hadley. 2016. <em>Tidyr: Easily Tidy Data with `spread()` and `gather()` Functions</em>. <a href="https://CRAN.R-project.org/package=tidyr" class="uri">https://CRAN.R-project.org/package=tidyr</a>.</p>
+</div>
+<div id="ref-R-ggplot2">
+<p>Wickham, Hadley. 2009. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="http://ggplot2.org" class="uri">http://ggplot2.org</a>.</p>
+</div>
+<div id="ref-R-broom">
+<p>Robinson, David, Matthieu Gomez, Boris Demeshev, Dieter Menne, Benjamin Nutter, Luke Johnston, Ben Bolker, Francois Briatte, and Hadley Wickham. 2015. <em>Broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
+</div>
+<div id="ref-tm">
+<p>Ingo Feinerer, Kurt Hornik, and David Meyer. 2008. “Text Mining Infrastructure in R.” <em>Journal of Statistical Software</em> 25 (5): 1–54. <a href="http://www.jstatsoft.org/v25/i05/" class="uri">http://www.jstatsoft.org/v25/i05/</a>.</p>
+</div>
+<div id="ref-R-quanteda">
+<p>Benoit, Kenneth, and Paul Nulty. 2016. <em>Quanteda: Quantitative Analysis of Textual Data</em>. <a href="https://CRAN.R-project.org/package=quanteda" class="uri">https://CRAN.R-project.org/package=quanteda</a>.</p>
+</div>
+<div id="ref-R-janeaustenr">
+<p>Silge, Julia. 2016. <em>Janeaustenr: Jane Austen’s Complete Novels</em>. <a href="https://CRAN.R-project.org/package=janeaustenr" class="uri">https://CRAN.R-project.org/package=janeaustenr</a>.</p>
+</div>
+<div id="ref-R-gutenbergr">
+<p>Robinson, David. 2016. <em>Gutenbergr: Download and Process Public Domain Works from Project Gutenberg</em>. <a href="https://cran.rstudio.com/package=gutenbergr" class="uri">https://cran.rstudio.com/package=gutenbergr</a>.</p>
 </div>
 </div>
             </section>
@@ -519,7 +564,7 @@ Figure 2.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, 
           </div>
         </div>
       </div>
-<a href="intro.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="preface.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 <a href="sentiment.html" class="navigation navigation-next " aria-label="Next page""><i class="fa fa-angle-right"></i></a>
 
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

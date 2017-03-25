@@ -5,26 +5,28 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title></title>
+  <title>Text Mining with R</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="">
+  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="" />
+  <meta property="og:title" content="Text Mining with R" />
   <meta property="og:type" content="book" />
   
-  
-  
-  
+  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="" />
+  <meta name="twitter:title" content="Text Mining with R" />
   
-  
-  
+  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="twitter:image" content="images/cover.png" />
+
+<meta name="author" content="Julia Silge and David Robinson">
 
 
-
+<meta name="date" content="2017-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -112,111 +114,112 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
-<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#outline"><i class="fa fa-check"></i><b>1.3</b> Outline</a></li>
-<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>1.4</b> Topics this book does not cover</a></li>
-<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#acknowledgements"><i class="fa fa-check"></i><b>1.5</b> Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
+<li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="0.1" data-path="preface.html"><a href="preface.html#outline"><i class="fa fa-check"></i><b>0.1</b> Outline</a></li>
+<li class="chapter" data-level="0.2" data-path="preface.html"><a href="preface.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>0.2</b> Topics this book does not cover</a></li>
+<li class="chapter" data-level="0.3" data-path="preface.html"><a href="preface.html#using-code-examples"><i class="fa fa-check"></i><b>0.3</b> Using code examples</a></li>
+<li class="chapter" data-level="0.4" data-path="preface.html"><a href="preface.html#acknowledgements"><i class="fa fa-check"></i><b>0.4</b> Acknowledgements</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>2</b> The tidy text format</a><ul>
-<li class="chapter" data-level="2.1" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>2.1</b> The <code>unnest_tokens</code> function</a></li>
-<li class="chapter" data-level="2.2" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>2.2</b> Tidying the works of Jane Austen</a></li>
-<li class="chapter" data-level="2.3" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>2.3</b> The gutenbergr package</a></li>
-<li class="chapter" data-level="2.4" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>2.4</b> Word frequencies</a></li>
-<li class="chapter" data-level="2.5" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>2.5</b> Conclusion</a></li>
+<li class="chapter" data-level="1" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>1</b> The tidy text format</a><ul>
+<li class="chapter" data-level="1.1" data-path="tidytext.html"><a href="tidytext.html#contrasting-tidy-text-with-other-data-structures"><i class="fa fa-check"></i><b>1.1</b> Contrasting tidy text with other data structures</a></li>
+<li class="chapter" data-level="1.2" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>1.2</b> The <code>unnest_tokens</code> function</a></li>
+<li class="chapter" data-level="1.3" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>1.3</b> Tidying the works of Jane Austen</a></li>
+<li class="chapter" data-level="1.4" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>1.4</b> The gutenbergr package</a></li>
+<li class="chapter" data-level="1.5" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>1.5</b> Word frequencies</a></li>
+<li class="chapter" data-level="1.6" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>1.6</b> Conclusion</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>3</b> Sentiment analysis with tidy data</a><ul>
-<li class="chapter" data-level="3.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>3.1</b> The <code>sentiments</code> dataset</a></li>
-<li class="chapter" data-level="3.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>3.2</b> Sentiment analysis with inner join</a></li>
-<li class="chapter" data-level="3.3" data-path="sentiment.html"><a href="sentiment.html#comparing-the-three-sentiment-dictionaries"><i class="fa fa-check"></i><b>3.3</b> Comparing the three sentiment dictionaries</a></li>
-<li class="chapter" data-level="3.4" data-path="sentiment.html"><a href="sentiment.html#most-positive-negative"><i class="fa fa-check"></i><b>3.4</b> Most common positive and negative words</a></li>
-<li class="chapter" data-level="3.5" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>3.5</b> Wordclouds</a></li>
-<li class="chapter" data-level="3.6" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>3.6</b> Looking at units beyond just words</a></li>
+<li class="chapter" data-level="2" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>2</b> Sentiment analysis with tidy data</a><ul>
+<li class="chapter" data-level="2.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>2.1</b> The <code>sentiments</code> dataset</a></li>
+<li class="chapter" data-level="2.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>2.2</b> Sentiment analysis with inner join</a></li>
+<li class="chapter" data-level="2.3" data-path="sentiment.html"><a href="sentiment.html#comparing-the-three-sentiment-dictionaries"><i class="fa fa-check"></i><b>2.3</b> Comparing the three sentiment dictionaries</a></li>
+<li class="chapter" data-level="2.4" data-path="sentiment.html"><a href="sentiment.html#most-positive-negative"><i class="fa fa-check"></i><b>2.4</b> Most common positive and negative words</a></li>
+<li class="chapter" data-level="2.5" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>2.5</b> Wordclouds</a></li>
+<li class="chapter" data-level="2.6" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>2.6</b> Looking at units beyond just words</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>4</b> Analyzing word and document frequency: tf-idf</a><ul>
-<li class="chapter" data-level="4.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>4.1</b> Term frequency in Jane Austen’s novels</a></li>
-<li class="chapter" data-level="4.2" data-path="tfidf.html"><a href="tfidf.html#zipfs-law"><i class="fa fa-check"></i><b>4.2</b> Zipf’s law</a></li>
-<li class="chapter" data-level="4.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>4.3</b> The <code>bind_tf_idf</code> function</a></li>
-<li class="chapter" data-level="4.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>4.4</b> A corpus of physics texts</a></li>
+<li class="chapter" data-level="3" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>3</b> Analyzing word and document frequency: tf-idf</a><ul>
+<li class="chapter" data-level="3.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>3.1</b> Term frequency in Jane Austen’s novels</a></li>
+<li class="chapter" data-level="3.2" data-path="tfidf.html"><a href="tfidf.html#zipfs-law"><i class="fa fa-check"></i><b>3.2</b> Zipf’s law</a></li>
+<li class="chapter" data-level="3.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>3.3</b> The <code>bind_tf_idf</code> function</a></li>
+<li class="chapter" data-level="3.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>3.4</b> A corpus of physics texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Relationships between words</a><ul>
-<li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
-<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
-<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
-<li class="chapter" data-level="5.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>5.1.4</b> Visualizing a network of bigrams with igraph</a></li>
-<li class="chapter" data-level="5.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>5.1.5</b> Visualizing bigrams in other texts</a></li>
+<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words</a><ul>
+<li class="chapter" data-level="4.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>4.1</b> Tokenizing by n-gram</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>4.1.1</b> Counting and filtering n-grams</a></li>
+<li class="chapter" data-level="4.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>4.1.2</b> Analyzing bigrams</a></li>
+<li class="chapter" data-level="4.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>4.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
+<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with igraph</a></li>
+<li class="chapter" data-level="4.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>4.1.5</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-among-sections"><i class="fa fa-check"></i><b>5.2.1</b> Counting and correlating among sections</a></li>
-<li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.2.2</b> Pairwise correlation</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>6</b> Tidying and casting document-term matrices and corpus objects</a><ul>
-<li class="chapter" data-level="6.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>6.1</b> Tidying a document-term matrix</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>6.1.1</b> Tidying DocumentTermMatrix objects</a></li>
-<li class="chapter" data-level="6.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>6.1.2</b> Tidying dfm objects</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="dtm.html"><a href="dtm.html#cast-dtm"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a matrix</a></li>
-<li class="chapter" data-level="6.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a><ul>
-<li class="chapter" data-level="6.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>6.3.1</b> Example: mining financial articles</a></li>
+<li class="chapter" data-level="4.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>4.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-among-sections"><i class="fa fa-check"></i><b>4.2.1</b> Counting and correlating among sections</a></li>
+<li class="chapter" data-level="4.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>4.2.2</b> Pairwise correlation</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic modeling</a><ul>
-<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>7.1</b> Latent Dirichlet allocation</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>7.1.1</b> Word-topic probabilities</a></li>
-<li class="chapter" data-level="7.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>7.1.2</b> Document-topic probabilities</a></li>
+<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Tidying and casting document-term matrices and corpus objects</a><ul>
+<li class="chapter" data-level="5.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>5.1</b> Tidying a document-term matrix</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>5.1.1</b> Tidying DocumentTermMatrix objects</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>5.1.2</b> Tidying dfm objects</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>7.2.1</b> LDA on chapters</a></li>
-<li class="chapter" data-level="7.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>7.2.2</b> Per-document classification</a></li>
-<li class="chapter" data-level="7.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.2.3</b> By word assignments: <code>augment</code></a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.3</b> Alternative LDA implementations</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
-<li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
-<li class="chapter" data-level="8.2" data-path="twitter.html"><a href="twitter.html#word-frequencies-1"><i class="fa fa-check"></i><b>8.2</b> Word frequencies</a></li>
-<li class="chapter" data-level="8.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>8.3</b> Comparing word usage</a></li>
-<li class="chapter" data-level="8.4" data-path="twitter.html"><a href="twitter.html#changes-in-word-use"><i class="fa fa-check"></i><b>8.4</b> Changes in word use</a></li>
-<li class="chapter" data-level="8.5" data-path="twitter.html"><a href="twitter.html#favorites-and-retweets"><i class="fa fa-check"></i><b>8.5</b> Favorites and retweets</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>9</b> Case study: mining NASA metadata</a><ul>
-<li class="chapter" data-level="9.1" data-path="nasa.html"><a href="nasa.html#how-data-is-organized-at-nasa"><i class="fa fa-check"></i><b>9.1</b> How data is organized at NASA</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>9.1.1</b> Wrangling and tidying the data</a></li>
-<li class="chapter" data-level="9.1.2" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>9.1.2</b> Some initial simple exploration</a></li>
-</ul></li>
-<li class="chapter" data-level="9.2" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>9.2</b> Word co-ocurrences and correlations</a><ul>
-<li class="chapter" data-level="9.2.1" data-path="nasa.html"><a href="nasa.html#networks-of-description-and-title-words"><i class="fa fa-check"></i><b>9.2.1</b> Networks of Description and Title Words</a></li>
-<li class="chapter" data-level="9.2.2" data-path="nasa.html"><a href="nasa.html#networks-of-keywords"><i class="fa fa-check"></i><b>9.2.2</b> Networks of Keywords</a></li>
-</ul></li>
-<li class="chapter" data-level="9.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>9.3</b> Calculating tf-idf for the description fields</a><ul>
-<li class="chapter" data-level="9.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>9.3.1</b> What is tf-idf for the description field words?</a></li>
-<li class="chapter" data-level="9.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>9.3.2</b> Connecting description fields to keywords</a></li>
-</ul></li>
-<li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>9.4</b> Topic modeling</a><ul>
-<li class="chapter" data-level="9.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>9.4.1</b> Casting to a document-term matrix</a></li>
-<li class="chapter" data-level="9.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>9.4.2</b> Ready for topic modeling</a></li>
-<li class="chapter" data-level="9.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>9.4.3</b> Interpreting the topic model</a></li>
-<li class="chapter" data-level="9.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>9.4.4</b> Connecting topic modeling with keywords</a></li>
+<li class="chapter" data-level="5.2" data-path="dtm.html"><a href="dtm.html#cast-dtm"><i class="fa fa-check"></i><b>5.2</b> Casting tidy text data into a matrix</a></li>
+<li class="chapter" data-level="5.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>5.3</b> Tidying corpus objects with metadata</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>5.3.1</b> Example: mining financial articles</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
-<li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>10.1</b> Pre-processing</a><ul>
-<li class="chapter" data-level="10.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>10.1.1</b> Pre-processing text</a></li>
+<li class="chapter" data-level="6" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>6</b> Topic modeling</a><ul>
+<li class="chapter" data-level="6.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>6.1</b> Latent Dirichlet allocation</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>6.1.1</b> Word-topic probabilities</a></li>
+<li class="chapter" data-level="6.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>6.1.2</b> Document-topic probabilities</a></li>
 </ul></li>
-<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>10.2</b> Words in newsgroups</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>10.2.1</b> Finding tf-idf within newsgroups</a></li>
-<li class="chapter" data-level="10.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>10.2.2</b> Topic modeling</a></li>
+<li class="chapter" data-level="6.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>6.2</b> Example: the great library heist</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>6.2.1</b> LDA on chapters</a></li>
+<li class="chapter" data-level="6.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>6.2.2</b> Per-document classification</a></li>
+<li class="chapter" data-level="6.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>6.2.3</b> By word assignments: <code>augment</code></a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a><ul>
-<li class="chapter" data-level="10.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>10.3.1</b> Sentiment analysis by word</a></li>
-<li class="chapter" data-level="10.3.2" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>10.3.2</b> Sentiment analysis by message</a></li>
-<li class="chapter" data-level="10.3.3" data-path="usenet.html"><a href="usenet.html#n-gram-analysis"><i class="fa fa-check"></i><b>10.3.3</b> N-gram analysis</a></li>
+<li class="chapter" data-level="6.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>6.3</b> Alternative LDA implementations</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>7</b> Case study: comparing Twitter archives</a><ul>
+<li class="chapter" data-level="7.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>7.1</b> Getting the data and distribution of tweets</a></li>
+<li class="chapter" data-level="7.2" data-path="twitter.html"><a href="twitter.html#word-frequencies-1"><i class="fa fa-check"></i><b>7.2</b> Word frequencies</a></li>
+<li class="chapter" data-level="7.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>7.3</b> Comparing word usage</a></li>
+<li class="chapter" data-level="7.4" data-path="twitter.html"><a href="twitter.html#changes-in-word-use"><i class="fa fa-check"></i><b>7.4</b> Changes in word use</a></li>
+<li class="chapter" data-level="7.5" data-path="twitter.html"><a href="twitter.html#favorites-and-retweets"><i class="fa fa-check"></i><b>7.5</b> Favorites and retweets</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>8</b> Case study: mining NASA metadata</a><ul>
+<li class="chapter" data-level="8.1" data-path="nasa.html"><a href="nasa.html#how-data-is-organized-at-nasa"><i class="fa fa-check"></i><b>8.1</b> How data is organized at NASA</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>8.1.1</b> Wrangling and tidying the data</a></li>
+<li class="chapter" data-level="8.1.2" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>8.1.2</b> Some initial simple exploration</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>8.2</b> Word co-ocurrences and correlations</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="nasa.html"><a href="nasa.html#networks-of-description-and-title-words"><i class="fa fa-check"></i><b>8.2.1</b> Networks of Description and Title Words</a></li>
+<li class="chapter" data-level="8.2.2" data-path="nasa.html"><a href="nasa.html#networks-of-keywords"><i class="fa fa-check"></i><b>8.2.2</b> Networks of Keywords</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>8.3</b> Calculating tf-idf for the description fields</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>8.3.1</b> What is tf-idf for the description field words?</a></li>
+<li class="chapter" data-level="8.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>8.3.2</b> Connecting description fields to keywords</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>8.4</b> Topic modeling</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>8.4.1</b> Casting to a document-term matrix</a></li>
+<li class="chapter" data-level="8.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>8.4.2</b> Ready for topic modeling</a></li>
+<li class="chapter" data-level="8.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>8.4.3</b> Interpreting the topic model</a></li>
+<li class="chapter" data-level="8.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>8.4.4</b> Connecting topic modeling with keywords</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
+<li class="chapter" data-level="9" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>9</b> Case study: analyzing usenet text</a><ul>
+<li class="chapter" data-level="9.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>9.1</b> Pre-processing</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>9.1.1</b> Pre-processing text</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>9.2</b> Words in newsgroups</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>9.2.1</b> Finding tf-idf within newsgroups</a></li>
+<li class="chapter" data-level="9.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>9.2.2</b> Topic modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>9.3</b> Sentiment analysis</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>9.3.1</b> Sentiment analysis by word</a></li>
+<li class="chapter" data-level="9.3.2" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>9.3.2</b> Sentiment analysis by message</a></li>
+<li class="chapter" data-level="9.3.3" data-path="usenet.html"><a href="usenet.html#n-gram-analysis"><i class="fa fa-check"></i><b>9.3.3</b> N-gram analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -229,7 +232,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
           </h1>
         </div>
 
@@ -238,10 +241,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="usenet" class="section level1">
-<h1><span class="header-section-number">10</span> Case study: analyzing usenet text</h1>
+<h1><span class="header-section-number">9</span> Case study: analyzing usenet text</h1>
 <p>In our final chapter, we’ll use what we’ve learned in this book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this dataset include newsgroups for topics like politics, religion, cars, sports, and cryptography, and offer a rich set of text written by many users. This data set is publicly available at <a href="http://qwone.com/~jason/20Newsgroups/" class="uri">http://qwone.com/~jason/20Newsgroups/</a> (the <code>20news-bydate.tar.gz</code> file) and has become popular for exercises in text analysis and machine learning.</p>
 <div id="pre-processing" class="section level2">
-<h2><span class="header-section-number">10.1</span> Pre-processing</h2>
+<h2><span class="header-section-number">9.1</span> Pre-processing</h2>
 <p>We’ll start by reading in all the messages from the <code>20news-bydate</code> folder, which are organized in sub-folders with one file for each message. We can read in files like these with a combination of <code>read_lines()</code>, <code>map()</code> and <code>unnest()</code>. Note that this step takes several minutes to read all the documents.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidyr)
@@ -276,7 +279,7 @@ raw_text &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span 
 ## 9  alt.atheism 49960                                                         Lines: 290
 ## 10 alt.atheism 49960                                                                   
 ## # ... with 511,645 more rows</code></pre>
-<p>Notice the <code>newsgroup</code> column, which describes which of the 20 newsgroups each message comes from, and <code>id</code> column, which identifies a unique message within that newsgroup. What newsgroups are included, and how many messages were posted in each (Figure <a href="usenet.html#fig:messagecounts">10.1</a>)?</p>
+<p>Notice the <code>newsgroup</code> column, which describes which of the 20 newsgroups each message comes from, and <code>id</code> column, which identifies a unique message within that newsgroup. What newsgroups are included, and how many messages were posted in each (Figure <a href="usenet.html#fig:messagecounts">9.1</a>)?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 raw_text %&gt;%
@@ -288,12 +291,12 @@ raw_text %&gt;%
 <div class="figure"><span id="fig:messagecounts"></span>
 <img src="09-usenet_files/figure-html/messagecounts-1.png" alt="Number of messages from each newsgroup" width="672" />
 <p class="caption">
-Figure 10.1: Number of messages from each newsgroup
+Figure 9.1: Number of messages from each newsgroup
 </p>
 </div>
 <p>We can see that Usenet newsgroup names are named hierarchically, starting with a main topic such as “talk”, “sci”, or “rec”, followed by further specifications.</p>
 <div id="pre-processing-text" class="section level3">
-<h3><span class="header-section-number">10.1.1</span> Pre-processing text</h3>
+<h3><span class="header-section-number">9.1.1</span> Pre-processing text</h3>
 <p>Most of the datasets we’ve examined in this book were pre-processed, meaning we didn’t have to remove, for example, copyright notices from the Jane Austen novels. Here, however, each message has some structure and extra text that we don’t want to include in our analysis. For example, every message has a header, containing field such as “from:” or “in_reply_to:” that describe the message. Some also have automated email signatures, which occur after a line like <code>--</code>.</p>
 <p>This kind of pre-processing can be done within the dplyr package, using a combination of <code>cumsum()</code> (cumulative sum) and <code>str_detect()</code> from stringr.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
@@ -322,7 +325,7 @@ usenet_words &lt;-<span class="st"> </span>cleaned_text %&gt;%
 </div>
 </div>
 <div id="words-in-newsgroups" class="section level2">
-<h2><span class="header-section-number">10.2</span> Words in newsgroups</h2>
+<h2><span class="header-section-number">9.2</span> Words in newsgroups</h2>
 <p>Now that we’ve removed the headers, signatures, and formatting, we can start exploring common words. For starters, we could find the most common words in the entire dataset, or within particular newsgroups.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">usenet_words %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
@@ -360,8 +363,8 @@ words_by_newsgroup</code></pre></div>
 ## 10   talk.politics.mideast armenians   509
 ## # ... with 173,903 more rows</code></pre>
 <div id="finding-tf-idf-within-newsgroups" class="section level3">
-<h3><span class="header-section-number">10.2.1</span> Finding tf-idf within newsgroups</h3>
-<p>We’d expect the newsgroups to differ in terms of topic and content, and therefore for the frequency of words to differ between them. Let’s try quantifying this using the tf-idf metric (Chapter <a href="tfidf.html#tfidf">4</a>).</p>
+<h3><span class="header-section-number">9.2.1</span> Finding tf-idf within newsgroups</h3>
+<p>We’d expect the newsgroups to differ in terms of topic and content, and therefore for the frequency of words to differ between them. Let’s try quantifying this using the tf-idf metric (Chapter <a href="tfidf.html#tfidf">3</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tf_idf &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(word, newsgroup, n) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf))
@@ -381,7 +384,7 @@ tf_idf</code></pre></div>
 ## 9          rec.sport.hockey         hockey   270 0.007561119 1.609438 0.01216915
 ## 10           comp.windows.x          oname   136 0.003535498 2.995732 0.01059141
 ## # ... with 173,903 more rows</code></pre>
-<p>We can examine the top tf-idf for a few selected groups to extract words specific to those topics. For example, we could look at all the <code>sci.</code> boards, visualized in Figure <a href="usenet.html#fig:scitfidf">10.2</a>.</p>
+<p>We can examine the top tf-idf for a few selected groups to extract words specific to those topics. For example, we could look at all the <code>sci.</code> boards, visualized in Figure <a href="usenet.html#fig:scitfidf">9.2</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tf_idf %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(newsgroup, <span class="st">&quot;^sci</span><span class="ch">\\</span><span class="st">.&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(newsgroup) %&gt;%
@@ -395,11 +398,11 @@ tf_idf</code></pre></div>
 <div class="figure"><span id="fig:scitfidf"></span>
 <img src="09-usenet_files/figure-html/scitfidf-1.png" alt="The 12 terms with the highest tf-idf within each of the science-related newsgroups" width="864" />
 <p class="caption">
-Figure 10.2: The 12 terms with the highest tf-idf within each of the science-related newsgroups
+Figure 9.2: The 12 terms with the highest tf-idf within each of the science-related newsgroups
 </p>
 </div>
 <p>We see lots of characteristic words specific to particular newsgroup, such as “wiring” and “circuit” on the sci.electronics topic and “orbit” and “lunar” for the space newsgroup. You could use this same code to explore other newsgroups yourself.</p>
-<p>What newsgroups tended to be similar to each other in text content? We could discover this by finding the pairwise correlation of word frequencies within each newsgroup, using the <code>pairwise_cor()</code> function from the widyr package (see Chapter <a href="ngrams.html#pairwise-correlation">5.2.2</a>).</p>
+<p>What newsgroups tended to be similar to each other in text content? We could discover this by finding the pairwise correlation of word frequencies within each newsgroup, using the <code>pairwise_cor()</code> function from the widyr package (see Chapter <a href="ngrams.html#pairwise-correlation">4.2.2</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
 
 newsgroup_cors &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
@@ -435,15 +438,15 @@ newsgroup_cors %&gt;%
 <div class="figure"><span id="fig:newsgroupcorsnetwork"></span>
 <img src="09-usenet_files/figure-html/newsgroupcorsnetwork-1.png" alt="A network of Usenet groups based on the correlation of word counts between them, including only connections with a correlation greater than .4" width="768" />
 <p class="caption">
-Figure 10.3: A network of Usenet groups based on the correlation of word counts between them, including only connections with a correlation greater than .4
+Figure 9.3: A network of Usenet groups based on the correlation of word counts between them, including only connections with a correlation greater than .4
 </p>
 </div>
 <p>It looks like there were four main clusters of newsgroups: computers/electronics, politics/religion, motor vehicles, and sports. This certainly makes sense in terms of what words and topics we’d expect these newsgroups to have in common.</p>
 </div>
 <div id="topic-modeling-1" class="section level3">
-<h3><span class="header-section-number">10.2.2</span> Topic modeling</h3>
-<p>In Chapter <a href="topicmodeling.html#topicmodeling">7</a>, we used the latent Dirichlet allocation (LDA) algorithm to divide a set of chapters into the books they originally came from. Could LDA do the same to sort out Usenet messages that came from different newsgroups?</p>
-<p>Let’s try dividing up messages from the four science-related newsgroups. We first process these into a document-term matrix with <code>cast_dtm()</code> (Chapter <a href="dtm.html#cast-dtm">6.2</a>), then fit the model with the <code>LDA()</code> function from the topicmodels package.</p>
+<h3><span class="header-section-number">9.2.2</span> Topic modeling</h3>
+<p>In Chapter <a href="topicmodeling.html#topicmodeling">6</a>, we used the latent Dirichlet allocation (LDA) algorithm to divide a set of chapters into the books they originally came from. Could LDA do the same to sort out Usenet messages that came from different newsgroups?</p>
+<p>Let’s try dividing up messages from the four science-related newsgroups. We first process these into a document-term matrix with <code>cast_dtm()</code> (Chapter <a href="dtm.html#cast-dtm">5.2</a>), then fit the model with the <code>LDA()</code> function from the topicmodels package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># include only words that occur at least 50 times</span>
 word_sci_newsgroups &lt;-<span class="st"> </span>usenet_words %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(newsgroup, <span class="st">&quot;^sci&quot;</span>)) %&gt;%
@@ -460,7 +463,7 @@ sci_dtm &lt;-<span class="st"> </span>word_sci_newsgroups %&gt;%
 <span class="st">  </span><span class="kw">cast_dtm</span>(document, word, n)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(topicmodels)
 sci_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(sci_dtm, <span class="dt">k =</span> <span class="dv">4</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">seed =</span> <span class="dv">2016</span>))</code></pre></div>
-<p>What four topics did this model extract, and did they match the four newsgroups? This approach will look familiar from Chapter <a href="topicmodeling.html#topicmodeling">7</a>: we visualize each topic based on the most frequent terms within it (Figure <a href="usenet.html#fig:usenettopicterms">10.4</a>).</p>
+<p>What four topics did this model extract, and did they match the four newsgroups? This approach will look familiar from Chapter <a href="topicmodeling.html#topicmodeling">6</a>: we visualize each topic based on the most frequent terms within it (Figure <a href="usenet.html#fig:usenettopicterms">9.4</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sci_lda %&gt;%
 <span class="st">  </span><span class="kw">tidy</span>() %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(topic) %&gt;%
@@ -474,10 +477,10 @@ sci_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(sci_dtm, <span
 <div class="figure"><span id="fig:usenettopicterms"></span>
 <img src="09-usenet_files/figure-html/usenettopicterms-1.png" alt="The top 8 words from each topic fit by LDA on the science-related newsgroups" width="672" />
 <p class="caption">
-Figure 10.4: The top 8 words from each topic fit by LDA on the science-related newsgroups
+Figure 9.4: The top 8 words from each topic fit by LDA on the science-related newsgroups
 </p>
 </div>
-<p>From the top words, we can start to suspect which topics may capture which newsgroups. Topic 1 certainly represents the sci.space newsgroup (thus the most common word being “space”), and topic 2 is likely drawn from cryptography, with terms such as “key” and “encryption”. Just as we did in Chapter <a href="topicmodeling.html#per-document">7.2.2</a>, we can confirm this by seeing how documents from each newsgroup have higher “gamma” for each topic (Figure <a href="usenet.html#fig:usenetassignments">10.5</a>).</p>
+<p>From the top words, we can start to suspect which topics may capture which newsgroups. Topic 1 certainly represents the sci.space newsgroup (thus the most common word being “space”), and topic 2 is likely drawn from cryptography, with terms such as “key” and “encryption”. Just as we did in Chapter <a href="topicmodeling.html#per-document">6.2.2</a>, we can confirm this by seeing how documents from each newsgroup have higher “gamma” for each topic (Figure <a href="usenet.html#fig:usenetassignments">9.5</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sci_lda %&gt;%
 <span class="st">  </span><span class="kw">tidy</span>(<span class="dt">matrix =</span> <span class="st">&quot;gamma&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(document, <span class="kw">c</span>(<span class="st">&quot;newsgroup&quot;</span>, <span class="st">&quot;id&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) %&gt;%
@@ -490,7 +493,7 @@ Figure 10.4: The top 8 words from each topic fit by LDA on the science-related n
 <div class="figure"><span id="fig:usenetassignments"></span>
 <img src="09-usenet_files/figure-html/usenetassignments-1.png" alt="Distribution of gamma for each topic within each Usenet newsgroup" width="672" />
 <p class="caption">
-Figure 10.5: Distribution of gamma for each topic within each Usenet newsgroup
+Figure 9.5: Distribution of gamma for each topic within each Usenet newsgroup
 </p>
 </div>
 <p>Much as we saw in the literature analysis, topic modeling was able to discover the distinct topics present in the text without needing to consult the labels.</p>
@@ -498,9 +501,9 @@ Figure 10.5: Distribution of gamma for each topic within each Usenet newsgroup
 </div>
 </div>
 <div id="sentiment-analysis" class="section level2">
-<h2><span class="header-section-number">10.3</span> Sentiment analysis</h2>
-<p>We can use the sentiment analysis techniques we explored in Chapter <a href="sentiment.html#sentiment">3</a> to examine how often positive and negative words occurred in these Usenet posts. Which newsgroups were the most positive or negative overall?</p>
-<p>In this example we’ll use the AFINN sentiment lexicon, which provides numeric positivity scores for each word, and visualize it with a bar plot (Figure <a href="usenet.html#fig:newsgroupsentiments">10.6</a>).</p>
+<h2><span class="header-section-number">9.3</span> Sentiment analysis</h2>
+<p>We can use the sentiment analysis techniques we explored in Chapter <a href="sentiment.html#sentiment">2</a> to examine how often positive and negative words occurred in these Usenet posts. Which newsgroups were the most positive or negative overall?</p>
+<p>In this example we’ll use the AFINN sentiment lexicon, which provides numeric positivity scores for each word, and visualize it with a bar plot (Figure <a href="usenet.html#fig:newsgroupsentiments">9.6</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newsgroup_sentiments &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(newsgroup) %&gt;%
@@ -515,12 +518,12 @@ newsgroup_sentiments %&gt;%
 <div class="figure"><span id="fig:newsgroupsentiments"></span>
 <img src="09-usenet_files/figure-html/newsgroupsentiments-1.png" alt="Average AFINN score for posts within each newsgroup" width="672" />
 <p class="caption">
-Figure 10.6: Average AFINN score for posts within each newsgroup
+Figure 9.6: Average AFINN score for posts within each newsgroup
 </p>
 </div>
 <p>According to this analysis, the “misc.forsale” newsgroup was the most positive. This makes sense, since it likely included many positive adjectives about the products that users wanted to sell!</p>
 <div id="sentiment-analysis-by-word" class="section level3">
-<h3><span class="header-section-number">10.3.1</span> Sentiment analysis by word</h3>
+<h3><span class="header-section-number">9.3.1</span> Sentiment analysis by word</h3>
 <p>It’s worth looking deeper to understand <em>why</em> some newsgroups ended up more positive or negative than others. For that, we can examine the total positive and negative contributions of each word.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contributions &lt;-<span class="st"> </span>usenet_words %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
@@ -543,7 +546,7 @@ contributions</code></pre></div>
 ## 9    ability        177          354
 ## 10    aboard          8            8
 ## # ... with 1,899 more rows</code></pre>
-<p>Which words had the most effect on sentiment scores overall (Figure <a href="usenet.html#fig:usenetcontributions">10.7</a>)?</p>
+<p>Which words had the most effect on sentiment scores overall (Figure <a href="usenet.html#fig:usenetcontributions">9.7</a>)?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contributions %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">25</span>, <span class="kw">abs</span>(contribution)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, contribution)) %&gt;%
@@ -553,11 +556,11 @@ contributions</code></pre></div>
 <div class="figure"><span id="fig:usenetcontributions"></span>
 <img src="09-usenet_files/figure-html/usenetcontributions-1.png" alt="Words with the greatest contributions to positive/negative sentiment scores in the Usenet text" width="576" />
 <p class="caption">
-Figure 10.7: Words with the greatest contributions to positive/negative sentiment scores in the Usenet text
+Figure 9.7: Words with the greatest contributions to positive/negative sentiment scores in the Usenet text
 </p>
 </div>
 <p>These words look generally reasonable as indicators of each message’s sentiment, but we can spot possible problems with the approach. “True” could just as easily be a part of “not true” or a similar negative expression, and the words “God” and “Jesus” are apparently very common on Usenet but could easily be used in many contexts, positive or negative.</p>
-<p>We may also care about which words contributed the most <em>within each newsgroup</em>, so that we can see which newsgroups might be incorrectly estimated. We can calculate each word’s contribution to each newsgroup’s sentiment score, and visualize the strongest contributors from a selection of the groups (Figure <a href="usenet.html#fig:newsgroupsentiment">10.8</a>).</p>
+<p>We may also care about which words contributed the most <em>within each newsgroup</em>, so that we can see which newsgroups might be incorrectly estimated. We can calculate each word’s contribution to each newsgroup’s sentiment score, and visualize the strongest contributors from a selection of the groups (Figure <a href="usenet.html#fig:newsgroupsentiment">9.8</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_sentiment_words &lt;-<span class="st"> </span>words_by_newsgroup %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> score *<span class="st"> </span>n /<span class="st"> </span><span class="kw">sum</span>(n))
@@ -580,14 +583,14 @@ top_sentiment_words</code></pre></div>
 <div class="figure"><span id="fig:newsgroupsentiment"></span>
 <img src="09-usenet_files/figure-html/newsgroupsentiment-1.png" alt="The 12 words that contributed the most to sentiment scores within each of six newsgroups" width="960" />
 <p class="caption">
-Figure 10.8: The 12 words that contributed the most to sentiment scores within each of six newsgroups
+Figure 9.8: The 12 words that contributed the most to sentiment scores within each of six newsgroups
 </p>
 </div>
 <p>This confirms our hypothesis about the “misc.forsale” newsgroup: most of the sentiment was driven by positive adjectives such as “excellent” and “perfect”. We can also see how much sentiment is confounded with topic. An atheism newsgroup is likely to discuss “god” in detail even in a negative context, and we can see that it makes the newsgroup look more positive. Similarly, the negative contribution of the word “gun” to the “talk.politics.guns” group will occur even when the members are discussing guns positively.</p>
 <p>This helps remind us that sentiment analysis can be confounded by topic, and that we should always examine the influential words before interpreting it too deeply.</p>
 </div>
 <div id="sentiment-analysis-by-message" class="section level3">
-<h3><span class="header-section-number">10.3.2</span> Sentiment analysis by message</h3>
+<h3><span class="header-section-number">9.3.2</span> Sentiment analysis by message</h3>
 <p>We can also try finding the most positive and negative individual messages, by grouping and summarizing by <code>id</code> rather than <code>newsgroup</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sentiment_messages &lt;-<span class="st"> </span>usenet_words %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
@@ -674,8 +677,8 @@ Figure 10.8: The 12 words that contributed the most to sentiment scores within e
 <p>Well, we can confidently say that the sentiment analysis worked!</p>
 </div>
 <div id="n-gram-analysis" class="section level3">
-<h3><span class="header-section-number">10.3.3</span> N-gram analysis</h3>
-<p>In Chapter <a href="ngrams.html#ngrams">5</a>, we considered the effect of words such as “not” and “no” on sentiment analysis of Jane Austen novels, such as considering whether a phrase like “don’t like” led to passages incorrectly being labeled as positive. The Usenet dataset is is a much larger corpus of more modern text, so we may be interested in how sentiment analysis may be reversed in this text.</p>
+<h3><span class="header-section-number">9.3.3</span> N-gram analysis</h3>
+<p>In Chapter <a href="ngrams.html#ngrams">4</a>, we considered the effect of words such as “not” and “no” on sentiment analysis of Jane Austen novels, such as considering whether a phrase like “don’t like” led to passages incorrectly being labeled as positive. The Usenet dataset is is a much larger corpus of more modern text, so we may be interested in how sentiment analysis may be reversed in this text.</p>
 <p>We’d start by finding and counting all the bigrams in the Usenet posts.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">usenet_bigrams &lt;-<span class="st"> </span>cleaned_text %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(bigram, text, <span class="dt">token =</span> <span class="st">&quot;ngrams&quot;</span>, <span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
@@ -683,7 +686,7 @@ Figure 10.8: The 12 words that contributed the most to sentiment scores within e
 <span class="st">  </span><span class="kw">count</span>(newsgroup, bigram, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(bigram, <span class="kw">c</span>(<span class="st">&quot;word1&quot;</span>, <span class="st">&quot;word2&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot; &quot;</span>)</code></pre></div>
-<p>We could then define a list of six words that we suspect are used in negation, such as “no”, “not”, and “without”, and visualize the sentiment-associated words that most often followed them (Figure <a href="usenet.html#fig:negatewords">10.9</a>). This shows the words that most often contributed in the “wrong” direction.</p>
+<p>We could then define a list of six words that we suspect are used in negation, such as “no”, “not”, and “without”, and visualize the sentiment-associated words that most often followed them (Figure <a href="usenet.html#fig:negatewords">9.9</a>). This shows the words that most often contributed in the “wrong” direction.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">negate_words &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;not&quot;</span>, <span class="st">&quot;without&quot;</span>, <span class="st">&quot;no&quot;</span>, <span class="st">&quot;can&#39;t&quot;</span>, <span class="st">&quot;don&#39;t&quot;</span>, <span class="st">&quot;won&#39;t&quot;</span>)
 
 usenet_bigram_counts %&gt;%
@@ -705,7 +708,7 @@ usenet_bigram_counts %&gt;%
 <div class="figure"><span id="fig:negatewords"></span>
 <img src="09-usenet_files/figure-html/negatewords-1.png" alt="Words that contributed the most to sentiment when they followed a 'negating' word" width="768" />
 <p class="caption">
-Figure 10.9: Words that contributed the most to sentiment when they followed a ‘negating’ word
+Figure 9.9: Words that contributed the most to sentiment when they followed a ‘negating’ word
 </p>
 </div>
 <p>It looks like the largest sources of misidentifying a word as positive come from “don’t want/like/care”, and the largest source of incorrectly classified negative sentiment is “no problem”.</p>

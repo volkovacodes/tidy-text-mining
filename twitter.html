@@ -5,26 +5,28 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title></title>
+  <title>Text Mining with R</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="">
+  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="" />
+  <meta property="og:title" content="Text Mining with R" />
   <meta property="og:type" content="book" />
   
-  
-  
-  
+  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="" />
+  <meta name="twitter:title" content="Text Mining with R" />
   
-  
-  
+  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="twitter:image" content="images/cover.png" />
+
+<meta name="author" content="Julia Silge and David Robinson">
 
 
-
+<meta name="date" content="2017-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -112,111 +114,112 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
-<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#outline"><i class="fa fa-check"></i><b>1.3</b> Outline</a></li>
-<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>1.4</b> Topics this book does not cover</a></li>
-<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#acknowledgements"><i class="fa fa-check"></i><b>1.5</b> Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
+<li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="0.1" data-path="preface.html"><a href="preface.html#outline"><i class="fa fa-check"></i><b>0.1</b> Outline</a></li>
+<li class="chapter" data-level="0.2" data-path="preface.html"><a href="preface.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>0.2</b> Topics this book does not cover</a></li>
+<li class="chapter" data-level="0.3" data-path="preface.html"><a href="preface.html#using-code-examples"><i class="fa fa-check"></i><b>0.3</b> Using code examples</a></li>
+<li class="chapter" data-level="0.4" data-path="preface.html"><a href="preface.html#acknowledgements"><i class="fa fa-check"></i><b>0.4</b> Acknowledgements</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>2</b> The tidy text format</a><ul>
-<li class="chapter" data-level="2.1" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>2.1</b> The <code>unnest_tokens</code> function</a></li>
-<li class="chapter" data-level="2.2" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>2.2</b> Tidying the works of Jane Austen</a></li>
-<li class="chapter" data-level="2.3" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>2.3</b> The gutenbergr package</a></li>
-<li class="chapter" data-level="2.4" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>2.4</b> Word frequencies</a></li>
-<li class="chapter" data-level="2.5" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>2.5</b> Conclusion</a></li>
+<li class="chapter" data-level="1" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>1</b> The tidy text format</a><ul>
+<li class="chapter" data-level="1.1" data-path="tidytext.html"><a href="tidytext.html#contrasting-tidy-text-with-other-data-structures"><i class="fa fa-check"></i><b>1.1</b> Contrasting tidy text with other data structures</a></li>
+<li class="chapter" data-level="1.2" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>1.2</b> The <code>unnest_tokens</code> function</a></li>
+<li class="chapter" data-level="1.3" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>1.3</b> Tidying the works of Jane Austen</a></li>
+<li class="chapter" data-level="1.4" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>1.4</b> The gutenbergr package</a></li>
+<li class="chapter" data-level="1.5" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>1.5</b> Word frequencies</a></li>
+<li class="chapter" data-level="1.6" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>1.6</b> Conclusion</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>3</b> Sentiment analysis with tidy data</a><ul>
-<li class="chapter" data-level="3.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>3.1</b> The <code>sentiments</code> dataset</a></li>
-<li class="chapter" data-level="3.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>3.2</b> Sentiment analysis with inner join</a></li>
-<li class="chapter" data-level="3.3" data-path="sentiment.html"><a href="sentiment.html#comparing-the-three-sentiment-dictionaries"><i class="fa fa-check"></i><b>3.3</b> Comparing the three sentiment dictionaries</a></li>
-<li class="chapter" data-level="3.4" data-path="sentiment.html"><a href="sentiment.html#most-positive-negative"><i class="fa fa-check"></i><b>3.4</b> Most common positive and negative words</a></li>
-<li class="chapter" data-level="3.5" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>3.5</b> Wordclouds</a></li>
-<li class="chapter" data-level="3.6" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>3.6</b> Looking at units beyond just words</a></li>
+<li class="chapter" data-level="2" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>2</b> Sentiment analysis with tidy data</a><ul>
+<li class="chapter" data-level="2.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>2.1</b> The <code>sentiments</code> dataset</a></li>
+<li class="chapter" data-level="2.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>2.2</b> Sentiment analysis with inner join</a></li>
+<li class="chapter" data-level="2.3" data-path="sentiment.html"><a href="sentiment.html#comparing-the-three-sentiment-dictionaries"><i class="fa fa-check"></i><b>2.3</b> Comparing the three sentiment dictionaries</a></li>
+<li class="chapter" data-level="2.4" data-path="sentiment.html"><a href="sentiment.html#most-positive-negative"><i class="fa fa-check"></i><b>2.4</b> Most common positive and negative words</a></li>
+<li class="chapter" data-level="2.5" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>2.5</b> Wordclouds</a></li>
+<li class="chapter" data-level="2.6" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>2.6</b> Looking at units beyond just words</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>4</b> Analyzing word and document frequency: tf-idf</a><ul>
-<li class="chapter" data-level="4.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>4.1</b> Term frequency in Jane Austen’s novels</a></li>
-<li class="chapter" data-level="4.2" data-path="tfidf.html"><a href="tfidf.html#zipfs-law"><i class="fa fa-check"></i><b>4.2</b> Zipf’s law</a></li>
-<li class="chapter" data-level="4.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>4.3</b> The <code>bind_tf_idf</code> function</a></li>
-<li class="chapter" data-level="4.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>4.4</b> A corpus of physics texts</a></li>
+<li class="chapter" data-level="3" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>3</b> Analyzing word and document frequency: tf-idf</a><ul>
+<li class="chapter" data-level="3.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>3.1</b> Term frequency in Jane Austen’s novels</a></li>
+<li class="chapter" data-level="3.2" data-path="tfidf.html"><a href="tfidf.html#zipfs-law"><i class="fa fa-check"></i><b>3.2</b> Zipf’s law</a></li>
+<li class="chapter" data-level="3.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>3.3</b> The <code>bind_tf_idf</code> function</a></li>
+<li class="chapter" data-level="3.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>3.4</b> A corpus of physics texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Relationships between words</a><ul>
-<li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
-<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
-<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
-<li class="chapter" data-level="5.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>5.1.4</b> Visualizing a network of bigrams with igraph</a></li>
-<li class="chapter" data-level="5.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>5.1.5</b> Visualizing bigrams in other texts</a></li>
+<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words</a><ul>
+<li class="chapter" data-level="4.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>4.1</b> Tokenizing by n-gram</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>4.1.1</b> Counting and filtering n-grams</a></li>
+<li class="chapter" data-level="4.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>4.1.2</b> Analyzing bigrams</a></li>
+<li class="chapter" data-level="4.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>4.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
+<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with igraph</a></li>
+<li class="chapter" data-level="4.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>4.1.5</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-among-sections"><i class="fa fa-check"></i><b>5.2.1</b> Counting and correlating among sections</a></li>
-<li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.2.2</b> Pairwise correlation</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>6</b> Tidying and casting document-term matrices and corpus objects</a><ul>
-<li class="chapter" data-level="6.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>6.1</b> Tidying a document-term matrix</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>6.1.1</b> Tidying DocumentTermMatrix objects</a></li>
-<li class="chapter" data-level="6.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>6.1.2</b> Tidying dfm objects</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="dtm.html"><a href="dtm.html#cast-dtm"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a matrix</a></li>
-<li class="chapter" data-level="6.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a><ul>
-<li class="chapter" data-level="6.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>6.3.1</b> Example: mining financial articles</a></li>
+<li class="chapter" data-level="4.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>4.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-among-sections"><i class="fa fa-check"></i><b>4.2.1</b> Counting and correlating among sections</a></li>
+<li class="chapter" data-level="4.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>4.2.2</b> Pairwise correlation</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic modeling</a><ul>
-<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>7.1</b> Latent Dirichlet allocation</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>7.1.1</b> Word-topic probabilities</a></li>
-<li class="chapter" data-level="7.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>7.1.2</b> Document-topic probabilities</a></li>
+<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Tidying and casting document-term matrices and corpus objects</a><ul>
+<li class="chapter" data-level="5.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>5.1</b> Tidying a document-term matrix</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>5.1.1</b> Tidying DocumentTermMatrix objects</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>5.1.2</b> Tidying dfm objects</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>7.2.1</b> LDA on chapters</a></li>
-<li class="chapter" data-level="7.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>7.2.2</b> Per-document classification</a></li>
-<li class="chapter" data-level="7.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.2.3</b> By word assignments: <code>augment</code></a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.3</b> Alternative LDA implementations</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
-<li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
-<li class="chapter" data-level="8.2" data-path="twitter.html"><a href="twitter.html#word-frequencies-1"><i class="fa fa-check"></i><b>8.2</b> Word frequencies</a></li>
-<li class="chapter" data-level="8.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>8.3</b> Comparing word usage</a></li>
-<li class="chapter" data-level="8.4" data-path="twitter.html"><a href="twitter.html#changes-in-word-use"><i class="fa fa-check"></i><b>8.4</b> Changes in word use</a></li>
-<li class="chapter" data-level="8.5" data-path="twitter.html"><a href="twitter.html#favorites-and-retweets"><i class="fa fa-check"></i><b>8.5</b> Favorites and retweets</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>9</b> Case study: mining NASA metadata</a><ul>
-<li class="chapter" data-level="9.1" data-path="nasa.html"><a href="nasa.html#how-data-is-organized-at-nasa"><i class="fa fa-check"></i><b>9.1</b> How data is organized at NASA</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>9.1.1</b> Wrangling and tidying the data</a></li>
-<li class="chapter" data-level="9.1.2" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>9.1.2</b> Some initial simple exploration</a></li>
-</ul></li>
-<li class="chapter" data-level="9.2" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>9.2</b> Word co-ocurrences and correlations</a><ul>
-<li class="chapter" data-level="9.2.1" data-path="nasa.html"><a href="nasa.html#networks-of-description-and-title-words"><i class="fa fa-check"></i><b>9.2.1</b> Networks of Description and Title Words</a></li>
-<li class="chapter" data-level="9.2.2" data-path="nasa.html"><a href="nasa.html#networks-of-keywords"><i class="fa fa-check"></i><b>9.2.2</b> Networks of Keywords</a></li>
-</ul></li>
-<li class="chapter" data-level="9.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>9.3</b> Calculating tf-idf for the description fields</a><ul>
-<li class="chapter" data-level="9.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>9.3.1</b> What is tf-idf for the description field words?</a></li>
-<li class="chapter" data-level="9.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>9.3.2</b> Connecting description fields to keywords</a></li>
-</ul></li>
-<li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>9.4</b> Topic modeling</a><ul>
-<li class="chapter" data-level="9.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>9.4.1</b> Casting to a document-term matrix</a></li>
-<li class="chapter" data-level="9.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>9.4.2</b> Ready for topic modeling</a></li>
-<li class="chapter" data-level="9.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>9.4.3</b> Interpreting the topic model</a></li>
-<li class="chapter" data-level="9.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>9.4.4</b> Connecting topic modeling with keywords</a></li>
+<li class="chapter" data-level="5.2" data-path="dtm.html"><a href="dtm.html#cast-dtm"><i class="fa fa-check"></i><b>5.2</b> Casting tidy text data into a matrix</a></li>
+<li class="chapter" data-level="5.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>5.3</b> Tidying corpus objects with metadata</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>5.3.1</b> Example: mining financial articles</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
-<li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>10.1</b> Pre-processing</a><ul>
-<li class="chapter" data-level="10.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>10.1.1</b> Pre-processing text</a></li>
+<li class="chapter" data-level="6" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>6</b> Topic modeling</a><ul>
+<li class="chapter" data-level="6.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>6.1</b> Latent Dirichlet allocation</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>6.1.1</b> Word-topic probabilities</a></li>
+<li class="chapter" data-level="6.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>6.1.2</b> Document-topic probabilities</a></li>
 </ul></li>
-<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>10.2</b> Words in newsgroups</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>10.2.1</b> Finding tf-idf within newsgroups</a></li>
-<li class="chapter" data-level="10.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>10.2.2</b> Topic modeling</a></li>
+<li class="chapter" data-level="6.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>6.2</b> Example: the great library heist</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>6.2.1</b> LDA on chapters</a></li>
+<li class="chapter" data-level="6.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>6.2.2</b> Per-document classification</a></li>
+<li class="chapter" data-level="6.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>6.2.3</b> By word assignments: <code>augment</code></a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a><ul>
-<li class="chapter" data-level="10.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>10.3.1</b> Sentiment analysis by word</a></li>
-<li class="chapter" data-level="10.3.2" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>10.3.2</b> Sentiment analysis by message</a></li>
-<li class="chapter" data-level="10.3.3" data-path="usenet.html"><a href="usenet.html#n-gram-analysis"><i class="fa fa-check"></i><b>10.3.3</b> N-gram analysis</a></li>
+<li class="chapter" data-level="6.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>6.3</b> Alternative LDA implementations</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>7</b> Case study: comparing Twitter archives</a><ul>
+<li class="chapter" data-level="7.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>7.1</b> Getting the data and distribution of tweets</a></li>
+<li class="chapter" data-level="7.2" data-path="twitter.html"><a href="twitter.html#word-frequencies-1"><i class="fa fa-check"></i><b>7.2</b> Word frequencies</a></li>
+<li class="chapter" data-level="7.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>7.3</b> Comparing word usage</a></li>
+<li class="chapter" data-level="7.4" data-path="twitter.html"><a href="twitter.html#changes-in-word-use"><i class="fa fa-check"></i><b>7.4</b> Changes in word use</a></li>
+<li class="chapter" data-level="7.5" data-path="twitter.html"><a href="twitter.html#favorites-and-retweets"><i class="fa fa-check"></i><b>7.5</b> Favorites and retweets</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>8</b> Case study: mining NASA metadata</a><ul>
+<li class="chapter" data-level="8.1" data-path="nasa.html"><a href="nasa.html#how-data-is-organized-at-nasa"><i class="fa fa-check"></i><b>8.1</b> How data is organized at NASA</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>8.1.1</b> Wrangling and tidying the data</a></li>
+<li class="chapter" data-level="8.1.2" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>8.1.2</b> Some initial simple exploration</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>8.2</b> Word co-ocurrences and correlations</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="nasa.html"><a href="nasa.html#networks-of-description-and-title-words"><i class="fa fa-check"></i><b>8.2.1</b> Networks of Description and Title Words</a></li>
+<li class="chapter" data-level="8.2.2" data-path="nasa.html"><a href="nasa.html#networks-of-keywords"><i class="fa fa-check"></i><b>8.2.2</b> Networks of Keywords</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>8.3</b> Calculating tf-idf for the description fields</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>8.3.1</b> What is tf-idf for the description field words?</a></li>
+<li class="chapter" data-level="8.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>8.3.2</b> Connecting description fields to keywords</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>8.4</b> Topic modeling</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>8.4.1</b> Casting to a document-term matrix</a></li>
+<li class="chapter" data-level="8.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>8.4.2</b> Ready for topic modeling</a></li>
+<li class="chapter" data-level="8.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>8.4.3</b> Interpreting the topic model</a></li>
+<li class="chapter" data-level="8.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>8.4.4</b> Connecting topic modeling with keywords</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
+<li class="chapter" data-level="9" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>9</b> Case study: analyzing usenet text</a><ul>
+<li class="chapter" data-level="9.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>9.1</b> Pre-processing</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>9.1.1</b> Pre-processing text</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>9.2</b> Words in newsgroups</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>9.2.1</b> Finding tf-idf within newsgroups</a></li>
+<li class="chapter" data-level="9.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>9.2.2</b> Topic modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>9.3</b> Sentiment analysis</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>9.3.1</b> Sentiment analysis by word</a></li>
+<li class="chapter" data-level="9.3.2" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>9.3.2</b> Sentiment analysis by message</a></li>
+<li class="chapter" data-level="9.3.3" data-path="usenet.html"><a href="usenet.html#n-gram-analysis"><i class="fa fa-check"></i><b>9.3.3</b> N-gram analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -229,7 +232,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
           </h1>
         </div>
 
@@ -238,11 +241,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="twitter" class="section level1">
-<h1><span class="header-section-number">8</span> Case study: comparing Twitter archives</h1>
+<h1><span class="header-section-number">7</span> Case study: comparing Twitter archives</h1>
 <p>One type of text that gets plenty of attention is text shared online via Twitter. In fact, several of the sentiment lexicons used in this book (and commonly used in general) were designed for use with and validated on tweets. Both of the authors of this book are on Twitter and are fairly regular users of it, so in this case study, let’s compare the entire Twitter archives of <a href="https://twitter.com/juliasilge">Julia</a> and <a href="https://twitter.com/drob">David</a>.</p>
 <div id="getting-the-data-and-distribution-of-tweets" class="section level2">
-<h2><span class="header-section-number">8.1</span> Getting the data and distribution of tweets</h2>
-<p>An individual can download their own Twitter archive by following <a href="https://support.twitter.com/articles/20170160">directions available on Twitter’s website</a>. We each downloaded ours and will now open them up. Let’s use the lubridate package to convert the string timestamps to date-time objects and initially take a look at our tweeting patterns overall (Figure <a href="twitter.html#fig:setup">8.1</a>).</p>
+<h2><span class="header-section-number">7.1</span> Getting the data and distribution of tweets</h2>
+<p>An individual can download their own Twitter archive by following <a href="https://support.twitter.com/articles/20170160">directions available on Twitter’s website</a>. We each downloaded ours and will now open them up. Let’s use the lubridate package to convert the string timestamps to date-time objects and initially take a look at our tweeting patterns overall (Figure <a href="twitter.html#fig:setup">7.1</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate)
 <span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(dplyr)
@@ -257,29 +260,29 @@ tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_ju
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">timestamp =</span> <span class="kw">ymd_hms</span>(timestamp))
 
 <span class="kw">ggplot</span>(tweets, <span class="kw">aes</span>(<span class="dt">x =</span> timestamp, <span class="dt">fill =</span> person)) +
-<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">bins =</span> <span class="dv">20</span>)</code></pre></div>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">bins =</span> <span class="dv">20</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~person, <span class="dt">ncol =</span> <span class="dv">1</span>)</code></pre></div>
 <div class="figure"><span id="fig:setup"></span>
 <img src="07-tweet-archives_files/figure-html/setup-1.png" alt="All tweets from our accounts" width="768" />
 <p class="caption">
-Figure 8.1: All tweets from our accounts
+Figure 7.1: All tweets from our accounts
 </p>
 </div>
 <p>David and Julia tweet at about the same rate currently and joined Twitter about a year apart from each other, but there were about 5 years where David was not active on Twitter and Julia was. In total, Julia has about 4 times as many tweets as David.</p>
 </div>
 <div id="word-frequencies-1" class="section level2">
-<h2><span class="header-section-number">8.2</span> Word frequencies</h2>
+<h2><span class="header-section-number">7.2</span> Word frequencies</h2>
 <p>Let’s use <code>unnest_tokens()</code> to make a tidy data frame of all the words in our tweets, and remove the common English stop words. There are certain conventions in how people use text on Twitter, so we will do a bit more work with our text here than, for example, we did with the narrative text from Project Gutenberg.</p>
 <p>First, we will remove tweets from this dataset that are retweets so that we only have tweets that we wrote ourselves. Next, the <code>mutate()</code> line removes links and cleans out some characters that we don’t want like ampersands and such. In the call to <code>unnest_tokens()</code>, we unnest using a regex pattern, instead of just looking for single unigrams (words). This regex pattern is very useful for dealing with Twitter text; it retains hashtags and mentions of usernames with the <code>@</code> symbol. Because we have kept these types of symbols in the text, we can’t use a simple <code>anti_join()</code> to remove stop words. Instead, we can take the approach shown in the <code>filter()</code> line that uses <code>str_detect()</code> from the stringr package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 <span class="kw">library</span>(stringr)
 
-reg &lt;-<span class="st"> &quot;([^A-Za-z_</span><span class="ch">\\</span><span class="st">d#@&#39;]|&#39;(?![A-Za-z_</span><span class="ch">\\</span><span class="st">d#@]))&quot;</span>
+replace_reg &lt;-<span class="st"> &quot;https://t.co/[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|http://[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|&amp;amp;|&amp;lt;|&amp;gt;|RT|https&quot;</span>
+unnest_reg &lt;-<span class="st"> &quot;([^A-Za-z_</span><span class="ch">\\</span><span class="st">d#@&#39;]|&#39;(?![A-Za-z_</span><span class="ch">\\</span><span class="st">d#@]))&quot;</span>
 tidy_tweets &lt;-<span class="st"> </span>tweets %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(!<span class="kw">str_detect</span>(text, <span class="st">&quot;^RT&quot;</span>)) %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">text =</span> <span class="kw">str_replace_all</span>(text, 
-                                <span class="st">&quot;https://t.co/[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|http://[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|&amp;amp;|&amp;lt;|&amp;gt;|RT|https&quot;</span>, 
-                                <span class="st">&quot;&quot;</span>)) %&gt;%
-<span class="st">  </span><span class="kw">unnest_tokens</span>(word, text, <span class="dt">token =</span> <span class="st">&quot;regex&quot;</span>, <span class="dt">pattern =</span> reg) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">text =</span> <span class="kw">str_replace_all</span>(text, replace_reg, <span class="st">&quot;&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, text, <span class="dt">token =</span> <span class="st">&quot;regex&quot;</span>, <span class="dt">pattern =</span> unnest_reg) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(!word %in%<span class="st"> </span>stop_words$word,
          <span class="kw">str_detect</span>(word, <span class="st">&quot;[a-z]&quot;</span>))</code></pre></div>
 <p>Now we can calculate word frequencies for each person. First, we group by person and count how many times each person used each word. Then we use <code>left_join()</code> to add a column of the total number of words used by each person. (This is higher for Julia than David since she has more tweets than David.) Finally, we calculate a frequency for each person and word.</p>
@@ -343,14 +346,14 @@ frequency</code></pre></div>
 <div class="figure"><span id="fig:spreadplot"></span>
 <img src="07-tweet-archives_files/figure-html/spreadplot-1.png" alt="Comparing the frequency of words used by Julia and David" width="672" />
 <p class="caption">
-Figure 8.2: Comparing the frequency of words used by Julia and David
+Figure 7.2: Comparing the frequency of words used by Julia and David
 </p>
 </div>
-<p>Words near the red line in Figure <a href="twitter.html#fig:spreadplot">8.2</a> are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Words, hashtags, and usernames that appear in this plot are ones that we have both used at least once in tweets.</p>
+<p>Words near the red line in Figure <a href="twitter.html#fig:spreadplot">7.2</a> are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Words, hashtags, and usernames that appear in this plot are ones that we have both used at least once in tweets.</p>
 <p>This may not even need to be pointed out, but David and Julia have used their Twitter accounts rather differently over the course of the past several years. David has used his Twitter account almost exclusively for professional purposes since he became more active, while Julia used it for entirely personal purposes until late 2015 and still uses it more personally than David. We see these differences immediately in this plot exploring word frequencies, and they will continue to be obvious in the rest of this chapter.</p>
 </div>
 <div id="comparing-word-usage" class="section level2">
-<h2><span class="header-section-number">8.3</span> Comparing word usage</h2>
+<h2><span class="header-section-number">7.3</span> Comparing word usage</h2>
 <p>We just made a plot comparing raw word frequencies over our whole Twitter histories; now let’s find which words are more or less likely to come from each person’s account using the log odds ratio. First, let’s restrict the analysis moving forward to tweets from David and Julia sent during 2016. David was consistently active on Twitter for all of 2016 and this was about when Julia transitioned into data science as a career.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_tweets &lt;-<span class="st"> </span>tidy_tweets %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(timestamp &gt;=<span class="st"> </span><span class="kw">as.Date</span>(<span class="st">&quot;2016-01-01&quot;</span>),
@@ -385,7 +388,7 @@ Figure 8.2: Comparing the frequency of words used by Julia and David
 ## 10      words 0.003376952 0.003240741 0.041171689
 ## # ... with 367 more rows</code></pre>
 <p>We are about equally likely to tweet about maps, email, APIs, and functions.</p>
-<p>Which words are most likely to be from Julia’s account or from David’s account? Let’s just take the top 15 most distinctive words for each account and plot them in Figure <a href="twitter.html#fig:plotratios">8.3</a>.</p>
+<p>Which words are most likely to be from Julia’s account or from David’s account? Let’s just take the top 15 most distinctive words for each account and plot them in Figure <a href="twitter.html#fig:plotratios">7.3</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_ratios %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(logratio &lt;<span class="st"> </span><span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">15</span>, <span class="kw">abs</span>(logratio)) %&gt;%
@@ -399,13 +402,13 @@ Figure 8.2: Comparing the frequency of words used by Julia and David
 <div class="figure"><span id="fig:plotratios"></span>
 <img src="07-tweet-archives_files/figure-html/plotratios-1.png" alt="Comparing the odds ratios of words from our accounts" width="672" />
 <p class="caption">
-Figure 8.3: Comparing the odds ratios of words from our accounts
+Figure 7.3: Comparing the odds ratios of words from our accounts
 </p>
 </div>
 <p>So David has tweeted about specific conferences he has gone to, genes, Stack Overflow, and matrices while Julia tweeted about Utah, physics, Census data, Christmas, and her family.</p>
 </div>
 <div id="changes-in-word-use" class="section level2">
-<h2><span class="header-section-number">8.4</span> Changes in word use</h2>
+<h2><span class="header-section-number">7.4</span> Changes in word use</h2>
 <p>The section above looked at overall word use, but now let’s ask a different question. Which words’ frequencies have changed the fastest in our Twitter feeds? Or to state this another way, which words have we tweeted about at a higher or lower rate as time has passed? To do this, we will define a new time variable in the data frame that defines which unit of time each tweet was posted in. We can use <code>floor_date()</code> from lubridate to do this, with a unit of our choosing; using 1 month seems to work well for this year of tweets from both of us.</p>
 <p>After we have the time bins defined, we count how many times each of us used each word in each time bin. After that, we add columns to the data frame for the total number of words used in each time bin by each person and the total number of times each word was used by each person. We can then <code>filter()</code> to only keep words used at least some minimum number of times (30, in this case).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">words_by_time &lt;-<span class="st"> </span>tidy_tweets %&gt;%
@@ -509,18 +512,18 @@ top_slopes</code></pre></div>
 <div class="figure"><span id="fig:topdave"></span>
 <img src="07-tweet-archives_files/figure-html/topdave-1.png" alt="Trending words in David's tweets" width="768" />
 <p class="caption">
-Figure 8.4: Trending words in David’s tweets
+Figure 7.4: Trending words in David’s tweets
 </p>
 </div>
-<p>We see in Figure <a href="twitter.html#fig:topdave">8.4</a> that David tweeted a lot about the UseR conference while he was there and then quickly stopped. He has tweeted more about Stack Overflow toward the end of the year and less about ggplot2 as the year has progressed.</p>
+<p>We see in Figure <a href="twitter.html#fig:topdave">7.4</a> that David tweeted a lot about the UseR conference while he was there and then quickly stopped. He has tweeted more about Stack Overflow toward the end of the year and less about ggplot2 as the year has progressed.</p>
 <blockquote class="twitter-tweet" data-lang="en">
 <p lang="en" dir="ltr">
 Me: I'm so sick of data science wars. <a href="https://twitter.com/hashtag/rstats?src=hash">#rstats</a> vs Python, frequentist vs Bayesian…<br><br>Them: base vs ggplot2…<br><br>Me: WHY WHICH SIDE ARE YOU ON
 </p>
-— David Robinson (<span class="citation">@drob</span>) <a href="https://twitter.com/drob/status/712639593703542785">March 23, 2016</a>
+— David Robinson (<span class="citation">(<span class="citeproc-not-found" data-reference-id="drob"><strong>???</strong></span>)</span>) <a href="https://twitter.com/drob/status/712639593703542785">March 23, 2016</a>
 </blockquote>
 <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-<p>Now let’s plot words that have changed frequency in Julia’s tweets in Figure <a href="twitter.html#fig:topjulia">8.5</a>.</p>
+<p>Now let’s plot words that have changed frequency in Julia’s tweets in Figure <a href="twitter.html#fig:topjulia">7.5</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">words_by_time %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(top_slopes, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;word&quot;</span>, <span class="st">&quot;person&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(person ==<span class="st"> &quot;Julia&quot;</span>) %&gt;%
@@ -530,13 +533,13 @@ Me: I'm so sick of data science wars. <a href="https://twitter.com/hashtag/rstat
 <div class="figure"><span id="fig:topjulia"></span>
 <img src="07-tweet-archives_files/figure-html/topjulia-1.png" alt="Trending words in Julia's tweets" width="768" />
 <p class="caption">
-Figure 8.5: Trending words in Julia’s tweets
+Figure 7.5: Trending words in Julia’s tweets
 </p>
 </div>
 <p>All the significant slopes for Julia are negative. This means she has not tweeted at a higher rate using any specific words, but instead using a variety of different words; her tweets earlier in the year contained the words shown in this plot at higher proportions. Words she uses when publicizing a new blog post like the #rstats hashtag and “post” have gone down in frequency, and she has tweeted less about reading.</p>
 </div>
 <div id="favorites-and-retweets" class="section level2">
-<h2><span class="header-section-number">8.5</span> Favorites and retweets</h2>
+<h2><span class="header-section-number">7.5</span> Favorites and retweets</h2>
 <p>Another important characteristic of tweets is how many times they are favorited or retweeted. Let’s explore which words are more likely to be retweeted or favorited for Julia’s and David’s tweets. When a user downloads their own Twitter archive, favorites and retweets are not included, so we constructed another dataset of the authors’ tweets that includes this information. We accessed our own tweets via the Twitter API and downloaded about 3200 tweets for each person. In both cases, that is about the last 18 months worth of Twitter activity. This corresponds to a period of increasing activity and increasing numbers of followers for both of us.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tweets_julia &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/juliasilge_tweets.csv&quot;</span>)
 tweets_dave &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;data/drob_tweets.csv&quot;</span>)
@@ -548,10 +551,8 @@ tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_ju
 <p>Now that we have this second, smaller set of only recent tweets, let’s use <code>unnest_tokens()</code> to transform these tweets to a tidy data set. Let’s remove all retweets and replies from this data set so we only look at regular tweets that David and Julia have posted directly.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_tweets &lt;-<span class="st"> </span>tweets %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(!<span class="kw">str_detect</span>(text, <span class="st">&quot;^(RT|@)&quot;</span>)) %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">text =</span> <span class="kw">str_replace_all</span>(text, 
-                                <span class="st">&quot;https://t.co/[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|http://[A-Za-z</span><span class="ch">\\</span><span class="st">d]+|&amp;amp;|&amp;lt;|&amp;gt;|RT|https&quot;</span>, 
-                                <span class="st">&quot;&quot;</span>)) %&gt;%
-<span class="st">  </span><span class="kw">unnest_tokens</span>(word, text, <span class="dt">token =</span> <span class="st">&quot;regex&quot;</span>, <span class="dt">pattern =</span> reg) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">text =</span> <span class="kw">str_replace_all</span>(text, replace_reg, <span class="st">&quot;&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">unnest_tokens</span>(word, text, <span class="dt">token =</span> <span class="st">&quot;regex&quot;</span>, <span class="dt">pattern =</span> unnest_reg) %&gt;%
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words)
 
 tidy_tweets</code></pre></div>
@@ -609,7 +610,7 @@ word_by_rts %&gt;%<span class="st"> </span>
 ## 9   David         error     34.5     8    110171
 ## 10  David      bayesian     34.0     7    110171
 ## # ... with 168 more rows</code></pre>
-<p>At the top of this sorted data frame, we see tweets from Julia and David about packages that they work on, like <a href="https://cran.r-project.org/package=gutenbergr">gutenbergr</a>, <a href="https://github.com/dgrtwo/gganimate">gganimate</a>, and <a href="https://cran.r-project.org/package=tidytext">tidytext</a>. Let’s plot the words that have the highest median retweets for each of our accounts (Figure <a href="twitter.html#fig:plotrts">8.6</a>).</p>
+<p>At the top of this sorted data frame, we see tweets from Julia and David about packages that they work on, like <a href="https://cran.r-project.org/package=gutenbergr">gutenbergr</a>, <a href="https://github.com/dgrtwo/gganimate">gganimate</a>, and <a href="https://cran.r-project.org/package=tidytext">tidytext</a>. Let’s plot the words that have the highest median retweets for each of our accounts (Figure <a href="twitter.html#fig:plotrts">7.6</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_by_rts %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(uses &gt;=<span class="st"> </span><span class="dv">5</span>) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(person) %&gt;%
@@ -626,7 +627,7 @@ word_by_rts %&gt;%<span class="st"> </span>
 <div class="figure"><span id="fig:plotrts"></span>
 <img src="07-tweet-archives_files/figure-html/plotrts-1.png" alt="Words with highest median retweets" width="960" />
 <p class="caption">
-Figure 8.6: Words with highest median retweets
+Figure 7.6: Words with highest median retweets
 </p>
 </div>
 <p>We see lots of word about R packages, including tidytext, a package about which you are reading right now! The “0” for David comes from tweets where he mentions version numbers of packages, like <a href="https://twitter.com/drob/status/671430703234576384">“broom 0.4.0”</a> or similar.</p>
@@ -645,7 +646,7 @@ word_by_favs &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> <
 <span class="st">  </span><span class="kw">left_join</span>(totals) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(favorites !=<span class="st"> </span><span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
-<p>We have built the data frames we need. Now let’s make our visualization in Figure <a href="twitter.html#fig:plotfavs">8.7</a>.</p>
+<p>We have built the data frames we need. Now let’s make our visualization in Figure <a href="twitter.html#fig:plotfavs">7.7</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_by_favs %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(uses &gt;=<span class="st"> </span><span class="dv">5</span>) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(person) %&gt;%
@@ -662,10 +663,10 @@ word_by_favs &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> <
 <div class="figure"><span id="fig:plotfavs"></span>
 <img src="07-tweet-archives_files/figure-html/plotfavs-1.png" alt="Words with highest median favorites" width="960" />
 <p class="caption">
-Figure 8.7: Words with highest median favorites
+Figure 7.7: Words with highest median favorites
 </p>
 </div>
-<p>We see some minor differences between Figures <a href="twitter.html#fig:plotrts">8.6</a> and <a href="twitter.html#fig:plotfavs">8.7</a>, especially near the bottom of the top 10 list, but these are largely the same words as for retweets. In general, the same words that lead to retweets lead to favorites. A prominent word for Julia in both plots is the hashtag for the NASA Datanauts program that she has participated in; read on to Chapter <a href="nasa.html#nasa">9</a> to learn more about NASA data and what we can learn from text analysis of NASA datasets.</p>
+<p>We see some minor differences between Figures <a href="twitter.html#fig:plotrts">7.6</a> and <a href="twitter.html#fig:plotfavs">7.7</a>, especially near the bottom of the top 10 list, but these are largely the same words as for retweets. In general, the same words that lead to retweets lead to favorites. A prominent word for Julia in both plots is the hashtag for the NASA Datanauts program that she has participated in; read on to Chapter <a href="nasa.html#nasa">8</a> to learn more about NASA data and what we can learn from text analysis of NASA datasets.</p>
 
 </div>
 </div>

@@ -5,26 +5,28 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title></title>
+  <title>Text Mining with R</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="">
+  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="" />
+  <meta property="og:title" content="Text Mining with R" />
   <meta property="og:type" content="book" />
   
-  
-  
-  
+  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="" />
+  <meta name="twitter:title" content="Text Mining with R" />
   
-  
-  
+  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="twitter:image" content="images/cover.png" />
+
+<meta name="author" content="Julia Silge and David Robinson">
 
 
-
+<meta name="date" content="2017-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -112,111 +114,112 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
-<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#outline"><i class="fa fa-check"></i><b>1.3</b> Outline</a></li>
-<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>1.4</b> Topics this book does not cover</a></li>
-<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#acknowledgements"><i class="fa fa-check"></i><b>1.5</b> Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
+<li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="0.1" data-path="preface.html"><a href="preface.html#outline"><i class="fa fa-check"></i><b>0.1</b> Outline</a></li>
+<li class="chapter" data-level="0.2" data-path="preface.html"><a href="preface.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>0.2</b> Topics this book does not cover</a></li>
+<li class="chapter" data-level="0.3" data-path="preface.html"><a href="preface.html#using-code-examples"><i class="fa fa-check"></i><b>0.3</b> Using code examples</a></li>
+<li class="chapter" data-level="0.4" data-path="preface.html"><a href="preface.html#acknowledgements"><i class="fa fa-check"></i><b>0.4</b> Acknowledgements</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>2</b> The tidy text format</a><ul>
-<li class="chapter" data-level="2.1" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>2.1</b> The <code>unnest_tokens</code> function</a></li>
-<li class="chapter" data-level="2.2" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>2.2</b> Tidying the works of Jane Austen</a></li>
-<li class="chapter" data-level="2.3" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>2.3</b> The gutenbergr package</a></li>
-<li class="chapter" data-level="2.4" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>2.4</b> Word frequencies</a></li>
-<li class="chapter" data-level="2.5" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>2.5</b> Conclusion</a></li>
+<li class="chapter" data-level="1" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>1</b> The tidy text format</a><ul>
+<li class="chapter" data-level="1.1" data-path="tidytext.html"><a href="tidytext.html#contrasting-tidy-text-with-other-data-structures"><i class="fa fa-check"></i><b>1.1</b> Contrasting tidy text with other data structures</a></li>
+<li class="chapter" data-level="1.2" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>1.2</b> The <code>unnest_tokens</code> function</a></li>
+<li class="chapter" data-level="1.3" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>1.3</b> Tidying the works of Jane Austen</a></li>
+<li class="chapter" data-level="1.4" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>1.4</b> The gutenbergr package</a></li>
+<li class="chapter" data-level="1.5" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>1.5</b> Word frequencies</a></li>
+<li class="chapter" data-level="1.6" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>1.6</b> Conclusion</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>3</b> Sentiment analysis with tidy data</a><ul>
-<li class="chapter" data-level="3.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>3.1</b> The <code>sentiments</code> dataset</a></li>
-<li class="chapter" data-level="3.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>3.2</b> Sentiment analysis with inner join</a></li>
-<li class="chapter" data-level="3.3" data-path="sentiment.html"><a href="sentiment.html#comparing-the-three-sentiment-dictionaries"><i class="fa fa-check"></i><b>3.3</b> Comparing the three sentiment dictionaries</a></li>
-<li class="chapter" data-level="3.4" data-path="sentiment.html"><a href="sentiment.html#most-positive-negative"><i class="fa fa-check"></i><b>3.4</b> Most common positive and negative words</a></li>
-<li class="chapter" data-level="3.5" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>3.5</b> Wordclouds</a></li>
-<li class="chapter" data-level="3.6" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>3.6</b> Looking at units beyond just words</a></li>
+<li class="chapter" data-level="2" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>2</b> Sentiment analysis with tidy data</a><ul>
+<li class="chapter" data-level="2.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>2.1</b> The <code>sentiments</code> dataset</a></li>
+<li class="chapter" data-level="2.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>2.2</b> Sentiment analysis with inner join</a></li>
+<li class="chapter" data-level="2.3" data-path="sentiment.html"><a href="sentiment.html#comparing-the-three-sentiment-dictionaries"><i class="fa fa-check"></i><b>2.3</b> Comparing the three sentiment dictionaries</a></li>
+<li class="chapter" data-level="2.4" data-path="sentiment.html"><a href="sentiment.html#most-positive-negative"><i class="fa fa-check"></i><b>2.4</b> Most common positive and negative words</a></li>
+<li class="chapter" data-level="2.5" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>2.5</b> Wordclouds</a></li>
+<li class="chapter" data-level="2.6" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>2.6</b> Looking at units beyond just words</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>4</b> Analyzing word and document frequency: tf-idf</a><ul>
-<li class="chapter" data-level="4.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>4.1</b> Term frequency in Jane Austen’s novels</a></li>
-<li class="chapter" data-level="4.2" data-path="tfidf.html"><a href="tfidf.html#zipfs-law"><i class="fa fa-check"></i><b>4.2</b> Zipf’s law</a></li>
-<li class="chapter" data-level="4.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>4.3</b> The <code>bind_tf_idf</code> function</a></li>
-<li class="chapter" data-level="4.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>4.4</b> A corpus of physics texts</a></li>
+<li class="chapter" data-level="3" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>3</b> Analyzing word and document frequency: tf-idf</a><ul>
+<li class="chapter" data-level="3.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>3.1</b> Term frequency in Jane Austen’s novels</a></li>
+<li class="chapter" data-level="3.2" data-path="tfidf.html"><a href="tfidf.html#zipfs-law"><i class="fa fa-check"></i><b>3.2</b> Zipf’s law</a></li>
+<li class="chapter" data-level="3.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>3.3</b> The <code>bind_tf_idf</code> function</a></li>
+<li class="chapter" data-level="3.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>3.4</b> A corpus of physics texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Relationships between words</a><ul>
-<li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
-<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
-<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
-<li class="chapter" data-level="5.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>5.1.4</b> Visualizing a network of bigrams with igraph</a></li>
-<li class="chapter" data-level="5.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>5.1.5</b> Visualizing bigrams in other texts</a></li>
+<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words</a><ul>
+<li class="chapter" data-level="4.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>4.1</b> Tokenizing by n-gram</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>4.1.1</b> Counting and filtering n-grams</a></li>
+<li class="chapter" data-level="4.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>4.1.2</b> Analyzing bigrams</a></li>
+<li class="chapter" data-level="4.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>4.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
+<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with igraph</a></li>
+<li class="chapter" data-level="4.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>4.1.5</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-among-sections"><i class="fa fa-check"></i><b>5.2.1</b> Counting and correlating among sections</a></li>
-<li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.2.2</b> Pairwise correlation</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>6</b> Tidying and casting document-term matrices and corpus objects</a><ul>
-<li class="chapter" data-level="6.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>6.1</b> Tidying a document-term matrix</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>6.1.1</b> Tidying DocumentTermMatrix objects</a></li>
-<li class="chapter" data-level="6.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>6.1.2</b> Tidying dfm objects</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="dtm.html"><a href="dtm.html#cast-dtm"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a matrix</a></li>
-<li class="chapter" data-level="6.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a><ul>
-<li class="chapter" data-level="6.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>6.3.1</b> Example: mining financial articles</a></li>
+<li class="chapter" data-level="4.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>4.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-among-sections"><i class="fa fa-check"></i><b>4.2.1</b> Counting and correlating among sections</a></li>
+<li class="chapter" data-level="4.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>4.2.2</b> Pairwise correlation</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic modeling</a><ul>
-<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>7.1</b> Latent Dirichlet allocation</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>7.1.1</b> Word-topic probabilities</a></li>
-<li class="chapter" data-level="7.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>7.1.2</b> Document-topic probabilities</a></li>
+<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Tidying and casting document-term matrices and corpus objects</a><ul>
+<li class="chapter" data-level="5.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>5.1</b> Tidying a document-term matrix</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>5.1.1</b> Tidying DocumentTermMatrix objects</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>5.1.2</b> Tidying dfm objects</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>7.2.1</b> LDA on chapters</a></li>
-<li class="chapter" data-level="7.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>7.2.2</b> Per-document classification</a></li>
-<li class="chapter" data-level="7.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.2.3</b> By word assignments: <code>augment</code></a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.3</b> Alternative LDA implementations</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
-<li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
-<li class="chapter" data-level="8.2" data-path="twitter.html"><a href="twitter.html#word-frequencies-1"><i class="fa fa-check"></i><b>8.2</b> Word frequencies</a></li>
-<li class="chapter" data-level="8.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>8.3</b> Comparing word usage</a></li>
-<li class="chapter" data-level="8.4" data-path="twitter.html"><a href="twitter.html#changes-in-word-use"><i class="fa fa-check"></i><b>8.4</b> Changes in word use</a></li>
-<li class="chapter" data-level="8.5" data-path="twitter.html"><a href="twitter.html#favorites-and-retweets"><i class="fa fa-check"></i><b>8.5</b> Favorites and retweets</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>9</b> Case study: mining NASA metadata</a><ul>
-<li class="chapter" data-level="9.1" data-path="nasa.html"><a href="nasa.html#how-data-is-organized-at-nasa"><i class="fa fa-check"></i><b>9.1</b> How data is organized at NASA</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>9.1.1</b> Wrangling and tidying the data</a></li>
-<li class="chapter" data-level="9.1.2" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>9.1.2</b> Some initial simple exploration</a></li>
-</ul></li>
-<li class="chapter" data-level="9.2" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>9.2</b> Word co-ocurrences and correlations</a><ul>
-<li class="chapter" data-level="9.2.1" data-path="nasa.html"><a href="nasa.html#networks-of-description-and-title-words"><i class="fa fa-check"></i><b>9.2.1</b> Networks of Description and Title Words</a></li>
-<li class="chapter" data-level="9.2.2" data-path="nasa.html"><a href="nasa.html#networks-of-keywords"><i class="fa fa-check"></i><b>9.2.2</b> Networks of Keywords</a></li>
-</ul></li>
-<li class="chapter" data-level="9.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>9.3</b> Calculating tf-idf for the description fields</a><ul>
-<li class="chapter" data-level="9.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>9.3.1</b> What is tf-idf for the description field words?</a></li>
-<li class="chapter" data-level="9.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>9.3.2</b> Connecting description fields to keywords</a></li>
-</ul></li>
-<li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>9.4</b> Topic modeling</a><ul>
-<li class="chapter" data-level="9.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>9.4.1</b> Casting to a document-term matrix</a></li>
-<li class="chapter" data-level="9.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>9.4.2</b> Ready for topic modeling</a></li>
-<li class="chapter" data-level="9.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>9.4.3</b> Interpreting the topic model</a></li>
-<li class="chapter" data-level="9.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>9.4.4</b> Connecting topic modeling with keywords</a></li>
+<li class="chapter" data-level="5.2" data-path="dtm.html"><a href="dtm.html#cast-dtm"><i class="fa fa-check"></i><b>5.2</b> Casting tidy text data into a matrix</a></li>
+<li class="chapter" data-level="5.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>5.3</b> Tidying corpus objects with metadata</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>5.3.1</b> Example: mining financial articles</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
-<li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>10.1</b> Pre-processing</a><ul>
-<li class="chapter" data-level="10.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>10.1.1</b> Pre-processing text</a></li>
+<li class="chapter" data-level="6" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>6</b> Topic modeling</a><ul>
+<li class="chapter" data-level="6.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>6.1</b> Latent Dirichlet allocation</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>6.1.1</b> Word-topic probabilities</a></li>
+<li class="chapter" data-level="6.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>6.1.2</b> Document-topic probabilities</a></li>
 </ul></li>
-<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>10.2</b> Words in newsgroups</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>10.2.1</b> Finding tf-idf within newsgroups</a></li>
-<li class="chapter" data-level="10.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>10.2.2</b> Topic modeling</a></li>
+<li class="chapter" data-level="6.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>6.2</b> Example: the great library heist</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>6.2.1</b> LDA on chapters</a></li>
+<li class="chapter" data-level="6.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>6.2.2</b> Per-document classification</a></li>
+<li class="chapter" data-level="6.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>6.2.3</b> By word assignments: <code>augment</code></a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a><ul>
-<li class="chapter" data-level="10.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>10.3.1</b> Sentiment analysis by word</a></li>
-<li class="chapter" data-level="10.3.2" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>10.3.2</b> Sentiment analysis by message</a></li>
-<li class="chapter" data-level="10.3.3" data-path="usenet.html"><a href="usenet.html#n-gram-analysis"><i class="fa fa-check"></i><b>10.3.3</b> N-gram analysis</a></li>
+<li class="chapter" data-level="6.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>6.3</b> Alternative LDA implementations</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>7</b> Case study: comparing Twitter archives</a><ul>
+<li class="chapter" data-level="7.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>7.1</b> Getting the data and distribution of tweets</a></li>
+<li class="chapter" data-level="7.2" data-path="twitter.html"><a href="twitter.html#word-frequencies-1"><i class="fa fa-check"></i><b>7.2</b> Word frequencies</a></li>
+<li class="chapter" data-level="7.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>7.3</b> Comparing word usage</a></li>
+<li class="chapter" data-level="7.4" data-path="twitter.html"><a href="twitter.html#changes-in-word-use"><i class="fa fa-check"></i><b>7.4</b> Changes in word use</a></li>
+<li class="chapter" data-level="7.5" data-path="twitter.html"><a href="twitter.html#favorites-and-retweets"><i class="fa fa-check"></i><b>7.5</b> Favorites and retweets</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>8</b> Case study: mining NASA metadata</a><ul>
+<li class="chapter" data-level="8.1" data-path="nasa.html"><a href="nasa.html#how-data-is-organized-at-nasa"><i class="fa fa-check"></i><b>8.1</b> How data is organized at NASA</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>8.1.1</b> Wrangling and tidying the data</a></li>
+<li class="chapter" data-level="8.1.2" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>8.1.2</b> Some initial simple exploration</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>8.2</b> Word co-ocurrences and correlations</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="nasa.html"><a href="nasa.html#networks-of-description-and-title-words"><i class="fa fa-check"></i><b>8.2.1</b> Networks of Description and Title Words</a></li>
+<li class="chapter" data-level="8.2.2" data-path="nasa.html"><a href="nasa.html#networks-of-keywords"><i class="fa fa-check"></i><b>8.2.2</b> Networks of Keywords</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>8.3</b> Calculating tf-idf for the description fields</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>8.3.1</b> What is tf-idf for the description field words?</a></li>
+<li class="chapter" data-level="8.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>8.3.2</b> Connecting description fields to keywords</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>8.4</b> Topic modeling</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>8.4.1</b> Casting to a document-term matrix</a></li>
+<li class="chapter" data-level="8.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>8.4.2</b> Ready for topic modeling</a></li>
+<li class="chapter" data-level="8.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>8.4.3</b> Interpreting the topic model</a></li>
+<li class="chapter" data-level="8.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>8.4.4</b> Connecting topic modeling with keywords</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
+<li class="chapter" data-level="9" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>9</b> Case study: analyzing usenet text</a><ul>
+<li class="chapter" data-level="9.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>9.1</b> Pre-processing</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>9.1.1</b> Pre-processing text</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>9.2</b> Words in newsgroups</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>9.2.1</b> Finding tf-idf within newsgroups</a></li>
+<li class="chapter" data-level="9.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>9.2.2</b> Topic modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>9.3</b> Sentiment analysis</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>9.3.1</b> Sentiment analysis by word</a></li>
+<li class="chapter" data-level="9.3.2" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>9.3.2</b> Sentiment analysis by message</a></li>
+<li class="chapter" data-level="9.3.3" data-path="usenet.html"><a href="usenet.html#n-gram-analysis"><i class="fa fa-check"></i><b>9.3.3</b> N-gram analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -229,7 +232,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
           </h1>
         </div>
 
@@ -238,12 +241,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="dtm" class="section level1">
-<h1><span class="header-section-number">6</span> Tidying and casting document-term matrices and corpus objects</h1>
+<h1><span class="header-section-number">5</span> Tidying and casting document-term matrices and corpus objects</h1>
 <p>In the previous chapters, we’ve been analyzing text arranged in the tidy text format: a table with one-token-per-document-per-row, such as is constructed by the <code>unnest_tokens()</code> function. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2 to explore and visualize text data. We’ve demonstrated that many informative text analyses can be performed using these tools.</p>
 <p>However, most of the existing R tools for natural language processing, besides the tidytext package, aren’t compatible with this format. The <a href="https://cran.r-project.org/web/views/NaturalLanguageProcessing.html">CRAN Task View for Natural Language Processing</a> lists a large selection of packages that take other structures of input and provide non-tidy outputs. These packages are very useful in text mining applications, and many existing text datasets are structured according to these formats.</p>
-<p>Computer scientist Hal Abelson has observed that “No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system” <span class="citation">[@Friedman:2008:EPL:1378240]</span>. In that spirit, this chapter will discuss the “glue” that connects the tidy text format with other important packages and data structures, allowing you to rely on both existing text mining packages and the suite of tidy tools to perform your analysis. In particular, we’ll examine the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix.</p>
+<p>Computer scientist Hal Abelson has observed that “No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system” <span class="citation">(Abelson <a href="#ref-Friedman:2008:EPL:1378240">2008</a>)</span>. In that spirit, this chapter will discuss the “glue” that connects the tidy text format with other important packages and data structures, allowing you to rely on both existing text mining packages and the suite of tidy tools to perform your analysis. In particular, we’ll examine the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix.</p>
 <div id="tidy-dtm" class="section level2">
-<h2><span class="header-section-number">6.1</span> Tidying a document-term matrix</h2>
+<h2><span class="header-section-number">5.1</span> Tidying a document-term matrix</h2>
 <p>One of the most common structures that text mining packages work with is the <a href="https://en.wikipedia.org/wiki/Document-term_matrix">document-term matrix</a> (or DTM). This is a matrix where:</p>
 <ul>
 <li>each row represents one document (such as a book or article),</li>
@@ -253,11 +256,11 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Since most pairings of document and term do not occur (they have the value zero), DTMs are usually implemented as sparse matrices. These objects can be treated as though they were matrices (for example, accessing particular rows and columns), but are stored in a more efficient format. We’ll discuss several implementations of these matrices in this chapter.</p>
 <p>DTM objects cannot be used directly with tidy tools, just as tidy data frames cannot be used as input for most text mining packages. Thus, the tidytext package provides two verbs that convert between the two formats.</p>
 <ul>
-<li><code>tidy()</code> turns a document-term matrix into a tidy data frame. This verb comes from the broom package <span class="citation">[@R-broom]</span>, which provides similar tidying functions for many statistical models and objects.</li>
+<li><code>tidy()</code> turns a document-term matrix into a tidy data frame. This verb comes from the broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>, which provides similar tidying functions for many statistical models and objects.</li>
 <li><code>cast()</code> turns a tidy one-term-per-row data frame into a matrix. tidytext provides three variations of this verb, each converting to a different type of matrix: <code>cast_sparse()</code> (converting to a sparse matrix from the Matrix package), <code>cast_dtm()</code> (converting to a <code>DocumentTermMatrix</code> object from tm), and <code>cast_dfm()</code> (converting to a <code>dfm</code> object from quanteda).</li>
 </ul>
 <div id="tidying-documenttermmatrix-objects" class="section level3">
-<h3><span class="header-section-number">6.1.1</span> Tidying DocumentTermMatrix objects</h3>
+<h3><span class="header-section-number">5.1.1</span> Tidying DocumentTermMatrix objects</h3>
 <p>Perhaps the most widely used implementation of DTMs in R is the <code>DocumentTermMatrix</code> class in the tm package. Many available text mining datasets are provided in this format. For example, consider the collection of Associated Press newspaper articles included in the topicmodels package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tm)
 
@@ -268,7 +271,7 @@ AssociatedPress</code></pre></div>
 ## Sparsity           : 99%
 ## Maximal term length: 18
 ## Weighting          : term frequency (tf)</code></pre>
-<p>We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the <code>Terms()</code> function.</p>
+<p>We see that this dataset contains documents (each of them an AP article) and terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the <code>Terms()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">terms &lt;-<span class="st"> </span><span class="kw">Terms</span>(AssociatedPress)
 <span class="kw">head</span>(terms)</code></pre></div>
 <pre><code>## [1] &quot;aaron&quot;      &quot;abandon&quot;    &quot;abandoned&quot;  &quot;abandoning&quot; &quot;abbott&quot;     &quot;abboud&quot;</code></pre>
@@ -292,8 +295,8 @@ ap_td</code></pre></div>
 ## 9         1   arrested     1
 ## 10        1    assault     1
 ## # ... with 302,021 more rows</code></pre>
-<p>Notice that we now have a tidy three-column <code>tbl_df</code>, with variables <code>document</code>, <code>term</code>, and <code>count</code>. This tidying operation is similar to the <code>melt()</code> function from the reshape2 package <span class="citation">[@R-reshape2]</span> for non-sparse matrices. Notice that only the non-zero values are included: document 1 includes terms such as “adding” and “adult”, but not “aaron” or “abandon”, which means the tidied version has no rows where <code>count</code> is zero.</p>
-<p>As we’ve seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles with the approach described in Chapter <a href="sentiment.html#sentiment">3</a>.</p>
+<p>Notice that we now have a tidy three-column <code>tbl_df</code>, with variables <code>document</code>, <code>term</code>, and <code>count</code>. This tidying operation is similar to the <code>melt()</code> function from the reshape2 package <span class="citation">(Wickham <a href="#ref-R-reshape2">2007</a>)</span> for non-sparse matrices. Notice that only the non-zero values are included: document 1 includes terms such as “adding” and “adult”, but not “aaron” or “abandon”, which means the tidied version has no rows where <code>count</code> is zero.</p>
+<p>As we’ve seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles with the approach described in Chapter <a href="sentiment.html#sentiment">2</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_sentiments &lt;-<span class="st"> </span>ap_td %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>), <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">term =</span> <span class="st">&quot;word&quot;</span>))
 
@@ -312,7 +315,7 @@ ap_sentiments</code></pre></div>
 ## 9         1   liked     1  positive
 ## 10        1 miracle     1  positive
 ## # ... with 30,084 more rows</code></pre>
-<p>This would let us visualize which words from the AP articles most often contributed to positive or negative sentiment, seen in Figure <a href="dtm.html#fig:apsentiments">6.1</a>. We can see that the most common positive words include “like”, “work”, “support”, and “good”, while the most negative words include “killed”, “death”, and “vice”. (The inclusion of “vice” as a negative term is probably a mistake on the algorithm’s part, since it likely usually refers to “vice president”).</p>
+<p>This would let us visualize which words from the AP articles most often contributed to positive or negative sentiment, seen in Figure <a href="dtm.html#fig:apsentiments">5.1</a>. We can see that the most common positive words include “like”, “work”, “support”, and “good”, while the most negative words include “killed”, “death”, and “vice”. (The inclusion of “vice” as a negative term is probably a mistake on the algorithm’s part, since it likely usually refers to “vice president”).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 ap_sentiments %&gt;%
@@ -328,13 +331,13 @@ ap_sentiments %&gt;%
 <div class="figure"><span id="fig:apsentiments"></span>
 <img src="05-document-term-matrices_files/figure-html/apsentiments-1.png" alt="Words from AP articles with the greatest contribution to positive or negative sentiments, computed as the product of the word's AFINN sentiment score and its frequency." width="672" />
 <p class="caption">
-Figure 6.1: Words from AP articles with the greatest contribution to positive or negative sentiments, computed as the product of the word’s AFINN sentiment score and its frequency.
+Figure 5.1: Words from AP articles with the greatest contribution to positive or negative sentiments, computed as the product of the word’s AFINN sentiment score and its frequency.
 </p>
 </div>
 </div>
 <div id="tidying-dfm-objects" class="section level3">
-<h3><span class="header-section-number">6.1.2</span> Tidying dfm objects</h3>
-<p>Other text mining packages provide alternative implementations of document-term matrices, such as the <code>dfm</code> (document-feature matrix) class from the quanteda package <span class="citation">[@R-quanteda]</span>. For example, the quanteda package comes with a corpus of presidential inauguration speeches, which can be converted to a <code>dfm</code> using the appropriate function.</p>
+<h3><span class="header-section-number">5.1.2</span> Tidying dfm objects</h3>
+<p>Other text mining packages provide alternative implementations of document-term matrices, such as the <code>dfm</code> (document-feature matrix) class from the quanteda package <span class="citation">(Benoit and Nulty <a href="#ref-R-quanteda">2016</a>)</span>. For example, the quanteda package comes with a corpus of presidential inauguration speeches, which can be converted to a <code>dfm</code> using the appropriate function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(methods)
 
 <span class="kw">data</span>(<span class="st">&quot;data_corpus_inaugural&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;quanteda&quot;</span>)
@@ -358,7 +361,7 @@ inaug_td</code></pre></div>
 ## 9      1821-Monroe fellow    10
 ## 10      1825-Adams fellow     3
 ## # ... with 44,715 more rows</code></pre>
-<p>We may be interested in finding the words most specific to each of the inaugural speeches. This could be quantified by calculating the tf-idf of each term-speech pair using the <code>bind_tf_idf()</code> function, as described in Chapter <a href="tfidf.html#tfidf">4</a>.</p>
+<p>We may be interested in finding the words most specific to each of the inaugural speeches. This could be quantified by calculating the tf-idf of each term-speech pair using the <code>bind_tf_idf()</code> function, as described in Chapter <a href="tfidf.html#tfidf">3</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inaug_tf_idf &lt;-<span class="st"> </span>inaug_td %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(term, document, count) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf))
@@ -378,11 +381,11 @@ inaug_tf_idf</code></pre></div>
 ## 9  1793-Washington   witnesses     1 0.006802721 2.961831 0.02014851
 ## 10 1793-Washington     besides     1 0.006802721 2.674149 0.01819149
 ## # ... with 44,715 more rows</code></pre>
-<p>We could use this data to pick four notable inaugural addresses (from Presidents Lincoln, Roosevelt, Kennedy, and Obama), and visualize the words most specific to each speech, as shown in Figure <a href="dtm.html#fig:presidentspeeches">6.2</a>.</p>
+<p>We could use this data to pick four notable inaugural addresses (from Presidents Lincoln, Roosevelt, Kennedy, and Obama), and visualize the words most specific to each speech, as shown in Figure <a href="dtm.html#fig:presidentspeeches">5.2</a>.</p>
 <div class="figure"><span id="fig:presidentspeeches"></span>
 <img src="05-document-term-matrices_files/figure-html/presidentspeeches-1.png" alt="The terms with the highest tf-idf from each of four selected inaugural addresses. Note that quanteda's tokenizer includes the '?' punctuation mark as a term, though the texts we've tokenized ourselves with unnest_tokens do not." width="576" />
 <p class="caption">
-Figure 6.2: The terms with the highest tf-idf from each of four selected inaugural addresses. Note that quanteda’s tokenizer includes the ‘?’ punctuation mark as a term, though the texts we’ve tokenized ourselves with unnest_tokens do not.
+Figure 5.2: The terms with the highest tf-idf from each of four selected inaugural addresses. Note that quanteda’s tokenizer includes the ‘?’ punctuation mark as a term, though the texts we’ve tokenized ourselves with unnest_tokens do not.
 </p>
 </div>
 <p>As another example of a visualization possible with tidy data, we could extract the year from each document’s name, and compute the total number of words within each year. Note that we’ve used tidyr’s <code>complete()</code> function to include zeroes (cases where a word didn’t appear in a document) in the table.</p>
@@ -393,7 +396,7 @@ year_term_counts &lt;-<span class="st"> </span>inaug_td %&gt;%
 <span class="st">  </span><span class="kw">complete</span>(year, term, <span class="dt">fill =</span> <span class="kw">list</span>(<span class="dt">count =</span> <span class="dv">0</span>)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(year) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year_total =</span> <span class="kw">sum</span>(count))</code></pre></div>
-<p>This lets us pick several words and visualize how they changed in frequency over time, as shown in <a href="dtm.html#fig:yearterm">6.3</a>. We can see that over time, American presidents became less likely to refer to the country as the “Union” and more likely to refer to “America”. They also became less likely to talk about the “constitution” and foreign&quot; countries, and more likely to mention “freedom” and “God”.</p>
+<p>This lets us pick several words and visualize how they changed in frequency over time, as shown in <a href="dtm.html#fig:yearterm">5.3</a>. We can see that over time, American presidents became less likely to refer to the country as the “Union” and more likely to refer to “America”. They also became less likely to talk about the “constitution” and foreign&quot; countries, and more likely to mention “freedom” and “God”.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">year_term_counts %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(term %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;god&quot;</span>, <span class="st">&quot;america&quot;</span>, <span class="st">&quot;foreign&quot;</span>, <span class="st">&quot;union&quot;</span>, <span class="st">&quot;constitution&quot;</span>, <span class="st">&quot;freedom&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year, count /<span class="st"> </span>year_total)) +
@@ -405,14 +408,14 @@ year_term_counts &lt;-<span class="st"> </span>inaug_td %&gt;%
 <div class="figure"><span id="fig:yearterm"></span>
 <img src="05-document-term-matrices_files/figure-html/yearterm-1.png" alt="Changes in word frequency over time within Presidential inaugural addresses, for four selected terms" width="672" />
 <p class="caption">
-Figure 6.3: Changes in word frequency over time within Presidential inaugural addresses, for four selected terms
+Figure 5.3: Changes in word frequency over time within Presidential inaugural addresses, for four selected terms
 </p>
 </div>
 <p>These examples show how you can use tidytext, and the related suite of tidy tools, to analyze sources even if their origin was not in a tidy format.</p>
 </div>
 </div>
 <div id="cast-dtm" class="section level2">
-<h2><span class="header-section-number">6.2</span> Casting tidy text data into a matrix</h2>
+<h2><span class="header-section-number">5.2</span> Casting tidy text data into a matrix</h2>
 <p>Just as some existing text mining packages provide document-term matrices as sample data or output, some algorithms expect such matrices as input. Therefore, tidytext provides <code>cast_</code> verbs for converting from a tidy form to these matrices.</p>
 <p>For example, we could take the tidied AP dataset and cast it back into a document-term matrix using the <code>cast_dtm()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_td %&gt;%
@@ -453,10 +456,10 @@ austen_dtm</code></pre></div>
 ## Sparsity           : 54%
 ## Maximal term length: 19
 ## Weighting          : term frequency (tf)</code></pre>
-<p>This casting process allows for reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications. In Chapter <a href="topicmodeling.html#topicmodeling">7</a>, we’ll examine some examples where a tidy-text dataset has to be converted into a DocumentTermMatrix for processing.</p>
+<p>This casting process allows for reading, filtering, and processing to be done using dplyr and other tidy tools, after which the data can be converted into a document-term matrix for machine learning applications. In Chapter <a href="topicmodeling.html#topicmodeling">6</a>, we’ll examine some examples where a tidy-text dataset has to be converted into a DocumentTermMatrix for processing.</p>
 </div>
 <div id="tidying-corpus-objects-with-metadata" class="section level2">
-<h2><span class="header-section-number">6.3</span> Tidying corpus objects with metadata</h2>
+<h2><span class="header-section-number">5.3</span> Tidying corpus objects with metadata</h2>
 <p>Some data structures are designed to store document collections <em>before</em> tokenization, often called a “corpus”. One common example is <code>Corpus</code> objects from the tm package. These store text alongside <strong>metadata</strong>, which may include an ID, date/time, title, or language for each document.</p>
 <p>For example, the tm package comes with the <code>acq</code> corpus, containing 50 articles from the news service Reuters.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;acq&quot;</span>)
@@ -545,7 +548,7 @@ acq_tokens %&gt;%
 ## 10   467  nursery     3 0.09677419 3.912023 0.3785829
 ## # ... with 2,843 more rows</code></pre>
 <div id="financial" class="section level3">
-<h3><span class="header-section-number">6.3.1</span> Example: mining financial articles</h3>
+<h3><span class="header-section-number">5.3.1</span> Example: mining financial articles</h3>
 <p><code>Corpus</code> objects are a common output format for data ingesting packages, which means the <code>tidy()</code> function gives us access to a wide variety of text data. One example is <a href="https://cran.r-project.org/package=tm.plugin.webmining">tm.plugin.webmining</a>, which connects to online feeds to retrieve news articles based on a keyword. For instance, performing <code>WebCorpus(GoogleFinanceSource(&quot;NASDAQ:MSFT&quot;)))</code> allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.</p>
 <p>Here we’ll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix. These results were downloaded in January 2017, when this chapter was written, but you’ll certainly find different results if you ran it for yourself. (Note that this code takes several minutes to run).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tm.plugin.webmining)
@@ -605,14 +608,14 @@ stock_tf_idf &lt;-<span class="st"> </span>stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(!<span class="kw">str_detect</span>(word, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(word, company, n) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(-tf_idf)</code></pre></div>
-<p>The top terms for each are visualized in Figure <a href="dtm.html#fig:stocktfidf">6.4</a>. As we’d expect the company’s name and symbol are typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).</p>
+<p>The top terms for each are visualized in Figure <a href="dtm.html#fig:stocktfidf">5.4</a>. As we’d expect the company’s name and symbol are typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).</p>
 <div class="figure"><span id="fig:stocktfidf"></span>
 <img src="05-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest tf-idf in recent articles specific to each company" width="768" />
 <p class="caption">
-Figure 6.4: The 8 words with the highest tf-idf in recent articles specific to each company
+Figure 5.4: The 8 words with the highest tf-idf in recent articles specific to each company
 </p>
 </div>
-<p>If we were interested in using recent news to analyze the market and make investment decisions, we’d likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter <a href="sentiment.html#most-positive-negative">3.4</a>. For example, we could examine this within the AFINN lexicon (Figure <a href="dtm.html#fig:stockafinn">6.5</a>).</p>
+<p>If we were interested in using recent news to analyze the market and make investment decisions, we’d likely want to use sentiment analysis to determine whether the news coverage was positive or negative. Before we run such an analysis, we should look at what words would contribute the most to positive and negative sentiments, as was shown in Chapter <a href="sentiment.html#most-positive-negative">2.4</a>. For example, we could examine this within the AFINN lexicon (Figure <a href="dtm.html#fig:stockafinn">5.5</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">anti_join</span>(stop_words, <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
@@ -627,11 +630,11 @@ Figure 6.4: The 8 words with the highest tf-idf in recent articles specific to e
 <div class="figure"><span id="fig:stockafinn"></span>
 <img src="05-document-term-matrices_files/figure-html/stockafinn-1.png" alt="The words with the largest contribution to sentiment scores in recent financial articles, according to the AFINN dictionary. The 'contribution' is the product of the word and the sentiment score." width="672" />
 <p class="caption">
-Figure 6.5: The words with the largest contribution to sentiment scores in recent financial articles, according to the AFINN dictionary. The ‘contribution’ is the product of the word and the sentiment score.
+Figure 5.5: The words with the largest contribution to sentiment scores in recent financial articles, according to the AFINN dictionary. The ‘contribution’ is the product of the word and the sentiment score.
 </p>
 </div>
 <p>In the context of these financial articles, there are a few big red flags here. The words “share” and “shares” are counted as positive verbs by the AFINN lexicon (“Alice will <strong>share</strong> her cake with Bob”), but they’re actually neutral nouns (“The stock price is $12 per <strong>share</strong>”) that could just as easily be in a positive sentence as a negative one. The word “fool” is even more deceptive: it refers to Motley Fool, a financial services company. In short, we can see that the AFINN sentiment lexicon is entirely unsuited to the context of financial data (as are the NRC and Bing).</p>
-<p>Instead, we introduce another sentiment lexicon: the Loughran and McDonald dictionary of financial sentiment terms <span class="citation">[@loughran2011liability]</span>. This dictionary was developed based on analyses of financial reports, and intentionally avoids words like “share” and “fool”, as well as subtler terms like “liability” and “risk” that may not have a negative meaning in a financial context.</p>
+<p>Instead, we introduce another sentiment lexicon: the Loughran and McDonald dictionary of financial sentiment terms <span class="citation">(LOUGHRAN and MCDONALD <a href="#ref-loughran2011liability">2011</a>)</span>. This dictionary was developed based on analyses of financial reports, and intentionally avoids words like “share” and “fool”, as well as subtler terms like “liability” and “risk” that may not have a negative meaning in a financial context.</p>
 <p>The Loughran data divides words into six sentiments: “positive”, “negative”, “litigious”, “uncertain”, “constraining”, and “superfluous”. We could start by examining the most common words belonging to each sentiment within this text dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word) %&gt;%
@@ -648,10 +651,10 @@ Figure 6.5: The words with the largest contribution to sentiment scores in recen
 <div class="figure"><span id="fig:stockloughransentiments"></span>
 <img src="05-document-term-matrices_files/figure-html/stockloughransentiments-1.png" alt="The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon" width="672" />
 <p class="caption">
-Figure 6.6: The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon
+Figure 5.6: The most common words in the financial news articles associated with each of the six sentiments in the Loughran and McDonald lexicon
 </p>
 </div>
-<p>These assignments (Figure <a href="dtm.html#fig:stockloughransentiments">6.6</a>) of words to sentiments look more reasonable: common positive words include “strong” and “better”, but not “shares” or “growth”, while negative words include “volatility” but not “fool”. The other sentiments look reasonable as well: the most common “uncertainty” terms include “could” and “may”.</p>
+<p>These assignments (Figure <a href="dtm.html#fig:stockloughransentiments">5.6</a>) of words to sentiments look more reasonable: common positive words include “strong” and “better”, but not “shares” or “growth”, while negative words include “volatility” but not “fool”. The other sentiments look reasonable as well: the most common “uncertainty” terms include “could” and “may”.</p>
 <p>Now that we know we can trust the dictionary to approximate the articles’ sentiments, we can use our typical methods for counting the number of uses of each sentiment-associated word in each corpus.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_sentiment_count &lt;-<span class="st"> </span>stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;loughran&quot;</span>), <span class="dt">by =</span> <span class="st">&quot;word&quot;</span>) %&gt;%
@@ -671,7 +674,7 @@ stock_sentiment_count</code></pre></div>
 ## 7   Netflix            4         7      111      162           0         106
 ## 8   Twitter            4        12      157       79           1          75
 ## 9     Yahoo            3        28      130       74           0          71</code></pre>
-<p>It might be interesting to examine which company has the most news with “litigious” or “uncertain” terms. But the simplest measure, much as it was for most analysis in Chapter <a href="sentiment.html#sentiment">3</a>, is to see whether the news is more positive or negative. As a general quantitative measure of sentiment, we’ll use “(positive - negative) / (positive + negative)” (Figure <a href="dtm.html#fig:stockpositivity">6.7</a>).</p>
+<p>It might be interesting to examine which company has the most news with “litigious” or “uncertain” terms. But the simplest measure, much as it was for most analysis in Chapter <a href="sentiment.html#sentiment">2</a>, is to see whether the news is more positive or negative. As a general quantitative measure of sentiment, we’ll use “(positive - negative) / (positive + negative)” (Figure <a href="dtm.html#fig:stockpositivity">5.7</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_sentiment_count %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">score =</span> (positive -<span class="st"> </span>negative) /<span class="st"> </span>(positive +<span class="st"> </span>negative)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">company =</span> <span class="kw">reorder</span>(company, score)) %&gt;%
@@ -683,12 +686,30 @@ stock_sentiment_count</code></pre></div>
 <div class="figure"><span id="fig:stockpositivity"></span>
 <img src="05-document-term-matrices_files/figure-html/stockpositivity-1.png" alt="&quot;Positivity&quot; of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company" width="672" />
 <p class="caption">
-Figure 6.7: “Positivity” of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company
+Figure 5.7: “Positivity” of the news coverage around each stock in January 2017, calculated as (positive - negative) / (positive + negative), based on uses of positive and negative words in 20 recent news articles about each company
 </p>
 </div>
 <p>Based on this analysis, we’d say that in January 2017 most of the coverage of Yahoo and Twitter was strongly negative, while coverage of Google and Amazon was the most positive. A glance at current financial headlines suggest that it’s on the right track. If you were interested in further analysis, you could use one of R’s many quantitative finance packages to compare these articles to recent stock prices and other metrics.</p>
 
 </div>
+</div>
+</div>
+<h3> References</h3>
+<div id="refs" class="references">
+<div id="ref-Friedman:2008:EPL:1378240">
+<p>Abelson, Hal. 2008. “Foreword.” In <em>Essentials of Programming Languages, 3rd Edition</em>, 3rd ed. The MIT Press.</p>
+</div>
+<div id="ref-R-broom">
+<p>Robinson, David, Matthieu Gomez, Boris Demeshev, Dieter Menne, Benjamin Nutter, Luke Johnston, Ben Bolker, Francois Briatte, and Hadley Wickham. 2015. <em>Broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
+</div>
+<div id="ref-R-reshape2">
+<p>Wickham, Hadley. 2007. “Reshaping Data with the reshape Package.” <em>Journal of Statistical Software</em> 21 (12): 1–20. <a href="http://www.jstatsoft.org/v21/i12/" class="uri">http://www.jstatsoft.org/v21/i12/</a>.</p>
+</div>
+<div id="ref-R-quanteda">
+<p>Benoit, Kenneth, and Paul Nulty. 2016. <em>Quanteda: Quantitative Analysis of Textual Data</em>. <a href="https://CRAN.R-project.org/package=quanteda" class="uri">https://CRAN.R-project.org/package=quanteda</a>.</p>
+</div>
+<div id="ref-loughran2011liability">
+<p>LOUGHRAN, TIM, and BILL MCDONALD. 2011. “When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks.” <em>The Journal of Finance</em> 66 (1). Blackwell Publishing Inc: 35–65. doi:<a href="https://doi.org/10.1111/j.1540-6261.2010.01625.x">10.1111/j.1540-6261.2010.01625.x</a>.</p>
 </div>
 </div>
             </section>

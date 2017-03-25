@@ -5,26 +5,28 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title></title>
+  <title>Text Mining with R</title>
   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
-  <meta name="description" content="">
+  <meta name="description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools">
   <meta name="generator" content="bookdown 0.3 and GitBook 2.6.7">
 
-  <meta property="og:title" content="" />
+  <meta property="og:title" content="Text Mining with R" />
   <meta property="og:type" content="book" />
   
-  
-  
-  
+  <meta property="og:image" content="images/cover.png" />
+  <meta property="og:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="github-repo" content="dgrtwo/tidy-text-mining" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="" />
+  <meta name="twitter:title" content="Text Mining with R" />
   
-  
-  
+  <meta name="twitter:description" content="A guide to text analysis within the tidy data framework, using the tidytext package and other tidy tools" />
+  <meta name="twitter:image" content="images/cover.png" />
+
+<meta name="author" content="Julia Silge and David Robinson">
 
 
-
+<meta name="date" content="2017-03-25">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -112,111 +114,112 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><a href="./">Text Mining with R</a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
-<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#what-is-tidy-text"><i class="fa fa-check"></i><b>1.1</b> What is tidy text?</a></li>
-<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#about-this-book"><i class="fa fa-check"></i><b>1.2</b> About this book</a></li>
-<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#outline"><i class="fa fa-check"></i><b>1.3</b> Outline</a></li>
-<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>1.4</b> Topics this book does not cover</a></li>
-<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#acknowledgements"><i class="fa fa-check"></i><b>1.5</b> Acknowledgements</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome to Text Mining with R</a></li>
+<li class="chapter" data-level="" data-path="preface.html"><a href="preface.html"><i class="fa fa-check"></i>Preface</a><ul>
+<li class="chapter" data-level="0.1" data-path="preface.html"><a href="preface.html#outline"><i class="fa fa-check"></i><b>0.1</b> Outline</a></li>
+<li class="chapter" data-level="0.2" data-path="preface.html"><a href="preface.html#topics-this-book-does-not-cover"><i class="fa fa-check"></i><b>0.2</b> Topics this book does not cover</a></li>
+<li class="chapter" data-level="0.3" data-path="preface.html"><a href="preface.html#using-code-examples"><i class="fa fa-check"></i><b>0.3</b> Using code examples</a></li>
+<li class="chapter" data-level="0.4" data-path="preface.html"><a href="preface.html#acknowledgements"><i class="fa fa-check"></i><b>0.4</b> Acknowledgements</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>2</b> The tidy text format</a><ul>
-<li class="chapter" data-level="2.1" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>2.1</b> The <code>unnest_tokens</code> function</a></li>
-<li class="chapter" data-level="2.2" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>2.2</b> Tidying the works of Jane Austen</a></li>
-<li class="chapter" data-level="2.3" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>2.3</b> The gutenbergr package</a></li>
-<li class="chapter" data-level="2.4" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>2.4</b> Word frequencies</a></li>
-<li class="chapter" data-level="2.5" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>2.5</b> Conclusion</a></li>
+<li class="chapter" data-level="1" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>1</b> The tidy text format</a><ul>
+<li class="chapter" data-level="1.1" data-path="tidytext.html"><a href="tidytext.html#contrasting-tidy-text-with-other-data-structures"><i class="fa fa-check"></i><b>1.1</b> Contrasting tidy text with other data structures</a></li>
+<li class="chapter" data-level="1.2" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>1.2</b> The <code>unnest_tokens</code> function</a></li>
+<li class="chapter" data-level="1.3" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>1.3</b> Tidying the works of Jane Austen</a></li>
+<li class="chapter" data-level="1.4" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>1.4</b> The gutenbergr package</a></li>
+<li class="chapter" data-level="1.5" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>1.5</b> Word frequencies</a></li>
+<li class="chapter" data-level="1.6" data-path="tidytext.html"><a href="tidytext.html#conclusion"><i class="fa fa-check"></i><b>1.6</b> Conclusion</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>3</b> Sentiment analysis with tidy data</a><ul>
-<li class="chapter" data-level="3.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>3.1</b> The <code>sentiments</code> dataset</a></li>
-<li class="chapter" data-level="3.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>3.2</b> Sentiment analysis with inner join</a></li>
-<li class="chapter" data-level="3.3" data-path="sentiment.html"><a href="sentiment.html#comparing-the-three-sentiment-dictionaries"><i class="fa fa-check"></i><b>3.3</b> Comparing the three sentiment dictionaries</a></li>
-<li class="chapter" data-level="3.4" data-path="sentiment.html"><a href="sentiment.html#most-positive-negative"><i class="fa fa-check"></i><b>3.4</b> Most common positive and negative words</a></li>
-<li class="chapter" data-level="3.5" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>3.5</b> Wordclouds</a></li>
-<li class="chapter" data-level="3.6" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>3.6</b> Looking at units beyond just words</a></li>
+<li class="chapter" data-level="2" data-path="sentiment.html"><a href="sentiment.html"><i class="fa fa-check"></i><b>2</b> Sentiment analysis with tidy data</a><ul>
+<li class="chapter" data-level="2.1" data-path="sentiment.html"><a href="sentiment.html#the-sentiments-dataset"><i class="fa fa-check"></i><b>2.1</b> The <code>sentiments</code> dataset</a></li>
+<li class="chapter" data-level="2.2" data-path="sentiment.html"><a href="sentiment.html#sentiment-analysis-with-inner-join"><i class="fa fa-check"></i><b>2.2</b> Sentiment analysis with inner join</a></li>
+<li class="chapter" data-level="2.3" data-path="sentiment.html"><a href="sentiment.html#comparing-the-three-sentiment-dictionaries"><i class="fa fa-check"></i><b>2.3</b> Comparing the three sentiment dictionaries</a></li>
+<li class="chapter" data-level="2.4" data-path="sentiment.html"><a href="sentiment.html#most-positive-negative"><i class="fa fa-check"></i><b>2.4</b> Most common positive and negative words</a></li>
+<li class="chapter" data-level="2.5" data-path="sentiment.html"><a href="sentiment.html#wordclouds"><i class="fa fa-check"></i><b>2.5</b> Wordclouds</a></li>
+<li class="chapter" data-level="2.6" data-path="sentiment.html"><a href="sentiment.html#looking-at-units-beyond-just-words"><i class="fa fa-check"></i><b>2.6</b> Looking at units beyond just words</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>4</b> Analyzing word and document frequency: tf-idf</a><ul>
-<li class="chapter" data-level="4.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>4.1</b> Term frequency in Jane Austen’s novels</a></li>
-<li class="chapter" data-level="4.2" data-path="tfidf.html"><a href="tfidf.html#zipfs-law"><i class="fa fa-check"></i><b>4.2</b> Zipf’s law</a></li>
-<li class="chapter" data-level="4.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>4.3</b> The <code>bind_tf_idf</code> function</a></li>
-<li class="chapter" data-level="4.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>4.4</b> A corpus of physics texts</a></li>
+<li class="chapter" data-level="3" data-path="tfidf.html"><a href="tfidf.html"><i class="fa fa-check"></i><b>3</b> Analyzing word and document frequency: tf-idf</a><ul>
+<li class="chapter" data-level="3.1" data-path="tfidf.html"><a href="tfidf.html#term-frequency-in-jane-austens-novels"><i class="fa fa-check"></i><b>3.1</b> Term frequency in Jane Austen’s novels</a></li>
+<li class="chapter" data-level="3.2" data-path="tfidf.html"><a href="tfidf.html#zipfs-law"><i class="fa fa-check"></i><b>3.2</b> Zipf’s law</a></li>
+<li class="chapter" data-level="3.3" data-path="tfidf.html"><a href="tfidf.html#the-bind_tf_idf-function"><i class="fa fa-check"></i><b>3.3</b> The <code>bind_tf_idf</code> function</a></li>
+<li class="chapter" data-level="3.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>3.4</b> A corpus of physics texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>5</b> Relationships between words</a><ul>
-<li class="chapter" data-level="5.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>5.1</b> Tokenizing by n-gram</a><ul>
-<li class="chapter" data-level="5.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>5.1.1</b> Counting and filtering n-grams</a></li>
-<li class="chapter" data-level="5.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>5.1.2</b> Analyzing bigrams</a></li>
-<li class="chapter" data-level="5.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>5.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
-<li class="chapter" data-level="5.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>5.1.4</b> Visualizing a network of bigrams with igraph</a></li>
-<li class="chapter" data-level="5.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>5.1.5</b> Visualizing bigrams in other texts</a></li>
+<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words</a><ul>
+<li class="chapter" data-level="4.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>4.1</b> Tokenizing by n-gram</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>4.1.1</b> Counting and filtering n-grams</a></li>
+<li class="chapter" data-level="4.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>4.1.2</b> Analyzing bigrams</a></li>
+<li class="chapter" data-level="4.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>4.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
+<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with igraph</a></li>
+<li class="chapter" data-level="4.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>4.1.5</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
-<li class="chapter" data-level="5.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>5.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
-<li class="chapter" data-level="5.2.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-among-sections"><i class="fa fa-check"></i><b>5.2.1</b> Counting and correlating among sections</a></li>
-<li class="chapter" data-level="5.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>5.2.2</b> Pairwise correlation</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>6</b> Tidying and casting document-term matrices and corpus objects</a><ul>
-<li class="chapter" data-level="6.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>6.1</b> Tidying a document-term matrix</a><ul>
-<li class="chapter" data-level="6.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>6.1.1</b> Tidying DocumentTermMatrix objects</a></li>
-<li class="chapter" data-level="6.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>6.1.2</b> Tidying dfm objects</a></li>
-</ul></li>
-<li class="chapter" data-level="6.2" data-path="dtm.html"><a href="dtm.html#cast-dtm"><i class="fa fa-check"></i><b>6.2</b> Casting tidy text data into a matrix</a></li>
-<li class="chapter" data-level="6.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>6.3</b> Tidying corpus objects with metadata</a><ul>
-<li class="chapter" data-level="6.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>6.3.1</b> Example: mining financial articles</a></li>
+<li class="chapter" data-level="4.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>4.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-among-sections"><i class="fa fa-check"></i><b>4.2.1</b> Counting and correlating among sections</a></li>
+<li class="chapter" data-level="4.2.2" data-path="ngrams.html"><a href="ngrams.html#pairwise-correlation"><i class="fa fa-check"></i><b>4.2.2</b> Pairwise correlation</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="7" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>7</b> Topic modeling</a><ul>
-<li class="chapter" data-level="7.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>7.1</b> Latent Dirichlet allocation</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>7.1.1</b> Word-topic probabilities</a></li>
-<li class="chapter" data-level="7.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>7.1.2</b> Document-topic probabilities</a></li>
+<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Tidying and casting document-term matrices and corpus objects</a><ul>
+<li class="chapter" data-level="5.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>5.1</b> Tidying a document-term matrix</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>5.1.1</b> Tidying DocumentTermMatrix objects</a></li>
+<li class="chapter" data-level="5.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>5.1.2</b> Tidying dfm objects</a></li>
 </ul></li>
-<li class="chapter" data-level="7.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>7.2</b> Example: the great library heist</a><ul>
-<li class="chapter" data-level="7.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>7.2.1</b> LDA on chapters</a></li>
-<li class="chapter" data-level="7.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>7.2.2</b> Per-document classification</a></li>
-<li class="chapter" data-level="7.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>7.2.3</b> By word assignments: <code>augment</code></a></li>
-</ul></li>
-<li class="chapter" data-level="7.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>7.3</b> Alternative LDA implementations</a></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>8</b> Case study: comparing Twitter archives</a><ul>
-<li class="chapter" data-level="8.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>8.1</b> Getting the data and distribution of tweets</a></li>
-<li class="chapter" data-level="8.2" data-path="twitter.html"><a href="twitter.html#word-frequencies-1"><i class="fa fa-check"></i><b>8.2</b> Word frequencies</a></li>
-<li class="chapter" data-level="8.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>8.3</b> Comparing word usage</a></li>
-<li class="chapter" data-level="8.4" data-path="twitter.html"><a href="twitter.html#changes-in-word-use"><i class="fa fa-check"></i><b>8.4</b> Changes in word use</a></li>
-<li class="chapter" data-level="8.5" data-path="twitter.html"><a href="twitter.html#favorites-and-retweets"><i class="fa fa-check"></i><b>8.5</b> Favorites and retweets</a></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>9</b> Case study: mining NASA metadata</a><ul>
-<li class="chapter" data-level="9.1" data-path="nasa.html"><a href="nasa.html#how-data-is-organized-at-nasa"><i class="fa fa-check"></i><b>9.1</b> How data is organized at NASA</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>9.1.1</b> Wrangling and tidying the data</a></li>
-<li class="chapter" data-level="9.1.2" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>9.1.2</b> Some initial simple exploration</a></li>
-</ul></li>
-<li class="chapter" data-level="9.2" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>9.2</b> Word co-ocurrences and correlations</a><ul>
-<li class="chapter" data-level="9.2.1" data-path="nasa.html"><a href="nasa.html#networks-of-description-and-title-words"><i class="fa fa-check"></i><b>9.2.1</b> Networks of Description and Title Words</a></li>
-<li class="chapter" data-level="9.2.2" data-path="nasa.html"><a href="nasa.html#networks-of-keywords"><i class="fa fa-check"></i><b>9.2.2</b> Networks of Keywords</a></li>
-</ul></li>
-<li class="chapter" data-level="9.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>9.3</b> Calculating tf-idf for the description fields</a><ul>
-<li class="chapter" data-level="9.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>9.3.1</b> What is tf-idf for the description field words?</a></li>
-<li class="chapter" data-level="9.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>9.3.2</b> Connecting description fields to keywords</a></li>
-</ul></li>
-<li class="chapter" data-level="9.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>9.4</b> Topic modeling</a><ul>
-<li class="chapter" data-level="9.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>9.4.1</b> Casting to a document-term matrix</a></li>
-<li class="chapter" data-level="9.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>9.4.2</b> Ready for topic modeling</a></li>
-<li class="chapter" data-level="9.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>9.4.3</b> Interpreting the topic model</a></li>
-<li class="chapter" data-level="9.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>9.4.4</b> Connecting topic modeling with keywords</a></li>
+<li class="chapter" data-level="5.2" data-path="dtm.html"><a href="dtm.html#cast-dtm"><i class="fa fa-check"></i><b>5.2</b> Casting tidy text data into a matrix</a></li>
+<li class="chapter" data-level="5.3" data-path="dtm.html"><a href="dtm.html#tidying-corpus-objects-with-metadata"><i class="fa fa-check"></i><b>5.3</b> Tidying corpus objects with metadata</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="dtm.html"><a href="dtm.html#financial"><i class="fa fa-check"></i><b>5.3.1</b> Example: mining financial articles</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="10" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>10</b> Case study: analyzing usenet text</a><ul>
-<li class="chapter" data-level="10.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>10.1</b> Pre-processing</a><ul>
-<li class="chapter" data-level="10.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>10.1.1</b> Pre-processing text</a></li>
+<li class="chapter" data-level="6" data-path="topicmodeling.html"><a href="topicmodeling.html"><i class="fa fa-check"></i><b>6</b> Topic modeling</a><ul>
+<li class="chapter" data-level="6.1" data-path="topicmodeling.html"><a href="topicmodeling.html#latent-dirichlet-allocation"><i class="fa fa-check"></i><b>6.1</b> Latent Dirichlet allocation</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="topicmodeling.html"><a href="topicmodeling.html#word-topic-probabilities"><i class="fa fa-check"></i><b>6.1.1</b> Word-topic probabilities</a></li>
+<li class="chapter" data-level="6.1.2" data-path="topicmodeling.html"><a href="topicmodeling.html#document-topic-probabilities"><i class="fa fa-check"></i><b>6.1.2</b> Document-topic probabilities</a></li>
 </ul></li>
-<li class="chapter" data-level="10.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>10.2</b> Words in newsgroups</a><ul>
-<li class="chapter" data-level="10.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>10.2.1</b> Finding tf-idf within newsgroups</a></li>
-<li class="chapter" data-level="10.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>10.2.2</b> Topic modeling</a></li>
+<li class="chapter" data-level="6.2" data-path="topicmodeling.html"><a href="topicmodeling.html#library-heist"><i class="fa fa-check"></i><b>6.2</b> Example: the great library heist</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="topicmodeling.html"><a href="topicmodeling.html#lda-on-chapters"><i class="fa fa-check"></i><b>6.2.1</b> LDA on chapters</a></li>
+<li class="chapter" data-level="6.2.2" data-path="topicmodeling.html"><a href="topicmodeling.html#per-document"><i class="fa fa-check"></i><b>6.2.2</b> Per-document classification</a></li>
+<li class="chapter" data-level="6.2.3" data-path="topicmodeling.html"><a href="topicmodeling.html#by-word-assignments-augment"><i class="fa fa-check"></i><b>6.2.3</b> By word assignments: <code>augment</code></a></li>
 </ul></li>
-<li class="chapter" data-level="10.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>10.3</b> Sentiment analysis</a><ul>
-<li class="chapter" data-level="10.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>10.3.1</b> Sentiment analysis by word</a></li>
-<li class="chapter" data-level="10.3.2" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>10.3.2</b> Sentiment analysis by message</a></li>
-<li class="chapter" data-level="10.3.3" data-path="usenet.html"><a href="usenet.html#n-gram-analysis"><i class="fa fa-check"></i><b>10.3.3</b> N-gram analysis</a></li>
+<li class="chapter" data-level="6.3" data-path="topicmodeling.html"><a href="topicmodeling.html#alternative-lda-implementations"><i class="fa fa-check"></i><b>6.3</b> Alternative LDA implementations</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="twitter.html"><a href="twitter.html"><i class="fa fa-check"></i><b>7</b> Case study: comparing Twitter archives</a><ul>
+<li class="chapter" data-level="7.1" data-path="twitter.html"><a href="twitter.html#getting-the-data-and-distribution-of-tweets"><i class="fa fa-check"></i><b>7.1</b> Getting the data and distribution of tweets</a></li>
+<li class="chapter" data-level="7.2" data-path="twitter.html"><a href="twitter.html#word-frequencies-1"><i class="fa fa-check"></i><b>7.2</b> Word frequencies</a></li>
+<li class="chapter" data-level="7.3" data-path="twitter.html"><a href="twitter.html#comparing-word-usage"><i class="fa fa-check"></i><b>7.3</b> Comparing word usage</a></li>
+<li class="chapter" data-level="7.4" data-path="twitter.html"><a href="twitter.html#changes-in-word-use"><i class="fa fa-check"></i><b>7.4</b> Changes in word use</a></li>
+<li class="chapter" data-level="7.5" data-path="twitter.html"><a href="twitter.html#favorites-and-retweets"><i class="fa fa-check"></i><b>7.5</b> Favorites and retweets</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="nasa.html"><a href="nasa.html"><i class="fa fa-check"></i><b>8</b> Case study: mining NASA metadata</a><ul>
+<li class="chapter" data-level="8.1" data-path="nasa.html"><a href="nasa.html#how-data-is-organized-at-nasa"><i class="fa fa-check"></i><b>8.1</b> How data is organized at NASA</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="nasa.html"><a href="nasa.html#wrangling-and-tidying-the-data"><i class="fa fa-check"></i><b>8.1.1</b> Wrangling and tidying the data</a></li>
+<li class="chapter" data-level="8.1.2" data-path="nasa.html"><a href="nasa.html#some-initial-simple-exploration"><i class="fa fa-check"></i><b>8.1.2</b> Some initial simple exploration</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="nasa.html"><a href="nasa.html#word-co-ocurrences-and-correlations"><i class="fa fa-check"></i><b>8.2</b> Word co-ocurrences and correlations</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="nasa.html"><a href="nasa.html#networks-of-description-and-title-words"><i class="fa fa-check"></i><b>8.2.1</b> Networks of Description and Title Words</a></li>
+<li class="chapter" data-level="8.2.2" data-path="nasa.html"><a href="nasa.html#networks-of-keywords"><i class="fa fa-check"></i><b>8.2.2</b> Networks of Keywords</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="nasa.html"><a href="nasa.html#calculating-tf-idf-for-the-description-fields"><i class="fa fa-check"></i><b>8.3</b> Calculating tf-idf for the description fields</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="nasa.html"><a href="nasa.html#what-is-tf-idf-for-the-description-field-words"><i class="fa fa-check"></i><b>8.3.1</b> What is tf-idf for the description field words?</a></li>
+<li class="chapter" data-level="8.3.2" data-path="nasa.html"><a href="nasa.html#connecting-description-fields-to-keywords"><i class="fa fa-check"></i><b>8.3.2</b> Connecting description fields to keywords</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="nasa.html"><a href="nasa.html#topic-modeling"><i class="fa fa-check"></i><b>8.4</b> Topic modeling</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="nasa.html"><a href="nasa.html#casting-to-a-document-term-matrix"><i class="fa fa-check"></i><b>8.4.1</b> Casting to a document-term matrix</a></li>
+<li class="chapter" data-level="8.4.2" data-path="nasa.html"><a href="nasa.html#ready-for-topic-modeling"><i class="fa fa-check"></i><b>8.4.2</b> Ready for topic modeling</a></li>
+<li class="chapter" data-level="8.4.3" data-path="nasa.html"><a href="nasa.html#interpreting-the-topic-model"><i class="fa fa-check"></i><b>8.4.3</b> Interpreting the topic model</a></li>
+<li class="chapter" data-level="8.4.4" data-path="nasa.html"><a href="nasa.html#connecting-topic-modeling-with-keywords"><i class="fa fa-check"></i><b>8.4.4</b> Connecting topic modeling with keywords</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="11" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>11</b> References</a></li>
+<li class="chapter" data-level="9" data-path="usenet.html"><a href="usenet.html"><i class="fa fa-check"></i><b>9</b> Case study: analyzing usenet text</a><ul>
+<li class="chapter" data-level="9.1" data-path="usenet.html"><a href="usenet.html#pre-processing"><i class="fa fa-check"></i><b>9.1</b> Pre-processing</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="usenet.html"><a href="usenet.html#pre-processing-text"><i class="fa fa-check"></i><b>9.1.1</b> Pre-processing text</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="usenet.html"><a href="usenet.html#words-in-newsgroups"><i class="fa fa-check"></i><b>9.2</b> Words in newsgroups</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="usenet.html"><a href="usenet.html#finding-tf-idf-within-newsgroups"><i class="fa fa-check"></i><b>9.2.1</b> Finding tf-idf within newsgroups</a></li>
+<li class="chapter" data-level="9.2.2" data-path="usenet.html"><a href="usenet.html#topic-modeling-1"><i class="fa fa-check"></i><b>9.2.2</b> Topic modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="usenet.html"><a href="usenet.html#sentiment-analysis"><i class="fa fa-check"></i><b>9.3</b> Sentiment analysis</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-word"><i class="fa fa-check"></i><b>9.3.1</b> Sentiment analysis by word</a></li>
+<li class="chapter" data-level="9.3.2" data-path="usenet.html"><a href="usenet.html#sentiment-analysis-by-message"><i class="fa fa-check"></i><b>9.3.2</b> Sentiment analysis by message</a></li>
+<li class="chapter" data-level="9.3.3" data-path="usenet.html"><a href="usenet.html#n-gram-analysis"><i class="fa fa-check"></i><b>9.3.3</b> N-gram analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
 
@@ -229,7 +232,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./"></a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Text Mining with R</a>
           </h1>
         </div>
 
@@ -238,12 +241,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="nasa" class="section level1">
-<h1><span class="header-section-number">9</span> Case study: mining NASA metadata</h1>
+<h1><span class="header-section-number">8</span> Case study: mining NASA metadata</h1>
 <p>There are over 32,000 datasets hosted and/or maintained by <a href="https://www.nasa.gov/">NASA</a>; these datasets cover topics from Earth science to aerospace engineering to management of NASA itself. We can use the metadata for these datasets to understand the connections between them.</p>
 <p>What is metadata? Metadata is a term that refers to data that gives information about other data; in this case, the metadata informs users about what is in these numerous NASA datasets but does not include the content of the datasets themselves. The metadata includes information like the title of the dataset, a description field, what organization(s) within NASA is responsible for the dataset, keywords for the dataset that have been assigned by a human being, and so forth. NASA places a high priority on making its data open and accessible, even requiring all NASA-funded research to be <a href="https://www.nasa.gov/press-release/nasa-unveils-new-public-web-portal-for-research-results">openly accessible online</a>. The metadata for all its datasets is <a href="https://data.nasa.gov/data.json">publicly available online in JSON format</a>.</p>
 <p>In this chapter, we will treat the NASA metadata as a text dataset and show how to implement several tidy text approaches with this real-life text. We will use word co-occurrences and correlations, tf-idf, and topic modeling to explore the connections between the datasets. Can we find datasets that are related to each other? Can we find clusters of similar datasets? Since we have several text fields in the NASA metadata, most importantly the title, description, and keyword fields, we can explore the connections between the fields to better understand the complex world of data at NASA. This type of approach can be extended to any domain that deals with text, so let’s take a look at this metadata and get started.</p>
 <div id="how-data-is-organized-at-nasa" class="section level2">
-<h2><span class="header-section-number">9.1</span> How data is organized at NASA</h2>
+<h2><span class="header-section-number">8.1</span> How data is organized at NASA</h2>
 <p>First, let’s download the JSON file and take a look at the names of what is stored in the metadata.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(jsonlite)
 metadata &lt;-<span class="st"> </span><span class="kw">fromJSON</span>(<span class="st">&quot;https://data.nasa.gov/data.json&quot;</span>)
@@ -265,7 +268,7 @@ metadata &lt;-<span class="st"> </span><span class="kw">fromJSON</span>(<span cl
 <pre><code>## [1] &quot;list&quot;</code></pre>
 <p>The title and description fields are stored as character vectors, but the keywords are stored as a list of character vectors.</p>
 <div id="wrangling-and-tidying-the-data" class="section level3">
-<h3><span class="header-section-number">9.1.1</span> Wrangling and tidying the data</h3>
+<h3><span class="header-section-number">8.1.1</span> Wrangling and tidying the data</h3>
 <p>Let’s set up separate tidy data frames for title, description, and keyword, keeping the dataset ids for each so that we can connect them later in the analysis if necessary.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 
@@ -368,7 +371,7 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 ## # ... with 2,677,801 more rows</code></pre>
 </div>
 <div id="some-initial-simple-exploration" class="section level3">
-<h3><span class="header-section-number">9.1.2</span> Some initial simple exploration</h3>
+<h3><span class="header-section-number">8.1.2</span> Some initial simple exploration</h3>
 <p>What are the most common words in the NASA dataset titles? We can use <code>count()</code> from dplyr to check this out.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nasa_title %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word, <span class="dt">sort =</span> <span class="ot">TRUE</span>)</code></pre></div>
@@ -435,10 +438,10 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 </div>
 </div>
 <div id="word-co-ocurrences-and-correlations" class="section level2">
-<h2><span class="header-section-number">9.2</span> Word co-ocurrences and correlations</h2>
-<p>As a next step, let’s examine which words commonly occur together in the titles, descriptions, and keywords of NASA datasets, as described in Chapter <a href="ngrams.html#ngrams">5</a>. We can then examine word networks for these fields; this may help us see, for example, which datasets are related to each other.</p>
+<h2><span class="header-section-number">8.2</span> Word co-ocurrences and correlations</h2>
+<p>As a next step, let’s examine which words commonly occur together in the titles, descriptions, and keywords of NASA datasets, as described in Chapter <a href="ngrams.html#ngrams">4</a>. We can then examine word networks for these fields; this may help us see, for example, which datasets are related to each other.</p>
 <div id="networks-of-description-and-title-words" class="section level3">
-<h3><span class="header-section-number">9.2.1</span> Networks of Description and Title Words</h3>
+<h3><span class="header-section-number">8.2.1</span> Networks of Description and Title Words</h3>
 <p>We can use <code>pairwise_count()</code> from the widyr package to count how many times each pair of words occurs together in a title or description field.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
 
@@ -480,7 +483,7 @@ desc_words</code></pre></div>
 ## 10      orbit resolution  7462
 ## # ... with 10,889,074 more rows</code></pre>
 <p>These are the pairs of words that occur together most often in descripton fields. “Data” is a very common word in description fields; there is no shortage of data in the datasets at NASA!</p>
-<p>Let’s plot networks of these co-occurring words so we can see these relationships better in Figure <a href="nasa.html#fig:plottitle">9.1</a>. We will again use the ggraph package for visualizing our networks.</p>
+<p>Let’s plot networks of these co-occurring words so we can see these relationships better in Figure <a href="nasa.html#fig:plottitle">8.1</a>. We will again use the ggraph package for visualizing our networks.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(igraph)
 <span class="kw">library</span>(ggraph)
@@ -497,7 +500,7 @@ title_words %&gt;%
 <div class="figure"><span id="fig:plottitle"></span>
 <img src="08-nasa-metadata_files/figure-html/plottitle-1.png" alt="Word network in NASA dataset titles" width="864" />
 <p class="caption">
-Figure 9.1: Word network in NASA dataset titles
+Figure 8.1: Word network in NASA dataset titles
 </p>
 </div>
 <p>We see some clear clustering in this network of title words; words in NASA dataset titles are largely organized into several families of words that tend to go together.</p>
@@ -514,14 +517,14 @@ desc_words %&gt;%
 <div class="figure"><span id="fig:plotdesc"></span>
 <img src="08-nasa-metadata_files/figure-html/plotdesc-1.png" alt="Word network in NASA dataset descriptions" width="864" />
 <p class="caption">
-Figure 9.2: Word network in NASA dataset descriptions
+Figure 8.2: Word network in NASA dataset descriptions
 </p>
 </div>
-<p>Figure <a href="nasa.html#fig:plotdesc">9.2</a> shows such <em>strong</em> connections between the top dozen or so words (words like “data”, “global”, “resolution”, and “instrument”) that we do not see clear clustering structure in the network. We may want to use tf-idf (as described in detail in Chapter <a href="tfidf.html#tfidf">4</a>) as a metric to find characteristic words for each description field, instead of looking at counts of words.</p>
+<p>Figure <a href="nasa.html#fig:plotdesc">8.2</a> shows such <em>strong</em> connections between the top dozen or so words (words like “data”, “global”, “resolution”, and “instrument”) that we do not see clear clustering structure in the network. We may want to use tf-idf (as described in detail in Chapter <a href="tfidf.html#tfidf">3</a>) as a metric to find characteristic words for each description field, instead of looking at counts of words.</p>
 </div>
 <div id="networks-of-keywords" class="section level3">
-<h3><span class="header-section-number">9.2.2</span> Networks of Keywords</h3>
-<p>Next, let’s make a network of the keywords in Figure <a href="nasa.html#fig:plotcounts">9.3</a> to see which keywords commonly occur together in the same datasets.</p>
+<h3><span class="header-section-number">8.2.2</span> Networks of Keywords</h3>
+<p>Next, let’s make a network of the keywords in Figure <a href="nasa.html#fig:plotcounts">8.3</a> to see which keywords commonly occur together in the same datasets.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_counts &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">pairwise_count</span>(keyword, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>, <span class="dt">upper =</span> <span class="ot">FALSE</span>)
 
@@ -552,10 +555,10 @@ keyword_counts %&gt;%
 <div class="figure"><span id="fig:plotcounts"></span>
 <img src="08-nasa-metadata_files/figure-html/plotcounts-1.png" alt="Co-occurrence network in NASA dataset keywords" width="864" />
 <p class="caption">
-Figure 9.3: Co-occurrence network in NASA dataset keywords
+Figure 8.3: Co-occurrence network in NASA dataset keywords
 </p>
 </div>
-<p>We definitely see clustering here, and strong connections between keywords like “OCEANS”, “OCEAN OPTICS”, and “OCEAN COLOR”, or “PROJECT” and “COMPLETED”. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in Chapter <a href="ngrams.html#ngrams">5</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
+<p>We definitely see clustering here, and strong connections between keywords like “OCEANS”, “OCEAN OPTICS”, and “OCEAN COLOR”, or “PROJECT” and “COMPLETED”. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in Chapter <a href="ngrams.html#ngrams">4</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_cors &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">50</span>) %&gt;%
@@ -590,17 +593,17 @@ keyword_cors %&gt;%
 <div class="figure"><span id="fig:plotcors"></span>
 <img src="08-nasa-metadata_files/figure-html/plotcors-1.png" alt="Correlation network in NASA dataset keywords" width="1152" />
 <p class="caption">
-Figure 9.4: Correlation network in NASA dataset keywords
+Figure 8.4: Correlation network in NASA dataset keywords
 </p>
 </div>
-<p>This network in Figure <a href="nasa.html#fig:plotcors">9.4</a> appears much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keywordsoccur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted (for further analysis) from the <code>graph_from_data_frame()</code> function above.</p>
+<p>This network in Figure <a href="nasa.html#fig:plotcors">8.4</a> appears much different than the co-occurence network. The difference is that the co-occurrence network asks a question about which keyword pairs occur most often, and the correlation network asks a question about which keywordsoccur more often together than with other keywords. Notice here the high number of small clusters of keywords; the network structure can be extracted (for further analysis) from the <code>graph_from_data_frame()</code> function above.</p>
 </div>
 </div>
 <div id="calculating-tf-idf-for-the-description-fields" class="section level2">
-<h2><span class="header-section-number">9.3</span> Calculating tf-idf for the description fields</h2>
-<p>The network graph in Figure <a href="nasa.html#fig:plotdesc">9.2</a> showed us that the description fields are dominated by a few common words like “data”, “global”, and “resolution”; this would be an excellent opportunity to use tf-idf as a statistic to find characteristic words for individual description fields. As discussed in Chapter <a href="tfidf.html#tfidf">4</a>, we can use tf-idf, the term frequency times inverse document frequency, to identify words that are especially important to a document within a collection of documents. Let’s apply that approach to the description fields of these NASA datasets.</p>
+<h2><span class="header-section-number">8.3</span> Calculating tf-idf for the description fields</h2>
+<p>The network graph in Figure <a href="nasa.html#fig:plotdesc">8.2</a> showed us that the description fields are dominated by a few common words like “data”, “global”, and “resolution”; this would be an excellent opportunity to use tf-idf as a statistic to find characteristic words for individual description fields. As discussed in Chapter <a href="tfidf.html#tfidf">3</a>, we can use tf-idf, the term frequency times inverse document frequency, to identify words that are especially important to a document within a collection of documents. Let’s apply that approach to the description fields of these NASA datasets.</p>
 <div id="what-is-tf-idf-for-the-description-field-words" class="section level3">
-<h3><span class="header-section-number">9.3.1</span> What is tf-idf for the description field words?</h3>
+<h3><span class="header-section-number">8.3.1</span> What is tf-idf for the description field words?</h3>
 <p>We will consider each description field a document, and the whole set of description fields the collection or corpus of documents. We have already used <code>unnest_tokens()</code> earlier in this chapter to make a tidy data frame of the words in the description fields, so now we can use <code>bind_tf_idf()</code> to calculate tf-idf for each word.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_tf_idf &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">count</span>(id, word, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
@@ -626,10 +629,10 @@ Figure 9.4: Correlation network in NASA dataset keywords
 <p>These are the most important words in the description fields as measured by tf-idf, meaning they are common but not too common. Notice we have run into an issue here; both <span class="math inline">\(n\)</span> and term frequency are equal to 1 for these terms, meaning that these were description fields that only had a single word in them. If a description field only contains one word, the tf-idf algorithm will think that is a very important word. Depending on our analytic goals, it might be a good idea to throw out all description fields that have very few words.</p>
 </div>
 <div id="connecting-description-fields-to-keywords" class="section level3">
-<h3><span class="header-section-number">9.3.2</span> Connecting description fields to keywords</h3>
+<h3><span class="header-section-number">8.3.2</span> Connecting description fields to keywords</h3>
 <p>We now know which words in the descriptions have high tf-idf, and we also have labels for these descriptions in the keywords. Let’s do a full join of the keyword data frame and the data frame of description words with tf-idf, and then find the highest tf-idf words for a given keyword.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_tf_idf &lt;-<span class="st"> </span><span class="kw">full_join</span>(desc_tf_idf, nasa_keyword, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>)</code></pre></div>
-<p>Let’s plot some of the most important words, as measured by tf-idf, for a few example keywords used on NASA datasets. First, let’s use dplyr operations to filter for the keywords we want to examine and take just the top 15 words for each keyword. Then, let’s plot those words in Figure <a href="nasa.html#fig:plottfidf">9.5</a>.</p>
+<p>Let’s plot some of the most important words, as measured by tf-idf, for a few example keywords used on NASA datasets. First, let’s use dplyr operations to filter for the keywords we want to examine and take just the top 15 words for each keyword. Then, let’s plot those words in Figure <a href="nasa.html#fig:plottfidf">8.5</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_tf_idf %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(!<span class="kw">near</span>(tf, <span class="dv">1</span>)) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(keyword %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;SOLAR ACTIVITY&quot;</span>, <span class="st">&quot;CLOUDS&quot;</span>, 
@@ -651,17 +654,17 @@ Figure 9.4: Correlation network in NASA dataset keywords
 <div class="figure"><span id="fig:plottfidf"></span>
 <img src="08-nasa-metadata_files/figure-html/plottfidf-1.png" alt="Distribution of tf-idf for words from datasets labeled with select keywords" width="960" />
 <p class="caption">
-Figure 9.5: Distribution of tf-idf for words from datasets labeled with select keywords
+Figure 8.5: Distribution of tf-idf for words from datasets labeled with select keywords
 </p>
 </div>
 <p>Using tf-idf has allowed us to identify important description words for each of these keywords. Datasets labeled with the keyword “SEISMOLOGY” have words like “earthquake”, “risk”, and “hazard” in their description, while those labeled with “HUMAN HEALTH” have descriptions characterized by words like “wellbeing”, “vulnerability”, and “children.” Most of the combinations of letters that are not English words are certainly acronyms (like OMB for the Office of Management and Budget), and the examples of years and numbers are important for these topics. The tf-idf statistic has identified the kinds of words it is intended to, important words for individual documents within a collection of documents.</p>
 </div>
 </div>
 <div id="topic-modeling" class="section level2">
-<h2><span class="header-section-number">9.4</span> Topic modeling</h2>
-<p>Using tf-idf as a statistic has already given us insight into the content of NASA description fields, but let’s try an additional approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in Chapter <a href="topicmodeling.html#topicmodeling">7</a> to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use <a href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">latent Dirichlet allocation (LDA)</a> for our topic modeling; there are other possible approaches for topic modeling.</p>
+<h2><span class="header-section-number">8.4</span> Topic modeling</h2>
+<p>Using tf-idf as a statistic has already given us insight into the content of NASA description fields, but let’s try an additional approach to the question of what the NASA descriptions fields are about. We can use topic modeling as described in Chapter <a href="topicmodeling.html#topicmodeling">6</a> to model each document (description field) as a mixture of topics and each topic as a mixture of words. As in earlier chapters, we will use <a href="https://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">latent Dirichlet allocation (LDA)</a> for our topic modeling; there are other possible approaches for topic modeling.</p>
 <div id="casting-to-a-document-term-matrix" class="section level3">
-<h3><span class="header-section-number">9.4.1</span> Casting to a document-term matrix</h3>
+<h3><span class="header-section-number">8.4.1</span> Casting to a document-term matrix</h3>
 <p>To do the topic modeling as implemented here, we need to make a <code>DocumentTermMatrix</code>, a special kind of matrix from the tm package (of course, this is just a specific implementation of the general concept of a “document-term matrix”). Rows correspond to documents (description texts in our case) and columns correspond to terms (i.e., words); it is a sparse matrix and the values are word counts.</p>
 <p>Let’s clean up the text a bit using stop words to remove some of the nonsense “words” leftover from HTML or other character encoding. We can use <code>bind_rows()</code> to add our custom stop words to the list of default stop words from the tidytext package, and then all at once use <code>anti_join()</code> to remove them all from our data frame.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_stop_words &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(stop_words, 
@@ -693,7 +696,7 @@ word_counts</code></pre></div>
 ## 9  55942a8ec63a7fe59b4986ef       al    32
 ## 10 55942a8ec63a7fe59b4986ef    human    31
 ## # ... with 1,895,300 more rows</code></pre>
-<p>This is the information we need, the number of times each word is used in each document, to make a <code>DocumentTermMatrix</code>. We can <code>cast()</code> from our tidy text format to this non-tidy format as described in detail in Chapter <a href="dtm.html#dtm">6</a>.</p>
+<p>This is the information we need, the number of times each word is used in each document, to make a <code>DocumentTermMatrix</code>. We can <code>cast()</code> from our tidy text format to this non-tidy format as described in detail in Chapter <a href="dtm.html#dtm">5</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_dtm &lt;-<span class="st"> </span>word_counts %&gt;%
 <span class="st">  </span><span class="kw">cast_dtm</span>(id, word, n)
 
@@ -706,7 +709,7 @@ desc_dtm</code></pre></div>
 <p>We see that this dataset contains documents (each of them a NASA description field) and terms (words). Notice that this example document-term matrix is (very close to) 100% sparse, meaning that almost all of the entries in this matrix are zero. Each non-zero entry corresponds to a certain word appearing in a certain document.</p>
 </div>
 <div id="ready-for-topic-modeling" class="section level3">
-<h3><span class="header-section-number">9.4.2</span> Ready for topic modeling</h3>
+<h3><span class="header-section-number">8.4.2</span> Ready for topic modeling</h3>
 <p>Now let’s use the <a href="https://cran.r-project.org/package=topicmodels">topicmodels</a> package to create an LDA model. How many topics will we tell the algorithm to make? This is a question much like in <span class="math inline">\(k\)</span>-means clustering; we don’t really know ahead of time. We tried the following modeling procedure using 8, 16, 24, 32, and 64 topics; we found that at 24 topics, documents are still getting sorted into topics cleanly but going much beyond that caused the distributions of <span class="math inline">\(\gamma\)</span>, the probability that each document belongs in each topic, to look worrisome. We will show more details on this later.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(topicmodels)
 
@@ -716,7 +719,7 @@ desc_lda</code></pre></div>
 <p>This is a stochastic algorithm that could have different results depending on where the algorithm starts, so we need to specify a <code>seed</code> for reproducibility as shown here.</p>
 </div>
 <div id="interpreting-the-topic-model" class="section level3">
-<h3><span class="header-section-number">9.4.3</span> Interpreting the topic model</h3>
+<h3><span class="header-section-number">8.4.3</span> Interpreting the topic model</h3>
 <p>Now that we have built the model, let’s <code>tidy()</code> the results of the model, i.e., construct a tidy data frame that summarizes the results of the model. The tidytext package includes a tidying method for LDA models from the topicmodels package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tidy_lda &lt;-<span class="st"> </span><span class="kw">tidy</span>(desc_lda)
 
@@ -758,7 +761,7 @@ top_terms</code></pre></div>
 ## 9      1    accuracy 0.01225131
 ## 10     1         set 0.01155372
 ## # ... with 230 more rows</code></pre>
-<p>It is not very easy to interpret what the topics are about from a data frame like this so let’s look at this information visually in Figure <a href="nasa.html#fig:plotbeta">9.6</a>.</p>
+<p>It is not very easy to interpret what the topics are about from a data frame like this so let’s look at this information visually in Figure <a href="nasa.html#fig:plotbeta">8.6</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_terms %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">term =</span> <span class="kw">reorder</span>(term, beta)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(topic, term) %&gt;%<span class="st">    </span>
@@ -776,7 +779,7 @@ top_terms</code></pre></div>
 <div class="figure"><span id="fig:plotbeta"></span>
 <img src="08-nasa-metadata_files/figure-html/plotbeta-1.png" alt="Top terms in topic modeling of NASA metadata description field texts" width="1152" />
 <p class="caption">
-Figure 9.6: Top terms in topic modeling of NASA metadata description field texts
+Figure 8.6: Top terms in topic modeling of NASA metadata description field texts
 </p>
 </div>
 <p>We can see what a dominant word “data” is in these description texts. In addition, there are meaningful differences between these collections of terms, from terms about soil, forests, and biomass in topic 12 to terms about design, systems, and technology in topic 21. The topic modeling process has identified groupings of terms that we can understand as human readers of these description fields.</p>
@@ -798,7 +801,7 @@ lda_gamma</code></pre></div>
 ## 9  55942a6ec63a7fe59b496bf7     1 4.408626e-05
 ## 10 55942a8ec63a7fe59b4986f6     1 2.878188e-05
 ## # ... with 768,062 more rows</code></pre>
-<p>Notice that some of the probabilites visible at the top of the data frame are low and some are higher. Our model has assigned a probability to each description belonging to each of the topics we constructed from the sets of words. How are the probabilities distributed? Let’s visualize them (Figure <a href="nasa.html#fig:plotgamma">9.7</a>).</p>
+<p>Notice that some of the probabilites visible at the top of the data frame are low and some are higher. Our model has assigned a probability to each description belonging to each of the topics we constructed from the sets of words. How are the probabilities distributed? Let’s visualize them (Figure <a href="nasa.html#fig:plotgamma">8.7</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(lda_gamma, <span class="kw">aes</span>(gamma, <span class="dt">fill =</span> <span class="kw">as.factor</span>(topic))) +
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">ncol =</span> <span class="dv">4</span>) +
@@ -808,14 +811,14 @@ lda_gamma</code></pre></div>
 <div class="figure"><span id="fig:plotgamma"></span>
 <img src="08-nasa-metadata_files/figure-html/plotgamma-1.png" alt="Probability distribution in topic modeling of NASA metadata description field texts" width="1152" />
 <p class="caption">
-Figure 9.7: Probability distribution in topic modeling of NASA metadata description field texts
+Figure 8.7: Probability distribution in topic modeling of NASA metadata description field texts
 </p>
 </div>
-<p>First notice that the y-axis is plotted on a log scale; otherwise it is difficult to make out any detail in the plot. Next, notice that <span class="math inline">\(\gamma\)</span> runs from 0 to 1 in each panel. Remember that this is the probability that a given document belongs in a given topic. There are many values near zero, which means there are many documents that do not belong in each topic. Also, most of these panels show a higher number of documents near <span class="math inline">\(\gamma = 1\)</span>; these are the documents that <em>do</em> belong in those topics. For example, let’s look specifically at topic 18 in Figure <a href="nasa.html#fig:plotgamma">9.7</a>, a topic that had documents cleanly sorted in and out of it. There are many documents with <span class="math inline">\(\gamma\)</span> close to 1; these are the documents that <em>do</em> belong to topic 18 according to the model. There are also many documents with <span class="math inline">\(\gamma\)</span> close to 0; these are the documents that do <em>not</em> belong to topic 18. Each document appears in each panel in this plot, and its <span class="math inline">\(\gamma\)</span> for that topic tells us that document’s probability of belonging in that topic.</p>
+<p>First notice that the y-axis is plotted on a log scale; otherwise it is difficult to make out any detail in the plot. Next, notice that <span class="math inline">\(\gamma\)</span> runs from 0 to 1 in each panel. Remember that this is the probability that a given document belongs in a given topic. There are many values near zero, which means there are many documents that do not belong in each topic. Also, most of these panels show a higher number of documents near <span class="math inline">\(\gamma = 1\)</span>; these are the documents that <em>do</em> belong in those topics. For example, let’s look specifically at topic 18 in Figure <a href="nasa.html#fig:plotgamma">8.7</a>, a topic that had documents cleanly sorted in and out of it. There are many documents with <span class="math inline">\(\gamma\)</span> close to 1; these are the documents that <em>do</em> belong to topic 18 according to the model. There are also many documents with <span class="math inline">\(\gamma\)</span> close to 0; these are the documents that do <em>not</em> belong to topic 18. Each document appears in each panel in this plot, and its <span class="math inline">\(\gamma\)</span> for that topic tells us that document’s probability of belonging in that topic.</p>
 <p>This plot displays the type of information we used to choose how many topics for our topic modeling procedure. When we tried options higher than 24 (such as 32 or 64), the distributions for <span class="math inline">\(\gamma\)</span> started to look very flat toward <span class="math inline">\(\gamma = 1\)</span>; documents were not getting sorted into topics very well.</p>
 </div>
 <div id="connecting-topic-modeling-with-keywords" class="section level3">
-<h3><span class="header-section-number">9.4.4</span> Connecting topic modeling with keywords</h3>
+<h3><span class="header-section-number">8.4.4</span> Connecting topic modeling with keywords</h3>
 <p>Let’s connect these topic models with the keywords and see what relationships we can find. We can <code>full_join()</code> this to the human-tagged keywords and discover which keywords are associated with which topic.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lda_gamma &lt;-<span class="st"> </span><span class="kw">full_join</span>(lda_gamma, nasa_keyword, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;document&quot;</span> =<span class="st"> &quot;id&quot;</span>))
 
@@ -875,11 +878,11 @@ top_keywords</code></pre></div>
 <div class="figure"><span id="fig:plottopkeywords"></span>
 <img src="08-nasa-metadata_files/figure-html/plottopkeywords-1.png" alt="Top keywords in topic modeling of NASA metadata description field texts" width="1536" />
 <p class="caption">
-Figure 9.8: Top keywords in topic modeling of NASA metadata description field texts
+Figure 8.8: Top keywords in topic modeling of NASA metadata description field texts
 </p>
 </div>
-<p>Let’s take a step back and remind ourselves what Figure <a href="nasa.html#fig:plottopkeywords">9.8</a> is telling us. NASA datasets are tagged with keywords by human beings, and we have built an LDA topic model (with 24 topics) for the description fields of the NASA datasets. This plot answers the question, “For the datasets with description fields that have a high probability of belonging to a given topic, what are the most common human-assigned keywords?”</p>
-<p>It’s interesting that the keywords for topics 13, 16, and 18 are essentially duplicates of each other (“OCEAN COLOR”, “OCEAN OPTICS”, “OCEANS”), because the top words in those topics do exhibit meaningful differences, as shown in Figure <a href="nasa.html#fig:plotbeta">9.6</a>. Also note that by number of documents, the combination of 13, 16, and 18 is quite a large percentage of the total number of datasets represented in this plot, and even more if we were to include topic 11. By number, there are <em>many</em> datasets at NASA that deal with oceans, ocean color, and ocean optics. We see “PROJECT COMPLETED” in topics 9, 10, and 21, along with the names of NASA laboratories and research centers. Other important subject areas that stand out are groups of keywords about atmospheric science, budget/finance, and population/human dimensions. We can go back to Figure <a href="nasa.html#fig:plotbeta">9.6</a> on terms and topics to see which words in the description fields are driving datasets being assigned to these topics. For example, topic 4 is associated with keywords about population and human dimensions, and some of the top terms for that topic are “population”, “international”, “center”, and “university”.</p>
+<p>Let’s take a step back and remind ourselves what Figure <a href="nasa.html#fig:plottopkeywords">8.8</a> is telling us. NASA datasets are tagged with keywords by human beings, and we have built an LDA topic model (with 24 topics) for the description fields of the NASA datasets. This plot answers the question, “For the datasets with description fields that have a high probability of belonging to a given topic, what are the most common human-assigned keywords?”</p>
+<p>It’s interesting that the keywords for topics 13, 16, and 18 are essentially duplicates of each other (“OCEAN COLOR”, “OCEAN OPTICS”, “OCEANS”), because the top words in those topics do exhibit meaningful differences, as shown in Figure <a href="nasa.html#fig:plotbeta">8.6</a>. Also note that by number of documents, the combination of 13, 16, and 18 is quite a large percentage of the total number of datasets represented in this plot, and even more if we were to include topic 11. By number, there are <em>many</em> datasets at NASA that deal with oceans, ocean color, and ocean optics. We see “PROJECT COMPLETED” in topics 9, 10, and 21, along with the names of NASA laboratories and research centers. Other important subject areas that stand out are groups of keywords about atmospheric science, budget/finance, and population/human dimensions. We can go back to Figure <a href="nasa.html#fig:plotbeta">8.6</a> on terms and topics to see which words in the description fields are driving datasets being assigned to these topics. For example, topic 4 is associated with keywords about population and human dimensions, and some of the top terms for that topic are “population”, “international”, “center”, and “university”.</p>
 <p>By using a combination of network analysis, tf-idf, and topic modeling, we have come to a greater understanding of how datasets are related at NASA. Specifically, we have more information now about how keywords are connected to each other and which datasets are likely to be related. The topic model could be used to suggest keywords based on the words in the description field, or the work on the keywords could suggest the most important combination of keywords for certain areas of study.</p>
 
 </div>

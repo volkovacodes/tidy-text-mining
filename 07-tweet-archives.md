@@ -24,7 +24,8 @@ tweets <- bind_rows(tweets_julia %>%
   mutate(timestamp = ymd_hms(timestamp))
 
 ggplot(tweets, aes(x = timestamp, fill = person)) +
-  geom_histogram(alpha = 0.5, position = "identity", bins = 20)
+  geom_histogram(alpha = 0.5, position = "identity", bins = 20, show.legend = FALSE) +
+  facet_wrap(~person, ncol = 1)
 ```
 
 <div class="figure">
@@ -45,13 +46,12 @@ First, we will remove tweets from this dataset that are retweets so that we only
 library(tidytext)
 library(stringr)
 
-reg <- "([^A-Za-z_\\d#@']|'(?![A-Za-z_\\d#@]))"
+replace_reg <- "https://t.co/[A-Za-z\\d]+|http://[A-Za-z\\d]+|&amp;|&lt;|&gt;|RT|https"
+unnest_reg <- "([^A-Za-z_\\d#@']|'(?![A-Za-z_\\d#@]))"
 tidy_tweets <- tweets %>% 
   filter(!str_detect(text, "^RT")) %>%
-  mutate(text = str_replace_all(text, 
-                                "https://t.co/[A-Za-z\\d]+|http://[A-Za-z\\d]+|&amp;|&lt;|&gt;|RT|https", 
-                                "")) %>%
-  unnest_tokens(word, text, token = "regex", pattern = reg) %>%
+  mutate(text = str_replace_all(text, replace_reg, "")) %>%
+  unnest_tokens(word, text, token = "regex", pattern = unnest_reg) %>%
   filter(!word %in% stop_words$word,
          str_detect(word, "[a-z]"))
 ```
@@ -422,10 +422,8 @@ Now that we have this second, smaller set of only recent tweets, let's use `unne
 ```r
 tidy_tweets <- tweets %>% 
   filter(!str_detect(text, "^(RT|@)")) %>%
-  mutate(text = str_replace_all(text, 
-                                "https://t.co/[A-Za-z\\d]+|http://[A-Za-z\\d]+|&amp;|&lt;|&gt;|RT|https", 
-                                "")) %>%
-  unnest_tokens(word, text, token = "regex", pattern = reg) %>%
+  mutate(text = str_replace_all(text, replace_reg, "")) %>%
+  unnest_tokens(word, text, token = "regex", pattern = unnest_reg) %>%
   anti_join(stop_words)
 
 tidy_tweets
