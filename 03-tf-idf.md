@@ -466,3 +466,8 @@ ggplot(plot_physics, aes(word, tf_idf, fill = author)) +
 </div>
 
 One thing we can conclude from Figure \@ref(fig:mystopwords) is that we don't hear enough about ramparts or things being ethereal in physics today.
+
+## Summary 
+
+TODO
+

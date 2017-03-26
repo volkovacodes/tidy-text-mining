@@ -344,7 +344,7 @@ not_words %>%
   head(20) %>%
   mutate(word2 = reorder(word2, contribution)) %>%
   ggplot(aes(word2, n * score, fill = n * score > 0)) +
-  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_col(show.legend = FALSE) +
   xlab("Words preceded by \"not\"") +
   ylab("Sentiment score * number of occurrences") +
   coord_flip()
@@ -780,4 +780,6 @@ word_cors %>%
 
 Note that unlike the bigram analysis, the relationships here are symmetrical, rather than directional (there are no arrows). We can also see that while pairings of names and titles that dominated bigram pairings are common, such as "colonel/fitzwilliam", we can also see pairings of words that appear close to each other, such as "walk" and "park", or "dance" and "ball".
 
-These network visualizations are a flexible tool for exploring relationships, and will play an important role in the case studies in later chapters.
+## Summary
+
+These network visualizations are a flexible tool for exploring relationships, and will play an important role in the case studies in later chapters. More TODO
