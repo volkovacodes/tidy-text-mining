@@ -252,7 +252,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="tfidf" class="section level1">
 <h1><span class="header-section-number">3</span> Analyzing word and document frequency: tf-idf</h1>
 <p>A central question in text mining and natural language processing is how to quantify what a document is about. Can we do this by looking at the words that make up the document? One measure of how important a word may be is its <em>term frequency</em> (tf), how frequently a word occurs in a document, as we examined in Chapter <a href="tidytext.html#tidytext">1</a>. There are words in a document, however, that occur many times but may not be important; in English, these are probably words like “the”, “is”, “of”, and so forth. We might take the approach of adding words like these to a list of stop words and removing them before analysis, but it is possible that some of these words might be more important in some documents than others. A list of stop words is not a very sophisticated approach to adjusting term frequency for commonly used words.</p>
-<p>Another approach is to look at a term’s <em>inverse document frequency</em> (idf), which decreases the weight for commonly used words and increases the weight for words that are not used very much in a collection of documents. This can be combined with term frequency to calculate a term’s <em>tf-idf</em> (the two quantities multiplied together), the frequency of a term adjusted for how rarely it is used. It is intended to measure how important a word is to a document in a collection (or corpus) of documents, for example, to one novel in a collection of novels or to one website in a collection of websites. It is a rule-of-thumb or heuristic quantity; while it has proved useful in text mining, search engines, etc., its theoretical foundations are considered less than firm by information theory experts. The inverse document frequency for any given term is defined as</p>
+<p>Another approach is to look at a term’s <em>inverse document frequency</em> (idf), which decreases the weight for commonly used words and increases the weight for words that are not used very much in a collection of documents. This can be combined with term frequency to calculate a term’s <em>tf-idf</em> (the two quantities multiplied together), the frequency of a term adjusted for how rarely it is used.</p>
+<div class="rmdnote">
+<p>
+The statistic <strong>tf-idf</strong> is intended to measure how important a word is to a document in a collection (or corpus) of documents, for example, to one novel in a collection of novels or to one website in a collection of websites.
+</p>
+</div>
+<p>It is a rule-of-thumb or heuristic quantity; while it has proved useful in text mining, search engines, etc., its theoretical foundations are considered less than firm by information theory experts. The inverse document frequency for any given term is defined as</p>
 <p><span class="math display">\[idf(\text{term}) = \ln{\left(\frac{n_{\text{documents}}}{n_{\text{documents containing term}}}\right)}\]</span></p>
 <p>We can use tidy data principles, as described in Chapter <a href="tidytext.html#tidytext">1</a>, to approach tf-idf analysis and use consistent, effective tools to quantify how important various terms are in a document that is part of a collection.</p>
 <div id="term-frequency-in-jane-austens-novels" class="section level2">
@@ -305,7 +311,13 @@ Figure 3.1: Term Frequency Distribution in Jane Austen’s Novels
 </div>
 <div id="zipfs-law" class="section level2">
 <h2><span class="header-section-number">3.2</span> Zipf’s law</h2>
-<p>Distributions like those shown in Figure <a href="tfidf.html#fig:plottf">3.1</a> are typical in language. In fact, those types of long-tailed distributions are so common in any given corpus of natural language (like a book, or a lot of text from a website, or spoken words) that the relationship between the frequency that a word is used and its rank has been the subject of study; a classic version of this relationship is called Zipf’s law, after George Zipf, a 20th century American linguist. Zipf’s law states that the frequency of a word is inversely proportional to its rank. Since we have the data frame we used to plot term frequency, we can examine Zipf’s law for Jane Austen’s novels with just a few lines of dplyr functions.</p>
+<p>Distributions like those shown in Figure <a href="tfidf.html#fig:plottf">3.1</a> are typical in language. In fact, those types of long-tailed distributions are so common in any given corpus of natural language (like a book, or a lot of text from a website, or spoken words) that the relationship between the frequency that a word is used and its rank has been the subject of study; a classic version of this relationship is called Zipf’s law, after George Zipf, a 20th century American linguist.</p>
+<div class="rmdnote">
+<p>
+Zipf’s law states that the frequency that a word appears is inversely proportional to its rank.
+</p>
+</div>
+<p>Since we have the data frame we used to plot term frequency, we can examine Zipf’s law for Jane Austen’s novels with just a few lines of dplyr functions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">freq_by_rank &lt;-<span class="st"> </span>book_words %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(book) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">rank =</span> <span class="kw">row_number</span>(), 
@@ -409,7 +421,13 @@ book_words</code></pre></div>
 ## 9    Pride &amp; Prejudice    bennet   294 0.002405813 1.791759 0.004310639
 ## 10          Persuasion wentworth   191 0.002283132 1.791759 0.004090824
 ## # ... with 40,369 more rows</code></pre>
-<p>Here we see all proper nouns, names that are in fact important in these novels. None of them occur in all of novels, and they are important, characteristic words for each text within the corpus of Jane Austen’s novels. Some of the values for idf are the same for different terms because there are 6 documents in this corpus and we are seeing the numerical value for <span class="math inline">\(\ln(6/1)\)</span>, <span class="math inline">\(\ln(6/2)\)</span>, etc. Let’s look at a visualization for these high tf-idf words in Figure <a href="tfidf.html#fig:plotausten">3.4</a>.</p>
+<p>Here we see all proper nouns, names that are in fact important in these novels. None of them occur in all of novels, and they are important, characteristic words for each text within the corpus of Jane Austen’s novels.</p>
+<div class="rmdnote">
+<p>
+Some of the values for idf are the same for different terms because there are 6 documents in this corpus and we are seeing the numerical value for <span class="math inline">ln(6/1)</span>, <span class="math inline">ln(6/2)</span>, etc.
+</p>
+</div>
+<p>Let’s look at a visualization for these high tf-idf words in Figure <a href="tfidf.html#fig:plotausten">3.4</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_austen &lt;-<span class="st"> </span>book_words %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(tf_idf)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">unique</span>(word))))
@@ -510,7 +528,7 @@ Figure 3.6: Highest tf-idf words in classic physics corpus
 Figure 3.7: Highest tf-idf words in each physics texts
 </p>
 </div>
-<p>Very interesting indeed. One thing we see here is “gif” in the Einstein text?!</p>
+<p>Very interesting indeed. One thing we see here is “eq” in the Einstein text?!</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stringr)
 
 physics %&gt;%<span class="st"> </span>
@@ -530,7 +548,7 @@ physics %&gt;%<span class="st"> </span>
 ## 9                            velocity v=c we should have eq. 06a ,
 ## 10              the rod as judged from K1 would have been eq. 06 ;
 ## # ... with 45 more rows</code></pre>
-<p>Some cleaning up of the text is in order. “K1” is the name of a coordinate system for Einstein:</p>
+<p>Some cleaning up of the text may be in order. “K1” is the name of a coordinate system for Einstein:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">physics %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(text, <span class="st">&quot;K1&quot;</span>)) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(text)</code></pre></div>
