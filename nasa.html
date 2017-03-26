@@ -252,7 +252,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="nasa" class="section level1">
 <h1><span class="header-section-number">8</span> Case study: mining NASA metadata</h1>
 <p>There are over 32,000 datasets hosted and/or maintained by <a href="https://www.nasa.gov/">NASA</a>; these datasets cover topics from Earth science to aerospace engineering to management of NASA itself. We can use the metadata for these datasets to understand the connections between them.</p>
-<p>What is metadata? Metadata is a term that refers to data that gives information about other data; in this case, the metadata informs users about what is in these numerous NASA datasets but does not include the content of the datasets themselves. The metadata includes information like the title of the dataset, a description field, what organization(s) within NASA is responsible for the dataset, keywords for the dataset that have been assigned by a human being, and so forth. NASA places a high priority on making its data open and accessible, even requiring all NASA-funded research to be <a href="https://www.nasa.gov/press-release/nasa-unveils-new-public-web-portal-for-research-results">openly accessible online</a>. The metadata for all its datasets is <a href="https://data.nasa.gov/data.json">publicly available online in JSON format</a>.</p>
+<div class="rmdnote">
+<p>
+What is metadata? Metadata is a term that refers to data that gives information about other data; in this case, the metadata informs users about what is in these numerous NASA datasets but does not include the content of the datasets themselves.
+</p>
+</div>
+<p>The metadata includes information like the title of the dataset, a description field, what organization(s) within NASA is responsible for the dataset, keywords for the dataset that have been assigned by a human being, and so forth. NASA places a high priority on making its data open and accessible, even requiring all NASA-funded research to be <a href="https://www.nasa.gov/press-release/nasa-unveils-new-public-web-portal-for-research-results">openly accessible online</a>. The metadata for all its datasets is <a href="https://data.nasa.gov/data.json">publicly available online in JSON format</a>.</p>
 <p>In this chapter, we will treat the NASA metadata as a text dataset and show how to implement several tidy text approaches with this real-life text. We will use word co-occurrences and correlations, tf-idf, and topic modeling to explore the connections between the datasets. Can we find datasets that are related to each other? Can we find clusters of similar datasets? Since we have several text fields in the NASA metadata, most importantly the title, description, and keyword fields, we can explore the connections between the fields to better understand the complex world of data at NASA. This type of approach can be extended to any domain that deals with text, so let’s take a look at this metadata and get started.</p>
 <div id="how-data-is-organized-at-nasa" class="section level2">
 <h2><span class="header-section-number">8.1</span> How data is organized at NASA</h2>
@@ -415,7 +420,12 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 ## 9       earth 14373
 ## 10 resolution 13879
 ## # ... with 35,930 more rows</code></pre>
-<p>Words like “data” and “global” are used very often in NASA titles and descriptions. We may want to remove digits and some “words” like “v1” from these data frames for many types of analyses; they are not too meaningful for most audiences. We can do this by making a list of custom stop words and using <code>anti_join()</code> to remove them from the data frame, just like we removed the default stop words that are in the tidytext package. This approach can be used in many instances and is a great tool to bear in mind.</p>
+<p>Words like “data” and “global” are used very often in NASA titles and descriptions. We may want to remove digits and some “words” like “v1” from these data frames for many types of analyses; they are not too meaningful for most audiences.</p>
+<div class="rmdtip">
+<p>
+We can do this by making a list of custom stop words and using <code>anti_join()</code> to remove them from the data frame, just like we removed the default stop words that are in the tidytext package. This approach can be used in many instances and is a great tool to bear in mind.
+</p>
+</div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my_stopwords &lt;-<span class="st"> </span><span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="kw">as.character</span>(<span class="dv">1</span>:<span class="dv">10</span>), 
                                     <span class="st">&quot;v1&quot;</span>, <span class="st">&quot;v03&quot;</span>, <span class="st">&quot;l2&quot;</span>, <span class="st">&quot;l3&quot;</span>, <span class="st">&quot;l4&quot;</span>, <span class="st">&quot;v5.2.0&quot;</span>, 
                                     <span class="st">&quot;v003&quot;</span>, <span class="st">&quot;v004&quot;</span>, <span class="st">&quot;v005&quot;</span>, <span class="st">&quot;v006&quot;</span>, <span class="st">&quot;v7&quot;</span>))
@@ -454,10 +464,10 @@ nasa_desc &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span
 <p>We can use <code>pairwise_count()</code> from the widyr package to count how many times each pair of words occurs together in a title or description field.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
 
-title_words &lt;-<span class="st"> </span>nasa_title %&gt;%<span class="st"> </span>
+title_word_pairs &lt;-<span class="st"> </span>nasa_title %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>, <span class="dt">upper =</span> <span class="ot">FALSE</span>)
 
-title_words</code></pre></div>
+title_word_pairs</code></pre></div>
 <pre><code>## # A tibble: 156,689 × 3
 ##     item1   item2     n
 ##     &lt;chr&gt;   &lt;chr&gt; &lt;dbl&gt;
@@ -473,10 +483,10 @@ title_words</code></pre></div>
 ## 10 ground     gpm   550
 ## # ... with 156,679 more rows</code></pre>
 <p>These are the pairs of words that occur together most often in title fields. Some of these words are obviously acronyms used within NASA, and we see how often words like “project” and “system” are used.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_words &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">desc_word_pairs &lt;-<span class="st"> </span>nasa_desc %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">pairwise_count</span>(word, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>, <span class="dt">upper =</span> <span class="ot">FALSE</span>)
 
-desc_words</code></pre></div>
+desc_word_pairs</code></pre></div>
 <pre><code>## # A tibble: 10,889,084 × 3
 ##         item1      item2     n
 ##         &lt;chr&gt;      &lt;chr&gt; &lt;dbl&gt;
@@ -498,7 +508,7 @@ desc_words</code></pre></div>
 <span class="kw">library</span>(ggraph)
 
 <span class="kw">set.seed</span>(<span class="dv">1234</span>)
-title_words %&gt;%
+title_word_pairs %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">250</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
@@ -515,7 +525,7 @@ Figure 8.1: Word network in NASA dataset titles
 <p>We see some clear clustering in this network of title words; words in NASA dataset titles are largely organized into several families of words that tend to go together.</p>
 <p>What about the words from the description fields?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
-desc_words %&gt;%
+desc_word_pairs %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">5000</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
@@ -534,10 +544,10 @@ Figure 8.2: Word network in NASA dataset descriptions
 <div id="networks-of-keywords" class="section level3">
 <h3><span class="header-section-number">8.2.2</span> Networks of Keywords</h3>
 <p>Next, let’s make a network of the keywords in Figure <a href="nasa.html#fig:plotcounts">8.3</a> to see which keywords commonly occur together in the same datasets.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_counts &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_pairs &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">pairwise_count</span>(keyword, id, <span class="dt">sort =</span> <span class="ot">TRUE</span>, <span class="dt">upper =</span> <span class="ot">FALSE</span>)
 
-keyword_counts</code></pre></div>
+keyword_pairs</code></pre></div>
 <pre><code>## # A tibble: 13,390 × 3
 ##            item1                   item2     n
 ##            &lt;chr&gt;                   &lt;chr&gt; &lt;dbl&gt;
@@ -553,7 +563,7 @@ keyword_counts</code></pre></div>
 ## 10 EARTH SCIENCE               BIOSPHERE  2448
 ## # ... with 13,380 more rows</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1234</span>)
-keyword_counts %&gt;%
+keyword_pairs %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">700</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
@@ -567,7 +577,13 @@ keyword_counts %&gt;%
 Figure 8.3: Co-occurrence network in NASA dataset keywords
 </p>
 </div>
-<p>We definitely see clustering here, and strong connections between keywords like “OCEANS”, “OCEAN OPTICS”, and “OCEAN COLOR”, or “PROJECT” and “COMPLETED”. These are the most commonly co-occurring words, but also just the most common keywords in general. To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in Chapter <a href="ngrams.html#ngrams">4</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
+<p>We definitely see clustering here, and strong connections between keywords like “OCEANS”, “OCEAN OPTICS”, and “OCEAN COLOR”, or “PROJECT” and “COMPLETED”.</p>
+<div class="rmdwarning">
+<p>
+These are the most commonly co-occurring words, but also just the most common keywords in general.
+</p>
+</div>
+<p>To examine the relationships among keywords in a different way, we can find the correlation among the keywords as described in Chapter <a href="ngrams.html#ngrams">4</a>. This looks for those keywords that are more likely to occur together than with other keywords in a description field.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">keyword_cors &lt;-<span class="st"> </span>nasa_keyword %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(keyword) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">n</span>() &gt;=<span class="st"> </span><span class="dv">50</span>) %&gt;%
@@ -635,7 +651,13 @@ Figure 8.4: Correlation network in NASA dataset keywords
 ## 9  55942ad8c63a7fe59b49cf6d                      template_proddescription     1     1  8.295611
 ## 10 55942ad8c63a7fe59b49cf6e                      template_proddescription     1     1  8.295611
 ## # ... with 1,913,214 more rows, and 1 more variables: tf_idf &lt;dbl&gt;</code></pre>
-<p>These are the most important words in the description fields as measured by tf-idf, meaning they are common but not too common. Notice we have run into an issue here; both <span class="math inline">\(n\)</span> and term frequency are equal to 1 for these terms, meaning that these were description fields that only had a single word in them. If a description field only contains one word, the tf-idf algorithm will think that is a very important word. Depending on our analytic goals, it might be a good idea to throw out all description fields that have very few words.</p>
+<p>These are the most important words in the description fields as measured by tf-idf, meaning they are common but not too common.</p>
+<div class="rmdwarning">
+<p>
+Notice we have run into an issue here; both <span class="math inline"><em>n</em></span> and term frequency are equal to 1 for these terms, meaning that these were description fields that only had a single word in them. If a description field only contains one word, the tf-idf algorithm will think that is a very important word.
+</p>
+</div>
+<p>Depending on our analytic goals, it might be a good idea to throw out all description fields that have very few words.</p>
 </div>
 <div id="connecting-description-fields-to-keywords" class="section level3">
 <h3><span class="header-section-number">8.3.2</span> Connecting description fields to keywords</h3>
@@ -722,6 +744,7 @@ desc_dtm</code></pre></div>
 <p>Now let’s use the <a href="https://cran.r-project.org/package=topicmodels">topicmodels</a> package to create an LDA model. How many topics will we tell the algorithm to make? This is a question much like in <span class="math inline">\(k\)</span>-means clustering; we don’t really know ahead of time. We tried the following modeling procedure using 8, 16, 24, 32, and 64 topics; we found that at 24 topics, documents are still getting sorted into topics cleanly but going much beyond that caused the distributions of <span class="math inline">\(\gamma\)</span>, the probability that each document belongs in each topic, to look worrisome. We will show more details on this later.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(topicmodels)
 
+<span class="co"># be aware that running this model is time intensive</span>
 desc_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(desc_dtm, <span class="dt">k =</span> <span class="dv">24</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">seed =</span> <span class="dv">1234</span>))
 desc_lda</code></pre></div>
 <pre><code>## A LDA_VEM topic model with 24 topics.</code></pre>
@@ -810,7 +833,19 @@ lda_gamma</code></pre></div>
 ## 9  55942a6ec63a7fe59b496bf7     1 4.408626e-05
 ## 10 55942a8ec63a7fe59b4986f6     1 2.878188e-05
 ## # ... with 768,062 more rows</code></pre>
-<p>Notice that some of the probabilites visible at the top of the data frame are low and some are higher. Our model has assigned a probability to each description belonging to each of the topics we constructed from the sets of words. How are the probabilities distributed? Let’s visualize them (Figure <a href="nasa.html#fig:plotgamma">8.7</a>).</p>
+<p>Notice that some of the probabilites visible at the top of the data frame are low and some are higher. Our model has assigned a probability to each description belonging to each of the topics we constructed from the sets of words. How are the probabilities distributed? Let’s visualize them (Figure <a href="nasa.html#fig:plotgammaall">8.7</a>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(lda_gamma, <span class="kw">aes</span>(gamma)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>() +
+<span class="st">  </span><span class="kw">scale_y_log10</span>() +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Distribution of probabilities for all topics&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Number of documents&quot;</span>, <span class="dt">x =</span> <span class="kw">expression</span>(gamma))</code></pre></div>
+<div class="figure"><span id="fig:plotgammaall"></span>
+<img src="08-nasa-metadata_files/figure-html/plotgammaall-1.png" alt="Probability distribution in topic modeling of NASA metadata description field texts" width="672" />
+<p class="caption">
+Figure 8.7: Probability distribution in topic modeling of NASA metadata description field texts
+</p>
+</div>
+<p>First notice that the y-axis is plotted on a log scale; otherwise it is difficult to make out any detail in the plot. Next, notice that <span class="math inline">\(\gamma\)</span> runs from 0 to 1; remember that this is the probability that a given document belongs in a given topic. There are many values near zero, which means there are many documents that do not belong in each topic. Also, there are many values near <span class="math inline">\(\gamma = 1\)</span>; these are the documents that <em>do</em> belong in those topics. This distribution shows that documents are being well discriminated as belonging to a topic or not. We can also look at how the probabilities are distributed within each topic, as shown in Figure <a href="nasa.html#fig:plotgamma">8.8</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(lda_gamma, <span class="kw">aes</span>(gamma, <span class="dt">fill =</span> <span class="kw">as.factor</span>(topic))) +
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~<span class="st"> </span>topic, <span class="dt">ncol =</span> <span class="dv">4</span>) +
@@ -818,12 +853,12 @@ lda_gamma</code></pre></div>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Distribution of probability for each topic&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Number of documents&quot;</span>, <span class="dt">x =</span> <span class="kw">expression</span>(gamma))</code></pre></div>
 <div class="figure"><span id="fig:plotgamma"></span>
-<img src="08-nasa-metadata_files/figure-html/plotgamma-1.png" alt="Probability distribution in topic modeling of NASA metadata description field texts" width="1152" />
+<img src="08-nasa-metadata_files/figure-html/plotgamma-1.png" alt="Probability distribution for each topic in topic modeling of NASA metadata description field texts" width="1152" />
 <p class="caption">
-Figure 8.7: Probability distribution in topic modeling of NASA metadata description field texts
+Figure 8.8: Probability distribution for each topic in topic modeling of NASA metadata description field texts
 </p>
 </div>
-<p>First notice that the y-axis is plotted on a log scale; otherwise it is difficult to make out any detail in the plot. Next, notice that <span class="math inline">\(\gamma\)</span> runs from 0 to 1 in each panel. Remember that this is the probability that a given document belongs in a given topic. There are many values near zero, which means there are many documents that do not belong in each topic. Also, most of these panels show a higher number of documents near <span class="math inline">\(\gamma = 1\)</span>; these are the documents that <em>do</em> belong in those topics. For example, let’s look specifically at topic 18 in Figure <a href="nasa.html#fig:plotgamma">8.7</a>, a topic that had documents cleanly sorted in and out of it. There are many documents with <span class="math inline">\(\gamma\)</span> close to 1; these are the documents that <em>do</em> belong to topic 18 according to the model. There are also many documents with <span class="math inline">\(\gamma\)</span> close to 0; these are the documents that do <em>not</em> belong to topic 18. Each document appears in each panel in this plot, and its <span class="math inline">\(\gamma\)</span> for that topic tells us that document’s probability of belonging in that topic.</p>
+<p>Let’s look specifically at topic 18 in Figure <a href="nasa.html#fig:plotgammaall">8.7</a>, a topic that had documents cleanly sorted in and out of it. There are many documents with <span class="math inline">\(\gamma\)</span> close to 1; these are the documents that <em>do</em> belong to topic 18 according to the model. There are also many documents with <span class="math inline">\(\gamma\)</span> close to 0; these are the documents that do <em>not</em> belong to topic 18. Each document appears in each panel in this plot, and its <span class="math inline">\(\gamma\)</span> for that topic tells us that document’s probability of belonging in that topic.</p>
 <p>This plot displays the type of information we used to choose how many topics for our topic modeling procedure. When we tried options higher than 24 (such as 32 or 64), the distributions for <span class="math inline">\(\gamma\)</span> started to look very flat toward <span class="math inline">\(\gamma = 1\)</span>; documents were not getting sorted into topics very well.</p>
 </div>
 <div id="connecting-topic-modeling-with-keywords" class="section level3">
@@ -887,10 +922,10 @@ top_keywords</code></pre></div>
 <div class="figure"><span id="fig:plottopkeywords"></span>
 <img src="08-nasa-metadata_files/figure-html/plottopkeywords-1.png" alt="Top keywords in topic modeling of NASA metadata description field texts" width="1536" />
 <p class="caption">
-Figure 8.8: Top keywords in topic modeling of NASA metadata description field texts
+Figure 8.9: Top keywords in topic modeling of NASA metadata description field texts
 </p>
 </div>
-<p>Let’s take a step back and remind ourselves what Figure <a href="nasa.html#fig:plottopkeywords">8.8</a> is telling us. NASA datasets are tagged with keywords by human beings, and we have built an LDA topic model (with 24 topics) for the description fields of the NASA datasets. This plot answers the question, “For the datasets with description fields that have a high probability of belonging to a given topic, what are the most common human-assigned keywords?”</p>
+<p>Let’s take a step back and remind ourselves what Figure <a href="nasa.html#fig:plottopkeywords">8.9</a> is telling us. NASA datasets are tagged with keywords by human beings, and we have built an LDA topic model (with 24 topics) for the description fields of the NASA datasets. This plot answers the question, “For the datasets with description fields that have a high probability of belonging to a given topic, what are the most common human-assigned keywords?”</p>
 <p>It’s interesting that the keywords for topics 13, 16, and 18 are essentially duplicates of each other (“OCEAN COLOR”, “OCEAN OPTICS”, “OCEANS”), because the top words in those topics do exhibit meaningful differences, as shown in Figure <a href="nasa.html#fig:plotbeta">8.6</a>. Also note that by number of documents, the combination of 13, 16, and 18 is quite a large percentage of the total number of datasets represented in this plot, and even more if we were to include topic 11. By number, there are <em>many</em> datasets at NASA that deal with oceans, ocean color, and ocean optics. We see “PROJECT COMPLETED” in topics 9, 10, and 21, along with the names of NASA laboratories and research centers. Other important subject areas that stand out are groups of keywords about atmospheric science, budget/finance, and population/human dimensions. We can go back to Figure <a href="nasa.html#fig:plotbeta">8.6</a> on terms and topics to see which words in the description fields are driving datasets being assigned to these topics. For example, topic 4 is associated with keywords about population and human dimensions, and some of the top terms for that topic are “population”, “international”, “center”, and “university”.</p>
 </div>
 </div>
