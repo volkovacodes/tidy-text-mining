@@ -234,7 +234,12 @@ Note that the `austen_books()` function started us with exactly the text we want
 
 ## The gutenbergr package
 
-Now that we've used the janeaustenr package to explore tidying text, let's introduce the [gutenbergr](https://github.com/ropenscilabs/gutenbergr) package [@R-gutenbergr]. The gutenbergr package provides access to the public domain works from the [Project Gutenberg](https://www.gutenberg.org/) collection. The package includes tools both for downloading books (stripping out the unhelpful header/footer information), and a complete dataset of Project Gutenberg metadata that can be used to find works of interest. In this book, we will mostly use the function `gutenberg_download()` that downloads one or more works from Project Gutenberg by ID, but you can also use other functions to explore metadata, pair Gutenberg ID with title, author, language, etc., or gather information about authors. To learn more about gutenbergr, check out the [package's tutorial at rOpenSci](https://ropensci.org/tutorials/gutenbergr_tutorial.html), where it is one of rOpenSci's packages for data access.
+Now that we've used the janeaustenr package to explore tidying text, let's introduce the [gutenbergr](https://github.com/ropenscilabs/gutenbergr) package [@R-gutenbergr]. The gutenbergr package provides access to the public domain works from the [Project Gutenberg](https://www.gutenberg.org/) collection. The package includes tools both for downloading books (stripping out the unhelpful header/footer information), and a complete dataset of Project Gutenberg metadata that can be used to find works of interest. In this book, we will mostly use the function `gutenberg_download()` that downloads one or more works from Project Gutenberg by ID, but you can also use other functions to explore metadata, pair Gutenberg ID with title, author, language, etc., or gather information about authors. 
+
+
+<div class="rmdnote">
+<p>To learn more about gutenbergr, check out the <a href="https://ropensci.org/tutorials/gutenbergr_tutorial.html">package's tutorial at rOpenSci</a>, where it is one of rOpenSci's packages for data access.</p>
+</div>
 
 ## Word frequencies
 
@@ -349,6 +354,7 @@ Now let's plot (Figure \@ref(fig:plotcompare)).
 ```r
 library(scales)
 
+# expect a warning about rows with missing values being removed
 ggplot(frequency, aes(x = proportion, y = `Jane Austen`, color = abs(`Jane Austen` - proportion))) +
   geom_abline(color = "gray40", lty = 2) +
   geom_jitter(alpha = 0.1, size = 2.5, width = 0.3, height = 0.3) +
@@ -365,10 +371,6 @@ ggplot(frequency, aes(x = proportion, y = `Jane Austen`, color = abs(`Jane Auste
 <img src="01-tidy-text_files/figure-html/plotcompare-1.png" alt="Comparing the word frequencies of Jane Austen, the Brontë sisters, and H.G. Wells" width="960" />
 <p class="caption">(\#fig:plotcompare)Comparing the word frequencies of Jane Austen, the Brontë sisters, and H.G. Wells</p>
 </div>
-
-```r
-  # expect a warning about rows with missing values being removed
-```
 
 Words that are close to the line in these plots have similar frequencies in both sets of texts, for example, in both Austen and Brontë texts ("miss", "time", "day" at the upper frequency end) or in both Austen and Wells texts ("time", "day", "brother" at the high frequency end). Words that are far from the line are words that are found more in one set of texts than another. For example, in the Austen-Brontë panel, words like "elizabeth", "emma", and "fanny" (all proper nouns) are found in Austen's texts but not much in the Brontë texts, while words like "arthur" and "dog" are found in the Brontë texts but not the Austen texts. In comparing H.G. Wells with Jane Austen, Wells uses words like "beast", "guns", "feet", and "black" that Austen does not, while Austen uses words like "family", "friend", "letter", and "dear" that Wells does not.
 

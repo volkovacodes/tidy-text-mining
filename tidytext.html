@@ -417,7 +417,12 @@ Figure 1.1: The most common words in Jane Austen’s novels
 </div>
 <div id="the-gutenbergr-package" class="section level2">
 <h2><span class="header-section-number">1.4</span> The gutenbergr package</h2>
-<p>Now that we’ve used the janeaustenr package to explore tidying text, let’s introduce the <a href="https://github.com/ropenscilabs/gutenbergr">gutenbergr</a> package <span class="citation">(Robinson <a href="#ref-R-gutenbergr">2016</a>)</span>. The gutenbergr package provides access to the public domain works from the <a href="https://www.gutenberg.org/">Project Gutenberg</a> collection. The package includes tools both for downloading books (stripping out the unhelpful header/footer information), and a complete dataset of Project Gutenberg metadata that can be used to find works of interest. In this book, we will mostly use the function <code>gutenberg_download()</code> that downloads one or more works from Project Gutenberg by ID, but you can also use other functions to explore metadata, pair Gutenberg ID with title, author, language, etc., or gather information about authors. To learn more about gutenbergr, check out the <a href="https://ropensci.org/tutorials/gutenbergr_tutorial.html">package’s tutorial at rOpenSci</a>, where it is one of rOpenSci’s packages for data access.</p>
+<p>Now that we’ve used the janeaustenr package to explore tidying text, let’s introduce the <a href="https://github.com/ropenscilabs/gutenbergr">gutenbergr</a> package <span class="citation">(Robinson <a href="#ref-R-gutenbergr">2016</a>)</span>. The gutenbergr package provides access to the public domain works from the <a href="https://www.gutenberg.org/">Project Gutenberg</a> collection. The package includes tools both for downloading books (stripping out the unhelpful header/footer information), and a complete dataset of Project Gutenberg metadata that can be used to find works of interest. In this book, we will mostly use the function <code>gutenberg_download()</code> that downloads one or more works from Project Gutenberg by ID, but you can also use other functions to explore metadata, pair Gutenberg ID with title, author, language, etc., or gather information about authors.</p>
+<div class="rmdnote">
+<p>
+To learn more about gutenbergr, check out the <a href="https://ropensci.org/tutorials/gutenbergr_tutorial.html">package’s tutorial at rOpenSci</a>, where it is one of rOpenSci’s packages for data access.
+</p>
+</div>
 </div>
 <div id="word-frequencies" class="section level2">
 <h2><span class="header-section-number">1.5</span> Word frequencies</h2>
@@ -484,6 +489,7 @@ frequency &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(<span 
 <p>Now let’s plot (Figure <a href="tidytext.html#fig:plotcompare">1.2</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(scales)
 
+<span class="co"># expect a warning about rows with missing values being removed</span>
 <span class="kw">ggplot</span>(frequency, <span class="kw">aes</span>(<span class="dt">x =</span> proportion, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Jane Austen</span><span class="st">`</span>, <span class="dt">color =</span> <span class="kw">abs</span>(<span class="st">`</span><span class="dt">Jane Austen</span><span class="st">`</span> -<span class="st"> </span>proportion))) +
 <span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">color =</span> <span class="st">&quot;gray40&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>) +
 <span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">alpha =</span> <span class="fl">0.1</span>, <span class="dt">size =</span> <span class="fl">2.5</span>, <span class="dt">width =</span> <span class="fl">0.3</span>, <span class="dt">height =</span> <span class="fl">0.3</span>) +
@@ -500,7 +506,6 @@ frequency &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(<span 
 Figure 1.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, and H.G. Wells
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  <span class="co"># expect a warning about rows with missing values being removed</span></code></pre></div>
 <p>Words that are close to the line in these plots have similar frequencies in both sets of texts, for example, in both Austen and Brontë texts (“miss”, “time”, “day” at the upper frequency end) or in both Austen and Wells texts (“time”, “day”, “brother” at the high frequency end). Words that are far from the line are words that are found more in one set of texts than another. For example, in the Austen-Brontë panel, words like “elizabeth”, “emma”, and “fanny” (all proper nouns) are found in Austen’s texts but not much in the Brontë texts, while words like “arthur” and “dog” are found in the Brontë texts but not the Austen texts. In comparing H.G. Wells with Jane Austen, Wells uses words like “beast”, “guns”, “feet”, and “black” that Austen does not, while Austen uses words like “family”, “friend”, “letter”, and “dear” that Wells does not.</p>
 <p>Overall, notice in Figure <a href="tidytext.html#fig:plotcompare">1.2</a> that the words in the Austen-Brontë panel are closer to the zero-slope line than in the Austen-Wells panel. Also notice that the words extend to lower frequencies in the Austen-Brontë panel; there is empty space in the Austen-Wells panel at low frequency. These characteristics indicate that Austen and the Brontë sisters use more similar words than Austen and H.G. Wells. Also, we see that not all the words are found in all three sets of texts and there are fewer data points in the panel for Austen and H.G. Wells.</p>
 <p>Let’s quantify how similar and different these sets of word frequencies are using a correlation test. How correlated are the word frequencies between Austen and the Brontë sisters, and between Austen and Wells?</p>
