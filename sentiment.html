@@ -125,7 +125,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1" data-path="tidytext.html"><a href="tidytext.html"><i class="fa fa-check"></i><b>1</b> The tidy text format</a><ul>
 <li class="chapter" data-level="1.1" data-path="tidytext.html"><a href="tidytext.html#contrasting-tidy-text-with-other-data-structures"><i class="fa fa-check"></i><b>1.1</b> Contrasting tidy text with other data structures</a></li>
 <li class="chapter" data-level="1.2" data-path="tidytext.html"><a href="tidytext.html#the-unnest_tokens-function"><i class="fa fa-check"></i><b>1.2</b> The <code>unnest_tokens</code> function</a></li>
-<li class="chapter" data-level="1.3" data-path="tidytext.html"><a href="tidytext.html#tidying-the-works-of-jane-austen"><i class="fa fa-check"></i><b>1.3</b> Tidying the works of Jane Austen</a></li>
+<li class="chapter" data-level="1.3" data-path="tidytext.html"><a href="tidytext.html#tidyausten"><i class="fa fa-check"></i><b>1.3</b> Tidying the works of Jane Austen</a></li>
 <li class="chapter" data-level="1.4" data-path="tidytext.html"><a href="tidytext.html#the-gutenbergr-package"><i class="fa fa-check"></i><b>1.4</b> The gutenbergr package</a></li>
 <li class="chapter" data-level="1.5" data-path="tidytext.html"><a href="tidytext.html#word-frequencies"><i class="fa fa-check"></i><b>1.5</b> Word frequencies</a></li>
 <li class="chapter" data-level="1.6" data-path="tidytext.html"><a href="tidytext.html#summary"><i class="fa fa-check"></i><b>1.6</b> Summary</a></li>
@@ -338,7 +338,7 @@ Dictionary-based methods like the ones we are discussing find the total sentimen
 <div id="sentiment-analysis-with-inner-join" class="section level2">
 <h2><span class="header-section-number">2.2</span> Sentiment analysis with inner join</h2>
 <p>With data in a tidy format, sentiment analysis can be done as an inner join. This is another of the great successes of viewing text mining as a tidy data analysis task; much as removing stop words is an antijoin operation, performing sentiment analysis is an inner join operation.</p>
-<p>Let’s look at the words with a joy score from the NRC lexicon. What are the most common joy words in <em>Emma</em>? First, we need to take the text of the novels and convert the text to the tidy format using <code>unnest_tokens()</code>. Let’s also set up some other columns to keep track of which line and chapter of the book each word comes from; we use <code>group_by</code> and <code>mutate</code> to construct those columns.</p>
+<p>Let’s look at the words with a joy score from the NRC lexicon. What are the most common joy words in <em>Emma</em>? First, we need to take the text of the novels and convert the text to the tidy format using <code>unnest_tokens()</code>, just as we did in Section <a href="tidytext.html#tidyausten">1.3</a>. Let’s also set up some other columns to keep track of which line and chapter of the book each word comes from; we use <code>group_by</code> and <code>mutate</code> to construct those columns.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(janeaustenr)
 <span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(stringr)
@@ -351,7 +351,7 @@ tidy_books &lt;-<span class="st"> </span><span class="kw">austen_books</span>() 
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(word, text)</code></pre></div>
 <p>Notice that we chose the name <code>word</code> for the output column from <code>unnest_tokens()</code>. This is a convenient choice because the sentiment lexicons and stop word datasets have columns named <code>word</code>; performing inner joins and anti-joins is thus easier.</p>
-<p>Now that the text is in a tidy format with one term per row, we are ready to do the sentiment analysis. First, let’s use the NRC lexicon and <code>filter()</code> for the joy words. Next, let’s <code>filter()</code> the data frame with the text from the books for the words from <em>Emma</em> and then use <code>inner_join()</code> to perform the sentiment analysis. What are the most common joy words in <em>Emma</em>? Let’s use <code>count()</code> from dplyr.</p>
+<p>Now that the text is in a tidy format with one word per row, we are ready to do the sentiment analysis. First, let’s use the NRC lexicon and <code>filter()</code> for the joy words. Next, let’s <code>filter()</code> the data frame with the text from the books for the words from <em>Emma</em> and then use <code>inner_join()</code> to perform the sentiment analysis. What are the most common joy words in <em>Emma</em>? Let’s use <code>count()</code> from dplyr.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nrcjoy &lt;-<span class="st"> </span><span class="kw">get_sentiments</span>(<span class="st">&quot;nrc&quot;</span>) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(sentiment ==<span class="st"> &quot;joy&quot;</span>)
 
@@ -375,13 +375,13 @@ tidy_books %&gt;%
 ## # ... with 293 more rows</code></pre>
 <p>We see many positive, happy words about hope, friendship, and love here.</p>
 <p>Or instead we could examine how sentiment changes throughout each novel. We can do this with just a handful of lines that are mostly dplyr functions. First, we find a sentiment score for each word using the Bing lexicon and <code>inner_join()</code>.</p>
-<p>Next, we count up how many positive and negative words there are in defined sections of each book.</p>
+<p>Next, we count up how many positive and negative words there are in defined sections of each book. We define an <code>index</code> here to keep track of where we are in the narrative; this index (using integer division) counts up sections of 100 lines of text.</p>
 <div class="rmdtip">
 <p>
-We define an <code>index</code> here to keep track of where we are in the narrative; this index (using integer division) counts up sections of 100 lines of text. The <code>%/%</code> operator does integer division (<code>x %/% y</code> is equivalent to <code>floor(x/y)</code>) so the index keeps track of which 100-line section of text we are counting up negative and positive sentiment in. Small sections of text may not have enough words in them to get a good estimate of sentiment while really large sections can wash out narrative structure. For these books, using 100 lines works well, but this can vary depending on individual texts, how long the lines were to start with, etc.
+The <code>%/%</code> operator does integer division (<code>x %/% y</code> is equivalent to <code>floor(x/y)</code>) so the index keeps track of which 100-line section of text we are counting up negative and positive sentiment in.
 </p>
 </div>
-<p>We then use <code>spread()</code> so that we have negative and positive sentiment in separate columns, and lastly calculate a net sentiment (positive - negative).</p>
+<p>Small sections of text may not have enough words in them to get a good estimate of sentiment while really large sections can wash out narrative structure. For these books, using 100 lines works well, but this can vary depending on individual texts, how long the lines were to start with, etc. We then use <code>spread()</code> so that we have negative and positive sentiment in separate columns, and lastly calculate a net sentiment (positive - negative).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
 janeaustensentiment &lt;-<span class="st"> </span>tidy_books %&gt;%
@@ -607,8 +607,8 @@ austen_chapters %&gt;%<span class="st"> </span>
 ## 4                Emma       56
 ## 5    Northanger Abbey       32
 ## 6          Persuasion       25</code></pre>
-<p>We have recovered the correct number of chapters in each novel (plus an “extra” row for each novel title). In this data frame, each row corresponds to one chapter.</p>
-<p>Near the beginning of this chapter, we used a similar regex to find where all the chapters were in Austen’s novels for a tidy data frame organized by one-word-per-row. We can use tidy text analysis to ask questions such as what are the most negative chapters in each of Jane Austen’s novels? First, let’s get the list of negative words from the Bing lexicon. Second, let’s make a data frame of how many words are in each chapter so we can normalize for the length of chapters. Then, let’s find the number of negative words in each chapter and divide by the total words in each chapter. Which chapter has the highest proportion of negative words?</p>
+<p>We have recovered the correct number of chapters in each novel (plus an “extra” row for each novel title). In the <code>austen_chapters</code> data frame, each row corresponds to one chapter.</p>
+<p>Near the beginning of this chapter, we used a similar regex to find where all the chapters were in Austen’s novels for a tidy data frame organized by one-word-per-row. We can use tidy text analysis to ask questions such as what are the most negative chapters in each of Jane Austen’s novels? First, let’s get the list of negative words from the Bing lexicon. Second, let’s make a data frame of how many words are in each chapter so we can normalize for the length of chapters. Then, let’s find the number of negative words in each chapter and divide by the total words in each chapter. For each book, which chapter has the highest proportion of negative words?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bingnegative &lt;-<span class="st"> </span><span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(sentiment ==<span class="st"> &quot;negative&quot;</span>)
 
