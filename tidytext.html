@@ -294,7 +294,13 @@ text_df</code></pre></div>
 ## 3     3 The Carriage held but just Ourselves -
 ## 4     4                        and Immortality</code></pre>
 <p>What does it mean that this data frame has printed out as a “tibble”? A tibble is a modern class of data frame within R, available in the dplyr and tibble packages, that has a convenient print method, will not convert strings to factors, and does not use row names. Tibbles are great for use with tidy tools.</p>
-<p>Notice that this data frame containing text isn’t yet compatible with tidy text analysis, though. We can’t filter out words or count which occur most frequently, since each row is made up of multiple combined words. We need to convert this so that it has <strong>one-token-per-document-per-row</strong>. A token is a meaningful unit of text, most often a word, that we are interested in using for further analysis, and tokenization is the process of splitting text into tokens. In this first example, we only have one document (the poem), but we will explore examples with multiple documents soon.</p>
+<p>Notice that this data frame containing text isn’t yet compatible with tidy text analysis, though. We can’t filter out words or count which occur most frequently, since each row is made up of multiple combined words. We need to convert this so that it has <strong>one-token-per-document-per-row</strong>.</p>
+<div class="rmdnote">
+<p>
+A token is a meaningful unit of text, most often a word, that we are interested in using for further analysis, and tokenization is the process of splitting text into tokens.
+</p>
+</div>
+<p>In this first example, we only have one document (the poem), but we will explore examples with multiple documents soon.</p>
 <p>Within our tidy text framework, we need to both break the text into individual tokens (a process called <em>tokenization</em>) <em>and</em> transform it to a tidy data structure. To do this, we use tidytext’s <code>unnest_tokens()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
@@ -418,7 +424,7 @@ Figure 1.1: The most common words in Jane Austen’s novels
 <div id="the-gutenbergr-package" class="section level2">
 <h2><span class="header-section-number">1.4</span> The gutenbergr package</h2>
 <p>Now that we’ve used the janeaustenr package to explore tidying text, let’s introduce the <a href="https://github.com/ropenscilabs/gutenbergr">gutenbergr</a> package <span class="citation">(Robinson <a href="#ref-R-gutenbergr">2016</a>)</span>. The gutenbergr package provides access to the public domain works from the <a href="https://www.gutenberg.org/">Project Gutenberg</a> collection. The package includes tools both for downloading books (stripping out the unhelpful header/footer information), and a complete dataset of Project Gutenberg metadata that can be used to find works of interest. In this book, we will mostly use the function <code>gutenberg_download()</code> that downloads one or more works from Project Gutenberg by ID, but you can also use other functions to explore metadata, pair Gutenberg ID with title, author, language, etc., or gather information about authors.</p>
-<div class="rmdnote">
+<div class="rmdtip">
 <p>
 To learn more about gutenbergr, check out the <a href="https://ropensci.org/tutorials/gutenbergr_tutorial.html">package’s tutorial at rOpenSci</a>, where it is one of rOpenSci’s packages for data access.
 </p>
