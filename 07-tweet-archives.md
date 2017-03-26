@@ -29,7 +29,7 @@ ggplot(tweets, aes(x = timestamp, fill = person)) +
 ```
 
 <div class="figure">
-<img src="07-tweet-archives_files/figure-html/setup-1.png" alt="All tweets from our accounts" width="768" />
+<img src="07-tweet-archives_files/figure-html/setup-1.png" alt="All tweets from our accounts" width="672" />
 <p class="caption">(\#fig:setup)All tweets from our accounts</p>
 </div>
 
@@ -39,7 +39,13 @@ David and Julia tweet at about the same rate currently and joined Twitter about 
 
 Let's use `unnest_tokens()` to make a tidy data frame of all the words in our tweets, and remove the common English stop words. There are certain conventions in how people use text on Twitter, so we will do a bit more work with our text here than, for example, we did with the narrative text from Project Gutenberg. 
 
-First, we will remove tweets from this dataset that are retweets so that we only have tweets that we wrote ourselves. Next, the `mutate()` line removes links and cleans out some characters that we don't want like ampersands and such. In the call to `unnest_tokens()`, we unnest using a regex pattern, instead of just looking for single unigrams (words). This regex pattern is very useful for dealing with Twitter text; it retains hashtags and mentions of usernames with the `@` symbol. Because we have kept these types of symbols in the text, we can't use a simple `anti_join()` to remove stop words. Instead, we can take the approach shown in the `filter()` line that uses `str_detect()` from the stringr package.
+First, we will remove tweets from this dataset that are retweets so that we only have tweets that we wrote ourselves. Next, the `mutate()` line removes links and cleans out some characters that we don't want like ampersands and such. 
+
+<div class="rmdnote">
+<p>In the call to <code>unnest_tokens()</code>, we unnest using a regex pattern, instead of just looking for single unigrams (words). This regex pattern is very useful for dealing with Twitter text; it retains hashtags and mentions of usernames with the <code>@</code> symbol.</p>
+</div>
+
+Because we have kept these types of symbols in the text, we can't use a simple `anti_join()` to remove stop words. Instead, we can take the approach shown in the `filter()` line that uses `str_detect()` from the stringr package.
 
 
 ```r
@@ -141,7 +147,7 @@ ggplot(frequency, aes(Julia, David)) +
 </div>
 
 
-Words near the red line in Figure \@ref(fig:spreadplot) are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Words, hashtags, and usernames that appear in this plot are ones that we have both used at least once in tweets.
+Words near the line in Figure \@ref(fig:spreadplot) are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Words, hashtags, and usernames that appear in this plot are ones that we have both used at least once in tweets.
 
 This may not even need to be pointed out, but David and Julia have used their Twitter accounts rather differently over the course of the past several years. David has used his Twitter account almost exclusively for professional purposes since he became more active, while Julia used it for entirely personal purposes until late 2015 and still uses it more personally than David. We see these differences immediately in this plot exploring word frequencies, and they will continue to be obvious in the rest of this chapter. 
 
@@ -296,7 +302,11 @@ nested_data
 ## # ... with 102 more rows
 ```
 
-This data frame has one row for each person-word combination; the `data` column is a list column that contains data frames, one for each combination of person and word. Let's use `map()` from the purrr library to apply our modeling procedure to each of those little data frames inside our big data frame. This is count data so let’s use `glm()` with `family = "binomial"` for modeling. We can think about this modeling procedure answering a question like, "Was a given word mentioned in a given time bin? Yes or no? How does the count of word mentions depend on time?"
+This data frame has one row for each person-word combination; the `data` column is a list column that contains data frames, one for each combination of person and word. Let's use `map()` from the purrr library to apply our modeling procedure to each of those little data frames inside our big data frame. This is count data so let’s use `glm()` with `family = "binomial"` for modeling. 
+
+<div class="rmdtip">
+<p>We can think about this modeling procedure answering a question like, &quot;Was a given word mentioned in a given time bin? Yes or no? How does the count of word mentions depend on time?&quot;</p>
+</div>
 
 
 ```r
@@ -446,7 +456,7 @@ tidy_tweets
 ## # ... with 11,068 more rows
 ```
 
-To start with, let's look at retweets. Let's find the total number of retweets for each person.
+To start with, let’s look at the number of times each of our tweets was retweeted. Let's find the total number of retweets for each person.
 
 
 ```r
@@ -576,4 +586,4 @@ We see some minor differences between Figures \@ref(fig:plotrts) and \@ref(fig:p
 
 ## Summary
 
-TODO
+This chapter was our first case study, a beginning-to-end analysis that demonstrates how to bring together the concepts and code we have been exploring in a cohesive way to understand a text data set. Comparing word frequencies allows us to see which words we tweeted more and less frequently, and the log odds ratio shows us which words are more likely to be tweeted from each of our accounts. We can use `nest()` and `map()` with the `glm()` function to find which words we have tweeted at higher and lower rates as time has passed. Finally, we can find which words in our tweets led to higher numbers of retweets and favorites. All of these are examples of approaches to measure how we use words in similar and different ways and how the characteristics of our tweets are changing or compare with each other. These are flexible approaches to text mining that can be applied to other types of text as well.

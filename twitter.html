@@ -272,7 +272,7 @@ tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_ju
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">bins =</span> <span class="dv">20</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~person, <span class="dt">ncol =</span> <span class="dv">1</span>)</code></pre></div>
 <div class="figure"><span id="fig:setup"></span>
-<img src="07-tweet-archives_files/figure-html/setup-1.png" alt="All tweets from our accounts" width="768" />
+<img src="07-tweet-archives_files/figure-html/setup-1.png" alt="All tweets from our accounts" width="672" />
 <p class="caption">
 Figure 7.1: All tweets from our accounts
 </p>
@@ -282,7 +282,13 @@ Figure 7.1: All tweets from our accounts
 <div id="word-frequencies-1" class="section level2">
 <h2><span class="header-section-number">7.2</span> Word frequencies</h2>
 <p>Let’s use <code>unnest_tokens()</code> to make a tidy data frame of all the words in our tweets, and remove the common English stop words. There are certain conventions in how people use text on Twitter, so we will do a bit more work with our text here than, for example, we did with the narrative text from Project Gutenberg.</p>
-<p>First, we will remove tweets from this dataset that are retweets so that we only have tweets that we wrote ourselves. Next, the <code>mutate()</code> line removes links and cleans out some characters that we don’t want like ampersands and such. In the call to <code>unnest_tokens()</code>, we unnest using a regex pattern, instead of just looking for single unigrams (words). This regex pattern is very useful for dealing with Twitter text; it retains hashtags and mentions of usernames with the <code>@</code> symbol. Because we have kept these types of symbols in the text, we can’t use a simple <code>anti_join()</code> to remove stop words. Instead, we can take the approach shown in the <code>filter()</code> line that uses <code>str_detect()</code> from the stringr package.</p>
+<p>First, we will remove tweets from this dataset that are retweets so that we only have tweets that we wrote ourselves. Next, the <code>mutate()</code> line removes links and cleans out some characters that we don’t want like ampersands and such.</p>
+<div class="rmdnote">
+<p>
+In the call to <code>unnest_tokens()</code>, we unnest using a regex pattern, instead of just looking for single unigrams (words). This regex pattern is very useful for dealing with Twitter text; it retains hashtags and mentions of usernames with the <code>@</code> symbol.
+</p>
+</div>
+<p>Because we have kept these types of symbols in the text, we can’t use a simple <code>anti_join()</code> to remove stop words. Instead, we can take the approach shown in the <code>filter()</code> line that uses <code>str_detect()</code> from the stringr package.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 <span class="kw">library</span>(stringr)
 
@@ -358,7 +364,7 @@ frequency</code></pre></div>
 Figure 7.2: Comparing the frequency of words used by Julia and David
 </p>
 </div>
-<p>Words near the red line in Figure <a href="twitter.html#fig:spreadplot">7.2</a> are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Words, hashtags, and usernames that appear in this plot are ones that we have both used at least once in tweets.</p>
+<p>Words near the line in Figure <a href="twitter.html#fig:spreadplot">7.2</a> are used with about equal frequencies by David and Julia, while words far away from the line are used much more by one person compared to the other. Words, hashtags, and usernames that appear in this plot are ones that we have both used at least once in tweets.</p>
 <p>This may not even need to be pointed out, but David and Julia have used their Twitter accounts rather differently over the course of the past several years. David has used his Twitter account almost exclusively for professional purposes since he became more active, while Julia used it for entirely personal purposes until late 2015 and still uses it more personally than David. We see these differences immediately in this plot exploring word frequencies, and they will continue to be obvious in the rest of this chapter.</p>
 </div>
 <div id="comparing-word-usage" class="section level2">
@@ -468,7 +474,12 @@ nested_data</code></pre></div>
 ## 9   David    data &lt;tibble [12 × 4]&gt;
 ## 10  David     day  &lt;tibble [8 × 4]&gt;
 ## # ... with 102 more rows</code></pre>
-<p>This data frame has one row for each person-word combination; the <code>data</code> column is a list column that contains data frames, one for each combination of person and word. Let’s use <code>map()</code> from the purrr library to apply our modeling procedure to each of those little data frames inside our big data frame. This is count data so let’s use <code>glm()</code> with <code>family = &quot;binomial&quot;</code> for modeling. We can think about this modeling procedure answering a question like, “Was a given word mentioned in a given time bin? Yes or no? How does the count of word mentions depend on time?”</p>
+<p>This data frame has one row for each person-word combination; the <code>data</code> column is a list column that contains data frames, one for each combination of person and word. Let’s use <code>map()</code> from the purrr library to apply our modeling procedure to each of those little data frames inside our big data frame. This is count data so let’s use <code>glm()</code> with <code>family = &quot;binomial&quot;</code> for modeling.</p>
+<div class="rmdtip">
+<p>
+We can think about this modeling procedure answering a question like, “Was a given word mentioned in a given time bin? Yes or no? How does the count of word mentions depend on time?”
+</p>
+</div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(purrr)
 
 nested_models &lt;-<span class="st"> </span>nested_data %&gt;%
@@ -579,7 +590,7 @@ tidy_tweets</code></pre></div>
 ## 9  8.040324e+17 2016-11-30 18:40:27 Twitter Web Client        0        17  Julia     zipped
 ## 10 8.040324e+17 2016-11-30 18:40:27 Twitter Web Client        0        17  Julia         gb
 ## # ... with 11,068 more rows</code></pre>
-<p>To start with, let’s look at retweets. Let’s find the total number of retweets for each person.</p>
+<p>To start with, let’s look at the number of times each of our tweets was retweeted. Let’s find the total number of retweets for each person.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">totals &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(person, id) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">rts =</span> <span class="kw">sum</span>(retweets)) %&gt;%<span class="st"> </span>
@@ -679,7 +690,7 @@ Figure 7.7: Words with highest median favorites
 </div>
 <div id="summary-6" class="section level2">
 <h2><span class="header-section-number">7.6</span> Summary</h2>
-<p>TODO</p>
+<p>This chapter was our first case study, a beginning-to-end analysis that demonstrates how to bring together the concepts and code we have been exploring in a cohesive way to understand a text data set. Comparing word frequencies allows us to see which words we tweeted more and less frequently, and the log odds ratio shows us which words are more likely to be tweeted from each of our accounts. We can use <code>nest()</code> and <code>map()</code> with the <code>glm()</code> function to find which words we have tweeted at higher and lower rates as time has passed. Finally, we can find which words in our tweets led to higher numbers of retweets and favorites. All of these are examples of approaches to measure how we use words in similar and different ways and how the characteristics of our tweets are changing or compare with each other. These are flexible approaches to text mining that can be applied to other types of text as well.</p>
 
 </div>
 </div>
