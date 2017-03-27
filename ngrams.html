@@ -279,7 +279,12 @@ austen_bigrams</code></pre></div>
 ## 9  Sense &amp; Sensibility           1 the
 ## 10 Sense &amp; Sensibility      the family
 ## # ... with 725,038 more rows</code></pre>
-<p>This data structure is still a variation of the tidy text format. It is structured as one-token-per-row (with extra metadata, such as <code>book</code>, still preserved), but each token now represents a bigram. Notice that these bigrams overlap: “sense and” is one token, while “and sensibility” is another.</p>
+<p>This data structure is still a variation of the tidy text format. It is structured as one-token-per-row (with extra metadata, such as <code>book</code>, still preserved), but each token now represents a bigram.</p>
+<div class="rmdnote">
+<p>
+Notice that these bigrams overlap: “sense and” is one token, while “and sensibility” is another.
+</p>
+</div>
 <div id="counting-and-filtering-n-grams" class="section level3">
 <h3><span class="header-section-number">4.1.1</span> Counting and filtering n-grams</h3>
 <p>Our usual tidy tools apply equally well to n-gram analysis. We can examine the most common bigrams using dplyr’s <code>count()</code>:</p>
@@ -587,7 +592,7 @@ bigram_graph</code></pre></div>
 <span class="st">  </span><span class="kw">geom_node_point</span>() +
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)</code></pre></div>
 <div class="figure"><span id="fig:bigramgraph"></span>
-<img src="04-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word" width="1056" />
+<img src="04-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word" width="1152" />
 <p class="caption">
 Figure 4.4: Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word
 </p>
@@ -611,17 +616,26 @@ a &lt;-<span class="st"> </span>grid::<span class="kw">arrow</span>(<span class=
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:bigramggraphausten2"></span>
-<img src="04-word-combinations_files/figure-html/bigramggraphausten2-1.png" alt="Common bigrams in Pride and Prejudice, with some polishing." width="1056" />
+<img src="04-word-combinations_files/figure-html/bigramggraphausten2-1.png" alt="Common bigrams in Pride and Prejudice, with some polishing." width="1152" />
 <p class="caption">
 Figure 4.5: Common bigrams in Pride and Prejudice, with some polishing.
 </p>
 </div>
 <p>It may take a some experimentation with ggraph to get your networks into a presentable format like this, but the network structure is useful and flexible way to visualize relational tidy data.</p>
-<p>Note that this is a visualization of a <strong>Markov chain</strong>, a common model in text processing. In a Markov chain, each choice of word depends only on the previous word. In this case, a random generator following this model might spit out “dear”, then “sir”, then “william/walter/thomas/thomas’s”, by following each word to the most common words that follow it. To make the visualization interpretable, we chose to show only the most common word to word connections, but one could imagine an enormous graph representing all connections that occur in the text.</p>
+<div class="rmdnote">
+<p>
+Note that this is a visualization of a <strong>Markov chain</strong>, a common model in text processing. In a Markov chain, each choice of word depends only on the previous word. In this case, a random generator following this model might spit out “dear”, then “sir”, then “william/walter/thomas/thomas’s”, by following each word to the most common words that follow it. To make the visualization interpretable, we chose to show only the most common word to word connections, but one could imagine an enormous graph representing all connections that occur in the text.
+</p>
+</div>
 </div>
 <div id="visualizing-bigrams-in-other-texts" class="section level3">
 <h3><span class="header-section-number">4.1.5</span> Visualizing bigrams in other texts</h3>
-<p>We went to a good amount of work in cleaning and visualizing bigrams on a text dataset, so let’s collect it into a function so that we easily perform it on other text datasets. To make it easy to use these functions yourself, we’ve also reloaded the packages necessary for them.</p>
+<p>We went to a good amount of work in cleaning and visualizing bigrams on a text dataset, so let’s collect it into a function so that we easily perform it on other text datasets.</p>
+<div class="rmdnote">
+<p>
+To make it easy to use the <code>count_bigrams()</code> and <code>visualize_bigrams()</code> yourself, we’ve also reloaded the packages necessary for them.
+</p>
+</div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidyr)
 <span class="kw">library</span>(tidytext)
@@ -792,7 +806,11 @@ word_pairs</code></pre></div>
 </table>
 <p>For example, that <span class="math inline">\(n_{11}\)</span> represents the number of documents where both word X and word Y appear, <span class="math inline">\(n_{00}\)</span> the number where neither appears, and <span class="math inline">\(n_{10}\)</span> and <span class="math inline">\(n_{01}\)</span> the cases where one appears without the other. In terms of this table, the phi coefficient is:</p>
 <p><span class="math display">\[\phi=\frac{n_{11}n_{00}-n_{10}n_{01}}{\sqrt{n_{1\cdot}n_{0\cdot}n_{\cdot0}n_{\cdot1}}}\]</span></p>
-<p>(The phi coefficient is equivalent to the Pearson correlation, which you may have heard of elsewhere, when it is applied to binary data).</p>
+<div class="rmdnote">
+<p>
+The phi coefficient is equivalent to the Pearson correlation, which you may have heard of elsewhere, when it is applied to binary data).
+</p>
+</div>
 <p>The <code>pairwise_cor()</code> function in widyr lets us find the phi coefficient between words based on how often they appear in the same section. Its syntax is similar to <code>pairwise_count()</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># we need to filter for at least relatively common words first</span>
 word_cors &lt;-<span class="st"> </span>austen_section_words %&gt;%

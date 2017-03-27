@@ -83,7 +83,11 @@ ap_td
 ## # ... with 302,021 more rows
 ```
 
-Notice that we now have a tidy three-column `tbl_df`, with variables `document`, `term`, and `count`. This tidying operation is similar to the `melt()` function from the reshape2 package [@R-reshape2] for non-sparse matrices. Notice that only the non-zero values are included: document 1 includes terms such as "adding" and "adult", but not "aaron" or "abandon", which means the tidied version has no rows where `count` is zero.
+Notice that we now have a tidy three-column `tbl_df`, with variables `document`, `term`, and `count`. This tidying operation is similar to the `melt()` function from the reshape2 package [@R-reshape2] for non-sparse matrices.
+
+<div class="rmdnote">
+<p>Notice that only the non-zero values are included in the tidied output: document 1 includes terms such as &quot;adding&quot; and &quot;adult&quot;, but not &quot;aaron&quot; or &quot;abandon&quot;. This means the tidied version has no rows where <code>count</code> is zero.</p>
+</div>
 
 As we've seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles with the approach described in Chapter \@ref(sentiment).
 
@@ -216,7 +220,11 @@ We could use this data to pick four notable inaugural addresses (from Presidents
 <p class="caption">(\#fig:presidentspeeches)The terms with the highest tf-idf from each of four selected inaugural addresses. Note that quanteda's tokenizer includes the '?' punctuation mark as a term, though the texts we've tokenized ourselves with unnest_tokens do not.</p>
 </div>
 
-As another example of a visualization possible with tidy data, we could extract the year from each document's name, and compute the total number of words within each year. Note that we've used tidyr's `complete()` function to include zeroes (cases where a word didn't appear in a document) in the table.
+As another example of a visualization possible with tidy data, we could extract the year from each document's name, and compute the total number of words within each year.
+
+<div class="rmdnote">
+<p>Note that we've used tidyr's <code>complete()</code> function to include zeroes (cases where a word didn't appear in a document) in the table.</p>
+</div>
 
 
 ```r
@@ -464,7 +472,11 @@ acq_tokens %>%
 
 `Corpus` objects are a common output format for data ingesting packages, which means the `tidy()` function gives us access to a wide variety of text data. One example is [tm.plugin.webmining](https://cran.r-project.org/package=tm.plugin.webmining), which connects to online feeds to retrieve news articles based on a keyword. For instance, performing `WebCorpus(GoogleFinanceSource("NASDAQ:MSFT")))` allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.
 
-Here we'll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix. These results were downloaded in January 2017, when this chapter was written, but you'll certainly find different results if you ran it for yourself. (Note that this code takes several minutes to run).
+Here we'll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix.
+
+<div class="rmdnote">
+<p>These results were downloaded in January 2017, when this chapter was written, but you'll certainly find different results if you ran it for yourself. Note that this code takes several minutes to run.</p>
+</div>
 
 
 ```r
@@ -550,7 +562,7 @@ stock_tf_idf <- stock_tokens %>%
   arrange(-tf_idf)
 ```
 
-The top terms for each are visualized in Figure \@ref(fig:stocktfidf). As we'd expect the company's name and symbol are typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).
+The top terms for each are visualized in Figure \@ref(fig:stocktfidf). As we'd expect, the company's name and symbol are typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).
 
 <div class="figure">
 <img src="05-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest tf-idf in recent articles specific to each company" width="768" />

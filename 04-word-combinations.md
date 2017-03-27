@@ -41,7 +41,11 @@ austen_bigrams
 ## # ... with 725,038 more rows
 ```
 
-This data structure is still a variation of the tidy text format. It is structured as one-token-per-row (with extra metadata, such as `book`, still preserved), but each token now represents a bigram. Notice that these bigrams overlap: "sense and" is one token, while "and sensibility" is another.
+This data structure is still a variation of the tidy text format. It is structured as one-token-per-row (with extra metadata, such as `book`, still preserved), but each token now represents a bigram.
+
+<div class="rmdnote">
+<p>Notice that these bigrams overlap: &quot;sense and&quot; is one token, while &quot;and sensibility&quot; is another.</p>
+</div>
 
 ### Counting and filtering n-grams
 
@@ -454,7 +458,7 @@ ggraph(bigram_graph, layout = "fr") +
 ```
 
 <div class="figure">
-<img src="04-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word" width="1056" />
+<img src="04-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word" width="1152" />
 <p class="caption">(\#fig:bigramgraph)Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word</p>
 </div>
 
@@ -482,17 +486,23 @@ ggraph(bigram_graph, layout = "fr") +
 ```
 
 <div class="figure">
-<img src="04-word-combinations_files/figure-html/bigramggraphausten2-1.png" alt="Common bigrams in Pride and Prejudice, with some polishing." width="1056" />
+<img src="04-word-combinations_files/figure-html/bigramggraphausten2-1.png" alt="Common bigrams in Pride and Prejudice, with some polishing." width="1152" />
 <p class="caption">(\#fig:bigramggraphausten2)Common bigrams in Pride and Prejudice, with some polishing.</p>
 </div>
 
 It may take a some experimentation with ggraph to get your networks into a presentable format like this, but the network structure is useful and flexible way to visualize relational tidy data.
 
-Note that this is a visualization of a **Markov chain**, a common model in text processing. In a Markov chain, each choice of word depends only on the previous word. In this case, a random generator following this model might spit out "dear", then "sir", then "william/walter/thomas/thomas's", by following each word to the most common words that follow it. To make the visualization interpretable, we chose to show only the most common word to word connections, but one could imagine an enormous graph representing all connections that occur in the text.
+<div class="rmdnote">
+<p>Note that this is a visualization of a <strong>Markov chain</strong>, a common model in text processing. In a Markov chain, each choice of word depends only on the previous word. In this case, a random generator following this model might spit out &quot;dear&quot;, then &quot;sir&quot;, then &quot;william/walter/thomas/thomas's&quot;, by following each word to the most common words that follow it. To make the visualization interpretable, we chose to show only the most common word to word connections, but one could imagine an enormous graph representing all connections that occur in the text.</p>
+</div>
 
 ### Visualizing bigrams in other texts
 
-We went to a good amount of work in cleaning and visualizing bigrams on a text dataset, so let's collect it into a function so that we easily perform it on other text datasets. To make it easy to use these functions yourself, we've also reloaded the packages necessary for them. 
+We went to a good amount of work in cleaning and visualizing bigrams on a text dataset, so let's collect it into a function so that we easily perform it on other text datasets.
+
+<div class="rmdnote">
+<p>To make it easy to use the <code>count_bigrams()</code> and <code>visualize_bigrams()</code> yourself, we've also reloaded the packages necessary for them.</p>
+</div>
 
 
 ```r
@@ -680,7 +690,9 @@ For example, that $n_{11}$ represents the number of documents where both word X 
 
 $$\phi=\frac{n_{11}n_{00}-n_{10}n_{01}}{\sqrt{n_{1\cdot}n_{0\cdot}n_{\cdot0}n_{\cdot1}}}$$
 
-(The phi coefficient is equivalent to the Pearson correlation, which you may have heard of elsewhere, when it is applied to binary data).
+<div class="rmdnote">
+<p>The phi coefficient is equivalent to the Pearson correlation, which you may have heard of elsewhere, when it is applied to binary data).</p>
+</div>
 
 The `pairwise_cor()` function in widyr lets us find the phi coefficient between words based on how often they appear in the same section. Its syntax is similar to `pairwise_count()`.
 

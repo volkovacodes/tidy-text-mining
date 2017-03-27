@@ -304,7 +304,12 @@ ap_td</code></pre></div>
 ## 9         1   arrested     1
 ## 10        1    assault     1
 ## # ... with 302,021 more rows</code></pre>
-<p>Notice that we now have a tidy three-column <code>tbl_df</code>, with variables <code>document</code>, <code>term</code>, and <code>count</code>. This tidying operation is similar to the <code>melt()</code> function from the reshape2 package <span class="citation">(Wickham <a href="#ref-R-reshape2">2007</a>)</span> for non-sparse matrices. Notice that only the non-zero values are included: document 1 includes terms such as “adding” and “adult”, but not “aaron” or “abandon”, which means the tidied version has no rows where <code>count</code> is zero.</p>
+<p>Notice that we now have a tidy three-column <code>tbl_df</code>, with variables <code>document</code>, <code>term</code>, and <code>count</code>. This tidying operation is similar to the <code>melt()</code> function from the reshape2 package <span class="citation">(Wickham <a href="#ref-R-reshape2">2007</a>)</span> for non-sparse matrices.</p>
+<div class="rmdnote">
+<p>
+Notice that only the non-zero values are included in the tidied output: document 1 includes terms such as “adding” and “adult”, but not “aaron” or “abandon”. This means the tidied version has no rows where <code>count</code> is zero.
+</p>
+</div>
 <p>As we’ve seen in previous chapters, this form is convenient for analysis with the dplyr, tidytext and ggplot2 packages. For example, you can perform sentiment analysis on these newspaper articles with the approach described in Chapter <a href="sentiment.html#sentiment">2</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ap_sentiments &lt;-<span class="st"> </span>ap_td %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>), <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">term =</span> <span class="st">&quot;word&quot;</span>))
@@ -397,7 +402,12 @@ inaug_tf_idf</code></pre></div>
 Figure 5.2: The terms with the highest tf-idf from each of four selected inaugural addresses. Note that quanteda’s tokenizer includes the ‘?’ punctuation mark as a term, though the texts we’ve tokenized ourselves with unnest_tokens do not.
 </p>
 </div>
-<p>As another example of a visualization possible with tidy data, we could extract the year from each document’s name, and compute the total number of words within each year. Note that we’ve used tidyr’s <code>complete()</code> function to include zeroes (cases where a word didn’t appear in a document) in the table.</p>
+<p>As another example of a visualization possible with tidy data, we could extract the year from each document’s name, and compute the total number of words within each year.</p>
+<div class="rmdnote">
+<p>
+Note that we’ve used tidyr’s <code>complete()</code> function to include zeroes (cases where a word didn’t appear in a document) in the table.
+</p>
+</div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
 year_term_counts &lt;-<span class="st"> </span>inaug_td %&gt;%
@@ -559,7 +569,12 @@ acq_tokens %&gt;%
 <div id="financial" class="section level3">
 <h3><span class="header-section-number">5.3.1</span> Example: mining financial articles</h3>
 <p><code>Corpus</code> objects are a common output format for data ingesting packages, which means the <code>tidy()</code> function gives us access to a wide variety of text data. One example is <a href="https://cran.r-project.org/package=tm.plugin.webmining">tm.plugin.webmining</a>, which connects to online feeds to retrieve news articles based on a keyword. For instance, performing <code>WebCorpus(GoogleFinanceSource(&quot;NASDAQ:MSFT&quot;)))</code> allows us to retrieve the 20 most recent articles related to the Microsoft (MSFT) stock.</p>
-<p>Here we’ll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix. These results were downloaded in January 2017, when this chapter was written, but you’ll certainly find different results if you ran it for yourself. (Note that this code takes several minutes to run).</p>
+<p>Here we’ll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix.</p>
+<div class="rmdnote">
+<p>
+These results were downloaded in January 2017, when this chapter was written, but you’ll certainly find different results if you ran it for yourself. Note that this code takes several minutes to run.
+</p>
+</div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tm.plugin.webmining)
 <span class="kw">library</span>(purrr)
 
@@ -617,7 +632,7 @@ stock_tf_idf &lt;-<span class="st"> </span>stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(!<span class="kw">str_detect</span>(word, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">d+&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">bind_tf_idf</span>(word, company, n) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(-tf_idf)</code></pre></div>
-<p>The top terms for each are visualized in Figure <a href="dtm.html#fig:stocktfidf">5.4</a>. As we’d expect the company’s name and symbol are typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).</p>
+<p>The top terms for each are visualized in Figure <a href="dtm.html#fig:stocktfidf">5.4</a>. As we’d expect, the company’s name and symbol are typically included, but so are several of their product offerings and executives, as well as companies they are making deals with (such as Disney with Netflix).</p>
 <div class="figure"><span id="fig:stocktfidf"></span>
 <img src="05-document-term-matrices_files/figure-html/stocktfidf-1.png" alt="The 8 words with the highest tf-idf in recent articles specific to each company" width="768" />
 <p class="caption">
