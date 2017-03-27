@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-26">
+<meta name="date" content="2017-03-27">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -146,12 +146,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>3.4</b> A corpus of physics texts</a></li>
 <li class="chapter" data-level="3.5" data-path="tfidf.html"><a href="tfidf.html#summary-2"><i class="fa fa-check"></i><b>3.5</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words</a><ul>
+<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words: n-grams and correlations</a><ul>
 <li class="chapter" data-level="4.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>4.1</b> Tokenizing by n-gram</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>4.1.1</b> Counting and filtering n-grams</a></li>
 <li class="chapter" data-level="4.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>4.1.2</b> Analyzing bigrams</a></li>
 <li class="chapter" data-level="4.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>4.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
-<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with igraph</a></li>
+<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-ggraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with ggraph</a></li>
 <li class="chapter" data-level="4.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>4.1.5</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>4.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
@@ -160,7 +160,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="ngrams.html"><a href="ngrams.html#summary-3"><i class="fa fa-check"></i><b>4.3</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Tidying and casting document-term matrices and corpus objects</a><ul>
+<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Converting to and from non-tidy formats</a><ul>
 <li class="chapter" data-level="5.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>5.1</b> Tidying a document-term matrix</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>5.1.1</b> Tidying DocumentTermMatrix objects</a></li>
 <li class="chapter" data-level="5.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>5.1.2</b> Tidying dfm objects</a></li>
@@ -250,7 +250,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="ngrams" class="section level1">
-<h1><span class="header-section-number">4</span> Relationships between words</h1>
+<h1><span class="header-section-number">4</span> Relationships between words: n-grams and correlations</h1>
 <p>So far we’ve considered words as individual units, and considered their relationships to sentiments or to documents. However, many interesting text analyses are based on the relationships between words, whether examining which words tend to follow others immediately, or that tend to co-occur within the same documents.</p>
 <p>In this chapter, we’ll explore some of the methods tidytext offers for calculating and visualizing relationships between words in your text dataset. This includes the <code>token = &quot;ngrams&quot;</code> argument, which tokenizes by pairs of adjacent words rather than by individual ones. We’ll also introduce two new packages: <a href="https://github.com/thomasp85/ggraph">ggraph</a>, which extends ggplot2 to construct network plots, and <a href="https://github.com/dgrtwo/widyr">widyr</a>, which calculates pairwise correlations and distances within a tidy data frame. Together these expand our toolbox for exploring text within the tidy data framework.</p>
 <div id="tokenizing-by-n-gram" class="section level2">
@@ -299,7 +299,7 @@ austen_bigrams</code></pre></div>
 ## 9   she was  1377
 ## 10 had been  1299
 ## # ... with 211,227 more rows</code></pre>
-<p>As one might expect, a lot of the most common bigrams are pairs of common (uninteresting) words, such as <code>of the</code> and <code>to be</code>: what we call “stop-words” (see Chapter <a href="tidytext.html#tidytext">1</a>). This is a useful time to use tidyr’s <code>separate()</code>, which splits a column into multiple based on a delimiter. This lets us separate it into two columns, “word1” and “word2”, at which we can remove cases where either is a stop-word.</p>
+<p>As one might expect, a lot of the most common bigrams are pairs of common (uninteresting) words, such as <code>of the</code> and <code>to be</code>: what we call “stop-words” (see Chapter <a href="tidytext.html#tidytext">1</a>). This is a useful time to use tidyr’s <code>separate()</code>, which splits a column into multiple based on a delimiter. This lets us separate it into two columns, “word1” and “word2”, at which point we can remove cases where either is a stop-word.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
 bigrams_separated &lt;-<span class="st"> </span>austen_bigrams %&gt;%
@@ -530,8 +530,8 @@ Figure 4.3: The most common positive or negative words to follow negations such 
 </p>
 </div>
 </div>
-<div id="visualizing-a-network-of-bigrams-with-igraph" class="section level3">
-<h3><span class="header-section-number">4.1.4</span> Visualizing a network of bigrams with igraph</h3>
+<div id="visualizing-a-network-of-bigrams-with-ggraph" class="section level3">
+<h3><span class="header-section-number">4.1.4</span> Visualizing a network of bigrams with ggraph</h3>
 <p>We may be interested in visualizing all of the relationships among words simultaneously, rather than just the top few at a time. As one common visualization, we can arrange the words into a network, or “graph.” Here we’ll be referring to a “graph” not in the sense of a visualization, but as a combination of connected nodes. A graph can be constructed from a tidy object since it has three variables:</p>
 <ul>
 <li><strong>from</strong>: the node an edge is coming from</li>
@@ -587,7 +587,7 @@ bigram_graph</code></pre></div>
 <span class="st">  </span><span class="kw">geom_node_point</span>() +
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)</code></pre></div>
 <div class="figure"><span id="fig:bigramgraph"></span>
-<img src="04-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word" width="960" />
+<img src="04-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word" width="1056" />
 <p class="caption">
 Figure 4.4: Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word
 </p>
@@ -611,7 +611,7 @@ a &lt;-<span class="st"> </span>grid::<span class="kw">arrow</span>(<span class=
 <span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">vjust =</span> <span class="dv">1</span>, <span class="dt">hjust =</span> <span class="dv">1</span>) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:bigramggraphausten2"></span>
-<img src="04-word-combinations_files/figure-html/bigramggraphausten2-1.png" alt="Common bigrams in Pride and Prejudice, with some polishing." width="960" />
+<img src="04-word-combinations_files/figure-html/bigramggraphausten2-1.png" alt="Common bigrams in Pride and Prejudice, with some polishing." width="1056" />
 <p class="caption">
 Figure 4.5: Common bigrams in Pride and Prejudice, with some polishing.
 </p>
@@ -870,7 +870,7 @@ Figure 4.9: Pairs of words in Pride and Prejudice that show at least a .15 corre
 </div>
 <div id="summary-3" class="section level2">
 <h2><span class="header-section-number">4.3</span> Summary</h2>
-<p>These network visualizations are a flexible tool for exploring relationships, and will play an important role in the case studies in later chapters. More TODO</p>
+<p>This chapter showed how the tidy text approach is useful not only for analyzing individual words, but also for exploring the relationships and connections between words. Such relationships include n-grams, which examine what words tend to appear after others, as well as co-occurences and correlations for words that appear in proximity to each other. The chapter also demonstrated the ggraph package for visualizing both of these types of relationships as networks. These network visualizations are a flexible tool for exploring relationships, and will play an important role in the case studies in later chapters.</p>
 
 </div>
 </div>

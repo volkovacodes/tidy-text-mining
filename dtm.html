@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-26">
+<meta name="date" content="2017-03-27">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -146,12 +146,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>3.4</b> A corpus of physics texts</a></li>
 <li class="chapter" data-level="3.5" data-path="tfidf.html"><a href="tfidf.html#summary-2"><i class="fa fa-check"></i><b>3.5</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words</a><ul>
+<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words: n-grams and correlations</a><ul>
 <li class="chapter" data-level="4.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>4.1</b> Tokenizing by n-gram</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>4.1.1</b> Counting and filtering n-grams</a></li>
 <li class="chapter" data-level="4.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>4.1.2</b> Analyzing bigrams</a></li>
 <li class="chapter" data-level="4.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>4.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
-<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with igraph</a></li>
+<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-ggraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with ggraph</a></li>
 <li class="chapter" data-level="4.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>4.1.5</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>4.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
@@ -160,7 +160,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="ngrams.html"><a href="ngrams.html#summary-3"><i class="fa fa-check"></i><b>4.3</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Tidying and casting document-term matrices and corpus objects</a><ul>
+<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Converting to and from non-tidy formats</a><ul>
 <li class="chapter" data-level="5.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>5.1</b> Tidying a document-term matrix</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>5.1.1</b> Tidying DocumentTermMatrix objects</a></li>
 <li class="chapter" data-level="5.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>5.1.2</b> Tidying dfm objects</a></li>
@@ -250,7 +250,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
             <section class="normal" id="section-">
 <div id="dtm" class="section level1">
-<h1><span class="header-section-number">5</span> Tidying and casting document-term matrices and corpus objects</h1>
+<h1><span class="header-section-number">5</span> Converting to and from non-tidy formats</h1>
 <p>In the previous chapters, we’ve been analyzing text arranged in the tidy text format: a table with one-token-per-document-per-row, such as is constructed by the <code>unnest_tokens()</code> function. This lets us use the popular suite of tidy tools such as dplyr, tidyr, and ggplot2 to explore and visualize text data. We’ve demonstrated that many informative text analyses can be performed using these tools.</p>
 <p>However, most of the existing R tools for natural language processing, besides the tidytext package, aren’t compatible with this format. The <a href="https://cran.r-project.org/web/views/NaturalLanguageProcessing.html">CRAN Task View for Natural Language Processing</a> lists a large selection of packages that take other structures of input and provide non-tidy outputs. These packages are very useful in text mining applications, and many existing text datasets are structured according to these formats.</p>
 <p>Computer scientist Hal Abelson has observed that “No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system” <span class="citation">(Abelson <a href="#ref-Friedman:2008:EPL:1378240">2008</a>)</span>. In that spirit, this chapter will discuss the “glue” that connects the tidy text format with other important packages and data structures, allowing you to rely on both existing text mining packages and the suite of tidy tools to perform your analysis. In particular, we’ll examine the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix.</p>
@@ -703,7 +703,7 @@ Figure 5.7: “Positivity” of the news coverage around each stock in January 2
 </div>
 <div id="summary-4" class="section level2">
 <h2><span class="header-section-number">5.4</span> Summary</h2>
-<p>TODO</p>
+<p>Text analysis requires working with a variety of tools, many of which have inputs and outputs that aren’t in a tidy form. This chapter showed how to convert between a tidy text data frame and sparse document-term matrices, as well as how to tidy a Corpus object containing document metadata. The next chapter will show another notable example of a package, topicmodels, that requires a document-term matrix as input, showing that these conversion tools are an essential part of text analysis.</p>
 
 </div>
 </div>

@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-26">
+<meta name="date" content="2017-03-27">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -146,12 +146,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>3.4</b> A corpus of physics texts</a></li>
 <li class="chapter" data-level="3.5" data-path="tfidf.html"><a href="tfidf.html#summary-2"><i class="fa fa-check"></i><b>3.5</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words</a><ul>
+<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words: n-grams and correlations</a><ul>
 <li class="chapter" data-level="4.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>4.1</b> Tokenizing by n-gram</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>4.1.1</b> Counting and filtering n-grams</a></li>
 <li class="chapter" data-level="4.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>4.1.2</b> Analyzing bigrams</a></li>
 <li class="chapter" data-level="4.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>4.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
-<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with igraph</a></li>
+<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-ggraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with ggraph</a></li>
 <li class="chapter" data-level="4.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>4.1.5</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>4.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
@@ -160,7 +160,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="ngrams.html"><a href="ngrams.html#summary-3"><i class="fa fa-check"></i><b>4.3</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Tidying and casting document-term matrices and corpus objects</a><ul>
+<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Converting to and from non-tidy formats</a><ul>
 <li class="chapter" data-level="5.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>5.1</b> Tidying a document-term matrix</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>5.1.1</b> Tidying DocumentTermMatrix objects</a></li>
 <li class="chapter" data-level="5.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>5.1.2</b> Tidying dfm objects</a></li>
@@ -252,14 +252,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="topicmodeling" class="section level1">
 <h1><span class="header-section-number">6</span> Topic modeling</h1>
 <p>In text mining, we often have collections of documents, such as blog posts or news articles, that we’d like to divide into natural groups so that we can understand them separately. Topic modeling is a method for unsupervised classification of such documents, similar to clustering on numeric data, which finds natural groups of items even when we’re not sure what we’re looking for.</p>
-<p>Latent Dirichlet allocation is a particularly popular method for fitting a topic model. It treats each document as a mixture of topics, and each topic as a mixture of words. This allows documents to “overlap” each other in terms of content, rather than being separated into discrete groups, in a way that mirrors typical use of natural language.</p>
-<p>We can use tidy text principles to approach topic modeling using consistent and effective tools. In this chapter, we’ll learn to tidy LDA objects from the <a href="https://cran.r-project.org/package=topicmodels">topicmodels package</a> to examine model results using ggplot2 and dplyr. We’ll also explore an example of clustering chapters from several books, where we can see that a topic model “learns” to tell the difference between the four books based on the text content.</p>
+<p>Latent Dirichlet allocation (LDA) is a particularly popular method for fitting a topic model. It treats each document as a mixture of topics, and each topic as a mixture of words. This allows documents to “overlap” each other in terms of content, rather than being separated into discrete groups, in a way that mirrors typical use of natural language.</p>
+<p>We can use tidy text principles to approach topic modeling with the same set of tidy tools we’ve used throughout this book. In this chapter, we’ll learn to tidy <code>LDA</code> objects from the <a href="https://cran.r-project.org/package=topicmodels">topicmodels package</a> to examine model results using ggplot2 and dplyr. We’ll also explore an example of clustering chapters from several books, where we can see that a topic model “learns” to tell the difference between the four books based on the text content.</p>
 <div id="latent-dirichlet-allocation" class="section level2">
 <h2><span class="header-section-number">6.1</span> Latent Dirichlet allocation</h2>
 <p>Latent Dirichlet allocation is one of the most common algorithms for topic modeling. Without diving into the math behind the model, we can understand it as being guided by two principles.</p>
 <ul>
-<li><strong>Every topic is a mixture of words.</strong> For example, we could imagine a two-topic model of American news, with one topic for “politics” and one for “entertainment.” The most common words in the politics topic might be “President”, “Congress”, and “government”, while the entertainment topic may be made up of words such as “movies”, “television”, and “actor”. Importantly, words can be shared between topics; a word like “budget” might appear in both equally.</li>
 <li><strong>Every document is a mixture of topics.</strong> We imagine that each document may contain words from several topics in particular proportions. For example, in a two-topic model we could say “Document 1 is 90% topic A and 10% topic B, while Document 2 is 30% topic A and 70% topic B.”</li>
+<li><strong>Every topic is a mixture of words.</strong> For example, we could imagine a two-topic model of American news, with one topic for “politics” and one for “entertainment.” The most common words in the politics topic might be “President”, “Congress”, and “government”, while the entertainment topic may be made up of words such as “movies”, “television”, and “actor”. Importantly, words can be shared between topics; a word like “budget” might appear in both equally.</li>
 </ul>
 <p>LDA is a mathematical method for estimating both of these at the same time: finding the mixture of words that is associated with each topic, while also determining the mixture of topics that describes each document. There are a number of existing implementations of this algorithm, and we’ll explore one of them in depth.</p>
 <p>In Chapter <a href="dtm.html#dtm">5</a> we briefly introduced the <code>AssociatedPress</code> dataset provided by the topicmodels package, as an example of a DocumentTermMatrix. This is a collection of 2246 news articles from an American news agency, mostly published around 1988.</p>
@@ -776,11 +776,11 @@ mallet_model$<span class="kw">train</span>(<span class="dv">100</span>)</code></
 <span class="co"># column needs to be named &quot;term&quot; for &quot;augment&quot;</span>
 term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_counts, <span class="dt">term =</span> word)
 <span class="kw">augment</span>(mallet_model, term_counts)</code></pre></div>
-<p>We could use ggplot2 to explore and visualize the model in the same way we did the LDA output. This is one of the advantages of the tidy approach to model exploration; the challenges of different output formats are handled by the tidying functions, and we can explore model results using the same set of tools.</p>
+<p>We could use ggplot2 to explore and visualize the model in the same way we did the LDA output.</p>
 </div>
 <div id="summary-5" class="section level2">
 <h2><span class="header-section-number">6.4</span> Summary</h2>
-<p>TODO</p>
+<p>This chapter introduces topic modeling for finding clusters of words within documents, and shows how the <code>tidy()</code> verb lets us explore and understand these models using dplyr and ggplot2. This is one of the advantages of the tidy approach to model exploration: the challenges of different output formats are handled by the tidying functions, and we can explore model results using a standard set of tools. In particular, we examined</p>
 
 </div>
 </div>

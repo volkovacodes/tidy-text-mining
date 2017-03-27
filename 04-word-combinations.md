@@ -1,4 +1,4 @@
-# Relationships between words {#ngrams}
+# Relationships between words: n-grams and correlations {#ngrams}
 
 
 
@@ -70,7 +70,7 @@ austen_bigrams %>%
 ## # ... with 211,227 more rows
 ```
 
-As one might expect, a lot of the most common bigrams are pairs of common (uninteresting) words, such as `of the` and `to be`: what we call "stop-words" (see Chapter \@ref(tidytext)). This is a useful time to use tidyr's `separate()`, which splits a column into multiple based on a delimiter. This lets us separate it into two columns, "word1" and "word2", at which we can remove cases where either is a stop-word.
+As one might expect, a lot of the most common bigrams are pairs of common (uninteresting) words, such as `of the` and `to be`: what we call "stop-words" (see Chapter \@ref(tidytext)). This is a useful time to use tidyr's `separate()`, which splits a column into multiple based on a delimiter. This lets us separate it into two columns, "word1" and "word2", at which point we can remove cases where either is a stop-word.
 
 
 ```r
@@ -377,7 +377,7 @@ We could then visualize what the most common words to follow each particular neg
 <p class="caption">(\#fig:negatedwords)The most common positive or negative words to follow negations such as 'never', 'no', 'not', and 'without'</p>
 </div>
 
-### Visualizing a network of bigrams with igraph
+### Visualizing a network of bigrams with ggraph
 
 We may be interested in visualizing all of the relationships among words simultaneously, rather than just the top few at a time. As one common visualization, we can arrange the words into a network, or "graph." Here we'll be referring to a "graph" not in the sense of a visualization, but as a combination of connected nodes. A graph can be constructed from a tidy object since it has three variables:
 
@@ -454,7 +454,7 @@ ggraph(bigram_graph, layout = "fr") +
 ```
 
 <div class="figure">
-<img src="04-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word" width="960" />
+<img src="04-word-combinations_files/figure-html/bigramgraph-1.png" alt="Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word" width="1056" />
 <p class="caption">(\#fig:bigramgraph)Common bigrams in Pride and Prejudice, showing those that occurred more than 20 times and where neither word was a stop-word</p>
 </div>
 
@@ -482,7 +482,7 @@ ggraph(bigram_graph, layout = "fr") +
 ```
 
 <div class="figure">
-<img src="04-word-combinations_files/figure-html/bigramggraphausten2-1.png" alt="Common bigrams in Pride and Prejudice, with some polishing." width="960" />
+<img src="04-word-combinations_files/figure-html/bigramggraphausten2-1.png" alt="Common bigrams in Pride and Prejudice, with some polishing." width="1056" />
 <p class="caption">(\#fig:bigramggraphausten2)Common bigrams in Pride and Prejudice, with some polishing.</p>
 </div>
 
@@ -782,4 +782,4 @@ Note that unlike the bigram analysis, the relationships here are symmetrical, ra
 
 ## Summary
 
-These network visualizations are a flexible tool for exploring relationships, and will play an important role in the case studies in later chapters. More TODO
+This chapter showed how the tidy text approach is useful not only for analyzing individual words, but also for exploring the relationships and connections between words. Such relationships include n-grams, which examine what words tend to appear after others, as well as co-occurences and correlations for words that appear in proximity to each other. The chapter also demonstrated the ggraph package for visualizing both of these types of relationships as networks. These network visualizations are a flexible tool for exploring relationships, and will play an important role in the case studies in later chapters. 

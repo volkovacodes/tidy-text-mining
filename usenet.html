@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-26">
+<meta name="date" content="2017-03-27">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -146,12 +146,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.4" data-path="tfidf.html"><a href="tfidf.html#a-corpus-of-physics-texts"><i class="fa fa-check"></i><b>3.4</b> A corpus of physics texts</a></li>
 <li class="chapter" data-level="3.5" data-path="tfidf.html"><a href="tfidf.html#summary-2"><i class="fa fa-check"></i><b>3.5</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words</a><ul>
+<li class="chapter" data-level="4" data-path="ngrams.html"><a href="ngrams.html"><i class="fa fa-check"></i><b>4</b> Relationships between words: n-grams and correlations</a><ul>
 <li class="chapter" data-level="4.1" data-path="ngrams.html"><a href="ngrams.html#tokenizing-by-n-gram"><i class="fa fa-check"></i><b>4.1</b> Tokenizing by n-gram</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="ngrams.html"><a href="ngrams.html#counting-and-filtering-n-grams"><i class="fa fa-check"></i><b>4.1.1</b> Counting and filtering n-grams</a></li>
 <li class="chapter" data-level="4.1.2" data-path="ngrams.html"><a href="ngrams.html#analyzing-bigrams"><i class="fa fa-check"></i><b>4.1.2</b> Analyzing bigrams</a></li>
 <li class="chapter" data-level="4.1.3" data-path="ngrams.html"><a href="ngrams.html#using-bigrams-to-provide-context-in-sentiment-analysis"><i class="fa fa-check"></i><b>4.1.3</b> Using bigrams to provide context in sentiment analysis</a></li>
-<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-igraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with igraph</a></li>
+<li class="chapter" data-level="4.1.4" data-path="ngrams.html"><a href="ngrams.html#visualizing-a-network-of-bigrams-with-ggraph"><i class="fa fa-check"></i><b>4.1.4</b> Visualizing a network of bigrams with ggraph</a></li>
 <li class="chapter" data-level="4.1.5" data-path="ngrams.html"><a href="ngrams.html#visualizing-bigrams-in-other-texts"><i class="fa fa-check"></i><b>4.1.5</b> Visualizing bigrams in other texts</a></li>
 </ul></li>
 <li class="chapter" data-level="4.2" data-path="ngrams.html"><a href="ngrams.html#counting-and-correlating-pairs-of-words-with-the-widyr-package"><i class="fa fa-check"></i><b>4.2</b> Counting and correlating pairs of words with the widyr package</a><ul>
@@ -160,7 +160,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="4.3" data-path="ngrams.html"><a href="ngrams.html#summary-3"><i class="fa fa-check"></i><b>4.3</b> Summary</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Tidying and casting document-term matrices and corpus objects</a><ul>
+<li class="chapter" data-level="5" data-path="dtm.html"><a href="dtm.html"><i class="fa fa-check"></i><b>5</b> Converting to and from non-tidy formats</a><ul>
 <li class="chapter" data-level="5.1" data-path="dtm.html"><a href="dtm.html#tidy-dtm"><i class="fa fa-check"></i><b>5.1</b> Tidying a document-term matrix</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="dtm.html"><a href="dtm.html#tidying-documenttermmatrix-objects"><i class="fa fa-check"></i><b>5.1.1</b> Tidying DocumentTermMatrix objects</a></li>
 <li class="chapter" data-level="5.1.2" data-path="dtm.html"><a href="dtm.html#tidying-dfm-objects"><i class="fa fa-check"></i><b>5.1.2</b> Tidying dfm objects</a></li>
@@ -432,6 +432,7 @@ newsgroup_cors</code></pre></div>
 ## 9        rec.sport.baseball         rec.sport.hockey   0.5770378
 ## 10         rec.sport.hockey       rec.sport.baseball   0.5770378
 ## # ... with 370 more rows</code></pre>
+<p>We could then filter for stronger correlations among newsgroups, and visualize them in a network (Figure ).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggraph)
 <span class="kw">library</span>(igraph)
 <span class="kw">set.seed</span>(<span class="dv">2017</span>)
@@ -687,7 +688,7 @@ Figure 9.8: The 12 words that contributed the most to sentiment scores within ea
 </div>
 <div id="n-gram-analysis" class="section level3">
 <h3><span class="header-section-number">9.3.3</span> N-gram analysis</h3>
-<p>In Chapter <a href="ngrams.html#ngrams">4</a>, we considered the effect of words such as “not” and “no” on sentiment analysis of Jane Austen novels, such as considering whether a phrase like “don’t like” led to passages incorrectly being labeled as positive. The Usenet dataset is is a much larger corpus of more modern text, so we may be interested in how sentiment analysis may be reversed in this text.</p>
+<p>In Chapter <a href="ngrams.html#ngrams">4</a>, we considered the effect of words such as “not” and “no” on sentiment analysis of Jane Austen novels, such as considering whether a phrase like “don’t like” led to passages incorrectly being labeled as positive. The Usenet dataset is a much larger corpus of more modern text, so we may be interested in how sentiment analysis may be reversed in this text.</p>
 <p>We’d start by finding and counting all the bigrams in the Usenet posts.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">usenet_bigrams &lt;-<span class="st"> </span>cleaned_text %&gt;%
 <span class="st">  </span><span class="kw">unnest_tokens</span>(bigram, text, <span class="dt">token =</span> <span class="st">&quot;ngrams&quot;</span>, <span class="dt">n =</span> <span class="dv">2</span>)</code></pre></div>
@@ -725,7 +726,7 @@ Figure 9.9: Words that contributed the most to sentiment when they followed a �
 </div>
 <div id="summary-8" class="section level2">
 <h2><span class="header-section-number">9.4</span> Summary</h2>
-<p>In this analysis of Usenet messages we’ve incorporated almost every method for tidy text mining described in this book, ranging from tf-idf to topic modeling and from sentiment analysis to n-gram tokenization. Throughout the chapter, and indeed through all of our case studies, we’ve been able to rely on a small list of common tools for exploration and visualization. We hope that these examples show how much all tidy text analyses have in common with each other, and indeed with all tidy data analyses.</p>
+<p>In this analysis of Usenet messages, we’ve incorporated almost every method for tidy text mining described in this book, ranging from tf-idf to topic modeling and from sentiment analysis to n-gram tokenization. Throughout the chapter, and indeed through all of our case studies, we’ve been able to rely on a small list of common tools for exploration and visualization. We hope that these examples show how much all tidy text analyses have in common with each other, and indeed with all tidy data analyses.</p>
 
 </div>
 </div>
