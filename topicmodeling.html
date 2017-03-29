@@ -280,7 +280,7 @@ ap_lda</code></pre></div>
 <p>Fitting the model was the “easy part”: the rest of the analysis will involve exploring and interpreting the model using tidying functions from the tidytext package.</p>
 <div id="word-topic-probabilities" class="section level3">
 <h3><span class="header-section-number">6.1.1</span> Word-topic probabilities</h3>
-<p>In Chapter <a href="dtm.html#dtm">5</a> we introduced the <code>tidy()</code> method, originally from the broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>, for tidying model objects. The tidytext package provides this method for extracting the per-topic-per-word probabilities, called <span class="math inline">\(\beta\)</span> (“beta”), from the model.</p>
+<p>In Chapter <a href="dtm.html#dtm">5</a> we introduced the <code>tidy()</code> method, originally from the broom package <span class="citation">(Robinson <a href="#ref-R-broom">2017</a>)</span>, for tidying model objects. The tidytext package provides this method for extracting the per-topic-per-word probabilities, called <span class="math inline">\(\beta\)</span> (“beta”), from the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidytext)
 
 ap_topics &lt;-<span class="st"> </span><span class="kw">tidy</span>(ap_lda, <span class="dt">matrix =</span> <span class="st">&quot;beta&quot;</span>)
@@ -787,10 +787,10 @@ term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_co
 <h3> References</h3>
 <div id="refs" class="references">
 <div id="ref-R-broom">
-<p>Robinson, David, Matthieu Gomez, Boris Demeshev, Dieter Menne, Benjamin Nutter, Luke Johnston, Ben Bolker, Francois Briatte, and Hadley Wickham. 2015. <em>Broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
+<p>Robinson, David. 2017. <em>broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
 </div>
 <div id="ref-R-mallet">
-<p>Mimno, David. 2013. <em>Mallet: A Wrapper Around the Java Machine Learning Tool MALLET</em>. <a href="https://cran.r-project.org/package=mallet" class="uri">https://cran.r-project.org/package=mallet</a>.</p>
+<p>Mimno, David. 2013. <em>mallet: A Wrapper Around the Java Machine Learning Tool MALLET</em>. <a href="https://cran.r-project.org/package=mallet" class="uri">https://cran.r-project.org/package=mallet</a>.</p>
 </div>
 </div>
             </section>

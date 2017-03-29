@@ -374,7 +374,7 @@ negated_words <- bigrams_separated %>%
   ungroup()
 ```
 
-We could then visualize what the most common words to follow each particular negation are (Figure \@ref(fig:negatedwords)). While "not like" and "not help" are still the two most common examples, we can also see pairings such as "no great" and "never loved." We could combine this with the approaches in Chapter \@ref(sentiments) to reverse the AFINN scores of each word that follows a negation. These are just a few examples of how finding consecutive words can give context to text mining methods.
+We could then visualize what the most common words to follow each particular negation are (Figure \@ref(fig:negatedwords)). While "not like" and "not help" are still the two most common examples, we can also see pairings such as "no great" and "never loved." We could combine this with the approaches in Chapter \@ref(sentiment) to reverse the AFINN scores of each word that follows a negation. These are just a few examples of how finding consecutive words can give context to text mining methods.
 
 <div class="figure">
 <img src="04-word-combinations_files/figure-html/negatedwords-1.png" alt="The most common positive or negative words to follow negations such as 'never', 'no', 'not', and 'without'" width="864" />
@@ -442,7 +442,7 @@ bigram_graph
 ## + ... omitted several edges
 ```
 
-igraph has plotting functions built in, but they're not what the package is designed to do, so many other packages have developed visualization methods for graph objects. We recommend the [ggraph package](https://github.com/thomasp85/ggraph), because it implements these visualizations in terms of the grammar of graphics, which we are already familiar with from ggplot2.
+igraph has plotting functions built in, but they're not what the package is designed to do, so many other packages have developed visualization methods for graph objects. We recommend the ggraph package [@R-ggraph], because it implements these visualizations in terms of the grammar of graphics, which we are already familiar with from ggplot2.
 
 We can convert an igraph object into a ggraph with the `ggraph` function, after which we add layers to it, much like layers are added in ggplot2. For example, for a basic graph we need to add three layers: nodes, edges, and text.
 

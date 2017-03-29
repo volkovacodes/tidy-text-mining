@@ -258,7 +258,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Each type of observational unit is a table</li>
 </ul>
 <p>We thus define the tidy text format as being <strong>a table with one-token-per-row.</strong> A token is a meaningful unit of text, such as a word, that we are interested in using for analysis, and tokenization is the process of splitting text into tokens. This one-token-per-row structure is in contrast to the ways text is often stored in current analyses, perhaps as strings or in a document-term matrix. For tidy text mining, the <strong>token</strong> that is stored in each row is most often a single word, but can also be an n-gram, sentence, or paragraph. In the tidytext package, we provide functionality to tokenize by commonly used units of text like these and convert to a one-term-per-row format.</p>
-<p>Tidy data sets allow manipulation with a standard set of “tidy” tools, including popular packages such as dplyr <span class="citation">(Wickham and Francois <a href="#ref-R-dplyr">2016</a>)</span>, tidyr <span class="citation">(Wickham <a href="#ref-R-tidyr">2016</a>)</span>, ggplot2 <span class="citation">(Wickham <a href="#ref-R-ggplot2">2009</a>)</span>, and broom <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>. By keeping the input and output in tidy tables, users can transition fluidly between these packages. We’ve found these tidy tools extend naturally to many text analyses and explorations.</p>
+<p>Tidy data sets allow manipulation with a standard set of “tidy” tools, including popular packages such as dplyr <span class="citation">(Wickham and Francois <a href="#ref-R-dplyr">2016</a>)</span>, tidyr <span class="citation">(Wickham <a href="#ref-R-tidyr">2016</a>)</span>, ggplot2 <span class="citation">(Wickham <a href="#ref-R-ggplot2">2009</a>)</span>, and broom <span class="citation">(Robinson <a href="#ref-R-broom">2017</a>)</span>. By keeping the input and output in tidy tables, users can transition fluidly between these packages. We’ve found these tidy tools extend naturally to many text analyses and explorations.</p>
 <p>At the same time, the tidytext package doesn’t expect a user to keep text data in a tidy form at all times during an analysis. The package includes functions to <code>tidy()</code> objects (see the broom package [Robinson et al cited above]) from popular text mining R packages such as tm <span class="citation">(Ingo Feinerer and Meyer <a href="#ref-tm">2008</a>)</span> and quanteda <span class="citation">(Benoit and Nulty <a href="#ref-R-quanteda">2016</a>)</span>. This allows, for example, a workflow where importing, filtering, and processing is done using dplyr and other tidy tools, after which the data is converted into a document-term matrix for machine learning applications. The models can then be re-converted into a tidy form for interpretation and visualization with ggplot2.</p>
 <div id="contrasting-tidy-text-with-other-data-structures" class="section level2">
 <h2><span class="header-section-number">1.1</span> Contrasting tidy text with other data structures</h2>
@@ -545,7 +545,7 @@ Figure 1.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, 
 </div>
 <div id="summary" class="section level2">
 <h2><span class="header-section-number">1.6</span> Summary</h2>
-<p>In this chapter, we explored what we mean by tidy data when it comes to text, and how tidy data principles can be applied to natural language processing. When text is organized in a format with one token per row, tasks like removing stop words or calculating word frequencies are natural applications of familiar operations within the tidy tool ecosystem. The one-token-per-row framework can be extended from single words to n-grams and other meaningful units of text, as well as to many more analysis priorities.</p>
+<p>In this chapter, we explored what we mean by tidy data when it comes to text, and how tidy data principles can be applied to natural language processing. When text is organized in a format with one token per row, tasks like removing stop words or calculating word frequencies are natural applications of familiar operations within the tidy tool ecosystem. The one-token-per-row framework can be extended from single words to n-grams and other meaningful units of text, as well as to many other analysis priorities that we will consider in this book.</p>
 
 </div>
 </div>
@@ -555,28 +555,28 @@ Figure 1.2: Comparing the word frequencies of Jane Austen, the Brontë sisters, 
 <p>Wickham, Hadley. 2014. “Tidy Data.” <em>Journal of Statistical Software</em> 59 (1): 1–23. doi:<a href="https://doi.org/10.18637/jss.v059.i10">10.18637/jss.v059.i10</a>.</p>
 </div>
 <div id="ref-R-dplyr">
-<p>Wickham, Hadley, and Romain Francois. 2016. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr" class="uri">https://CRAN.R-project.org/package=dplyr</a>.</p>
+<p>Wickham, Hadley, and Romain Francois. 2016. <em>dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr" class="uri">https://CRAN.R-project.org/package=dplyr</a>.</p>
 </div>
 <div id="ref-R-tidyr">
-<p>Wickham, Hadley. 2016. <em>Tidyr: Easily Tidy Data with `spread()` and `gather()` Functions</em>. <a href="https://CRAN.R-project.org/package=tidyr" class="uri">https://CRAN.R-project.org/package=tidyr</a>.</p>
+<p>Wickham, Hadley. 2016. <em>tidyr: Easily Tidy Data with `spread()` and `gather()` Functions</em>. <a href="https://CRAN.R-project.org/package=tidyr" class="uri">https://CRAN.R-project.org/package=tidyr</a>.</p>
 </div>
 <div id="ref-R-ggplot2">
-<p>Wickham, Hadley. 2009. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="http://ggplot2.org" class="uri">http://ggplot2.org</a>.</p>
+<p>Wickham, Hadley. 2009. <em>ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="http://ggplot2.org" class="uri">http://ggplot2.org</a>.</p>
 </div>
 <div id="ref-R-broom">
-<p>Robinson, David, Matthieu Gomez, Boris Demeshev, Dieter Menne, Benjamin Nutter, Luke Johnston, Ben Bolker, Francois Briatte, and Hadley Wickham. 2015. <em>Broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
+<p>Robinson, David. 2017. <em>broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
 </div>
 <div id="ref-tm">
 <p>Ingo Feinerer, Kurt Hornik, and David Meyer. 2008. “Text Mining Infrastructure in R.” <em>Journal of Statistical Software</em> 25 (5): 1–54. <a href="http://www.jstatsoft.org/v25/i05/" class="uri">http://www.jstatsoft.org/v25/i05/</a>.</p>
 </div>
 <div id="ref-R-quanteda">
-<p>Benoit, Kenneth, and Paul Nulty. 2016. <em>Quanteda: Quantitative Analysis of Textual Data</em>. <a href="https://CRAN.R-project.org/package=quanteda" class="uri">https://CRAN.R-project.org/package=quanteda</a>.</p>
+<p>Benoit, Kenneth, and Paul Nulty. 2016. <em>quanteda: Quantitative Analysis of Textual Data</em>. <a href="https://CRAN.R-project.org/package=quanteda" class="uri">https://CRAN.R-project.org/package=quanteda</a>.</p>
 </div>
 <div id="ref-R-janeaustenr">
-<p>Silge, Julia. 2016. <em>Janeaustenr: Jane Austen’s Complete Novels</em>. <a href="https://CRAN.R-project.org/package=janeaustenr" class="uri">https://CRAN.R-project.org/package=janeaustenr</a>.</p>
+<p>Silge, Julia. 2016. <em>janeaustenr: Jane Austen’s Complete Novels</em>. <a href="https://CRAN.R-project.org/package=janeaustenr" class="uri">https://CRAN.R-project.org/package=janeaustenr</a>.</p>
 </div>
 <div id="ref-R-gutenbergr">
-<p>Robinson, David. 2016. <em>Gutenbergr: Download and Process Public Domain Works from Project Gutenberg</em>. <a href="https://cran.rstudio.com/package=gutenbergr" class="uri">https://cran.rstudio.com/package=gutenbergr</a>.</p>
+<p>Robinson, David. 2016. <em>gutenbergr: Download and Process Public Domain Works from Project Gutenberg</em>. <a href="https://cran.rstudio.com/package=gutenbergr" class="uri">https://cran.rstudio.com/package=gutenbergr</a>.</p>
 </div>
 </div>
             </section>

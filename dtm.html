@@ -265,7 +265,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Since most pairings of document and term do not occur (they have the value zero), DTMs are usually implemented as sparse matrices. These objects can be treated as though they were matrices (for example, accessing particular rows and columns), but are stored in a more efficient format. We’ll discuss several implementations of these matrices in this chapter.</p>
 <p>DTM objects cannot be used directly with tidy tools, just as tidy data frames cannot be used as input for most text mining packages. Thus, the tidytext package provides two verbs that convert between the two formats.</p>
 <ul>
-<li><code>tidy()</code> turns a document-term matrix into a tidy data frame. This verb comes from the broom package <span class="citation">(Robinson et al. <a href="#ref-R-broom">2015</a>)</span>, which provides similar tidying functions for many statistical models and objects.</li>
+<li><code>tidy()</code> turns a document-term matrix into a tidy data frame. This verb comes from the broom package <span class="citation">(Robinson <a href="#ref-R-broom">2017</a>)</span>, which provides similar tidying functions for many statistical models and objects.</li>
 <li><code>cast()</code> turns a tidy one-term-per-row data frame into a matrix. tidytext provides three variations of this verb, each converting to a different type of matrix: <code>cast_sparse()</code> (converting to a sparse matrix from the Matrix package), <code>cast_dtm()</code> (converting to a <code>DocumentTermMatrix</code> object from tm), and <code>cast_dfm()</code> (converting to a <code>dfm</code> object from quanteda).</li>
 </ul>
 <div id="tidying-documenttermmatrix-objects" class="section level3">
@@ -658,7 +658,7 @@ Figure 5.5: The words with the largest contribution to sentiment scores in recen
 </p>
 </div>
 <p>In the context of these financial articles, there are a few big red flags here. The words “share” and “shares” are counted as positive verbs by the AFINN lexicon (“Alice will <strong>share</strong> her cake with Bob”), but they’re actually neutral nouns (“The stock price is $12 per <strong>share</strong>”) that could just as easily be in a positive sentence as a negative one. The word “fool” is even more deceptive: it refers to Motley Fool, a financial services company. In short, we can see that the AFINN sentiment lexicon is entirely unsuited to the context of financial data (as are the NRC and Bing).</p>
-<p>Instead, we introduce another sentiment lexicon: the Loughran and McDonald dictionary of financial sentiment terms <span class="citation">(LOUGHRAN and MCDONALD <a href="#ref-loughran2011liability">2011</a>)</span>. This dictionary was developed based on analyses of financial reports, and intentionally avoids words like “share” and “fool”, as well as subtler terms like “liability” and “risk” that may not have a negative meaning in a financial context.</p>
+<p>Instead, we introduce another sentiment lexicon: the Loughran and McDonald dictionary of financial sentiment terms <span class="citation">(Loughran and McDonald <a href="#ref-loughran2011liability">2011</a>)</span>. This dictionary was developed based on analyses of financial reports, and intentionally avoids words like “share” and “fool”, as well as subtler terms like “liability” and “risk” that may not have a negative meaning in a financial context.</p>
 <p>The Loughran data divides words into six sentiments: “positive”, “negative”, “litigious”, “uncertain”, “constraining”, and “superfluous”. We could start by examining the most common words belonging to each sentiment within this text dataset.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stock_tokens %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word) %&gt;%
@@ -728,16 +728,16 @@ Figure 5.7: “Positivity” of the news coverage around each stock in January 2
 <p>Abelson, Hal. 2008. “Foreword.” In <em>Essentials of Programming Languages, 3rd Edition</em>, 3rd ed. The MIT Press.</p>
 </div>
 <div id="ref-R-broom">
-<p>Robinson, David, Matthieu Gomez, Boris Demeshev, Dieter Menne, Benjamin Nutter, Luke Johnston, Ben Bolker, Francois Briatte, and Hadley Wickham. 2015. <em>Broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
+<p>Robinson, David. 2017. <em>broom: Convert Statistical Analysis Objects into Tidy Data Frames</em>. <a href="https://CRAN.R-project.org/package=broom" class="uri">https://CRAN.R-project.org/package=broom</a>.</p>
 </div>
 <div id="ref-R-reshape2">
 <p>Wickham, Hadley. 2007. “Reshaping Data with the reshape Package.” <em>Journal of Statistical Software</em> 21 (12): 1–20. <a href="http://www.jstatsoft.org/v21/i12/" class="uri">http://www.jstatsoft.org/v21/i12/</a>.</p>
 </div>
 <div id="ref-R-quanteda">
-<p>Benoit, Kenneth, and Paul Nulty. 2016. <em>Quanteda: Quantitative Analysis of Textual Data</em>. <a href="https://CRAN.R-project.org/package=quanteda" class="uri">https://CRAN.R-project.org/package=quanteda</a>.</p>
+<p>Benoit, Kenneth, and Paul Nulty. 2016. <em>quanteda: Quantitative Analysis of Textual Data</em>. <a href="https://CRAN.R-project.org/package=quanteda" class="uri">https://CRAN.R-project.org/package=quanteda</a>.</p>
 </div>
 <div id="ref-loughran2011liability">
-<p>LOUGHRAN, TIM, and BILL MCDONALD. 2011. “When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks.” <em>The Journal of Finance</em> 66 (1). Blackwell Publishing Inc: 35–65. doi:<a href="https://doi.org/10.1111/j.1540-6261.2010.01625.x">10.1111/j.1540-6261.2010.01625.x</a>.</p>
+<p>Loughran, Tim, and Bill McDonald. 2011. “When Is a Liability Not a Liability? Textual Analysis, Dictionaries, and 10-Ks.” <em>The Journal of Finance</em> 66 (1). Blackwell Publishing Inc: 35–65. doi:<a href="https://doi.org/10.1111/j.1540-6261.2010.01625.x">10.1111/j.1540-6261.2010.01625.x</a>.</p>
 </div>
 </div>
             </section>

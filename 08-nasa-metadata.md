@@ -850,7 +850,7 @@ ggplot(lda_gamma, aes(gamma, fill = as.factor(topic))) +
 ```
 
 <div class="figure">
-<img src="08-nasa-metadata_files/figure-html/plotgamma-1.png" alt="Probability distribution for each topic in topic modeling of NASA metadata description field texts" width="1152" />
+<img src="08-nasa-metadata_files/figure-html/plotgamma-1.png" alt="Probability distribution for each topic in topic modeling of NASA metadata description field texts" width="960" />
 <p class="caption">(\#fig:plotgamma)Probability distribution for each topic in topic modeling of NASA metadata description field texts</p>
 </div>
 

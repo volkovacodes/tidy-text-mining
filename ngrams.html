@@ -527,7 +527,7 @@ negated_words &lt;-<span class="st"> </span>bigrams_separated %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(AFINN, <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">word2 =</span> <span class="st">&quot;word&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word1, word2, score, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
-<p>We could then visualize what the most common words to follow each particular negation are (Figure <a href="ngrams.html#fig:negatedwords">4.3</a>). While “not like” and “not help” are still the two most common examples, we can also see pairings such as “no great” and “never loved.” We could combine this with the approaches in Chapter <a href="#sentiments"><strong>??</strong></a> to reverse the AFINN scores of each word that follows a negation. These are just a few examples of how finding consecutive words can give context to text mining methods.</p>
+<p>We could then visualize what the most common words to follow each particular negation are (Figure <a href="ngrams.html#fig:negatedwords">4.3</a>). While “not like” and “not help” are still the two most common examples, we can also see pairings such as “no great” and “never loved.” We could combine this with the approaches in Chapter <a href="sentiment.html#sentiment">2</a> to reverse the AFINN scores of each word that follows a negation. These are just a few examples of how finding consecutive words can give context to text mining methods.</p>
 <div class="figure"><span id="fig:negatedwords"></span>
 <img src="04-word-combinations_files/figure-html/negatedwords-1.png" alt="The most common positive or negative words to follow negations such as 'never', 'no', 'not', and 'without'" width="864" />
 <p class="caption">
@@ -582,7 +582,7 @@ bigram_graph</code></pre></div>
 ## [25] miss    -&gt;smith      miss    -&gt;crawford&#39;s henry   -&gt;crawford   miss    -&gt;elliot    
 ## [29] dr      -&gt;grant      miss    -&gt;bertram    sir     -&gt;thomas&#39;s   ten     -&gt;minutes   
 ## + ... omitted several edges</code></pre>
-<p>igraph has plotting functions built in, but they’re not what the package is designed to do, so many other packages have developed visualization methods for graph objects. We recommend the <a href="https://github.com/thomasp85/ggraph">ggraph package</a>, because it implements these visualizations in terms of the grammar of graphics, which we are already familiar with from ggplot2.</p>
+<p>igraph has plotting functions built in, but they’re not what the package is designed to do, so many other packages have developed visualization methods for graph objects. We recommend the ggraph package <span class="citation">(Pedersen <a href="#ref-R-ggraph">2017</a>)</span>, because it implements these visualizations in terms of the grammar of graphics, which we are already familiar with from ggplot2.</p>
 <p>We can convert an igraph object into a ggraph with the <code>ggraph</code> function, after which we add layers to it, much like layers are added in ggplot2. For example, for a basic graph we need to add three layers: nodes, edges, and text.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggraph)
 <span class="kw">set.seed</span>(<span class="dv">2017</span>)
@@ -890,6 +890,12 @@ Figure 4.9: Pairs of words in Pride and Prejudice that show at least a .15 corre
 <h2><span class="header-section-number">4.3</span> Summary</h2>
 <p>This chapter showed how the tidy text approach is useful not only for analyzing individual words, but also for exploring the relationships and connections between words. Such relationships can involve n-grams, which enable us to see what words tend to appear after others, or co-occurences and correlations, for words that appear in proximity to each other. This chapter also demonstrated the ggraph package for visualizing both of these types of relationships as networks. These network visualizations are a flexible tool for exploring relationships, and will play an important role in the case studies in later chapters.</p>
 
+</div>
+</div>
+<h3> References</h3>
+<div id="refs" class="references">
+<div id="ref-R-ggraph">
+<p>Pedersen, Thomas Lin. 2017. <em>ggraph: An Implementation of Grammar of Graphics for Graphs and Networks</em>. <a href="https://cran.r-project.org/package=ggraph" class="uri">https://cran.r-project.org/package=ggraph</a>.</p>
 </div>
 </div>
             </section>
