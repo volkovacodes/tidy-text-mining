@@ -512,9 +512,10 @@ title_word_pairs %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">250</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
-<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
-<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;darkslategray4&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n), <span class="dt">edge_colour =</span> <span class="st">&quot;cyan4&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>, 
+                 <span class="dt">point.padding =</span> <span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;lines&quot;</span>)) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:plottitle"></span>
 <img src="08-nasa-metadata_files/figure-html/plottitle-1.png" alt="Word network in NASA dataset titles" width="864" />
@@ -529,9 +530,10 @@ desc_word_pairs %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">5000</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
-<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
-<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;indianred4&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n), <span class="dt">edge_colour =</span> <span class="st">&quot;darkred&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>,
+                 <span class="dt">point.padding =</span> <span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;lines&quot;</span>)) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:plotdesc"></span>
 <img src="08-nasa-metadata_files/figure-html/plotdesc-1.png" alt="Word network in NASA dataset descriptions" width="864" />
@@ -567,9 +569,10 @@ keyword_pairs %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(n &gt;=<span class="st"> </span><span class="dv">700</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
-<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n)) +
-<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;royalblue3&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> n, <span class="dt">edge_width =</span> n), <span class="dt">edge_colour =</span> <span class="st">&quot;royalblue&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>,
+                 <span class="dt">point.padding =</span> <span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;lines&quot;</span>)) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:plotcounts"></span>
 <img src="08-nasa-metadata_files/figure-html/plotcounts-1.png" alt="Co-occurrence network in NASA dataset keywords" width="864" />
@@ -611,9 +614,10 @@ keyword_cors %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(correlation &gt;<span class="st"> </span>.<span class="dv">6</span>) %&gt;%
 <span class="st">  </span><span class="kw">graph_from_data_frame</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggraph</span>(<span class="dt">layout =</span> <span class="st">&quot;fr&quot;</span>) +
-<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> correlation, <span class="dt">edge_width =</span> correlation)) +
-<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">color =</span> <span class="st">&quot;royalblue3&quot;</span>, <span class="dt">size =</span> <span class="dv">5</span>) +
-<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>) +
+<span class="st">  </span><span class="kw">geom_edge_link</span>(<span class="kw">aes</span>(<span class="dt">edge_alpha =</span> correlation, <span class="dt">edge_width =</span> correlation), <span class="dt">edge_colour =</span> <span class="st">&quot;royalblue&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_node_point</span>(<span class="dt">size =</span> <span class="dv">5</span>) +
+<span class="st">  </span><span class="kw">geom_node_text</span>(<span class="kw">aes</span>(<span class="dt">label =</span> name), <span class="dt">repel =</span> <span class="ot">TRUE</span>,
+                 <span class="dt">point.padding =</span> <span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;lines&quot;</span>)) +
 <span class="st">  </span><span class="kw">theme_void</span>()</code></pre></div>
 <div class="figure"><span id="fig:plotcors"></span>
 <img src="08-nasa-metadata_files/figure-html/plotcors-1.png" alt="Correlation network in NASA dataset keywords" width="1152" />

@@ -425,7 +425,7 @@ physics %>%
 ## # ... with 49 more rows
 ```
 
-Maybe it makes sense to keep this one. Also notice that in this line we have "co-ordinate", which explains why there are separate "co" and "ordinate" items in the high tf-idf words for the Einstein text; the `unnest_tokens()` function separates around punctuation.
+Maybe it makes sense to keep this one. Also notice that in this line we have "co-ordinate", which explains why there are separate "co" and "ordinate" items in the high tf-idf words for the Einstein text; the `unnest_tokens()` function separates around punctuation. Notice that the tf-idf scores for "co" and "ordinate" are close to same!
 
 "AB", "RC", and so forth are names of rays, circles, angles, and so forth for Huygens.
 

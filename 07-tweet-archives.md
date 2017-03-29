@@ -176,8 +176,7 @@ word_ratios <- tidy_tweets %>%
   count(word, person) %>%
   filter(sum(n) >= 10) %>%
   spread(person, n, fill = 0) %>%
-  ungroup() %>%
-  mutate_each(funs((. + 1) / sum(. + 1)), -word) %>%
+  mutate_if(is.numeric, funs((. + 1) / sum(. + 1))) %>%
   mutate(logratio = log(David / Julia)) %>%
   arrange(desc(logratio))
 ```
@@ -191,19 +190,21 @@ word_ratios %>%
 ```
 
 ```
-## # A tibble: 377 × 4
-##          word       David       Julia    logratio
-##         <chr>       <dbl>       <dbl>       <dbl>
-## 1         map 0.002321655 0.002314815 0.002950476
-## 2       email 0.002110595 0.002083333 0.013000812
-## 3        file 0.002110595 0.002083333 0.013000812
-## 4       names 0.003799071 0.003703704 0.025423332
-## 5     account 0.001688476 0.001620370 0.041171689
-## 6         api 0.001688476 0.001620370 0.041171689
-## 7    function 0.003376952 0.003240741 0.041171689
-## 8  population 0.001688476 0.001620370 0.041171689
-## 9         sad 0.001688476 0.001620370 0.041171689
-## 10      words 0.003376952 0.003240741 0.041171689
+## Source: local data frame [377 x 4]
+## Groups: word [377]
+## 
+##         word David Julia logratio
+##        <chr> <dbl> <dbl>    <dbl>
+## 1   #jsm2016     1     1        0
+## 2   #plotcon     1     1        0
+## 3    #rstats     1     1        0
+## 4  #user2016     1     1        0
+## 5        2nd     1     1        0
+## 6    account     1     1        0
+## 7        acs     1     1        0
+## 8     actual     1     1        0
+## 9        add     1     1        0
+## 10    adverb     1     1        0
 ## # ... with 367 more rows
 ```
 
@@ -214,8 +215,9 @@ Which words are most likely to be from Julia's account or from David's account? 
 
 ```r
 word_ratios %>%
+  mutate(abslogratio = abs(logratio)) %>%
   group_by(logratio < 0) %>%
-  top_n(15, abs(logratio)) %>%
+  top_n(15, abslogratio) %>%
   ungroup() %>%
   mutate(word = reorder(word, logratio)) %>%
   ggplot(aes(word, logratio, fill = logratio < 0)) +

@@ -393,9 +393,10 @@ title_word_pairs %>%
   filter(n >= 250) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
-  geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
-  geom_node_point(color = "darkslategray4", size = 5) +
-  geom_node_text(aes(label = name), repel = TRUE) +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "cyan4") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE, 
+                 point.padding = unit(0.2, "lines")) +
   theme_void()
 ```
 
@@ -415,9 +416,10 @@ desc_word_pairs %>%
   filter(n >= 5000) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
-  geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
-  geom_node_point(color = "indianred4", size = 5) +
-  geom_node_text(aes(label = name), repel = TRUE) +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "darkred") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE,
+                 point.padding = unit(0.2, "lines")) +
   theme_void()
 ```
 
@@ -463,9 +465,10 @@ keyword_pairs %>%
   filter(n >= 700) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
-  geom_edge_link(aes(edge_alpha = n, edge_width = n)) +
-  geom_node_point(color = "royalblue3", size = 5) +
-  geom_node_text(aes(label = name), repel = TRUE) +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "royalblue") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE,
+                 point.padding = unit(0.2, "lines")) +
   theme_void()
 ```
 
@@ -520,9 +523,10 @@ keyword_cors %>%
   filter(correlation > .6) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
-  geom_edge_link(aes(edge_alpha = correlation, edge_width = correlation)) +
-  geom_node_point(color = "royalblue3", size = 5) +
-  geom_node_text(aes(label = name), repel = TRUE) +
+  geom_edge_link(aes(edge_alpha = correlation, edge_width = correlation), edge_colour = "royalblue") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE,
+                 point.padding = unit(0.2, "lines")) +
   theme_void()
 ```
 

@@ -381,32 +381,34 @@ Figure 7.2: Comparing the frequency of words used by Julia and David
 <span class="st">  </span><span class="kw">count</span>(word, person) %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">sum</span>(n) &gt;=<span class="st"> </span><span class="dv">10</span>) %&gt;%
 <span class="st">  </span><span class="kw">spread</span>(person, n, <span class="dt">fill =</span> <span class="dv">0</span>) %&gt;%
-<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
-<span class="st">  </span><span class="kw">mutate_each</span>(<span class="kw">funs</span>((. +<span class="st"> </span><span class="dv">1</span>) /<span class="st"> </span><span class="kw">sum</span>(. +<span class="st"> </span><span class="dv">1</span>)), -word) %&gt;%
+<span class="st">  </span><span class="kw">mutate_if</span>(is.numeric, <span class="kw">funs</span>((. +<span class="st"> </span><span class="dv">1</span>) /<span class="st"> </span><span class="kw">sum</span>(. +<span class="st"> </span><span class="dv">1</span>))) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">logratio =</span> <span class="kw">log</span>(David /<span class="st"> </span>Julia)) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(logratio))</code></pre></div>
 <p>What are some words that have been about equally likely to come from David or Julia’s account during 2016?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_ratios %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">abs</span>(logratio))</code></pre></div>
-<pre><code>## # A tibble: 377 × 4
-##          word       David       Julia    logratio
-##         &lt;chr&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
-## 1         map 0.002321655 0.002314815 0.002950476
-## 2       email 0.002110595 0.002083333 0.013000812
-## 3        file 0.002110595 0.002083333 0.013000812
-## 4       names 0.003799071 0.003703704 0.025423332
-## 5     account 0.001688476 0.001620370 0.041171689
-## 6         api 0.001688476 0.001620370 0.041171689
-## 7    function 0.003376952 0.003240741 0.041171689
-## 8  population 0.001688476 0.001620370 0.041171689
-## 9         sad 0.001688476 0.001620370 0.041171689
-## 10      words 0.003376952 0.003240741 0.041171689
+<pre><code>## Source: local data frame [377 x 4]
+## Groups: word [377]
+## 
+##         word David Julia logratio
+##        &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+## 1   #jsm2016     1     1        0
+## 2   #plotcon     1     1        0
+## 3    #rstats     1     1        0
+## 4  #user2016     1     1        0
+## 5        2nd     1     1        0
+## 6    account     1     1        0
+## 7        acs     1     1        0
+## 8     actual     1     1        0
+## 9        add     1     1        0
+## 10    adverb     1     1        0
 ## # ... with 367 more rows</code></pre>
 <p>We are about equally likely to tweet about maps, email, APIs, and functions.</p>
 <p>Which words are most likely to be from Julia’s account or from David’s account? Let’s just take the top 15 most distinctive words for each account and plot them in Figure <a href="twitter.html#fig:plotratios">7.3</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_ratios %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">abslogratio =</span> <span class="kw">abs</span>(logratio)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(logratio &lt;<span class="st"> </span><span class="dv">0</span>) %&gt;%
-<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">15</span>, <span class="kw">abs</span>(logratio)) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">15</span>, abslogratio) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, logratio)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, logratio, <span class="dt">fill =</span> logratio &lt;<span class="st"> </span><span class="dv">0</span>)) +

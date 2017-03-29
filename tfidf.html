@@ -566,7 +566,7 @@ physics %&gt;%<span class="st"> </span>
 ## 9  reference-body K and for the reference-body K1. A light-signal is sent
 ## 10  immediately follows. If referred to the system K1, the propagation of
 ## # ... with 49 more rows</code></pre>
-<p>Maybe it makes sense to keep this one. Also notice that in this line we have “co-ordinate”, which explains why there are separate “co” and “ordinate” items in the high tf-idf words for the Einstein text; the <code>unnest_tokens()</code> function separates around punctuation.</p>
+<p>Maybe it makes sense to keep this one. Also notice that in this line we have “co-ordinate”, which explains why there are separate “co” and “ordinate” items in the high tf-idf words for the Einstein text; the <code>unnest_tokens()</code> function separates around punctuation. Notice that the tf-idf scores for “co” and “ordinate” are close to same!</p>
 <p>“AB”, “RC”, and so forth are names of rays, circles, angles, and so forth for Huygens.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">physics %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(text, <span class="st">&quot;AK&quot;</span>)) %&gt;%<span class="st"> </span>
