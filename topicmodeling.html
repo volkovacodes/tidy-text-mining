@@ -674,6 +674,7 @@ assignments</code></pre></div>
 <p>This combination of the true book (<code>title</code>) and the book assigned to it (<code>consensus</code>) is useful for further exploration. We can, for example, visualize a <strong>confusion matrix</strong>, showing how often words from one book were assigned to another, using dplyr’s <code>count()</code> and ggplot2’s <code>geom_tile</code> (Figure @ref(fig:confusionmatrix}).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">assignments %&gt;%
 <span class="st">  </span><span class="kw">count</span>(title, consensus, <span class="dt">wt =</span> count) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(title) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">percent =</span> n /<span class="st"> </span><span class="kw">sum</span>(n)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(consensus, title, <span class="dt">fill =</span> percent)) +
 <span class="st">  </span><span class="kw">geom_tile</span>() +

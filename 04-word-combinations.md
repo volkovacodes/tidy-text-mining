@@ -340,8 +340,6 @@ It's worth asking which words contributed the most in the "wrong" direction. To 
 
 
 ```r
-library(ggplot2)
-
 not_words %>%
   mutate(contribution = n * score) %>%
   arrange(desc(abs(contribution))) %>%

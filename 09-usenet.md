@@ -432,7 +432,8 @@ Which words had the most effect on sentiment scores overall (Figure \@ref(fig:us
 
 ```r
 contributions %>%
-  top_n(25, abs(contribution)) %>%
+  mutate(abscontribution = abs(contribution)) %>%
+  top_n(25, abscontribution) %>%
   mutate(word = reorder(word, contribution)) %>%
   ggplot(aes(word, contribution, fill = contribution > 0)) +
   geom_col(show.legend = FALSE) +
@@ -639,8 +640,10 @@ usenet_bigram_counts %>%
   filter(word1 %in% negate_words) %>%
   count(word1, word2, wt = n, sort = TRUE) %>%
   inner_join(get_sentiments("afinn"), by = c(word2 = "word")) %>%
-  mutate(contribution = score * nn) %>%
-  top_n(10, abs(contribution)) %>%
+  mutate(contribution = score * nn,
+         abscontribution = abs(contribution)) %>%
+  group_by(word1) %>%
+  top_n(10, abscontribution) %>%
   ungroup() %>%
   mutate(word2 = reorder(paste(word2, word1, sep = "__"), contribution)) %>%
   ggplot(aes(word2, contribution, fill = contribution > 0)) +
@@ -663,13 +666,3 @@ It looks like the largest sources of misidentifying a word as positive come from
 ## Summary
 
 In this analysis of Usenet messages, we've incorporated almost every method for tidy text mining described in this book, ranging from tf-idf to topic modeling and from sentiment analysis to n-gram tokenization. Throughout the chapter, and indeed through all of our case studies, we've been able to rely on a small list of common tools for exploration and visualization. We hope that these examples show how much all tidy text analyses have in common with each other, and indeed with all tidy data analyses.
-
-
-
-
-
-
-
-
-
-

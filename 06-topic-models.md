@@ -601,6 +601,7 @@ This combination of the true book (`title`) and the book assigned to it (`consen
 ```r
 assignments %>%
   count(title, consensus, wt = count) %>%
+  group_by(title) %>%
   mutate(percent = n / sum(n)) %>%
   ggplot(aes(consensus, title, fill = percent)) +
   geom_tile() +
