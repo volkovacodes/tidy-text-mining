@@ -109,7 +109,13 @@ After using `unnest_tokens`, we've split each row so that there is one token (wo
 * Punctuation has been stripped.
 * By default, `unnest_tokens()` converts the tokens to lowercase, which makes them easier to compare or combine with other datasets. (Use the `to_lower = FALSE` argument to turn off this behavior).
 
-Having the text data in this format lets us manipulate, process, and visualize the text using the standard set of tidy tools, namely dplyr, tidyr, ggplot2, and broom.
+Having the text data in this format lets us manipulate, process, and visualize the text using the standard set of tidy tools, namely dplyr, tidyr, and ggplot2, as shown in Figure \@ref(fig:tidyflow-ch1).
+
+<div class="figure">
+<img src="images/tidyflow-ch-1.png" alt="A flowchart of a typical text analysis using tidy data principles. This chapter shows how to summarize and visualize text using these tools." width="100%" />
+<p class="caption">(\#fig:tidyflow-ch1)A flowchart of a typical text analysis using tidy data principles. This chapter shows how to summarize and visualize text using these tools.</p>
+</div>
+
 
 ## Tidying the works of Jane Austen {#tidyausten}
 

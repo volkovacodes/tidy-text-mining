@@ -251,7 +251,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="sentiment" class="section level1">
 <h1><span class="header-section-number">2</span> Sentiment analysis with tidy data</h1>
-<p>In the previous chapter, we explored in depth what we mean by the tidy text format and showed how this format can be used to approach questions about word frequency. This allowed us to analyze which words are used most frequently in documents and to compare documents, but now let’s investigate a different topic. Let’s address the topic of opinion mining or sentiment analysis. When human readers approach a text, we use our understanding of the emotional intent of words to infer whether a section of text is positive or negative, or perhaps characterized by some other more nuanced emotion like surprise or disgust. We can use the tools of text mining to approach the emotional content of text programmatically.</p>
+<p>In the previous chapter, we explored in depth what we mean by the tidy text format and showed how this format can be used to approach questions about word frequency. This allowed us to analyze which words are used most frequently in documents and to compare documents, but now let’s investigate a different topic. Let’s address the topic of opinion mining or sentiment analysis. When human readers approach a text, we use our understanding of the emotional intent of words to infer whether a section of text is positive or negative, or perhaps characterized by some other more nuanced emotion like surprise or disgust. We can use the tools of text mining to approach the emotional content of text programmatically, as shown in Figure <a href="sentiment.html#fig:tidyflow-ch2">2.1</a>.</p>
+<div class="figure"><span id="fig:tidyflow-ch2"></span>
+<img src="images/tidyflow-ch-2.png" alt="A flowchart of a typical text analysis that uses tidytext for sentiment analysis. This chapter shows how to implement sentiment analysis using tidy data principles." width="100%" />
+<p class="caption">
+Figure 2.1: A flowchart of a typical text analysis that uses tidytext for sentiment analysis. This chapter shows how to implement sentiment analysis using tidy data principles.
+</p>
+</div>
 <p>One way to analyze the sentiment of a text is to consider the text as a combination of its individual words and the sentiment content of the whole text as the sum of the sentiment content of the individual words. This isn’t the only way to approach sentiment analysis, but it is an often-used approach, <em>and</em> an approach that naturally takes advantage of the tidy tool ecosystem.</p>
 <div id="the-sentiments-dataset" class="section level2">
 <h2><span class="header-section-number">2.1</span> The <code>sentiments</code> dataset</h2>
@@ -398,10 +404,10 @@ janeaustensentiment &lt;-<span class="st"> </span>tidy_books %&gt;%
 <div class="figure"><span id="fig:sentimentplot"></span>
 <img src="02-sentiment-analysis_files/figure-html/sentimentplot-1.png" alt="Sentiment through the narratives of Jane Austen's novels" width="864" />
 <p class="caption">
-Figure 2.1: Sentiment through the narratives of Jane Austen’s novels
+Figure 2.2: Sentiment through the narratives of Jane Austen’s novels
 </p>
 </div>
-<p>We can see in Figure <a href="sentiment.html#fig:sentimentplot">2.1</a> how the plot of each novel changes toward more positive or negative sentiment over the trajectory of the story.</p>
+<p>We can see in Figure <a href="sentiment.html#fig:sentimentplot">2.2</a> how the plot of each novel changes toward more positive or negative sentiment over the trajectory of the story.</p>
 </div>
 <div id="comparing-the-three-sentiment-dictionaries" class="section level2">
 <h2><span class="header-section-number">2.3</span> Comparing the three sentiment dictionaries</h2>
@@ -448,7 +454,7 @@ bing_and_nrc &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(pri
 <span class="st">  </span><span class="kw">count</span>(method, <span class="dt">index =</span> linenumber %/%<span class="st"> </span><span class="dv">80</span>, sentiment) %&gt;%
 <span class="st">  </span><span class="kw">spread</span>(sentiment, n, <span class="dt">fill =</span> <span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentiment =</span> positive -<span class="st"> </span>negative)</code></pre></div>
-<p>We now have an estimate of the net sentiment (positive - negative) in each chunk of the novel text for each sentiment lexicon. Let’s bind them together and visualize them in Figure <a href="sentiment.html#fig:compareplot">2.2</a>.</p>
+<p>We now have an estimate of the net sentiment (positive - negative) in each chunk of the novel text for each sentiment lexicon. Let’s bind them together and visualize them in Figure <a href="sentiment.html#fig:compareplot">2.3</a>.</p>
 
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">bind_rows</span>(afinn, 
           bing_and_nrc) %&gt;%
@@ -458,7 +464,7 @@ bing_and_nrc &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(pri
 <div class="figure"><span id="fig:compareplot"></span>
 <img src="02-sentiment-analysis_files/figure-html/compareplot-1.png" alt="Comparing three sentiment lexicons using Pride and Prejudice" width="864" />
 <p class="caption">
-Figure 2.2: Comparing three sentiment lexicons using <em>Pride and Prejudice</em>
+Figure 2.3: Comparing three sentiment lexicons using <em>Pride and Prejudice</em>
 </p>
 </div>
 <p>The three different lexicons for calculating sentiment give results that are different in an absolute sense but have similar relative trajectories through the novel. We see similar dips and peaks in sentiment at about the same places in the novel, but the absolute values are significantly different. The AFINN lexicon gives the largest absolute values, with high positive values. The lexicon from Bing et al. has lower absolute values and seems to label larger blocks of contiguous positive or negative text. The NRC results are shifted higher relative to the other two, labeling the text more positively, but detects similar relative changes in the text. We find similar differences between the methods when looking at other novels; the NRC sentiment is high, the AFINN sentiment has more variance, the Bing et al. sentiment appears to find longer stretches of similar text, but all three agree roughly on the overall trends in the sentiment through a narrative arc.</p>
@@ -518,10 +524,10 @@ bing_word_counts</code></pre></div>
 <div class="figure"><span id="fig:pipetoplot"></span>
 <img src="02-sentiment-analysis_files/figure-html/pipetoplot-1.png" alt="Words that contribute to positive and negative sentiment in Jane Austen's novels" width="768" />
 <p class="caption">
-Figure 2.3: Words that contribute to positive and negative sentiment in Jane Austen’s novels
+Figure 2.4: Words that contribute to positive and negative sentiment in Jane Austen’s novels
 </p>
 </div>
-<p>Figure <a href="sentiment.html#fig:pipetoplot">2.3</a> lets us spot an anomaly in the sentiment analysis; the word “miss” is coded as negative but it is used as a title for young, unmarried women in Jane Austen’s works. If it were appropriate for our purposes, we could easily add “miss” to a custom stop-words list using <code>bind_rows()</code>. We could implement that with a strategy such as this.</p>
+<p>Figure <a href="sentiment.html#fig:pipetoplot">2.4</a> lets us spot an anomaly in the sentiment analysis; the word “miss” is coded as negative but it is used as a title for young, unmarried women in Jane Austen’s works. If it were appropriate for our purposes, we could easily add “miss” to a custom stop-words list using <code>bind_rows()</code>. We could implement that with a strategy such as this.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">custom_stop_words &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(<span class="kw">data_frame</span>(<span class="dt">word =</span> <span class="kw">c</span>(<span class="st">&quot;miss&quot;</span>), 
                                           <span class="dt">lexicon =</span> <span class="kw">c</span>(<span class="st">&quot;custom&quot;</span>)), 
                                stop_words)
@@ -545,7 +551,7 @@ custom_stop_words</code></pre></div>
 <div id="wordclouds" class="section level2">
 <h2><span class="header-section-number">2.5</span> Wordclouds</h2>
 <p>We’ve seen that this tidy text mining approach works well with ggplot2, but having our data in a tidy format is useful for other plots as well.</p>
-<p>For example, consider the wordcloud package, which uses base R graphics. Let’s look at the most common words in Jane Austen’s works as a whole again, but this time as a wordcloud in Figure <a href="sentiment.html#fig:firstwordcloud">2.4</a>.</p>
+<p>For example, consider the wordcloud package, which uses base R graphics. Let’s look at the most common words in Jane Austen’s works as a whole again, but this time as a wordcloud in Figure <a href="sentiment.html#fig:firstwordcloud">2.5</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(wordcloud)
 
 tidy_books %&gt;%
@@ -555,7 +561,7 @@ tidy_books %&gt;%
 <div class="figure"><span id="fig:firstwordcloud"></span>
 <img src="02-sentiment-analysis_files/figure-html/firstwordcloud-1.png" alt="The most common words in Jane Austen's novels" width="576" />
 <p class="caption">
-Figure 2.4: The most common words in Jane Austen’s novels
+Figure 2.5: The most common words in Jane Austen’s novels
 </p>
 </div>
 <p>In other functions, such as <code>comparison.cloud()</code>, you may need to turn the data frame into a matrix with reshape2’s <code>acast()</code>. Let’s do the sentiment analysis to tag positive and negative words using an inner join, then find the most common positive and negative words. Until the step where we need to send the data to <code>comparison.cloud()</code>, this can all be done with joins, piping, and dplyr because our data is in tidy format.</p>
@@ -570,10 +576,10 @@ tidy_books %&gt;%
 <div class="figure"><span id="fig:wordcloud"></span>
 <img src="02-sentiment-analysis_files/figure-html/wordcloud-1.png" alt="Most common positive and negative words in Jane Austen's novels" width="480" />
 <p class="caption">
-Figure 2.5: Most common positive and negative words in Jane Austen’s novels
+Figure 2.6: Most common positive and negative words in Jane Austen’s novels
 </p>
 </div>
-<p>The size of a word’s text in Figure <a href="sentiment.html#fig:wordcloud">2.5</a> is in proportion to its frequency within its sentiment. We can use this visualization to see the most important positive and negative words, but the sizes of the words are not comparable across sentiments.</p>
+<p>The size of a word’s text in Figure <a href="sentiment.html#fig:wordcloud">2.6</a> is in proportion to its frequency within its sentiment. We can use this visualization to see the most important positive and negative words, but the sizes of the words are not comparable across sentiments.</p>
 </div>
 <div id="looking-at-units-beyond-just-words" class="section level2">
 <h2><span class="header-section-number">2.6</span> Looking at units beyond just words</h2>
