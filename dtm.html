@@ -288,7 +288,7 @@ AssociatedPress</code></pre></div>
 ## Sparsity           : 99%
 ## Maximal term length: 18
 ## Weighting          : term frequency (tf)</code></pre>
-<p>We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the <code>Terms()</code> function.</p>
+<p>We see that this dataset contains documents (each of them an AP article) and terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the <code>Terms()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">terms &lt;-<span class="st"> </span><span class="kw">Terms</span>(AssociatedPress)
 <span class="kw">head</span>(terms)</code></pre></div>
 <pre><code>## [1] &quot;aaron&quot;      &quot;abandon&quot;    &quot;abandoned&quot;  &quot;abandoning&quot; &quot;abbott&quot;     &quot;abboud&quot;</code></pre>
