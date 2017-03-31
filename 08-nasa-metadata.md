@@ -896,8 +896,7 @@ Now we can use `filter()` to keep only the document-topic entries that have prob
 ```r
 top_keywords <- lda_gamma %>% 
   filter(gamma > 0.9) %>% 
-  group_by(topic, keyword) %>% 
-  count(keyword, sort = TRUE)
+  count(topic, keyword, sort = TRUE)
 
 top_keywords
 ```
@@ -926,6 +925,7 @@ What are the top keywords for each topic?
 
 ```r
 top_keywords %>%
+  group_by(topic) %>%
   top_n(5, n) %>%
   group_by(topic, keyword) %>%
   arrange(desc(n)) %>%  

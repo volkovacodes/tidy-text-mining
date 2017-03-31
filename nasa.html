@@ -888,8 +888,7 @@ lda_gamma</code></pre></div>
 <p>Now we can use <code>filter()</code> to keep only the document-topic entries that have probabilities (<span class="math inline">\(\gamma\)</span>) greater than some cut-off value; let’s use 0.9.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_keywords &lt;-<span class="st"> </span>lda_gamma %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(gamma &gt;<span class="st"> </span><span class="fl">0.9</span>) %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">group_by</span>(topic, keyword) %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">count</span>(keyword, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
+<span class="st">  </span><span class="kw">count</span>(topic, keyword, <span class="dt">sort =</span> <span class="ot">TRUE</span>)
 
 top_keywords</code></pre></div>
 <pre><code>## Source: local data frame [1,022 x 3]
@@ -910,6 +909,7 @@ top_keywords</code></pre></div>
 ## # ... with 1,012 more rows</code></pre>
 <p>What are the top keywords for each topic?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">top_keywords %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(topic) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">5</span>, n) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(topic, keyword) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(n)) %&gt;%<span class="st">  </span>

@@ -487,6 +487,7 @@ frequency &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(<span 
                        <span class="kw">mutate</span>(tidy_books, <span class="dt">author =</span> <span class="st">&quot;Jane Austen&quot;</span>)) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">str_extract</span>(word, <span class="st">&quot;[a-z&#39;]+&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(author, word) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(author) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">proportion =</span> n /<span class="st"> </span><span class="kw">sum</span>(n)) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">select</span>(-n) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">spread</span>(author, proportion) %&gt;%<span class="st"> </span>
