@@ -254,7 +254,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>In our final chapter, we’ll use what we’ve learned in this book to perform a start-to-finish analysis of a set of 20,000 messages sent to 20 Usenet bulletin boards in 1993. The Usenet bulletin boards in this dataset include newsgroups for topics like politics, religion, cars, sports, and cryptography, and offer a rich set of text written by many users. This data set is publicly available at <a href="http://qwone.com/~jason/20Newsgroups/" class="uri">http://qwone.com/~jason/20Newsgroups/</a> (the <code>20news-bydate.tar.gz</code> file) and has become popular for exercises in text analysis and machine learning.</p>
 <div id="pre-processing" class="section level2">
 <h2><span class="header-section-number">9.1</span> Pre-processing</h2>
-<p>We’ll start by reading in all the messages from the <code>20news-bydate</code> folder, which are organized in sub-folders with one file for each message. We can read in files like these with a combination of <code>read_lines()</code>, <code>map()</code> and <code>unnest()</code>. Note that this step takes several minutes to read all the documents.</p>
+<p>We’ll start by reading in all the messages from the <code>20news-bydate</code> folder, which are organized in sub-folders with one file for each message. We can read in files like these with a combination of <code>read_lines()</code>, <code>map()</code> and <code>unnest()</code>.</p>
+<div class="rmdwarning">
+<p>
+Note that this step may take several minutes to read all the documents.
+</p>
+</div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(tidyr)
 <span class="kw">library</span>(purrr)
@@ -317,7 +322,12 @@ cleaned_text &lt;-<span class="st"> </span>raw_text %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">cumsum</span>(text ==<span class="st"> &quot;&quot;</span>) &gt;<span class="st"> </span><span class="dv">0</span>,
          <span class="kw">cumsum</span>(<span class="kw">str_detect</span>(text, <span class="st">&quot;^--&quot;</span>)) ==<span class="st"> </span><span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
-<p>Many lines also have nested text representing quotes from other users, typically starting with a line like “so-and-so writes…” These can be removed with a few regular expressions. (We also choose to manually remove two messages, <code>9704</code> and <code>9985</code> that contained a large amount of non-text content).</p>
+<p>Many lines also have nested text representing quotes from other users, typically starting with a line like “so-and-so writes…” These can be removed with a few regular expressions.</p>
+<div class="rmdnote">
+<p>
+We also choose to manually remove two messages, <code>9704</code> and <code>9985</code> that contained a large amount of non-text content.
+</p>
+</div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cleaned_text &lt;-<span class="st"> </span>cleaned_text %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(text, <span class="st">&quot;^[^&gt;]+[A-Za-z</span><span class="ch">\\</span><span class="st">d]&quot;</span>) |<span class="st"> </span>text ==<span class="st"> &quot;&quot;</span>,
          !<span class="kw">str_detect</span>(text, <span class="st">&quot;writes(:|</span><span class="ch">\\</span><span class="st">.</span><span class="ch">\\</span><span class="st">.</span><span class="ch">\\</span><span class="st">.)$&quot;</span>),
@@ -410,7 +420,7 @@ tf_idf</code></pre></div>
 Figure 9.2: The 12 terms with the highest tf-idf within each of the science-related newsgroups
 </p>
 </div>
-<p>We see lots of characteristic words specific to particular newsgroup, such as “wiring” and “circuit” on the sci.electronics topic and “orbit” and “lunar” for the space newsgroup. You could use this same code to explore other newsgroups yourself.</p>
+<p>We see lots of characteristic words specific to a particular newsgroup, such as “wiring” and “circuit” on the sci.electronics topic and “orbit” and “lunar” for the space newsgroup. You could use this same code to explore other newsgroups yourself.</p>
 <p>What newsgroups tended to be similar to each other in text content? We could discover this by finding the pairwise correlation of word frequencies within each newsgroup, using the <code>pairwise_cor()</code> function from the widyr package (see Chapter <a href="ngrams.html#pairwise-correlation">4.2.2</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(widyr)
 
@@ -609,7 +619,12 @@ Figure 9.8: The 12 words that contributed the most to sentiment scores within ea
             <span class="dt">words =</span> <span class="kw">n</span>()) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(words &gt;=<span class="st"> </span><span class="dv">5</span>)</code></pre></div>
-<p>As a simple measure to reduce the role of randomness, we filtered out messages that had fewer than five words that contributed to sentiment. What were the most positive messages?</p>
+<div class="rmdnote">
+<p>
+As a simple measure to reduce the role of randomness, we filtered out messages that had fewer than five words that contributed to sentiment.
+</p>
+</div>
+<p>What were the most positive messages?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sentiment_messages %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(sentiment))</code></pre></div>
 <pre><code>## # A tibble: 3,554 × 4

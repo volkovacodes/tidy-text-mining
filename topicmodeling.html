@@ -253,7 +253,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">6</span> Topic modeling</h1>
 <p>In text mining, we often have collections of documents, such as blog posts or news articles, that we’d like to divide into natural groups so that we can understand them separately. Topic modeling is a method for unsupervised classification of such documents, similar to clustering on numeric data, which finds natural groups of items even when we’re not sure what we’re looking for.</p>
 <p>Latent Dirichlet allocation (LDA) is a particularly popular method for fitting a topic model. It treats each document as a mixture of topics, and each topic as a mixture of words. This allows documents to “overlap” each other in terms of content, rather than being separated into discrete groups, in a way that mirrors typical use of natural language.</p>
-<p>We can use tidy text principles to approach topic modeling with the same set of tidy tools we’ve used throughout this book. In this chapter, we’ll learn to tidy <code>LDA</code> objects from the <a href="https://cran.r-project.org/package=topicmodels">topicmodels package</a> to examine model results using ggplot2 and dplyr. We’ll also explore an example of clustering chapters from several books, where we can see that a topic model “learns” to tell the difference between the four books based on the text content.</p>
+<p>We can use tidy text principles to approach topic modeling with the same set of tidy tools we’ve used throughout this book. In this chapter, we’ll learn to work with <code>LDA</code> objects from the <a href="https://cran.r-project.org/package=topicmodels">topicmodels package</a>. As shown in Figure <a href="dtm.html#fig:flowchart">5.1</a> in the last chapter, the LDA package produces a model object that can be tidied with tidytext to make it compatible with ggplot2 and dplyr. We’ll also explore an example of clustering chapters from several books, where we can see that a topic model “learns” to tell the difference between the four books based on the text content.</p>
 <div id="latent-dirichlet-allocation" class="section level2">
 <h2><span class="header-section-number">6.1</span> Latent Dirichlet allocation</h2>
 <p>Latent Dirichlet allocation is one of the most common algorithms for topic modeling. Without diving into the math behind the model, we can understand it as being guided by two principles.</p>
@@ -272,7 +272,13 @@ AssociatedPress</code></pre></div>
 ## Sparsity           : 99%
 ## Maximal term length: 18
 ## Weighting          : term frequency (tf)</code></pre>
-<p>We can use the <code>LDA()</code> function from the topicmodels package, setting <code>k = 2</code>, to create a two-topic LDA model. (Almost any topic model in practice will use a larger <code>k</code>, but we will see in Chapter <a href="topicmodeling.html#library-heist">6.2</a> that this analysis approach extends to a larger number of topics). This function returns an object containing the full details of the model fit, such as how words are associated with topics and how topics are associated with documents.</p>
+<p>We can use the <code>LDA()</code> function from the topicmodels package, setting <code>k = 2</code>, to create a two-topic LDA model.</p>
+<div class="rmdnote">
+<p>
+Almost any topic model in practice will use a larger <code>k</code>, but we will soon see that this analysis approach extends to a larger number of topics
+</p>
+</div>
+<p>This function returns an object containing the full details of the model fit, such as how words are associated with topics and how topics are associated with documents.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># set a seed so that the output of the model is predictable</span>
 ap_lda &lt;-<span class="st"> </span><span class="kw">LDA</span>(AssociatedPress, <span class="dt">k =</span> <span class="dv">2</span>, <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">seed =</span> <span class="dv">1234</span>))
 ap_lda</code></pre></div>
@@ -554,7 +560,7 @@ chapters_gamma</code></pre></div>
 ## 10 The War of the Worlds_16     1 1.084337e-05
 ## # ... with 762 more rows</code></pre>
 <p>Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the Great Expectations_57 document has only a 0.00135% probability of coming from topic 1 (Pride and Prejudice).</p>
-<p>Now that we have these topic-probabilities, we can see how well our unsupervised learning did at distinguishing the four books. We’d expect that chapters within a book would be found to be mostly (or entirely), generated from the corresponding topic.</p>
+<p>Now that we have these topic probabilities, we can see how well our unsupervised learning did at distinguishing the four books. We’d expect that chapters within a book would be found to be mostly (or entirely), generated from the corresponding topic.</p>
 <p>First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure <a href="topicmodeling.html#fig:chaptersldagamma">6.4</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_gamma &lt;-<span class="st"> </span>chapters_gamma %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(document, <span class="kw">c</span>(<span class="st">&quot;title&quot;</span>, <span class="st">&quot;chapter&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>, <span class="dt">convert =</span> <span class="ot">TRUE</span>)
@@ -684,7 +690,7 @@ assignments</code></pre></div>
 Figure 6.5: Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to.
 </p>
 </div>
-<p>We notice that almost all the words for <em>Pride and Prejudice</em>, <em>Twenty Thousand Leagues Under the Sea</em>, and <em>War of the Worlds</em> were correctly assigned, while <em>Great Expectations</em> had a fair amount of misassigned words (which, as we saw above, led to two chapters getting misclassified).</p>
+<p>We notice that almost all the words for <em>Pride and Prejudice</em>, <em>Twenty Thousand Leagues Under the Sea</em>, and <em>War of the Worlds</em> were correctly assigned, while <em>Great Expectations</em> had a fair number of misassigned words (which, as we saw above, led to two chapters getting misclassified).</p>
 <p>What were the most commonly mistaken words?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wrong_words &lt;-<span class="st"> </span>assignments %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(title !=<span class="st"> </span>consensus)
@@ -760,6 +766,7 @@ collapsed &lt;-<span class="st"> </span>by_chapter_word %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(document) %&gt;%
 <span class="st">  </span><span class="kw">summarize</span>(<span class="dt">text =</span> <span class="kw">paste</span>(word, <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>))
 
+<span class="co"># create an empty file of &quot;stopwords&quot;</span>
 <span class="kw">file.create</span>(empty_file &lt;-<span class="st"> </span><span class="kw">tempfile</span>())
 docs &lt;-<span class="st"> </span><span class="kw">mallet.import</span>(collapsed$document, collapsed$text, empty_file)
 
@@ -780,7 +787,7 @@ term_counts &lt;-<span class="st"> </span><span class="kw">rename</span>(word_co
 </div>
 <div id="summary-5" class="section level2">
 <h2><span class="header-section-number">6.4</span> Summary</h2>
-<p>This chapter introduces topic modeling for finding clusters of words within documents, and shows how the <code>tidy()</code> verb lets us explore and understand these models using dplyr and ggplot2. This is one of the advantages of the tidy approach to model exploration; the challenges of different output formats are handled by the tidying functions, and we can explore model results using a standard set of tools. In particular, we examined</p>
+<p>This chapter introduces topic modeling for finding clusters of words that characterize a set of documents, and shows how the <code>tidy()</code> verb lets us explore and understand these models using dplyr and ggplot2. This is one of the advantages of the tidy approach to model exploration: the challenges of different output formats are handled by the tidying functions, and we can explore model results using a standard set of tools. In particular, we saw that topic modeling is able to separate and distinguish chapters from four separate books, and explored the limitations of the model by finding words and chapters that it assigned incorrectly.</p>
 
 </div>
 </div>

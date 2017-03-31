@@ -6,7 +6,11 @@ In our final chapter, we'll use what we've learned in this book to perform a sta
 
 ## Pre-processing
 
-We'll start by reading in all the messages from the `20news-bydate` folder, which are organized in sub-folders with one file for each message. We can read in files like these with a combination of `read_lines()`, `map()` and `unnest()`. Note that this step takes several minutes to read all the documents.
+We'll start by reading in all the messages from the `20news-bydate` folder, which are organized in sub-folders with one file for each message. We can read in files like these with a combination of `read_lines()`, `map()` and `unnest()`.
+
+<div class="rmdwarning">
+<p>Note that this step may take several minutes to read all the documents.</p>
+</div>
 
 
 ```r
@@ -98,7 +102,11 @@ cleaned_text <- raw_text %>%
   ungroup()
 ```
 
-Many lines also have nested text representing quotes from other users, typically starting with a line like "so-and-so writes..." These can be removed with a few regular expressions. (We also choose to manually remove two messages, `9704` and `9985` that contained a large amount of non-text content).
+Many lines also have nested text representing quotes from other users, typically starting with a line like "so-and-so writes..." These can be removed with a few regular expressions.
+
+<div class="rmdnote">
+<p>We also choose to manually remove two messages, <code>9704</code> and <code>9985</code> that contained a large amount of non-text content.</p>
+</div>
 
 
 ```r
@@ -226,7 +234,7 @@ tf_idf %>%
 <p class="caption">(\#fig:scitfidf)The 12 terms with the highest tf-idf within each of the science-related newsgroups</p>
 </div>
 
-We see lots of characteristic words specific to particular newsgroup, such as "wiring" and "circuit" on the sci.electronics topic and "orbit" and "lunar" for the space newsgroup. You could use this same code to explore other newsgroups yourself.
+We see lots of characteristic words specific to a particular newsgroup, such as "wiring" and "circuit" on the sci.electronics topic and "orbit" and "lunar" for the space newsgroup. You could use this same code to explore other newsgroups yourself.
 
 
 
@@ -490,7 +498,11 @@ sentiment_messages <- usenet_words %>%
   filter(words >= 5)
 ```
 
-As a simple measure to reduce the role of randomness, we filtered out messages that had fewer than five words that contributed to sentiment. What were the most positive messages?
+<div class="rmdnote">
+<p>As a simple measure to reduce the role of randomness, we filtered out messages that had fewer than five words that contributed to sentiment.</p>
+</div>
+
+What were the most positive messages?
 
 
 ```r
