@@ -9,11 +9,11 @@ However, most of the existing R tools for natural language processing, besides t
 Computer scientist Hal Abelson has observed that "No matter how complex and polished the individual operations are, it is often the quality of the glue that most directly determines the power of the system" [@Friedman:2008:EPL:1378240]. In that spirit, this chapter will discuss the "glue" that connects the tidy text format with other important packages and data structures, allowing you to rely on both existing text mining packages and the suite of tidy tools to perform your analysis.
 
 <div class="figure">
-<img src="images/flowchart.png" alt="A flowchart of a typical text analysis that combines tidytext with other tools and data formats. This chapter shows how to convert between document-term matrices and tidy data frames, as well as converting from a Corpus object to a text data frame. The topicmodels and mallet packages are explored in Chapter 6." width="100%" />
-<p class="caption">(\#fig:flowchart)A flowchart of a typical text analysis that combines tidytext with other tools and data formats. This chapter shows how to convert between document-term matrices and tidy data frames, as well as converting from a Corpus object to a text data frame. The topicmodels and mallet packages are explored in Chapter 6.</p>
+<img src="images/tidyflow-ch-5.png" alt="A flowchart of a typical text analysis that combines tidytext with other tools and data formats, particularly the tm or quanteda packages. This chapter shows how to convert back and forth between document-term matrices and tidy data frames, as well as converting from a Corpus object to a text data frame." width="100%" />
+<p class="caption">(\#fig:tidy_flowchart_ch5)A flowchart of a typical text analysis that combines tidytext with other tools and data formats, particularly the tm or quanteda packages. This chapter shows how to convert back and forth between document-term matrices and tidy data frames, as well as converting from a Corpus object to a text data frame.</p>
 </div>
 
-Figure \@ref(fig:flowchart) illustrates how an analysis can might switch between tidy and non-tidy data structures and tools, a process that will be explored in these next two chapters. This chapter will focus on the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix. We'll also expore how to tidy Corpus objects into text data frames, including a case study of ingesting and analyzing financial articles.
+Figure \@ref(fig:tidy_flowchart_ch5) illustrates how an analysis might switch between tidy and non-tidy data structures and tools. This chapter will focus on the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix. We'll also expore how to tidy Corpus objects, which combine raw text with document metadata, into text data frames, leading to a case study of ingesting and analyzing financial articles.
 
 ## Tidying a document-term matrix {#tidy-dtm}
 
@@ -52,7 +52,7 @@ AssociatedPress
 ## Weighting          : term frequency (tf)
 ```
 
-We see that this dataset contains  documents (each of them an AP article) and  terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the `Terms()` function.
+We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the `Terms()` function.
 
 
 ```r
