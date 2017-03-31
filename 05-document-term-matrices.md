@@ -10,10 +10,10 @@ Computer scientist Hal Abelson has observed that "No matter how complex and poli
 
 <div class="figure">
 <img src="images/tidyflow-ch-5.png" alt="A flowchart of a typical text analysis that combines tidytext with other tools and data formats, particularly the tm or quanteda packages. This chapter shows how to convert back and forth between document-term matrices and tidy data frames, as well as converting from a Corpus object to a text data frame." width="100%" />
-<p class="caption">(\#fig:tidy_flowchart_ch5)A flowchart of a typical text analysis that combines tidytext with other tools and data formats, particularly the tm or quanteda packages. This chapter shows how to convert back and forth between document-term matrices and tidy data frames, as well as converting from a Corpus object to a text data frame.</p>
+<p class="caption">(\#fig:tidyflowchartch5)A flowchart of a typical text analysis that combines tidytext with other tools and data formats, particularly the tm or quanteda packages. This chapter shows how to convert back and forth between document-term matrices and tidy data frames, as well as converting from a Corpus object to a text data frame.</p>
 </div>
 
-Figure \@ref(fig:tidy_flowchart_ch5) illustrates how an analysis might switch between tidy and non-tidy data structures and tools. This chapter will focus on the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix. We'll also expore how to tidy Corpus objects, which combine raw text with document metadata, into text data frames, leading to a case study of ingesting and analyzing financial articles.
+Figure \@ref(fig:tidyflowchartch5) illustrates how an analysis might switch between tidy and non-tidy data structures and tools. This chapter will focus on the process of tidying document-term matrices, as well as casting a tidy data frame into a sparse matrix. We'll also expore how to tidy Corpus objects, which combine raw text with document metadata, into text data frames, leading to a case study of ingesting and analyzing financial articles.
 
 ## Tidying a document-term matrix {#tidy-dtm}
 

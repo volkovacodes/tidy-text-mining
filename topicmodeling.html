@@ -253,13 +253,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1><span class="header-section-number">6</span> Topic modeling</h1>
 <p>In text mining, we often have collections of documents, such as blog posts or news articles, that we’d like to divide into natural groups so that we can understand them separately. Topic modeling is a method for unsupervised classification of such documents, similar to clustering on numeric data, which finds natural groups of items even when we’re not sure what we’re looking for.</p>
 <p>Latent Dirichlet allocation (LDA) is a particularly popular method for fitting a topic model. It treats each document as a mixture of topics, and each topic as a mixture of words. This allows documents to “overlap” each other in terms of content, rather than being separated into discrete groups, in a way that mirrors typical use of natural language.</p>
-<div class="figure">
+<div class="figure"><span id="fig:tidyflowchartch6"></span>
 <img src="images/tidyflow-ch-6.png" alt="A flowchart of a text analysis that incorporates topic modeling. The topicmodels package takes a Document-Term Matrix as input and produces a model that can be tided by tidytext, such that it can be manipulated and visualized with dplyr and ggplot2." width="100%" />
 <p class="caption">
-(#fig:tidy_flowchart_ch6)A flowchart of a text analysis that incorporates topic modeling. The topicmodels package takes a Document-Term Matrix as input and produces a model that can be tided by tidytext, such that it can be manipulated and visualized with dplyr and ggplot2.
+Figure 6.1: A flowchart of a text analysis that incorporates topic modeling. The topicmodels package takes a Document-Term Matrix as input and produces a model that can be tided by tidytext, such that it can be manipulated and visualized with dplyr and ggplot2.
 </p>
 </div>
-<p>As Figure @ref(fig:tidy_flowchart_ch6) shows, we can use tidy text principles to approach topic modeling with the same set of tidy tools we’ve used throughout this book. In this chapter, we’ll learn to work with <code>LDA</code> objects from the <a href="https://cran.r-project.org/package=topicmodels">topicmodels package</a>, particularly tidying such models so that they can be manipulated with ggplot2 and dplyr. We’ll also explore an example of clustering chapters from several books, where we can see that a topic model “learns” to tell the difference between the four books based on the text content.</p>
+<p>As Figure <a href="topicmodeling.html#fig:tidyflowchartch6">6.1</a> shows, we can use tidy text principles to approach topic modeling with the same set of tidy tools we’ve used throughout this book. In this chapter, we’ll learn to work with <code>LDA</code> objects from the <a href="https://cran.r-project.org/package=topicmodels">topicmodels package</a>, particularly tidying such models so that they can be manipulated with ggplot2 and dplyr. We’ll also explore an example of clustering chapters from several books, where we can see that a topic model “learns” to tell the difference between the four books based on the text content.</p>
 <div id="latent-dirichlet-allocation" class="section level2">
 <h2><span class="header-section-number">6.1</span> Latent Dirichlet allocation</h2>
 <p>Latent Dirichlet allocation is one of the most common algorithms for topic modeling. Without diving into the math behind the model, we can understand it as being guided by two principles.</p>
@@ -312,7 +312,7 @@ ap_topics</code></pre></div>
 ## 10     2     abbott 2.968045e-05
 ## # ... with 20,936 more rows</code></pre>
 <p>Notice that this has turned the model into a one-topic-per-term-per-row format. For each combination, the model computes the probability of that term being generated from that topic. For example, the term “aaron” has a <span class="math inline">\(1.686917\times 10^{-12}\)</span> probability of being generated from topic 1, but a <span class="math inline">\(3.8959408\times 10^{-5}\)</span> probability of being generated from topic 2.</p>
-<p>We could use dplyr’s <code>top_n()</code> to find the 10 terms that are most common within each topic. As a tidy data frame, this lends itself well to a ggplot2 visualization (Figure <a href="topicmodeling.html#fig:aptoptermsplot">6.1</a>).</p>
+<p>We could use dplyr’s <code>top_n()</code> to find the 10 terms that are most common within each topic. As a tidy data frame, this lends itself well to a ggplot2 visualization (Figure <a href="topicmodeling.html#fig:aptoptermsplot">6.2</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 <span class="kw">library</span>(dplyr)
 
@@ -331,7 +331,7 @@ ap_top_terms %&gt;%
 <div class="figure"><span id="fig:aptoptermsplot"></span>
 <img src="06-topic-models_files/figure-html/aptoptermsplot-1.png" alt="The terms that are most common within each topic" width="672" />
 <p class="caption">
-Figure 6.1: The terms that are most common within each topic
+Figure 6.2: The terms that are most common within each topic
 </p>
 </div>
 <p>This visualization lets us understand the two topics that were extracted from the articles. The most common words in topic 1 include “percent”, “million”, “billion”, and “company”, which suggests it may represent business or financial news. Those most common in topic 2 include “president”, “government”, and “soviet”, suggeting that this topic represents political news. One important observation about the words in each topic is that some words, such as “new” and “people”, are common within both topics. This is an advantage of topic modeling as opposed to “hard clustering” methods: topics used in natural language could have some overlap in terms of words.</p>
@@ -359,12 +359,12 @@ beta_spread</code></pre></div>
 ## 9            army 2.622192e-04 1.048089e-03   1.9989152
 ## 10          asked 1.885803e-04 1.559209e-03   3.0475641
 ## # ... with 188 more rows</code></pre>
-<p>The words with the greatest differences between the two topics are visualized in Figure <a href="topicmodeling.html#fig:topiccompare">6.2</a>.</p>
+<p>The words with the greatest differences between the two topics are visualized in Figure <a href="topicmodeling.html#fig:topiccompare">6.3</a>.</p>
 
 <div class="figure"><span id="fig:topiccompare"></span>
 <img src="06-topic-models_files/figure-html/topiccompare-1.png" alt="Words with the greatest difference in \(\beta\) between topic 2 and topic 1" width="672" />
 <p class="caption">
-Figure 6.2: Words with the greatest difference in <span class="math inline">\(\beta\)</span> between topic 2 and topic 1
+Figure 6.3: Words with the greatest difference in <span class="math inline">\(\beta\)</span> between topic 2 and topic 1
 </p>
 </div>
 <p>We can see that the words more common in topic 2 include political parties such as “democratic” and “republican”, as well as politician’s names such as “dukakis” and “gorbachev”. Topic 1 was more characterized by currencies like “yen” and “dollar”, as well as financial terms such as “index”, “prices” and “rates”. This helps confirm that the two topics the algorithm identified were political and financial news.</p>
@@ -529,7 +529,7 @@ top_terms</code></pre></div>
 ## 18     4       pip 0.006817363
 ## 19     4    looked 0.006365257
 ## 20     4      miss 0.006228387</code></pre>
-<p>This tidy output lends itself well to a ggplot2 visualization (Figure <a href="topicmodeling.html#fig:toptermsplot">6.3</a>).</p>
+<p>This tidy output lends itself well to a ggplot2 visualization (Figure <a href="topicmodeling.html#fig:toptermsplot">6.4</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
 
 top_terms %&gt;%
@@ -541,7 +541,7 @@ top_terms %&gt;%
 <div class="figure"><span id="fig:toptermsplot"></span>
 <img src="06-topic-models_files/figure-html/toptermsplot-1.png" alt="The terms that are most common within each topic" width="672" />
 <p class="caption">
-Figure 6.3: The terms that are most common within each topic
+Figure 6.4: The terms that are most common within each topic
 </p>
 </div>
 <p>These topics are pretty clearly associated with the four books! There’s no question that the topic of “captain”, “nautilus”, “sea”, and “nemo” belongs to <em>Twenty Thousand Leagues Under the Sea</em>, and that “jane”, “darcy”, and “elizabeth” belongs to <em>Pride and Prejudice</em>. We see “pip” and “joe” from <em>Great Expectations</em> and “martians”, “black”, and “night” from <em>The War of the Worlds</em>. We also notice that, in line with LDA being a “fuzzy clustering” method, there can be words in common between multiple topics, such as “miss” in topics 1 and 4, and “time” in topics 3 and 4.</p>
@@ -567,7 +567,7 @@ chapters_gamma</code></pre></div>
 ## # ... with 762 more rows</code></pre>
 <p>Each of these values is an estimated proportion of words from that document that are generated from that topic. For example, the model estimates that each word in the Great Expectations_57 document has only a 0.00135% probability of coming from topic 1 (Pride and Prejudice).</p>
 <p>Now that we have these topic probabilities, we can see how well our unsupervised learning did at distinguishing the four books. We’d expect that chapters within a book would be found to be mostly (or entirely), generated from the corresponding topic.</p>
-<p>First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure <a href="topicmodeling.html#fig:chaptersldagamma">6.4</a>).</p>
+<p>First we re-separate the document name into title and chapter, after which we can visualize the per-document-per-topic probability for each (Figure <a href="topicmodeling.html#fig:chaptersldagamma">6.5</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">chapters_gamma &lt;-<span class="st"> </span>chapters_gamma %&gt;%
 <span class="st">  </span><span class="kw">separate</span>(document, <span class="kw">c</span>(<span class="st">&quot;title&quot;</span>, <span class="st">&quot;chapter&quot;</span>), <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>, <span class="dt">convert =</span> <span class="ot">TRUE</span>)
 
@@ -595,7 +595,7 @@ chapters_gamma %&gt;%
 <div class="figure"><span id="fig:chaptersldagamma"></span>
 <img src="06-topic-models_files/figure-html/chaptersldagamma-1.png" alt="The gamma probabilities for each chapter within each book" width="768" />
 <p class="caption">
-Figure 6.4: The gamma probabilities for each chapter within each book
+Figure 6.5: The gamma probabilities for each chapter within each book
 </p>
 </div>
 <p>We notice that almost all of the chapters from <em>Pride and Prejudice</em>, <em>War of the Worlds</em>, and <em>Twenty Thousand Leagues Under the Sea</em> were uniquely identified as a single topic each.</p>
@@ -694,7 +694,7 @@ assignments</code></pre></div>
 <div class="figure"><span id="fig:confusionmatrix"></span>
 <img src="06-topic-models_files/figure-html/confusionmatrix-1.png" alt="Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to." width="384" />
 <p class="caption">
-Figure 6.5: Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to.
+Figure 6.6: Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to.
 </p>
 </div>
 <p>We notice that almost all the words for <em>Pride and Prejudice</em>, <em>Twenty Thousand Leagues Under the Sea</em>, and <em>War of the Worlds</em> were correctly assigned, while <em>Great Expectations</em> had a fair number of misassigned words (which, as we saw above, led to two chapters getting misclassified).</p>

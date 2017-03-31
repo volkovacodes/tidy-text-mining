@@ -8,10 +8,10 @@ Latent Dirichlet allocation (LDA) is a particularly popular method for fitting a
 
 <div class="figure">
 <img src="images/tidyflow-ch-6.png" alt="A flowchart of a text analysis that incorporates topic modeling. The topicmodels package takes a Document-Term Matrix as input and produces a model that can be tided by tidytext, such that it can be manipulated and visualized with dplyr and ggplot2." width="100%" />
-<p class="caption">(\#fig:tidy_flowchart_ch6)A flowchart of a text analysis that incorporates topic modeling. The topicmodels package takes a Document-Term Matrix as input and produces a model that can be tided by tidytext, such that it can be manipulated and visualized with dplyr and ggplot2.</p>
+<p class="caption">(\#fig:tidyflowchartch6)A flowchart of a text analysis that incorporates topic modeling. The topicmodels package takes a Document-Term Matrix as input and produces a model that can be tided by tidytext, such that it can be manipulated and visualized with dplyr and ggplot2.</p>
 </div>
 
-As Figure \@ref(fig:tidy_flowchart_ch6) shows, we can use tidy text principles to approach topic modeling with the same set of tidy tools we've used throughout this book. In this chapter, we'll learn to work with `LDA` objects from the [topicmodels package](https://cran.r-project.org/package=topicmodels), particularly tidying such models so that they can be manipulated with ggplot2 and dplyr. We'll also explore an example of clustering chapters from several books, where we can see that a topic model "learns" to tell the difference between the four books based on the text content.
+As Figure \@ref(fig:tidyflowchartch6) shows, we can use tidy text principles to approach topic modeling with the same set of tidy tools we've used throughout this book. In this chapter, we'll learn to work with `LDA` objects from the [topicmodels package](https://cran.r-project.org/package=topicmodels), particularly tidying such models so that they can be manipulated with ggplot2 and dplyr. We'll also explore an example of clustering chapters from several books, where we can see that a topic model "learns" to tell the difference between the four books based on the text content.
 
 ## Latent Dirichlet allocation
 
