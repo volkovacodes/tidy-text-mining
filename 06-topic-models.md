@@ -43,7 +43,7 @@ AssociatedPress
 We can use the `LDA()` function from the topicmodels package, setting `k = 2`, to create a two-topic LDA model.
 
 <div class="rmdnote">
-<p>Almost any topic model in practice will use a larger <code>k</code>, but we will soon see that this analysis approach extends to a larger number of topics</p>
+<p>Almost any topic model in practice will use a larger <code>k</code>, but we will soon see that this analysis approach extends to a larger number of topics.</p>
 </div>
 
 This function returns an object containing the full details of the model fit, such as how words are associated with topics and how topics are associated with documents.
