@@ -303,6 +303,7 @@ We can then compare each to the "consensus" topic for each book (the most common
 ```{r book_topics, dependson = "chapter_classifications"}
 book_topics <- chapter_classifications %>%
   count(title, topic) %>%
+  group_by(title) %>%
   top_n(1, n) %>%
   ungroup() %>%
   transmute(consensus = title, topic)
@@ -327,7 +328,7 @@ assignments
 
 This returns a tidy data frame of book-term counts, but adds an extra column: `.topic`, with the topic each term was assigned to within each document. (Extra columns added by `augment` always start with `.`, to prevent overwriting existing columns). We can combine this `assignments` table with the consensus book titles to find which words were incorrectly classified.
 
-```{r assignments2, dependson = "assignments"}
+```{r assignments2, dependson = c("assignments", "book_topics")}
 assignments <- assignments %>%
   separate(document, c("title", "chapter"), sep = "_", convert = TRUE) %>%
   inner_join(book_topics, by = c(".topic" = "topic"))
