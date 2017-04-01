@@ -15,7 +15,7 @@ In our final chapter, we'll use what we've learned in this book to perform a sta
 
 We'll start by reading in all the messages from the `20news-bydate` folder, which are organized in sub-folders with one file for each message. We can read in files like these with a combination of `read_lines()`, `map()` and `unnest()`.
 
-```{block, type = "rmdwarning"}
+```WARNING
 Note that this step may take several minutes to read all the documents.
 ```
 
@@ -86,7 +86,7 @@ cleaned_text <- raw_text %>%
 
 Many lines also have nested text representing quotes from other users, typically starting with a line like "so-and-so writes..." These can be removed with a few regular expressions.
 
-```{block, type = "rmdnote"}
+```NOTE
 We also choose to manually remove two messages, `9704` and `9985` that contained a large amount of non-text content.
 ```
 
@@ -361,7 +361,7 @@ sentiment_messages <- usenet_words %>%
   filter(words >= 5)
 ```
 
-```{block, type = "rmdnote"}
+```NOTE
 As a simple measure to reduce the role of randomness, we filtered out messages that had fewer than five words that contributed to sentiment.
 ```
 

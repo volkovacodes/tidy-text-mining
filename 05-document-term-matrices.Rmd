@@ -69,7 +69,7 @@ ap_td
 
 Notice that we now have a tidy three-column `tbl_df`, with variables `document`, `term`, and `count`. This tidying operation is similar to the `melt()` function from the reshape2 package [@R-reshape2] for non-sparse matrices.
 
-```{block, type = "rmdnote"}
+```NOTE
 Notice that only the non-zero values are included in the tidied output: document 1 includes terms such as "adding" and "adult", but not "aaron" or "abandon". This means the tidied version has no rows where `count` is zero.
 ```
 
@@ -153,7 +153,7 @@ inaug_tf_idf %>%
 
 As another example of a visualization possible with tidy data, we could extract the year from each document's name, and compute the total number of words within each year.
 
-```{block, type = "rmdnote"}
+```NOTE
 Note that we've used tidyr's `complete()` function to include zeroes (cases where a word didn't appear in a document) in the table.
 ```
 
@@ -276,7 +276,7 @@ acq_tokens %>%
 
 Here we'll retrieve recent articles relevant to nine major technology stocks: Microsoft, Apple, Google, Amazon, Facebook, Twitter, IBM, Yahoo, and Netflix.
 
-```{block, type = "rmdnote"}
+```NOTE
 These results were downloaded in January 2017, when this chapter was written, but you'll certainly find different results if you ran it for yourself. Note that this code takes several minutes to run.
 ```
 

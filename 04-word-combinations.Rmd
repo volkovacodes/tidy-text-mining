@@ -31,7 +31,7 @@ austen_bigrams
 
 This data structure is still a variation of the tidy text format. It is structured as one-token-per-row (with extra metadata, such as `book`, still preserved), but each token now represents a bigram.
 
-```{block, type = "rmdnote"}
+```NOTE
 Notice that these bigrams overlap: "sense and" is one token, while "and sensibility" is another.
 ```
 
@@ -273,7 +273,7 @@ ggraph(bigram_graph, layout = "fr") +
 
 It may take a some experimentation with ggraph to get your networks into a presentable format like this, but the network structure is useful and flexible way to visualize relational tidy data.
 
-```{block, type = "rmdnote"}
+```NOTE
 Note that this is a visualization of a **Markov chain**, a common model in text processing. In a Markov chain, each choice of word depends only on the previous word. In this case, a random generator following this model might spit out "dear", then "sir", then "william/walter/thomas/thomas's", by following each word to the most common words that follow it. To make the visualization interpretable, we chose to show only the most common word to word connections, but one could imagine an enormous graph representing all connections that occur in the text.
 ```
 
@@ -281,7 +281,7 @@ Note that this is a visualization of a **Markov chain**, a common model in text 
 
 We went to a good amount of work in cleaning and visualizing bigrams on a text dataset, so let's collect it into a function so that we easily perform it on other text datasets.
 
-```{block, type = "rmdnote"}
+```NOTE
 To make it easy to use the `count_bigrams()` and `visualize_bigrams()` yourself, we've also reloaded the packages necessary for them. 
 ```
 
@@ -410,7 +410,7 @@ For example, that $n_{11}$ represents the number of documents where both word X 
 
 $$\phi=\frac{n_{11}n_{00}-n_{10}n_{01}}{\sqrt{n_{1\cdot}n_{0\cdot}n_{\cdot0}n_{\cdot1}}}$$
 
-```{block, type = "rmdnote"}
+```NOTE
 The phi coefficient is equivalent to the Pearson correlation, which you may have heard of elsewhere, when it is applied to binary data).
 ```
 
