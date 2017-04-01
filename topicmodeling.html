@@ -623,6 +623,7 @@ chapter_classifications</code></pre></div>
 <p>We can then compare each to the “consensus” topic for each book (the most common topic among its chapters), and see which were most often misidentified.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">book_topics &lt;-<span class="st"> </span>chapter_classifications %&gt;%
 <span class="st">  </span><span class="kw">count</span>(title, topic) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(title) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">1</span>, n) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">transmute</span>(<span class="dt">consensus =</span> title, topic)
