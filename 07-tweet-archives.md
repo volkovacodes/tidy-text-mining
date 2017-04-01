@@ -24,7 +24,7 @@ tweets <- bind_rows(tweets_julia %>%
   mutate(timestamp = ymd_hms(timestamp))
 
 ggplot(tweets, aes(x = timestamp, fill = person)) +
-  geom_histogram(alpha = 0.5, position = "identity", bins = 20, show.legend = FALSE) +
+  geom_histogram(position = "identity", bins = 20, show.legend = FALSE) +
   facet_wrap(~person, ncol = 1)
 ```
 
@@ -522,6 +522,7 @@ word_by_rts %>%
   group_by(person) %>%
   top_n(10, retweets) %>%
   arrange(retweets) %>%
+  ungroup() %>%
   mutate(word = factor(word, unique(word))) %>%
   ungroup() %>%
   ggplot(aes(word, retweets, fill = person)) +
@@ -568,6 +569,7 @@ word_by_favs %>%
   group_by(person) %>%
   top_n(10, favorites) %>%
   arrange(favorites) %>%
+  ungroup() %>%
   mutate(word = factor(word, unique(word))) %>%
   ungroup() %>%
   ggplot(aes(word, favorites, fill = person)) +

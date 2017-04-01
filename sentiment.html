@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-31">
+<meta name="date" content="2017-04-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -384,15 +384,15 @@ tidy_books %&gt;%
 <p>Next, we count up how many positive and negative words there are in defined sections of each book. We define an <code>index</code> here to keep track of where we are in the narrative; this index (using integer division) counts up sections of 100 lines of text.</p>
 <div class="rmdtip">
 <p>
-The <code>%/%</code> operator does integer division (<code>x %/% y</code> is equivalent to <code>floor(x/y)</code>) so the index keeps track of which 100-line section of text we are counting up negative and positive sentiment in.
+The <code>%/%</code> operator does integer division (<code>x %/% y</code> is equivalent to <code>floor(x/y)</code>) so the index keeps track of which 80-line section of text we are counting up negative and positive sentiment in.
 </p>
 </div>
-<p>Small sections of text may not have enough words in them to get a good estimate of sentiment while really large sections can wash out narrative structure. For these books, using 100 lines works well, but this can vary depending on individual texts, how long the lines were to start with, etc. We then use <code>spread()</code> so that we have negative and positive sentiment in separate columns, and lastly calculate a net sentiment (positive - negative).</p>
+<p>Small sections of text may not have enough words in them to get a good estimate of sentiment while really large sections can wash out narrative structure. For these books, using 80 lines works well, but this can vary depending on individual texts, how long the lines were to start with, etc. We then use <code>spread()</code> so that we have negative and positive sentiment in separate columns, and lastly calculate a net sentiment (positive - negative).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyr)
 
 janeaustensentiment &lt;-<span class="st"> </span>tidy_books %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;bing&quot;</span>)) %&gt;%
-<span class="st">  </span><span class="kw">count</span>(book, <span class="dt">index =</span> linenumber %/%<span class="st"> </span><span class="dv">100</span>, sentiment) %&gt;%
+<span class="st">  </span><span class="kw">count</span>(book, <span class="dt">index =</span> linenumber %/%<span class="st"> </span><span class="dv">80</span>, sentiment) %&gt;%
 <span class="st">  </span><span class="kw">spread</span>(sentiment, n, <span class="dt">fill =</span> <span class="dv">0</span>) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">sentiment =</span> positive -<span class="st"> </span>negative)</code></pre></div>
 <p>Now we can plot these sentiment scores across the plot trajectory of each novel. Notice that we are plotting against the <code>index</code> on the x-axis that keeps track of narrative time in sections of text.</p>
@@ -514,6 +514,7 @@ bing_word_counts</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bing_word_counts %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(sentiment) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, n)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, n, <span class="dt">fill =</span> sentiment)) +
 <span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +

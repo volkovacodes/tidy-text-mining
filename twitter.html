@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-31">
+<meta name="date" content="2017-04-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -269,7 +269,7 @@ tweets &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(tweets_ju
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">timestamp =</span> <span class="kw">ymd_hms</span>(timestamp))
 
 <span class="kw">ggplot</span>(tweets, <span class="kw">aes</span>(<span class="dt">x =</span> timestamp, <span class="dt">fill =</span> person)) +
-<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">bins =</span> <span class="dv">20</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">bins =</span> <span class="dv">20</span>, <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~person, <span class="dt">ncol =</span> <span class="dv">1</span>)</code></pre></div>
 <div class="figure"><span id="fig:setup"></span>
 <img src="07-tweet-archives_files/figure-html/setup-1.png" alt="All tweets from our accounts" width="672" />
@@ -637,6 +637,7 @@ word_by_rts %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(person) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, retweets) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(retweets) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="kw">unique</span>(word))) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, retweets, <span class="dt">fill =</span> person)) +
@@ -673,6 +674,7 @@ word_by_favs &lt;-<span class="st"> </span>tidy_tweets %&gt;%<span class="st"> <
 <span class="st">  </span><span class="kw">group_by</span>(person) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, favorites) %&gt;%
 <span class="st">  </span><span class="kw">arrange</span>(favorites) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">factor</span>(word, <span class="kw">unique</span>(word))) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, favorites, <span class="dt">fill =</span> person)) +

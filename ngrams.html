@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-31">
+<meta name="date" content="2017-04-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -853,6 +853,7 @@ word_cors</code></pre></div>
 <span class="st">  </span><span class="kw">filter</span>(item1 %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;elizabeth&quot;</span>, <span class="st">&quot;pounds&quot;</span>, <span class="st">&quot;married&quot;</span>, <span class="st">&quot;pride&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(item1) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">6</span>) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">item2 =</span> <span class="kw">reorder</span>(item2, correlation)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(item2, correlation)) +
 <span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>) +

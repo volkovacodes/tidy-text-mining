@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-03-31">
+<meta name="date" content="2017-04-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -408,6 +408,7 @@ tf_idf</code></pre></div>
 <span class="st">  </span><span class="kw">filter</span>(<span class="kw">str_detect</span>(newsgroup, <span class="st">&quot;^sci</span><span class="ch">\\</span><span class="st">.&quot;</span>)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(newsgroup) %&gt;%
 <span class="st">  </span><span class="kw">top_n</span>(<span class="dv">12</span>, tf_idf) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, tf_idf)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, tf_idf, <span class="dt">fill =</span> newsgroup)) +
 <span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
