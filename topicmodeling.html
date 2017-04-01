@@ -677,7 +677,7 @@ assignments</code></pre></div>
 ## 9  Great Expectations       9   joe    44      4 Great Expectations
 ## 10 Great Expectations      13   joe    40      4 Great Expectations
 ## # ... with 104,711 more rows</code></pre>
-<p>This combination of the true book (<code>title</code>) and the book assigned to it (<code>consensus</code>) is useful for further exploration. We can, for example, visualize a <strong>confusion matrix</strong>, showing how often words from one book were assigned to another, using dplyr’s <code>count()</code> and ggplot2’s <code>geom_tile</code> (Figure @ref(fig:confusionmatrix}).</p>
+<p>This combination of the true book (<code>title</code>) and the book assigned to it (<code>consensus</code>) is useful for further exploration. We can, for example, visualize a <strong>confusion matrix</strong>, showing how often words from one book were assigned to another, using dplyr’s <code>count()</code> and ggplot2’s <code>geom_tile</code> (Figure <a href="topicmodeling.html#fig:confusionmatrix">6.6</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">assignments %&gt;%
 <span class="st">  </span><span class="kw">count</span>(title, consensus, <span class="dt">wt =</span> count) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(title) %&gt;%
@@ -692,7 +692,7 @@ assignments</code></pre></div>
        <span class="dt">y =</span> <span class="st">&quot;Book words came from&quot;</span>,
        <span class="dt">fill =</span> <span class="st">&quot;% of assignments&quot;</span>)</code></pre></div>
 <div class="figure"><span id="fig:confusionmatrix"></span>
-<img src="06-topic-models_files/figure-html/confusionmatrix-1.png" alt="Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to." width="384" />
+<img src="06-topic-models_files/figure-html/confusionmatrix-1.png" alt="Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to." width="960" />
 <p class="caption">
 Figure 6.6: Confusion matrix showing where LDA assigned the words from each book. Each row of this table represents the true book each word came from, and each column represents what book it was assigned to.
 </p>
