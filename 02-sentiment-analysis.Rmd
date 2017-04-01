@@ -44,7 +44,7 @@ How were these sentiment lexicons put together and validated? They were construc
 
 There are also some domain-specific sentiment lexicons available, constructed to be used with text from a specific content area. Section \@ref(financial) explores an analysis using a sentiment lexicon specifically for finance.
 
-```{block, type = "rmdnote"}
+```NOTE
 Dictionary-based methods like the ones we are discussing find the total sentiment of a piece of text by adding up the individual sentiment scores for each word in the text.
 ```
 
@@ -92,7 +92,7 @@ Or instead we could examine how sentiment changes throughout each novel. We can 
 
 Next, we count up how many positive and negative words there are in defined sections of each book. We define an `index` here to keep track of where we are in the narrative; this index (using integer division) counts up sections of 100 lines of text.
 
-```{block, type = "rmdtip"}
+```TIP
 The `%/%` operator does integer division (`x %/% y` is equivalent to `floor(x/y)`) so the index keeps track of which 80-line section of text we are counting up negative and positive sentiment in. 
 ```
 
@@ -133,7 +133,7 @@ pride_prejudice
 
 Now, we can use `inner_join()` to calculate the sentiment in different ways. 
 
-```{block, type = "rmdnote"}
+```NOTE
 Remember from above that the AFINN lexicon measures sentiment with a numeric score between -5 and 5, while the other two lexicons categorize words in a binary fashion, either positive or negative. To find a sentiment score in chunks of text throughout the novel, we will need to use a different pattern for the AFINN lexicon than for the other two. 
 ```
 

@@ -41,7 +41,7 @@ Let's use `unnest_tokens()` to make a tidy data frame of all the words in our tw
 
 First, we will remove tweets from this dataset that are retweets so that we only have tweets that we wrote ourselves. Next, the `mutate()` line removes links and cleans out some characters that we don't want like ampersands and such. 
 
-```{block, type = "rmdnote"}
+```NOTE
 In the call to `unnest_tokens()`, we unnest using a regex pattern, instead of just looking for single unigrams (words). This regex pattern is very useful for dealing with Twitter text; it retains hashtags and mentions of usernames with the `@` symbol. 
 ```
 
@@ -198,7 +198,7 @@ nested_data
 
 This data frame has one row for each person-word combination; the `data` column is a list column that contains data frames, one for each combination of person and word. Let's use `map()` from the purrr library to apply our modeling procedure to each of those little data frames inside our big data frame. This is count data so let’s use `glm()` with `family = "binomial"` for modeling. 
 
-```{block, type = "rmdtip"}
+```TIP
 We can think about this modeling procedure answering a question like, "Was a given word mentioned in a given time bin? Yes or no? How does the count of word mentions depend on time?"
 ```
 

@@ -12,7 +12,7 @@ theme_set(theme_light())
 
 There are over 32,000 datasets hosted and/or maintained by [NASA](https://www.nasa.gov/); these datasets cover topics from Earth science to aerospace engineering to management of NASA itself. We can use the metadata for these datasets to understand the connections between them. 
 
-```{block, type = "rmdnote"}
+```NOTE
 What is metadata? Metadata is a term that refers to data that gives information about other data; in this case, the metadata informs users about what is in these numerous NASA datasets but does not include the content of the datasets themselves. 
 ```
 
@@ -126,7 +126,7 @@ nasa_desc %>%
 
 Words like "data" and "global" are used very often in NASA titles and descriptions. We may want to remove digits and some "words" like "v1" from these data frames for many types of analyses; they are not too meaningful for most audiences. 
 
-```{block, type = "rmdtip"}
+```TIP
 We can do this by making a list of custom stop words and using `anti_join()` to remove them from the data frame, just like we removed the default stop words that are in the tidytext package. This approach can be used in many instances and is a great tool to bear in mind.
 ```
 
@@ -246,7 +246,7 @@ keyword_pairs %>%
 
 We definitely see clustering here, and strong connections between keywords like "OCEANS", "OCEAN OPTICS", and "OCEAN COLOR", or "PROJECT" and "COMPLETED". 
 
-```{block, type = "rmdwarning"}
+```WARNING
 These are the most commonly co-occurring words, but also just the most common keywords in general. 
 ```
 
@@ -304,7 +304,7 @@ desc_tf_idf %>%
 
 These are the most important words in the description fields as measured by tf-idf, meaning they are common but not too common. 
 
-```{block, type = "rmdwarning"}
+```WARNING
 Notice we have run into an issue here; both $n$ and term frequency are equal to 1 for these terms, meaning that these were description fields that only had a single word in them. If a description field only contains one word, the tf-idf algorithm will think that is a very important word. 
 ```
 

@@ -12,7 +12,7 @@ A central question in text mining and natural language processing is how to quan
 
 Another approach is to look at a term's *inverse document frequency* (idf), which decreases the weight for commonly used words and increases the weight for words that are not used very much in a collection of documents. This can be combined with term frequency to calculate a term's *tf-idf* (the two quantities multiplied together), the frequency of a term adjusted for how rarely it is used. 
 
-```{block, type = "rmdnote"}
+```NOTE
 The statistic **tf-idf** is intended to measure how important a word is to a document in a collection (or corpus) of documents, for example, to one novel in a collection of novels or to one website in a collection of websites. 
 ```
 
@@ -62,7 +62,7 @@ There are very long tails to the right for these novels (those extremely common 
 
 Distributions like those shown in Figure \@ref(fig:plottf) are typical in language. In fact, those types of long-tailed distributions are so common in any given corpus of natural language (like a book, or a lot of text from a website, or spoken words) that the relationship between the frequency that a word is used and its rank has been the subject of study; a classic version of this relationship is called Zipf's law, after George Zipf, a 20th century American linguist. 
 
-```{block, type = "rmdnote"}
+```NOTE
 Zipf's law states that the frequency that a word appears is inversely proportional to its rank. 
 ```
 
@@ -137,7 +137,7 @@ book_words %>%
 
 Here we see all proper nouns, names that are in fact important in these novels. None of them occur in all of novels, and they are important, characteristic words for each text within the corpus of Jane Austen's novels. 
 
-```{block, type = "rmdnote"}
+```NOTE
 Some of the values for idf are the same for different terms because there are 6 documents in this corpus and we are seeing the numerical value for $\ln(6/1)$, $\ln(6/2)$, etc. 
 ```
 
