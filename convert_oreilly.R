@@ -10,13 +10,28 @@ library(bookdown)
 
 book <- read_lines("_main.utf8.md")
 
-s <- str_replace_all(book, "<a .*?>(.*)</a>", "\\1")
+s <- str_replace_all(book, "<a .*?>(.*?)</a>", "\\1")
 s <- str_replace_all(s, " +\\[@.*?\\]", "")
 s <- str_replace_all(s, "<strong>|<\\/strong>", "")
 s <- str_replace_all(s, "\\(.*_files/figure-docx/", "\\(")
 s <- str_replace_all(s, "images/", "")
 s <- s[!str_detect(s, "^\\<\\!\\-\\-")]
 s <- tail(s, -(which(str_detect(s, "^# Preface"))[1] - 1))
+
+# fix figure labels
+figure_mapping <- data_frame(line = s) %>%
+  mutate(chapter = cumsum(str_detect(line, "^# .*\\{")) - 1) %>%
+  filter(str_detect(line, "!\\[Figure ")) %>%
+  extract(line, "original", "(\\d+)") %>%
+  group_by(chapter) %>%
+  mutate(within = row_number()) %>%
+  unite(new, chapter, within, sep = ".") %>%
+  mutate_each(funs(paste("Figure", .))) %>%
+  mutate(original = paste0(original, "(?!\\d|\\.\\d)"))
+
+s <- reduce(seq_len(nrow(figure_mapping)), function(old, i) {
+  str_replace_all(old, figure_mapping$original[i], figure_mapping$new[i])
+}, .init = s)
 
 outfolder <- "text-mining-manuscript"
 dir.create(outfolder, showWarnings = FALSE)
