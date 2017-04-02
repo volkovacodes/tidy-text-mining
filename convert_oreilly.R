@@ -13,8 +13,7 @@ book <- read_lines("_main.utf8.md")
 s <- str_replace_all(book, "<a .*?>(.*?)</a>", "\\1")
 s <- str_replace_all(s, " +\\[@.*?\\]", "")
 s <- str_replace_all(s, "<strong>|<\\/strong>", "")
-s <- str_replace_all(s, "\\(.*_files/figure-docx/", "\\(")
-s <- str_replace_all(s, "images/", "")
+s <- str_replace_all(s, "\\/figure-docx\\/", "/")
 s <- s[!str_detect(s, "^\\<\\!\\-\\-")]
 s <- tail(s, -(which(str_detect(s, "^# Preface"))[1] - 1))
 
@@ -49,6 +48,8 @@ for (f in paste0(c("01-tidy-text",
                    "09-usenet"), "_files")) {
   out2 <- file.path(outfolder, f)
   dir.create(out2, showWarnings = FALSE)
-  system(paste0("cp -r _bookdown_files/", f, "/figure-docx ", out2))
+  system(paste0("cp -r _bookdown_files/", f, "/figure-docx/* ", out2))
 }
+
+system(paste("cp -r images", outfolder))
 
