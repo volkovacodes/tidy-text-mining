@@ -246,7 +246,9 @@ plot_austen <- book_words %>%
   arrange(desc(tf_idf)) %>%
   mutate(word = factor(word, levels = rev(unique(word))))
 
-ggplot(plot_austen[1:20,], aes(word, tf_idf, fill = book)) +
+plot_austen %>% 
+  top_n(20) %>%
+  ggplot(aes(word, tf_idf, fill = book)) +
   geom_col() +
   labs(x = NULL, y = "tf-idf") +
   coord_flip()
@@ -261,12 +263,11 @@ Let's look at the novels individually.
 
 
 ```r
-plot_austen <- plot_austen %>% 
+plot_austen %>% 
   group_by(book) %>% 
   top_n(15) %>% 
-  ungroup
-
-ggplot(plot_austen, aes(word, tf_idf, fill = book)) +
+  ungroup %>%
+  ggplot(aes(word, tf_idf, fill = book)) +
   geom_col(show.legend = FALSE) +
   labs(x = NULL, y = "tf-idf") +
   facet_wrap(~book, ncol = 2, scales = "free") +
@@ -339,7 +340,9 @@ plot_physics <- physics_words %>%
                                             "Tesla, Nikola",
                                             "Einstein, Albert")))
 
-ggplot(plot_physics[1:20,], aes(word, tf_idf, fill = author)) +
+plot_physics %>%
+  top_n(20) %>%
+  ggplot(aes(word, tf_idf, fill = author)) +
   geom_col() +
   labs(x = NULL, y = "tf-idf") +
   coord_flip()
@@ -354,12 +357,12 @@ Nice! Let's look at each text individually in Figure \@ref(fig:physicsseparate).
 
 
 ```r
-plot_physics <- plot_physics %>% 
+plot_physics %>% 
   group_by(author) %>% 
   top_n(15, tf_idf) %>% 
-  mutate(word = reorder(word, tf_idf))
-
-ggplot(plot_physics, aes(word, tf_idf, fill = author)) +
+  ungroup() %>%
+  mutate(word = reorder(word, tf_idf)) %>%
+  ggplot(aes(word, tf_idf, fill = author)) +
   geom_col(show.legend = FALSE) +
   labs(x = NULL, y = "tf-idf") +
   facet_wrap(~author, ncol = 2, scales = "free") +
