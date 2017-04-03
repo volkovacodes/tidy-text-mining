@@ -50,8 +50,8 @@ There is one row in this `book_words` data frame for each word-book combination;
 ```{r plottf, dependson = "book_words", fig.height=9, fig.width=9, fig.cap="Term Frequency Distribution in Jane Austen's Novels"}
 library(ggplot2)
 
-ggplot(book_words, aes(n/total, fill = book)) +
-  geom_histogram(show.legend = FALSE) +
+ggplot(book_words, aes(n/total)) +
+  geom_histogram() +
   xlim(NA, 0.0009) +
   facet_wrap(~book, ncol = 2, scales = "free_y")
 ```
@@ -79,9 +79,9 @@ freq_by_rank
 
 The `rank` column here tells us the rank of each word within the frequency table; the table was already ordered by `n` so we could use `row_number()` to find the rank. Then, we can calculate the term frequency in the same way we did before. Zipf's law is often visualized by plotting rank on the x-axis and term frequency on the y-axis, on logarithmic scales. Plotting this way, an inversely proportional relationship will have a constant, negative slope.
 
-```{r zipf, dependson = "freq_by_rank", fig.width=7, fig.height=5, fig.cap="Zipf's law for Jane Austen's novels"}
+```{r zipf, dependson = "freq_by_rank", fig.width=6, fig.height=5, fig.cap="Zipf's law for Jane Austen's novels"}
 freq_by_rank %>% 
-  ggplot(aes(rank, `term frequency`, color = book)) + 
+  ggplot(aes(rank, `term frequency`, group = book)) + 
   geom_line(size = 1.2, alpha = 0.8) + 
   scale_x_log10() +
   scale_y_log10()
@@ -102,9 +102,9 @@ Classic versions of Zipf's law have
 $$\text{frequency} \propto \frac{1}{\text{rank}}$$
 and we have in fact gotten a slope close to -1 here. Let's plot this fitted power law with the data in Figure \@ref(fig:zipffit) to see how it looks.
 
-```{r zipffit, dependson = "freq_by_rank", fig.width=7, fig.height=5, fig.cap="Fitting an exponent for Zipf's law with Jane Austen's novels"}
+```{r zipffit, dependson = "freq_by_rank", fig.width=6, fig.height=5, fig.cap="Fitting an exponent for Zipf's law with Jane Austen's novels"}
 freq_by_rank %>% 
-  ggplot(aes(rank, `term frequency`, color = book)) + 
+  ggplot(aes(rank, `term frequency`, group = book)) + 
   geom_abline(intercept = -0.62, slope = -1.1, color = "gray50", linetype = 2) +
   geom_line(size = 1.2, alpha = 0.8) + 
   scale_x_log10() +
@@ -148,7 +148,9 @@ plot_austen <- book_words %>%
   arrange(desc(tf_idf)) %>%
   mutate(word = factor(word, levels = rev(unique(word))))
 
-ggplot(plot_austen[1:20,], aes(word, tf_idf, fill = book)) +
+plot_austen %>% 
+  top_n(20) %>%
+  ggplot(aes(word, tf_idf)) +
   geom_col() +
   labs(x = NULL, y = "tf-idf") +
   coord_flip()
@@ -157,13 +159,12 @@ ggplot(plot_austen[1:20,], aes(word, tf_idf, fill = book)) +
 Let's look at the novels individually.
 
 ```{r plotseparate, dependson = "plot_austen", fig.height=10, fig.width=9, fig.cap="Highest tf-idf words in each of Jane Austen's Novels"}
-plot_austen <- plot_austen %>% 
+plot_austen %>% 
   group_by(book) %>% 
   top_n(15) %>% 
-  ungroup
-
-ggplot(plot_austen, aes(word, tf_idf, fill = book)) +
-  geom_col(show.legend = FALSE) +
+  ungroup %>%
+  ggplot(aes(word, tf_idf)) +
+  geom_col() +
   labs(x = NULL, y = "tf-idf") +
   facet_wrap(~book, ncol = 2, scales = "free") +
   coord_flip()
@@ -212,7 +213,9 @@ plot_physics <- physics_words %>%
                                             "Tesla, Nikola",
                                             "Einstein, Albert")))
 
-ggplot(plot_physics[1:20,], aes(word, tf_idf, fill = author)) +
+plot_physics %>%
+  top_n(20) %>% 
+  ggplot(aes(word, tf_idf)) +
   geom_col() +
   labs(x = NULL, y = "tf-idf") +
   coord_flip()
@@ -221,13 +224,13 @@ ggplot(plot_physics[1:20,], aes(word, tf_idf, fill = author)) +
 Nice! Let's look at each text individually in Figure \@ref(fig:physicsseparate).
 
 ```{r physicsseparate, dependson = "plot_physics", fig.height=7, fig.width=8, fig.cap="Highest tf-idf words in each physics texts"}
-plot_physics <- plot_physics %>% 
+plot_physics %>% 
   group_by(author) %>% 
   top_n(15, tf_idf) %>% 
-  mutate(word = reorder(word, tf_idf))
-
-ggplot(plot_physics, aes(word, tf_idf, fill = author)) +
-  geom_col(show.legend = FALSE) +
+  ungroup() %>%
+  mutate(word = reorder(word, tf_idf)) %>%
+  ggplot(aes(word, tf_idf)) +
+  geom_col() +
   labs(x = NULL, y = "tf-idf") +
   facet_wrap(~author, ncol = 2, scales = "free") +
   coord_flip()
@@ -278,8 +281,8 @@ plot_physics <- physics_words %>%
                                             "Tesla, Nikola",
                                             "Einstein, Albert")))
 
-ggplot(plot_physics, aes(word, tf_idf, fill = author)) +
-  geom_col(show.legend = FALSE) +
+ggplot(plot_physics, aes(word, tf_idf)) +
+  geom_col() +
   labs(x = NULL, y = "tf-idf") +
   facet_wrap(~author, ncol = 2, scales = "free") +
   coord_flip()

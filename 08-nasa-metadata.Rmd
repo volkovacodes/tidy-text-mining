@@ -195,7 +195,7 @@ title_word_pairs %>%
   filter(n >= 250) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
-  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "cyan4") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "gray") +
   geom_node_point(size = 5) +
   geom_node_text(aes(label = name), repel = TRUE, 
                  point.padding = unit(0.2, "lines")) +
@@ -212,7 +212,7 @@ desc_word_pairs %>%
   filter(n >= 5000) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
-  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "darkred") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "gray") +
   geom_node_point(size = 5) +
   geom_node_text(aes(label = name), repel = TRUE,
                  point.padding = unit(0.2, "lines")) +
@@ -237,7 +237,7 @@ keyword_pairs %>%
   filter(n >= 700) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
-  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "royalblue") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "gray") +
   geom_node_point(size = 5) +
   geom_node_text(aes(label = name), repel = TRUE,
                  point.padding = unit(0.2, "lines")) +
@@ -271,7 +271,7 @@ keyword_cors %>%
   filter(correlation > .6) %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
-  geom_edge_link(aes(edge_alpha = correlation, edge_width = correlation), edge_colour = "royalblue") +
+  geom_edge_link(aes(edge_alpha = correlation, edge_width = correlation), edge_colour = "gray") +
   geom_node_point(size = 5) +
   geom_node_text(aes(label = name), repel = TRUE,
                  point.padding = unit(0.2, "lines")) +
@@ -332,8 +332,8 @@ desc_tf_idf %>%
   top_n(15, tf_idf) %>% 
   ungroup() %>%
   mutate(word = factor(word, levels = rev(unique(word)))) %>%
-  ggplot(aes(word, tf_idf, fill = keyword)) +
-  geom_col(show.legend = FALSE) +
+  ggplot(aes(word, tf_idf)) +
+  geom_col() +
   facet_wrap(~keyword, ncol = 3, scales = "free") +
   coord_flip() +
   labs(title = "Highest tf-idf words in NASA metadata description fields",
@@ -436,8 +436,8 @@ top_terms %>%
   ungroup() %>%
   mutate(term = factor(paste(term, topic, sep = "__"), 
                        levels = rev(paste(term, topic, sep = "__")))) %>%
-  ggplot(aes(term, beta, fill = as.factor(topic))) +
-  geom_col(show.legend = FALSE) +
+  ggplot(aes(term, beta)) +
+  geom_col() +
   coord_flip() +
   scale_x_discrete(labels = function(x) gsub("__.+$", "", x)) +
   labs(title = "Top 10 terms in each LDA topic",
@@ -468,8 +468,8 @@ ggplot(lda_gamma, aes(gamma)) +
 First notice that the y-axis is plotted on a log scale; otherwise it is difficult to make out any detail in the plot. Next, notice that $\gamma$ runs from 0 to 1; remember that this is the probability that a given document belongs in a given topic. There are many values near zero, which means there are many documents that do not belong in each topic. Also, there are many values near $\gamma = 1$; these are the documents that *do* belong in those topics. This distribution shows that documents are being well discriminated as belonging to a topic or not. We can also look at how the probabilities are distributed within each topic, as shown in Figure \@ref(fig:plotgamma).
 
 ```{r plotgamma, dependson = "lda_gamma", fig.width=10, fig.height=12, fig.cap="Probability distribution for each topic in topic modeling of NASA metadata description field texts"}
-ggplot(lda_gamma, aes(gamma, fill = as.factor(topic))) +
-  geom_histogram(show.legend = FALSE) +
+ggplot(lda_gamma, aes(gamma)) +
+  geom_histogram() +
   facet_wrap(~ topic, ncol = 4) +
   scale_y_log10() +
   labs(title = "Distribution of probability for each topic",
@@ -511,8 +511,8 @@ top_keywords %>%
   ungroup() %>%
   mutate(keyword = factor(paste(keyword, topic, sep = "__"), 
                           levels = rev(paste(keyword, topic, sep = "__")))) %>%
-  ggplot(aes(keyword, n, fill = as.factor(topic))) +
-  geom_col(show.legend = FALSE) +
+  ggplot(aes(keyword, n)) +
+  geom_col() +
   labs(title = "Top keywords for each LDA topic",
        x = NULL, y = "Number of documents") +
   coord_flip() +

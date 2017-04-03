@@ -174,7 +174,7 @@ year_term_counts %>%
   filter(term %in% c("god", "america", "foreign", "union", "constitution", "freedom")) %>%
   ggplot(aes(year, count / year_total)) +
   geom_point() +
-  geom_smooth() +
+  geom_smooth(color = "black") +
   facet_wrap(~ term, scales = "free_y") +
   scale_y_continuous(labels = scales::percent_format()) +
   ylab("% frequency of word in inaugural address")
