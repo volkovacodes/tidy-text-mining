@@ -116,7 +116,7 @@ bigram_tf_idf %>%
   top_n(12, tf_idf) %>%
   ungroup() %>%
   mutate(bigram = reorder(bigram, tf_idf)) %>%
-  ggplot(aes(bigram, tf_idf, fill = book)) +
+  ggplot(aes(bigram, tf_idf)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~ book, ncol = 2, scales = "free") +
   coord_flip() +
@@ -172,8 +172,8 @@ not_words %>%
   arrange(desc(abs(contribution))) %>%
   head(20) %>%
   mutate(word2 = reorder(word2, contribution)) %>%
-  ggplot(aes(word2, n * score, fill = n * score > 0)) +
-  geom_col(show.legend = FALSE) +
+  ggplot(aes(word2, n * score)) +
+  geom_col() +
   xlab("Words preceded by \"not\"") +
   ylab("Sentiment score * number of occurrences") +
   coord_flip()
@@ -202,8 +202,8 @@ negated_words %>%
          word2 = reorder(paste(word2, word1, sep = "__"), contribution)) %>%
   group_by(word1) %>%
   top_n(12, abscontribution) %>%
-  ggplot(aes(word2, contribution, fill = n * score > 0)) +
-  geom_col(show.legend = FALSE) +
+  ggplot(aes(word2, contribution)) +
+  geom_col() +
   facet_wrap(~ word1, scales = "free") +
   scale_x_discrete(labels = function(x) gsub("__.+$", "", x)) +
   xlab("Words preceded by negation term") +
@@ -266,7 +266,7 @@ a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
 ggraph(bigram_graph, layout = "fr") +
   geom_edge_link(aes(edge_alpha = n), show.legend = FALSE,
                  arrow = a, end_cap = circle(.07, 'inches')) +
-  geom_node_point(color = "lightblue", size = 5) +
+  geom_node_point(color = "gray", size = 5) +
   geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
   theme_void()
 ```
@@ -310,7 +310,7 @@ visualize_bigrams <- function(bigrams) {
     graph_from_data_frame() %>%
     ggraph(layout = "fr") +
     geom_edge_link(aes(edge_alpha = n), show.legend = FALSE, arrow = a) +
-    geom_node_point(color = "lightblue", size = 5) +
+    geom_node_point(color = "gray", size = 5) +
     geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
     theme_void()
 }
@@ -458,7 +458,7 @@ word_cors %>%
   graph_from_data_frame() %>%
   ggraph(layout = "fr") +
   geom_edge_link(aes(edge_alpha = correlation), show.legend = FALSE) +
-  geom_node_point(color = "lightblue", size = 5) +
+  geom_node_point(color = "gray", size = 5) +
   geom_node_text(aes(label = name), repel = TRUE) +
   theme_void()
 ```

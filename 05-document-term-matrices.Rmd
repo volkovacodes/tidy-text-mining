@@ -93,7 +93,7 @@ ap_sentiments %>%
   filter(n >= 200) %>%
   mutate(n = ifelse(sentiment == "negative", -n, n)) %>%
   mutate(term = reorder(term, n)) %>%
-  ggplot(aes(term, n, fill = sentiment)) +
+  ggplot(aes(term, n)) +
   geom_bar(stat = "identity") +
   ylab("Contribution to sentiment") +
   coord_flip()
@@ -143,7 +143,7 @@ inaug_tf_idf %>%
   top_n(10, tf_idf) %>%
   ungroup() %>%
   mutate(term = reorder(term, tf_idf)) %>%
-  ggplot(aes(term, tf_idf, fill = document)) +
+  ggplot(aes(term, tf_idf)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~ document, scales = "free") +
   coord_flip() +
@@ -338,7 +338,7 @@ stock_tf_idf %>%
   top_n(8, tf_idf) %>%
   ungroup() %>%
   mutate(word = reorder(word, tf_idf)) %>%
-  ggplot(aes(word, tf_idf, fill = company)) +
+  ggplot(aes(word, tf_idf)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~ company, scales = "free") +
   coord_flip() +
@@ -404,8 +404,8 @@ It might be interesting to examine which company has the most news with "litigio
 stock_sentiment_count %>%
   mutate(score = (positive - negative) / (positive + negative)) %>%
   mutate(company = reorder(company, score)) %>%
-  ggplot(aes(company, score, fill = score > 0)) +
-  geom_col(show.legend = FALSE) +
+  ggplot(aes(company, score)) +
+  geom_col() +
   coord_flip() +
   labs(x = "Company",
        y = "Positivity score among 20 recent news articles")
