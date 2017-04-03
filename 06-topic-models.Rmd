@@ -81,8 +81,8 @@ ap_top_terms <- ap_topics %>%
 
 ap_top_terms %>%
   mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(term, beta)) +
-  geom_col() +
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip()
 ```
@@ -246,8 +246,8 @@ library(ggplot2)
 
 top_terms %>%
   mutate(term = reorder(term, beta)) %>%
-  ggplot(aes(term, beta)) +
-  geom_col() +
+  ggplot(aes(term, beta, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
   facet_wrap(~ topic, scales = "free") +
   coord_flip()
 ```
@@ -345,7 +345,7 @@ assignments %>%
   mutate(percent = n / sum(n)) %>%
   ggplot(aes(consensus, title, fill = percent)) +
   geom_tile() +
-  scale_fill_gradient2(high = "black", label = percent_format()) +
+  scale_fill_gradient2(high = "red", label = percent_format()) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1),
         panel.grid = element_blank()) +
