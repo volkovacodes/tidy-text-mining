@@ -11,7 +11,7 @@ library(bookdown)
 book <- read_lines("_main.utf8.md")
 
 s <- str_replace_all(book, "<a .*?>(.*?)</a>", "\\1")
-s <- str_replace_all(s, " +\\[@.*?\\]", "")
+#s <- str_replace_all(s, " +\\[@.*?\\]", "")
 s <- str_replace_all(s, "<strong>|<\\/strong>", "")
 s <- str_replace_all(s, "\\/figure-docx\\/", "/")
 s <- s[!str_detect(s, "^\\<\\!\\-\\-")]
@@ -53,3 +53,5 @@ for (f in paste0(c("01-tidy-text",
 
 system(paste("cp -r images", outfolder))
 
+# finally, format the asciidoc
+source("pandoc -s -S --bibliography book.bib text-mining-manuscript/text-mining-with-r.md -t asciidoc -o text-mining-manuscript/text-mining-with-r.asciidoc")
