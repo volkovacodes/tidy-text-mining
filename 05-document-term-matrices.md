@@ -157,7 +157,7 @@ Other text mining packages provide alternative implementations of document-term 
 library(methods)
 
 data("data_corpus_inaugural", package = "quanteda")
-inaug_dfm <- quanteda::dfm(data_corpus_inaugural)
+inaug_dfm <- quanteda::dfm(data_corpus_inaugural, verbose = FALSE)
 ```
 
 

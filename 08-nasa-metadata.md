@@ -109,13 +109,13 @@ nasa_desc %>%
 
 ```
 ## # A tibble: 5 × 1
-##                                                                                                   desc
-##                                                                                                  <chr>
-## 1 There is an extraordinary need for a universal biomedical analyzer that has broadly flexible capabil
-## 2 Press kit for ISS mission Expedition 19 from 03/2009-05/2009. Press kits contain information about e
-## 3 Solid rocket motor cases are subject to a variety of external environmental and loading conditions f
-## 4 &lt;p&gt;Switching from metallic to composite construction holds the&amp;nbsp;potential to dramatica
-## 5 This dataset is part of the collection of Special Sensor Microwave/Imager (SSM/I) and Special Sensor
+##                                                                                                     desc
+##                                                                                                    <chr>
+## 1  MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
+## 2   The OMI science team produces two Level-3 Aura/OMI Global Aerosol Data Products OMAERUVd (1deg Lat/L
+## 3 Tech-X proposes to develop a comprehensive Fortran testing and \r\nrefactoring infrastructure that all
+## 4  The Coastal Zone Color Scanner Experiment (CZCS) was the first instrument devoted to\nthe measurement
+## 5  The Coastal Zone Color Scanner Experiment (CZCS) was the first instrument devoted to\nthe measurement
 ```
 
 Here we see the first part of several selected description fields from the metadata.

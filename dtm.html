@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-04-03">
+<meta name="date" content="2017-04-23">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -363,7 +363,7 @@ Figure 5.2: Words from AP articles with the greatest contribution to positive or
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(methods)
 
 <span class="kw">data</span>(<span class="st">&quot;data_corpus_inaugural&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;quanteda&quot;</span>)
-inaug_dfm &lt;-<span class="st"> </span>quanteda::<span class="kw">dfm</span>(data_corpus_inaugural)</code></pre></div>
+inaug_dfm &lt;-<span class="st"> </span>quanteda::<span class="kw">dfm</span>(data_corpus_inaugural, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">inaug_dfm</code></pre></div>
 <pre><code>## Document-feature matrix of: 58 documents, 9,232 features (91.6% sparse).</code></pre>
 <p>The <code>tidy</code> method works on these document-feature matrices as well, turning them into a one-token-per-document-per-row table:</p>
