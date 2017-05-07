@@ -2,7 +2,7 @@
 title: "Text Mining with R"
 subtitle: "A Tidy Approach"
 author: "Julia Silge and David Robinson"
-date: "2017-04-23"
+date: "2017-05-07"
 knit: "bookdown::render_book"
 site: bookdown::bookdown_site
 output: bookdown::gitbook

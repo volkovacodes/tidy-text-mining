@@ -52,7 +52,7 @@ AssociatedPress
 ## Weighting          : term frequency (tf)
 ```
 
-We see that this dataset contains  documents (each of them an AP article) and  terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the `Terms()` function.
+We see that this dataset contains 2246 documents (each of them an AP article) and 10473 terms (distinct words). Notice that this DTM is 99% sparse (99% of document-word pairs are zero). We could access the terms in the document with the `Terms()` function.
 
 
 ```r
@@ -587,9 +587,8 @@ stock_tokens %>%
   count(word, id, sort = TRUE) %>%
   inner_join(get_sentiments("afinn"), by = "word") %>%
   group_by(word) %>%
-  summarize(contribution = sum(n * score),
-            abscontribution = abs(contribution)) %>%
-  top_n(12, abscontribution) %>%
+  summarize(contribution = sum(n * score)) %>%
+  top_n(12, abs(contribution)) %>%
   mutate(word = reorder(word, contribution)) %>%
   ggplot(aes(word, contribution)) +
   geom_col() +

@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-04-23">
+<meta name="date" content="2017-05-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -405,9 +405,8 @@ Figure 7.2: Comparing the frequency of words used by Julia and David
 <p>We are about equally likely to tweet about maps, email, APIs, and functions.</p>
 <p>Which words are most likely to be from Julia’s account or from David’s account? Let’s just take the top 15 most distinctive words for each account and plot them in Figure <a href="twitter.html#fig:plotratios">7.3</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">word_ratios %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">abslogratio =</span> <span class="kw">abs</span>(logratio)) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(logratio &lt;<span class="st"> </span><span class="dv">0</span>) %&gt;%
-<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">15</span>, abslogratio) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">15</span>, <span class="kw">abs</span>(logratio)) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, logratio)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, logratio, <span class="dt">fill =</span> logratio &lt;<span class="st"> </span><span class="dv">0</span>)) +

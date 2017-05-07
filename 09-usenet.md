@@ -433,8 +433,7 @@ Which words had the most effect on sentiment scores overall (Figure \@ref(fig:us
 
 ```r
 contributions %>%
-  mutate(abscontribution = abs(contribution)) %>%
-  top_n(25, abscontribution) %>%
+  top_n(25, abs(contribution)) %>%
   mutate(word = reorder(word, contribution)) %>%
   ggplot(aes(word, contribution, fill = contribution > 0)) +
   geom_col(show.legend = FALSE) +
@@ -641,10 +640,9 @@ usenet_bigram_counts %>%
   filter(word1 %in% negate_words) %>%
   count(word1, word2, wt = n, sort = TRUE) %>%
   inner_join(get_sentiments("afinn"), by = c(word2 = "word")) %>%
-  mutate(contribution = score * nn,
-         abscontribution = abs(contribution)) %>%
+  mutate(contribution = score * nn) %>%
   group_by(word1) %>%
-  top_n(10, abscontribution) %>%
+  top_n(10, abs(contribution)) %>%
   ungroup() %>%
   mutate(word2 = reorder(paste(word2, word1, sep = "__"), contribution)) %>%
   ggplot(aes(word2, contribution, fill = contribution > 0)) +

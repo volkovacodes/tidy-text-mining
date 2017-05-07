@@ -109,13 +109,13 @@ nasa_desc %>%
 
 ```
 ## # A tibble: 5 × 1
-##                                                                                                     desc
-##                                                                                                    <chr>
-## 1  MODIS (or Moderate Resolution Imaging Spectroradiometer) is a key instrument aboard the\nTerra (EOS A
-## 2   The OMI science team produces two Level-3 Aura/OMI Global Aerosol Data Products OMAERUVd (1deg Lat/L
-## 3 Tech-X proposes to develop a comprehensive Fortran testing and \r\nrefactoring infrastructure that all
-## 4  The Coastal Zone Color Scanner Experiment (CZCS) was the first instrument devoted to\nthe measurement
-## 5  The Coastal Zone Color Scanner Experiment (CZCS) was the first instrument devoted to\nthe measurement
+##                                                                                                   desc
+##                                                                                                  <chr>
+## 1 FTT proposes development of a magnetically actuated dynamic seal.  Dynamic seals are used throughout
+## 2                           Filtered boundary layer fluxes recorded on aircraft flights over the Konza
+## 3 The Modern-Era Retrospective Analysis for Research and Applications (MERRA) is a state-of-the-art re
+## 4                                      ERS-1 Standard Beam Data in ASF Frame Size Processed to Level 0
+## 5                                                 Carbon Monoxide Metal Oxide Reduction System Project
 ```
 
 Here we see the first part of several selected description fields from the metadata.

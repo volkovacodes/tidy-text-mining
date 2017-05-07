@@ -214,9 +214,8 @@ Which words are most likely to be from Julia's account or from David's account? 
 
 ```r
 word_ratios %>%
-  mutate(abslogratio = abs(logratio)) %>%
   group_by(logratio < 0) %>%
-  top_n(15, abslogratio) %>%
+  top_n(15, abs(logratio)) %>%
   ungroup() %>%
   mutate(word = reorder(word, logratio)) %>%
   ggplot(aes(word, logratio, fill = logratio < 0)) +

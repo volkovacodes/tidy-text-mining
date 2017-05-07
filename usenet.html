@@ -26,7 +26,7 @@
 <meta name="author" content="Julia Silge and David Robinson">
 
 
-<meta name="date" content="2017-04-23">
+<meta name="date" content="2017-05-07">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -569,8 +569,7 @@ contributions</code></pre></div>
 ## # ... with 1,899 more rows</code></pre>
 <p>Which words had the most effect on sentiment scores overall (Figure <a href="usenet.html#fig:usenetcontributions">9.7</a>)?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">contributions %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">abscontribution =</span> <span class="kw">abs</span>(contribution)) %&gt;%
-<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">25</span>, abscontribution) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">25</span>, <span class="kw">abs</span>(contribution)) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word =</span> <span class="kw">reorder</span>(word, contribution)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word, contribution, <span class="dt">fill =</span> contribution &gt;<span class="st"> </span><span class="dv">0</span>)) +
 <span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">show.legend =</span> <span class="ot">FALSE</span>) +
@@ -720,10 +719,9 @@ usenet_bigram_counts %&gt;%
 <span class="st">  </span><span class="kw">filter</span>(word1 %in%<span class="st"> </span>negate_words) %&gt;%
 <span class="st">  </span><span class="kw">count</span>(word1, word2, <span class="dt">wt =</span> n, <span class="dt">sort =</span> <span class="ot">TRUE</span>) %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">get_sentiments</span>(<span class="st">&quot;afinn&quot;</span>), <span class="dt">by =</span> <span class="kw">c</span>(<span class="dt">word2 =</span> <span class="st">&quot;word&quot;</span>)) %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> score *<span class="st"> </span>nn,
-         <span class="dt">abscontribution =</span> <span class="kw">abs</span>(contribution)) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">contribution =</span> score *<span class="st"> </span>nn) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(word1) %&gt;%
-<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, abscontribution) %&gt;%
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">10</span>, <span class="kw">abs</span>(contribution)) %&gt;%
 <span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">word2 =</span> <span class="kw">reorder</span>(<span class="kw">paste</span>(word2, word1, <span class="dt">sep =</span> <span class="st">&quot;__&quot;</span>), contribution)) %&gt;%
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(word2, contribution, <span class="dt">fill =</span> contribution &gt;<span class="st"> </span><span class="dv">0</span>)) +
