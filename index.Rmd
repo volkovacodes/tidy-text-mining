@@ -1,4 +1,4 @@
---- 
+---  
 title: "Text Mining with R"
 subtitle: "A Tidy Approach"
 author: "Julia Silge and David Robinson"
